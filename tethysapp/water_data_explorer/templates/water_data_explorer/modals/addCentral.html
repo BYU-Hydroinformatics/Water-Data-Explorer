@@ -1,0 +1,37 @@
+<form id="addCentral" class="modal fade" action="add-central/" method="POST">
+  {% csrf_token %}
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add CUAHSI Compatible Catalog Service</h4>
+            </div>
+            <div class="modal-body">
+
+                <form id="add_central_form" class="form-horizontal">
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3 form-group">
+                            <label for="title">Title (Required):</label>
+                            <input type="text" class="form-control" name="title" id="title" placeholder="Please enter a valid Catalog Title" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3 form-group">
+                            <label for="url">URL (Required):</label>
+                            <input type="text" class="form-control" name="url" id="url" placeholder="Please enter a valid HydroCatalog Endpoint" required>
+                        </div>
+                    </div>
+                </form>
+                <div class="warning">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="button-group">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="btn-add-central" class="btn btn-default">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

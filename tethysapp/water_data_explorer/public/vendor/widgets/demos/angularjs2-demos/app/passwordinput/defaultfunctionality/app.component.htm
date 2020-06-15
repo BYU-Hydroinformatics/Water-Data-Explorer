@@ -1,0 +1,73 @@
+﻿<!--<div id="createAccount" style="font-family: Verdana; font-size: 13px;">-->
+    <angularExpander #expanderAng>
+        <div>
+            Create a new account
+        </div>
+        <div>
+            <form id="form" style="overflow: hidden; margin: 10px;" action="./">
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            First Name
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!--<input id="firstName" />-->
+                            <angularInput id="firstNameSelector" #firstName></angularInput>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Last Name
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!--<input id="lastName" />-->
+                            <angularInput id="lastNameSelector" #lastName></angularInput>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Choose your username
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <!--<input id="userName" />-->
+                            <angularInput id="userNameSelector" #userName></angularInput>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Create a password
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <!--<input id="password" type="password" />-->
+                            <angularPasswordInput id="passwordSelector" #password></angularPasswordInput>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Confirm your password
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <!--<input id="passwordConfirm" type="password" />-->
+                            <angularPasswordInput id="passwordConfirmSelector" #passwordConfirm></angularPasswordInput>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <angularButton #submit (OnClick)="ButtonClicked($event)">Create account</angularButton>
+                         </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </angularExpander>
+<!--</div>-->

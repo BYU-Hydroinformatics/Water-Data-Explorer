@@ -1,0 +1,38 @@
+{% load staticfiles %}
+<form id="modalAddSoap" class="modal fade" action="soap/" method="POST">
+    {% csrf_token %}
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add WaterOneFlow Service Info</h4>
+            </div>
+            <div class="modal-body">
+                <br>
+                <label for="soap-title">Title (Required):</label>
+                <input type="text" class="form-control" name="soap-title" id="soap-title" placeholder="Please enter a valid HydroServer Title">
+                <label for="soap-url">URL (Required):</label>
+                <input type="text" class="form-control" name="soap-url" id="soap-url" placeholder="Please enter a valid HydroServer SOAP Endpoint">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="extent" id="extent">Get Values for the Zoomed Area</label>
+                </div>
+                <button type="button" id="select-his" class="btn btn-primary">
+                    Select Server from Existing Catalog
+                </button>
+                <div id="chk_val" name="chk_val"></div>
+                <div class="warning">
+                </div>
+                <div id="addSoapIdCentering">
+                  <img id="soapAddLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loader.gif' %}" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="button-group">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="btn-add-soap" class="btn btn-default">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

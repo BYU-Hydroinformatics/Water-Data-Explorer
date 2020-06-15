@@ -1,0 +1,22 @@
+﻿#jqxResponsivePanel, #content {
+    float: left;
+}
+.jqx-rc-all{
+    border-radius: 0px;
+}
+
+#ownerPanel {
+    height: 300px; 
+    width: 800px;
+}
+
+h4 {
+    text-align: center;
+}
+
+span {
+    float: left; 
+    font-size: 3.26em; 
+    line-height: 0.5; 
+    margin-top: 0.2em;
+}

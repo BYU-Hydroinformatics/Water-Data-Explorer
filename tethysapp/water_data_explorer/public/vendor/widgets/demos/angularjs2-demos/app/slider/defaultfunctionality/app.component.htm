@@ -1,0 +1,17 @@
+﻿<div id="container">
+    <div style="height: 180px;">
+        <div style="float: left">
+            <span style="font-style: italic;">Red</span>
+            <angularSlider id='redLevel' #redSlider (OnChange)="setColor()"></angularSlider>
+            <span style="font-style: italic;">Green</span>
+            <angularSlider id='greenLevel' #greenSlider (OnChange)="setColor()"></angularSlider>
+            <span style="font-style: italic;">Blue</span>
+            <angularSlider id='blueLevel' #blueSlider (OnChange)="setColor()"></angularSlider>
+        </div>
+        <div class="colorBlock jqx-rc-all" id="colorBlock">
+            <div class="colorLabel" id="colorLabel">
+            </div>
+        </div>
+    </div>
+        <angularCheckBox (OnChange)="OnChange($event)">Smooth Thumb Drag</angularCheckBox>
+</div>
