@@ -19,6 +19,8 @@ requirements:
       - sqlalchemy
       - psycopg2
       - suds-jurko
+      - xmltodict
+      - pyshp
 
   pip:
 
