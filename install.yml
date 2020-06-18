@@ -8,7 +8,19 @@ requirements:
   skip: false
   conda:
     channels:
+      - conda-forge
     packages:
+      - requests
+      - fiona
+      - geojson
+      - pyproj
+      - shapely
+      - owslib
+      - sqlalchemy
+      - psycopg2
+      - suds-jurko
+      - xmltodict
+      - pyshp
 
   pip:
 
