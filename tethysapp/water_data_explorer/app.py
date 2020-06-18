@@ -9,7 +9,7 @@ class WaterDataExplorer(TethysAppBase):
 
     name = 'Water Data Explorer'
     index = 'water_data_explorer:home'
-    icon = 'images/logoo.png'
+    icon = 'water_data_explorer/images/logoo.png'
     package = 'water_data_explorer'
     root_url = 'water-data-explorer'
     color = '#f2910d'
