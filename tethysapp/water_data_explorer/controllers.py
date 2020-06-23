@@ -693,7 +693,7 @@ def get_values_hs(request):
         print("adding to the methodID as a dict")
         variable_name_ = object_methods['variable']['variableName']
         ## this part was added for the WHOS plata broker endpoint ##
-        if hasattr(object_methods, 'method'):
+        if 'method' in object_methods:
             object_with_methods_and_variables[variable_name_]= object_methods['method']['@methodID']
         else:
             object_with_methods_and_variables[variable_name_]= None
@@ -705,7 +705,7 @@ def get_values_hs(request):
         for object_method in object_methods:
             print("adding to the methodID as an arraylist")
             variable_name_ = object_method['variable']['variableName']
-            if hasattr(object_method, 'method'):
+            if 'method' in object_method:
                 object_with_methods_and_variables[variable_name_]= object_method['method']['@methodID']
             else:
                 object_with_methods_and_variables[variable_name_]= None
