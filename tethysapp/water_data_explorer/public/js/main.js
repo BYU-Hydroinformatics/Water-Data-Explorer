@@ -156,7 +156,8 @@ var water_data_explorer_PACKAGE = (function() {
           'bar':{},
           'pie':{},
           'whisker':{}
-        };
+        },
+        cleanGraphs;
       /************************************************************************
      *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that
      *************************************************************************/
@@ -171,6 +172,24 @@ var water_data_explorer_PACKAGE = (function() {
         "#6600cc",
         "#00ffff"
     ]
+    /*
+    ************ FUNCTION NAME: CLEANGRAPH **********************
+    ************ PURPOSE: RESET THE GRAPHS PORTION ***********
+    */
+    cleanGraphs = function(){
+      //RESET THE GRAPHS PORTION //
+      $( "#table_div" ).empty();
+      initialize_graphs([],[],"No data Available","","","","scatter");
+      $("#siteName_title").html("Site Variables Info");
+      $("#siteDes").html("No Site Selected, when a site is 'clicked' metadata of the site will display in this part such as a name and a description.");
+      $('#variables_graph option').remove();
+      $('#variables_graph').selectpicker('refresh');
+      // $('#variables_graph').empty();
+      $("#variables_graph").html(`<option > No Variables Available . . .</option>`);
+      $('#datetimepicker6').datepicker('update', '');
+      $('#datetimepicker7').datepicker('update', '');
+
+    }
     /*
     ************ FUNCTION NAME: DISABLE MAP **********************
     ************ PURPOSE: DISABLES OR ENABLES THE ZOOM OUT AND DRAGGING OF THE MAP ***********
@@ -1366,8 +1385,6 @@ var water_data_explorer_PACKAGE = (function() {
       // $btnUpload = $("#btn-add-shp");
     }
 
-
-
 /*
 ************ FUNCTION NAME : GET_KEYWORDS_FROM_GROUPS
 ************ PURPOSE : THE FUNCTION LETS YOU FILTER THE HYDROSERVERS LIST FROM THE SELECTED GROUPS OF HYDROSERVERS
@@ -1519,6 +1536,7 @@ var water_data_explorer_PACKAGE = (function() {
                     this.reset()
                 })
 
+                cleanGraphs();
 
 
             },
