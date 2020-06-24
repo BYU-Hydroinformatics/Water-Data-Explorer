@@ -498,7 +498,6 @@ var water_data_explorer_PACKAGE = (function() {
     ************ PURPOSE: SELECT A VARIABLE FROM A DROPDOWN AND CHANGE THE GRAPH ***********
     */
 
-
     select_variable_change = function(){
       console.log("new change on this");
       console.log(this);
@@ -832,35 +831,61 @@ var water_data_explorer_PACKAGE = (function() {
         var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
             //you can add a condition on layer to restrict the listener
             if(feature){
+
+
               if(layersDict['selectedPoint']){
                 map.removeLayer(layersDict['selectedPoint'])
                 delete layersDict[title]
                 map.updateSize()
               }
-              var actual_source = layer.getSource();
-              var centerLongitudeLatitude = ol.proj.fromLonLat([feature.values_['lon'], feature.values_['lat']]);
-              var dist = 40000;
-              // actual_source.addFeature(new ol.Feature(new ol.geom.Circle(centerLongitudeLatitude, dist)));
-              var layer = new ol.layer.Vector({
-                source: new ol.source.Vector({
-                  projection: 'EPSG:4326',
-                  // radius = 4000 meters
-                  features: [new ol.Feature(new ol.geom.Circle(centerLongitudeLatitude, 4000))]
-                }),
-                style: [
-                  new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                      color: 'red',
-                      width: 6
-                    }),
-                    fill: new ol.style.Fill({
-                      color: 'rgba(255, 0, 0, 0.1)'
-                    })
+
+              let actual_Source = new ol.source.Vector({})
+              actual_Source.addFeature(feature);
+              let vectorLayer = new ol.layer.Vector({
+                  source: actual_Source,
+                  style:  new ol.style.Style({
+                      image: new ol.style.Circle({
+                          radius: 6,
+                          stroke: new ol.style.Stroke({
+                              color: "black",
+                              width: 4
+                          }),
+                          fill: new ol.style.Fill({
+                              color: `#FF0000`
+                          })
+                      })
                   })
-                ]
-              });
-              layersDict['selectedPoint'] = layer;
-              map.addLayer(layer);
+              })
+              layersDict['selectedPoint'] = vectorLayer;
+              console.log("adding new feature");
+              console.log(vectorLayer);
+              map.addLayer(vectorLayer);
+
+
+              // var actual_source = layer.getSource();
+              // var centerLongitudeLatitude = ol.proj.fromLonLat([feature.values_['lon'], feature.values_['lat']]);
+              // var dist = 40000;
+              // actual_source.addFeature(new ol.Feature(new ol.geom.Circle(centerLongitudeLatitude, dist)));
+              // var layer = new ol.layer.Vector({
+              //   source: new ol.source.Vector({
+              //     projection: 'EPSG:4326',
+              //     // radius = 4000 meters
+              //     features: [new ol.Feature(new ol.geom.Circle(centerLongitudeLatitude, 6))]
+              //   }),
+              //   style: [
+              //     new ol.style.Style({
+              //       stroke: new ol.style.Stroke({
+              //         color: 'red',
+              //         width: 6
+              //       }),
+              //       fill: new ol.style.Fill({
+              //         color: 'rgba(255, 0, 0, 0.1)'
+              //       })
+              //     })
+              //   ]
+              // });
+              // layersDict['selectedPoint'] = layer;
+              // map.addLayer(layer);
 
             }
             return feature;
