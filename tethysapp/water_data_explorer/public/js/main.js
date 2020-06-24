@@ -860,33 +860,6 @@ var water_data_explorer_PACKAGE = (function() {
               console.log("adding new feature");
               console.log(vectorLayer);
               map.addLayer(vectorLayer);
-
-
-              // var actual_source = layer.getSource();
-              // var centerLongitudeLatitude = ol.proj.fromLonLat([feature.values_['lon'], feature.values_['lat']]);
-              // var dist = 40000;
-              // actual_source.addFeature(new ol.Feature(new ol.geom.Circle(centerLongitudeLatitude, dist)));
-              // var layer = new ol.layer.Vector({
-              //   source: new ol.source.Vector({
-              //     projection: 'EPSG:4326',
-              //     // radius = 4000 meters
-              //     features: [new ol.Feature(new ol.geom.Circle(centerLongitudeLatitude, 6))]
-              //   }),
-              //   style: [
-              //     new ol.style.Style({
-              //       stroke: new ol.style.Stroke({
-              //         color: 'red',
-              //         width: 6
-              //       }),
-              //       fill: new ol.style.Fill({
-              //         color: 'rgba(255, 0, 0, 0.1)'
-              //       })
-              //     })
-              //   ]
-              // });
-              // layersDict['selectedPoint'] = layer;
-              // map.addLayer(layer);
-
             }
             return feature;
             });
