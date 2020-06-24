@@ -157,7 +157,8 @@ var water_data_explorer_PACKAGE = (function() {
           'pie':{},
           'whisker':{}
         },
-        cleanGraphs;
+        cleanGraphs,
+        zoom_hydroserver;
       /************************************************************************
      *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that
      *************************************************************************/
@@ -172,6 +173,15 @@ var water_data_explorer_PACKAGE = (function() {
         "#6600cc",
         "#00ffff"
     ]
+    /*
+    ************ FUNCTION NAME: zoom_hydroserver**********************
+    ************ PURPOSE: ZOOM TO THE SELECTED HYDROSERVER ***********
+    */
+    zoom_hydroserver =function(layer){
+      let vectorSource = layer.getSource();
+      map.getView().fit(vectorSource.getExtent());
+      map.updateSize();
+    }
     /*
     ************ FUNCTION NAME: CLEANGRAPH **********************
     ************ PURPOSE: RESET THE GRAPHS PORTION ***********
@@ -2204,13 +2214,17 @@ var water_data_explorer_PACKAGE = (function() {
                        let newHtml = `
                        <li class="ui-state-default" layer-name="${title}" id="${title}" >
                        <input class="chkbx-layer" type="checkbox" checked><span class="server-name">${title}</span>
-
+                       <button type="button" id="${title}_zoom" class="btn btn-dark">
+                        <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+                       </button>
                        </li>
                        `;
 
                        // $(newHtml).appendTo("#current-servers")
                        $(newHtml).appendTo(`#${id_group_separator}`);
                        console.log($(newHtml));
+
+
 
                        // console.log(document.getElementById("current-servers"));
                        // let lis = document.getElementById("current-servers").getElementsByTagName("li");
@@ -2369,10 +2383,11 @@ var water_data_explorer_PACKAGE = (function() {
                        //   console.log("hola");
                        // })
 
-
-
-
                        layersDict[title] = vectorLayer;
+                       $(`#${title}_zoom`).on("click",function(){
+                         map.getView().fit(vectorSource.getExtent());
+                         map.updateSize();
+                       });
                    }
                  })
 
@@ -2702,6 +2717,9 @@ var water_data_explorer_PACKAGE = (function() {
                       let newHtml = `
                       <li class="ui-state-default" layer-name="${title}" id="${title}" >
                       <input class="chkbx-layer" type="checkbox" checked><span class="server-name">${title}</span>
+                      <button type="button" id="${title}_zoom" class="btn btn-dark">
+                       <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+                      </button>
                       </li>
                       `;
 
@@ -2870,7 +2888,13 @@ var water_data_explorer_PACKAGE = (function() {
                       layersDict[title] = vectorLayer;
 
                       map.getView().fit(vectorSource.getExtent());
-                      map.updateSize()
+                      map.updateSize();
+
+                      layersDict[title] = vectorLayer;
+                      $(`#${title}_zoom`).on("click",function(){
+                        map.getView().fit(vectorSource.getExtent());
+                        map.updateSize();
+                      });
 
 
                       if(keywords_in_servers.includes(title) || key_words_to_search.length == 0 ){
