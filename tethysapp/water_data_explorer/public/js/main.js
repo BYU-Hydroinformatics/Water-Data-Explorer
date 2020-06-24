@@ -158,7 +158,6 @@ var water_data_explorer_PACKAGE = (function() {
           'whisker':{}
         },
         cleanGraphs,
-        zoom_hydroserver;
       /************************************************************************
      *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that
      *************************************************************************/
@@ -173,15 +172,7 @@ var water_data_explorer_PACKAGE = (function() {
         "#6600cc",
         "#00ffff"
     ]
-    /*
-    ************ FUNCTION NAME: zoom_hydroserver**********************
-    ************ PURPOSE: ZOOM TO THE SELECTED HYDROSERVER ***********
-    */
-    zoom_hydroserver =function(layer){
-      let vectorSource = layer.getSource();
-      map.getView().fit(vectorSource.getExtent());
-      map.updateSize();
-    }
+
     /*
     ************ FUNCTION NAME: CLEANGRAPH **********************
     ************ PURPOSE: RESET THE GRAPHS PORTION ***********
