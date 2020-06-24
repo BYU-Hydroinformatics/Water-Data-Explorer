@@ -909,9 +909,13 @@ def get_values_graph_hs(request):
 
             graph_json = {}  # json object that will be returned to the front end
             graph_json["variable"] = times_series['variable']['variableName']
-            graph_json["unit"] = times_series[
-                'variable']['unit']['unitAbbreviation']
-
+            graph_json["unit"]=""
+            if times_series['variable']['unit']['unitAbbreviation'] is not None:
+                graph_json["unit"] = times_series[
+                    'variable']['unit']['unitAbbreviation']
+            print(times_series)
+            print("UNITS ERROR")
+            print(graph_json)
             graph_json["title"] = times_series['variable']['variableName'] + " (" + graph_json["unit"] + ") vs Time"
             for j in times_series['values']:  # Parsing the timeseries
                 print("first for loop")
@@ -1063,8 +1067,11 @@ def get_values_graph_hs(request):
 
             graph_json = {}  # json object that will be returned to the front end
             graph_json["variable"] = times_series['wml1:variable']['wml1:variableName']
-            graph_json["unit"] = times_series[
-                'wml1:variable']['wml1:unit']['wml1:unitAbbreviation']
+            graph_json["unit"]=""
+            if times_series['wml1:variable']['wml1:unit']['wml1:unitAbbreviation'] is not None:
+                graph_json["unit"] = times_series[
+                    'wml1:variable']['wml1:unit']['wml1:unitAbbreviation']
+
 
             graph_json["title"] = times_series['wml1:variable']['wml1:variableName'] + " (" + graph_json["unit"] + ") vs Time"
             for j in times_series['wml1:values']:  # Parsing the timeseries
