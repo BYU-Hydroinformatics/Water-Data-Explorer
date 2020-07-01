@@ -5,29 +5,40 @@
 {% block app_navigation_items %}
 <!--The Hydroservers are added to this box-->
 
-
+<!-- id= "buttonsBar" for the button bar -->
 <br>
 
 <img id="GeneralLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loader.gif' %}" />
 
 <div class="accordion" id="groups_hydroservers">
   <button class="btn btn-primary btn-lg btn-block">HydroServers</button>
-  <br>
-  <div id="buttonsBar">
-    {% if can_delete_hydrogroups %}
-    <button class="btn btn-primary" data-toggle="modal" data-target="#modalAddGroupServer"> <span class="glyphicon glyphicon-plus"></span></button>
-    {% endif %}
 
-    {% if can_delete_hydrogroups %}
-    <button class="btn btn-danger"  data-toggle="modal" data-target="#DeleteWarning"> <span class="glyphicon glyphicon-trash"></span></button>
-    {% endif %}
-    <button class="btn btn-success" data-toggle="modal" data-target="#modalKeyWordSearch"> <span class="glyphicon glyphicon-search"></span></button>
-    {% if can_block_map %}
-    <input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
-    {% endif %}
-    <input id="sG" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="small" data-onstyle = "danger"></input>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingCP">
+      <h4 class="panel-title">
+        <button class="btn btn-success btn-block" type="button"  data-toggle="collapse" data-target="#collapseCP" href="#collapseCP" aria-expanded="true" aria-controls="collapseCP">
+          Hydroserver Control Panel
+        </button>
+      </h4>
+    </div>
+    <div id="collapseCP" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingCP">
+      <div class="panel-body">
+        {% if can_delete_hydrogroups %}
+        <button class="btn btn-primary" data-toggle="modal" data-target="#modalAddGroupServer"> <span class="glyphicon glyphicon-plus"></span></button>
+          {% endif %}
+
+          {% if can_delete_hydrogroups %}
+          <button class="btn btn-danger"  data-toggle="modal" data-target="#DeleteWarning"> <span class="glyphicon glyphicon-trash"></span></button>
+          {% endif %}
+          <button class="btn btn-success" data-toggle="modal" data-target="#modalKeyWordSearch"> <span class="glyphicon glyphicon-search"></span></button>
+          {% if can_block_map %}
+          <input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
+          {% endif %}
+          <input id="sG" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="small" data-onstyle = "danger"></input>
+      </div>
+    </div>
   </div>
-  <br>
+
   <button class="btn btn-primary btn-block" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"> </button>
   <br>
   <div class="panel-group" id="current-Groupservers" role="tablist" aria-multiselectable="true"></div>
