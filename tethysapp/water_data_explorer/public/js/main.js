@@ -1098,7 +1098,7 @@ var water_data_explorer_PACKAGE = (function() {
     ************ PURPOSE: THE FUNCTIONS SHOWS THE GRAPHS IN THE LOWER PORTION OF THE MAP ***********
     */
     activate_deactivate_graphs = function(){
-
+      console.log("we ACTIVATEEAAGAG");
       let actual_state=$(this).prop('checked');
       let element_graphs=document.getElementById("graph");
 
@@ -1109,6 +1109,7 @@ var water_data_explorer_PACKAGE = (function() {
 
       }
       else{
+
         console.log("off");
         $("#graph").hide();
         if(map !==undefined){
@@ -3310,17 +3311,17 @@ var water_data_explorer_PACKAGE = (function() {
    *************************************************************************/
   $(function() {
 
-      init_jquery_var();
-      addDefaultBehaviorToAjax();
-      init_menu();
-
-      init_map();
-      load_group_hydroservers();
-
-       activate_layer_values();
-       let empty_array=[];
-       initialize_graphs([],[],"No data Available","","","","scatter");
-       add_boundary_map(geoServerColor, geoServerWidth, map);
+    init_jquery_var();
+    addDefaultBehaviorToAjax();
+    init_menu();
+    init_map();
+    // activate_deactivate_graphs();
+    load_group_hydroservers();
+    activate_layer_values();
+    let empty_array=[];
+    initialize_graphs([],[],"No data Available","","","","scatter");
+    add_boundary_map(geoServerColor, geoServerWidth, map);
+    activate_deactivate_graphs();
 
 
 
