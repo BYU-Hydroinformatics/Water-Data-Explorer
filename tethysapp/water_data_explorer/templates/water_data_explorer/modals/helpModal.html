@@ -50,9 +50,9 @@
                           {% endif %}
                           <button class="btn btn-success" data-toggle="modal" data-target="#modalKeyWordSearch" disabled> <span class="glyphicon glyphicon-search"></span></button>
                           {% if can_block_map %}
-                          <input id="blockPosition" type="checkbox" disabled checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
+                          <input id="blockPosition2" type="checkbox" disabled checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
                           {% endif %}
-                          <input id="sG" type="checkbox" disabled checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="small" data-onstyle = "danger"></input>
+                          <input id="sG2" type="checkbox" disabled checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="small" data-onstyle = "danger"></input>
                       </div>
                     </div>
                   </div>
@@ -78,7 +78,7 @@
 
                     </div>
                     <div class="ui-state-default" layer-name="${title}" id="${title}" >
-                    <input class="chkbx-layer" type="checkbox" checked><span class="server-name">Hydroserver Example</span>
+                    <input class="chkbx-layer" type="checkbox" disabled checked><span class="server-name">Hydroserver Example</span>
                       <button type="button" id="${title}_zoom" class="btn btn-dark" disabled>
                        <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
                       </button>
@@ -128,9 +128,9 @@
                           {% endif %}
                           <button class="btn btn-success" data-toggle="modal" data-target="#modalKeyWordSearch" disabled> <span class="glyphicon glyphicon-search"></span></button>
                           {% if can_block_map %}
-                          <input id="blockPosition" type="checkbox" disabled checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
+                          <input id="blockPosition2" type="checkbox" disabled checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
                           {% endif %}
-                          <input id="sG" type="checkbox" disabled checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="small" data-onstyle = "danger"></input>
+                          <input id="sG2" type="checkbox" disabled checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="small" data-onstyle = "danger"></input>
                       </div>
                     </div>
                   </div>
@@ -144,14 +144,13 @@
                         <h4 class="modal-title">Add a Group of Hydroservers</h4>
                     </div>
                     <div class="modal-body">
-                      <form id="modalAddGroupServerForm">
+                      <form id="modalAddGroupServerForm2">
                         <br>
                         <label for="addGroup-title">Title (Required):</label>
-                        <input type="text" class="form-control" name="addGroup-title" id="addGroup-title" placeholder="Please enter a valid Title for the Hydroserver Group">
+                        <input type="text" disabled class="form-control" name="addGroup-title" id="addGroup-title2" placeholder="Please enter a valid Title for the Hydroserver Group">
                         <label for="addGroup-description"> Description (Required): </label>
-                        <textarea name="textarea" rows="10" cols="50" class="form-control" name="addGroup-description" id="addGroup-description" placeholder="Please enter a valid description for the HydroServer Group"></textarea>
+                        <textarea name="textarea" disabled rows="10" cols="50" class="form-control" name="addGroup-description" id="addGroup-description2" placeholder="Please enter a valid description for the HydroServer Group"></textarea>
                         <div class="warning"> </div>
-                        <img id="soapAddLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loader.gif' %}" />
                       </form>
                     </div>
                   </div>
@@ -162,7 +161,7 @@
                   BE CAREFUL, ALL THE HYDROGRUPS THAT HAVE THE CHECKBOX CHECKED WILL BE DELETING </p>
                   <div class="marcoLogico2">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLongTitle">Delete Hydroserver Groups</h5>
+                      <h5 class="modal-title" id="exampleModalLongTitle2">Delete Hydroserver Groups</h5>
 
                     </div>
                     <div class="modal-body">
@@ -171,7 +170,7 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal" disabled>Cancel</button>
-                      <button type="button" id="btn-delete-hydroserver-group" class="btn btn-danger" disabled>Proceed and Delete</button>
+                      <button type="button" id="btn-delete-hydroserver-group2" class="btn btn-danger" disabled>Proceed and Delete</button>
                     </div>
                   </div>
 
@@ -190,7 +189,7 @@
                         the search will give any server that has at least one of the selected keywords</em>
                     </div>
                     <div class="modal-body">
-                      <table id="data-table" class="table table-striped table-bordered nowrap" width="100%">
+                      <table id="data-table2" class="table table-striped table-bordered nowrap" width="100%">
 
                           <tbody>
                               <tr class="odd gradeX">
@@ -227,14 +226,12 @@
                               </tr>
                           </tbody>
                       </table>
-                      <img id="KeywordLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loader.gif' %}" style="z-index:1000; position: absolute; margin-left:10%;" />
-
                     </div>
 
                     <div class="modal-footer">
                         <div class="button-group">
-                            <button type="button" id="btn-key-search" class="btn btn-primary" disabled>Seach Keywords</button>
-                            <button type="button" id="btn-r-reset" class="btn btn-danger" disabled>Reset</button>
+                            <button type="button" id="btn-key-search2" class="btn btn-primary" disabled>Seach Keywords</button>
+                            <button type="button" id="btn-r-reset2" class="btn btn-danger" disabled>Reset</button>
                         </div>
                     </div>
                   </div>
@@ -268,7 +265,7 @@
 
                   </div>
                   <div class="ui-state-default" layer-name="${title}" id="${title}" >
-                  <input class="chkbx-layer" type="checkbox" checked><span class="server-name">Hydroserver Example</span>
+                  <input class="chkbx-layer" type="checkbox" disabled checked><span class="server-name">Hydroserver Example</span>
                     <button type="button" id="${title}_zoom" class="btn btn-dark" disabled>
                      <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
                     </button>
@@ -313,9 +310,9 @@
                           <h2>Add/Delete HydroServers</h2>
                           <h3>Instructions</h3>
                           <p>You can add a SOAP endpoint to an existing HydroServer or choose from a list of HydroServers present in the catalogs</p>
-                          <input type="button" id="load-from-soap" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap" Value="Add New HydroServer" disabled>
-                          <input type="button" id="select_his" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap" Value="Add from Existing Catalog" disabled>
-                          <input type="button" id="delete-server" class="btn btn-danger" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete" Value="Delete HydroServer" disabled>
+                          <input type="button" id="load-from-soap2" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap" Value="Add New HydroServer" disabled>
+                          <input type="button" id="select_his2" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap" Value="Add from Existing Catalog" disabled>
+                          <input type="button" id="delete-server2" class="btn btn-danger" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete" Value="Delete HydroServer" disabled>
                       </div>
                     </div>
                     <h6>Adding hydroserver</h6>
@@ -325,25 +322,22 @@
                       <div class="modal-body">
                           <br>
                           <label for="soap-title">Title (Required):</label>
-                          <input type="text" class="form-control" name="soap-title" id="soap-title" placeholder="Please enter a valid HydroServer Title">
+                          <input type="text" disabled class="form-control" name="soap-title" id="soap-title2" placeholder="Please enter a valid HydroServer Title">
                           <label for="soap-url">URL (Required):</label>
-                          <input type="text" class="form-control" name="soap-url" id="soap-url" placeholder="Please enter a valid HydroServer SOAP Endpoint">
+                          <input type="text" disabled class="form-control" name="soap-url" id="soap-url2" placeholder="Please enter a valid HydroServer SOAP Endpoint">
                           <div class="checkbox">
                               <label>
-                                  <input type="checkbox" name="extent" id="extent">Get Values for the Zoomed Area</label>
+                                  <input type="checkbox" disabled name="extent" id="extent2" disabled>Get Values for the Zoomed Area</label>
                           </div>
-                          <button type="button" id="select-his" class="btn btn-primary" disabled>
+                          <button type="button" disabled id="select-his2" class="btn btn-primary" disabled>
                               Select Server from Existing Catalog
                           </button>
-                          <div id="chk_val" name="chk_val"></div>
-                          <div class="warning">
-                          </div>
 
                       </div>
                       <div class="modal-footer">
                           <div class="button-group">
                               <button type="button" class="btn btn-default" data-dismiss="modal" disabled>Close</button>
-                              <button type="button" id="btn-add-soap" class="btn btn-default" disabled>Add</button>
+                              <button type="button" id="btn-add-soap2" class="btn btn-default" disabled>Add</button>
                           </div>
                       </div>
                     </div>
@@ -357,7 +351,7 @@
                           <h4 class="modal-title">Delete HydroServer</h4>
                       </div>
                       <div class="modal-body">
-                        <table id="tbl-hydroservers">
+                        <table id="tbl-hydroservers2">
                           <thead>
                             <th>Check</th>
                             <th>Title</th>
@@ -365,7 +359,7 @@
                           </thead>
                           <tbody>
                             <tr>
-                            <td><input type="checkbox" name="server" disabled></td>
+                            <td><input type="checkbox" disabled name="server" disabled></td>
                             <td class="hs_title"> Example title </td>
                             <td class="hs_url">http://hydrolite.ddns.net/EXAMPLE/default/services/cuahsi_1_1.asmx?WSDL</td>
                             </tr>
@@ -389,21 +383,21 @@
                      These two different. The following shows the user interface for the graphs </p>
                      <div class="marcoLogico2">
                        <div id="graph2">
-                         <div id="options">
-                           <h3 id= "siteName_title"> Select a Station</h3>
-                           <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
+                         <div id="options2">
+                           <h3 id= "siteName_title2"> Select a Station</h3>
+                           <p id= "siteDes2"> No Site Selected, when a site is "clicked" metadata of the site will display
                              in this part such as a name and a description.
                            </p>
 
                            <br>
                          </div>
-                         <img id="graphAddLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loader.gif' %}"  />
-                         <div id="variables_id">
-                           <h3 id= "siteName_title"> Site Variables Info</h3>
+                         <img id="graphAddLoading2" class="view-file hidden" src="{% static 'water_data_explorer/images/loader.gif' %}"  />
+                         <div id="variables_id2">
+                           <h3 id= "siteName_title2"> Site Variables Info</h3>
                            <p><em>Site Variable Distribution</em></p>
                            <p>Select a plot to describe the variable distribution in the selected site</p>
                            <p>
-                             <select id="type_graph_select" class="selectpicker" disabled data-width="auto">
+                             <select id="type_graph_select2" class="selectpicker" disabled data-width="auto">
                                <optgroup label="Gropup Plots">
                                  <option> Pie </option>
                                  <option> Bar </option>
@@ -416,10 +410,10 @@
                            <p ><em> Variables Plot </em></p>
                            <p> Select a variable and its kind of Plot </p>
                            <p>
-                             <select id= "variables_graph" class="selectpicker" disabled data-live-search="true" data-style="btn-info"width: '100%'>
+                             <select id= "variables_graph2" class="selectpicker" disabled data-live-search="true" data-style="btn-info"width: '100%'>
                                <option > No Variables Available . . .</option>
                              </select>
-                             <select id="type_graph_select2" class="selectpicker" disabled data-width="fit">
+                             <select id="type_graph_select3" class="selectpicker" disabled data-width="fit">
 
                                <optgroup label="Individual Variable Plots">
                                  <option> Scatter </option>
@@ -457,8 +451,8 @@
                            <br>
                            <br>
                            <br>
-                           <button type="button" id= "update_graphs" class="btn btn-danger" disabled>Update</button>
-                         <div id="table_div"></div>
+                           <button type="button" id= "update_graphs2" class="btn btn-danger" disabled>Update</button>
+                         <div id="table_div4"></div>
                          </div>
                          <div id="plots2">
                          </div>
