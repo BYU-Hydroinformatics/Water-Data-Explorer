@@ -931,7 +931,8 @@ var water_data_explorer_PACKAGE = (function() {
 
               // create Dict //
               for(let i=0; i< result['variables'].length; ++i){
-                let x_axis= `${result['variables'][i]} (${result['codes'][i]})`;
+                // let x_axis= `${result['variables'][i]} (${result['codes'][i]})`;
+                let x_axis= `${result['variables'][i]}`;
                 active_map_feature_graphs['bar']['x_array'].push(x_axis);
                 active_map_feature_graphs['pie']['x_array'].push(x_axis);
 
