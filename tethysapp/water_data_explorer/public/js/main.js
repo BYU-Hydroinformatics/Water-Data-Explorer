@@ -778,8 +778,10 @@ var water_data_explorer_PACKAGE = (function() {
           showlegend: true,
           // autosize: true,
           legend: {
-            x: 1,
-            y: 0.5
+            xanchor:"center",
+            yanchor:"top",
+            y:-0.3, // play with it
+            x:0.5   // play with it
           }
 
         };
