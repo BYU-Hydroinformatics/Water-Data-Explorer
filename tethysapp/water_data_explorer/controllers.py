@@ -586,23 +586,6 @@ def keyWordsForGroup(request):
         layer_obj["url"] = hydroservers.url.strip()
         print(layer_obj["url"])
         layer_obj["siteInfo"] = hydroservers.siteinfo
-        # schema_url = "http://www.cuahsi.org/his/1.1/ws"
-
-
-        # imp = Import('http://schemas.xmlsoap.org/soap/encoding/',location='http://schemas.xmlsoap.org/soap/encoding/')
-        # schema_url1 = "http://www.cuahsi.org/waterML/1.1"
-        # schema_url2 = "http://www.cuahsi.org/his/1.1"
-        # schema_url3 = "http://www.w3.org/2001/XMLSchema"
-        # imp.filter.add(schema_url1)
-        # imp.filter.add(schema_url2)
-        # imp.filter.add(schema_url3)
-
-        # schema_location = "http://www.cuahsi.org/his/1.1/ws.xsd"
-        # schema_import = Import(schema_url)
-        # schema_doctor =ImportDoctor(schema_import)
-
-        # schema_doctor =ImportDoctor(imp)
-
         client = Client(url = hydroservers.url.strip(), timeout= 500)
         # client = Client(url = hydroservers.url.strip(), plugins =[schema_doctor], autoblend=True)
 
@@ -622,18 +605,117 @@ def keyWordsForGroup(request):
         array_keywords_hydroserver=[]
         print(type(array_variables))
         # print(array_variables)
+
         if isinstance(array_variables,type([])):
             # print("inside the list iption")
             for words in array_variables:
+                array_keywords_hydroserver.append(words['variableName'])
+                # print(words['variableName'])
+                # variable_text = words['variableName']
+                # code_variable = words['variableCode']['#text']
+                # start_date = ""
+                # end_date = ""
+                # network = "hola"
+                # variable_desc = network + ':' + code_variable
+                # site_desc = "hols"
+                # print("variable_desc")
+                # print(variable_desc)
+                # print(site_desc)
+                # try:
+                #     values=client.service.GetValues(site_desc,variable_desc,start_date,end_date,"")
+                #
+                #     values_dict = xmltodict.parse(values)  # Converting xml to dict
+                #     values_json_object = json.dumps(values_dict)
+                #     values_json = json.loads(values_json_object)
+                #     # print(values_json)
+                #     # print(values_json.keys())
+                #     if 'timeSeriesResponse' in values_json:
+                #     # if values_json['timeSeriesResponse'] is not None:
+                #         times_series = values_json['timeSeriesResponse'][
+                #             'timeSeries']  # Timeseries object for the variable
+                #         # print(times_series)
+                #         if times_series['values'] is not None:
+                #             length_values= len(times_series['values']['value'])
+                #             print(variable_text," ", length_values )
+                #             array_keywords_hydroserver.append(words['variableName'])
+                #
+                #         else:
+                #             length_values = 0
+                #             print(variable_text," ", length_values )
+                #     ## Addition for the WHOS PLATA ##
+                #     else:
+                #         times_series = values_json['wml1:timeSeriesResponse'][
+                #             'wml1:timeSeries']  # Timeseries object for the variable
+                #         # print(times_series)
+                #         if times_series['wml1:values'] is not None:
+                #             length_values= len(times_series['wml1:values']['wml1:value'])
+                #             print(variable_text," ", length_values )
+                #             array_keywords_hydroserver.append(words['variableName'])
+                #
+                #         else:
+                #             length_values = 0
+                #             print(variable_text," ", length_values )
+                # except Exception as e:
+                #     print("OOPS",e.__class__)
                 # print("priting words")
                 # print(type(words))
                 # print(words)
                 # print(words.get('variableName'))
                 # print(words['variableName'])
-                array_keywords_hydroserver.append(words['variableName'])
+
+                # array_keywords_hydroserver.append(words['variableName'])
             # words_to_search[name] = array_keywords_hydroserver
         if isinstance(array_variables,dict):
             array_keywords_hydroserver.append(array_variables['variableName'])
+
+            # variable_text = array_variables['variableName']
+            # code_variable = array_variables['variableCode']['#text']
+            # start_date = ""
+            # end_date = ""
+            # network = "hola"
+            # site_desc = "hols"
+            #
+            # # site_desc = network + ':' + site_code
+            #
+            # variable_desc = network + ':' + code_variable
+            # try:
+            #     values = client.service.GetValues(site_desc, variable_desc, start_date, end_date, "")
+            # # print(values)
+            #
+            #     values_dict = xmltodict.parse(values)  # Converting xml to dict
+            #     values_json_object = json.dumps(values_dict)
+            #     values_json = json.loads(values_json_object)
+            #     if 'timeSeriesResponse' in values_json:
+            #     # if values_json['timeSeriesResponse'] is not None:
+            #         times_series = values_json['timeSeriesResponse'][
+            #             'timeSeries']  # Timeseries object for the variable
+            #         # print(times_series)
+            #         if times_series['values'] is not None:
+            #             length_values= len(times_series['values']['value'])
+            #             print(variable_text," ", length_values )
+            #             array_keywords_hydroserver.append(array_variables['variableName'])
+            #
+            #         else:
+            #             length_values = 0
+            #             print(variable_text," ", length_values )
+            #     ## Addition for the WHOS PLATA ##
+            #     else:
+            #         times_series = values_json['wml1:timeSeriesResponse'][
+            #             'wml1:timeSeries']  # Timeseries object for the variable
+            #         # print(times_series)
+            #         if times_series['wml1:values'] is not None:
+            #             length_values= len(times_series['wml1:values']['wml1:value'])
+            #             print(variable_text," ", length_values )
+            #             array_keywords_hydroserver.append(array_variables['variableName'])
+            #
+            #         else:
+            #             length_values = 0
+            #             print(variable_text," ", length_values )
+            # except Exception as e:
+            #     print("OOPS",e.__class__)
+
+            # array_keywords_hydroserver.append(array_variables['variableName'])
+
 
         words_to_search[name] = array_keywords_hydroserver
         print(words_to_search)
@@ -1212,3 +1294,309 @@ def get_values_graph_hs(request):
 
     print("done with get_values_graph_hs")
     return JsonResponse(return_obj)
+
+def get_variables_hs(request):
+    list_catalog={}
+    print("inside the keywordsgroup function")
+    specific_group=request.GET.get('group')
+    hs_actual = request.GET.get('hs')
+
+    SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
+
+    session = SessionMaker()  # Initiate a session
+    hydroservers_group = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
+
+    for hydroservers in hydroservers_group:
+        name = hydroservers.title
+        if hs_actual == name:
+            # print(hydroservers.title)
+            # print(hydroservers.url)
+            layer_obj = {}
+            layer_obj["title"] = hydroservers.title
+            layer_obj["url"] = hydroservers.url.strip()
+            print(layer_obj["url"])
+            layer_obj["siteInfo"] = hydroservers.siteinfo
+            client = Client(url = hydroservers.url.strip(), timeout= 500)
+            # client = Client(url = hydroservers.url.strip(), plugins =[schema_doctor], autoblend=True)
+
+            keywords = client.service.GetVariables('[:]')
+
+            keywords_dict = xmltodict.parse(keywords)
+            keywords_dict_object = json.dumps(keywords_dict)
+
+            keywords_json = json.loads(keywords_dict_object)
+            # Parsing the sites and creating a sites object. See utilities.py
+            print("-------------------------------------")
+            # print(sites_json)
+            print(type(keywords_json))
+            print(keywords_dict.keys())
+            # print(keywords_json['variablesResponse']['variables']['variable'])
+            array_variables=keywords_json['variablesResponse']['variables']['variable']
+            array_keywords_hydroserver=[]
+            print(type(array_variables))
+
+            if isinstance(array_variables,type([])):
+                # print("inside the list iption")
+                for words in array_variables:
+                    array_keywords_hydroserver.append(words['variableName'])
+
+            if isinstance(array_variables,dict):
+                array_keywords_hydroserver.append(array_variables['variableName'])
+
+
+            variables_show = array_keywords_hydroserver
+
+    list_catalog["variables"] = variables_show
+    print("------------------------------------------")
+
+    return JsonResponse(list_catalog)
+
+def get_available_sites(request):
+    # print("Catalog_group function in controllers.py")
+    # print("--------------------------------------------------------------------")
+    specific_group=request.GET.get('group')
+    specific_hydroserver = request.GET.get('hs')
+    specific_variables = request.GET.getlist('variables[]')
+    safety_check_limit = len(specific_variables)
+    safety_check_intial = 0
+    print("this is the specific varibales in the beginnign")
+    print(specific_variables)
+    print(request.GET)
+    # print(specific_group)
+    # print(request.GET)
+    list_catalog = {}
+    return_obj={}
+
+    # print("catalogs_groups controllers.py FUNCTION inside")
+
+    SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
+
+    # print(SessionMaker)
+    session = SessionMaker()  # Initiate a session
+    hydroservers_group = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
+    h1=session.query(Groups).join("hydroserver")
+    hs_list = []
+    for hydroservers in hydroservers_group:
+        if hydroservers.title ==specific_hydroserver:
+            print("this is the one selecting hs")
+            name = hydroservers.title
+            print(name)
+
+            # print(hydroservers.title)
+            # print(hydroservers.url)
+            layer_obj = {}
+
+            layer_obj["title"] = hydroservers.title
+            layer_obj["url"] = hydroservers.url.strip()
+            client = Client(layer_obj["url"])  # Connect to the HydroServer endpoint
+            # print(client)
+            keywords = client.service.GetVariables('[:]')
+            keywords_dict = xmltodict.parse(keywords)
+            keywords_dict_object = json.dumps(keywords_dict)
+
+            keywords_json = json.loads(keywords_dict_object)
+            # print(client)
+            layer_obj["siteInfoJSON"] =json.loads(hydroservers.siteinfo)
+            layer_obj["siteInfo"] =hydroservers.siteinfo
+            for site in layer_obj["siteInfoJSON"]:
+
+                sitecode = site['sitecode']
+                site_name= site['sitename']
+                network = site["network"]
+                layer_obj2={}
+                layer_obj2['sitecode']=sitecode
+                layer_obj2['sitename']=site_name
+                layer_obj2['network']=network
+                layer_obj2['latitude']=site['latitude']
+                layer_obj2['longitude']=site['longitude']
+                print("THIS IS THE ACTUAL SITE")
+                print(layer_obj2['sitename'])
+                site_desc = network + ":" + sitecode
+                site_info_Mc = client.service.GetSiteInfo(site_desc)
+                site_info_Mc_dict = xmltodict.parse(site_info_Mc)
+                site_info_Mc_json_object = json.dumps(site_info_Mc_dict)
+                site_info_Mc_json = json.loads(site_info_Mc_json_object)
+                # print(site_info_Mc_json)
+                object_methods= site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
+                # print("GETSITESINFO FUNCTION")
+                # print(object_methods)
+                object_with_methods_and_variables = {}
+                object_with_descriptions_and_variables = {}
+                object_with_time_and_variables = {}
+                if(isinstance(object_methods,(dict))):
+                    # print("adding to the methodID as a dict")
+                    variable_name_ = object_methods['variable']['variableName']
+                    ## this part was added for the WHOS plata broker endpoint ##
+                    if 'method' in object_methods:
+                        object_with_methods_and_variables[variable_name_]= object_methods['method']['@methodID']
+                    else:
+                        object_with_methods_and_variables[variable_name_]= None
+                    ## end of the part for WHOS plata
+                    object_with_descriptions_and_variables[variable_name_]= object_methods['source'];
+                    object_with_time_and_variables[variable_name_]= object_methods['variableTimeInterval'];
+                    # print(object_with_methods_and_variables)
+                else:
+                    for object_method in object_methods:
+                        # print("adding to the methodID as an arraylist")
+                        variable_name_ = object_method['variable']['variableName']
+                        if 'method' in object_method:
+                            object_with_methods_and_variables[variable_name_]= object_method['method']['@methodID']
+                        else:
+                            object_with_methods_and_variables[variable_name_]= None
+                        # print(object_method['source'])
+                        object_with_descriptions_and_variables[variable_name_]= object_method['source'];
+                        object_with_time_and_variables[variable_name_]= object_method['variableTimeInterval'];
+                        # print(object_with_methods_and_variables)
+
+
+
+                array_variables=keywords_json['variablesResponse']['variables']['variable']
+                array_keywords_hydroserver=[]
+                array_variables_codes = []
+                array_variables_lengths = []
+                length_values = 0
+
+
+                if isinstance(array_variables,type([])):
+                    print("array type")
+                    ijj = 0
+                    for words in array_variables:
+                        # print(ijj)
+                        print("variable name")
+                        print(words['variableName'])
+                        variable_text = words['variableName']
+                        print("compared to the following")
+                        print(specific_variables)
+                        if variable_text in specific_variables:
+                            print("TRUE compared")
+
+                            safety_check_intial = safety_check_intial + 1
+                            print("we are in the varaible specified")
+                            code_variable = words['variableCode']['#text']
+                            start_date = ""
+                            end_date = ""
+                            variable_desc = network + ':' + code_variable
+
+                            # print("variable_desc")
+                            # print("varaible in list")
+                            # print(variable_desc)
+                            # print(site_desc)
+                            try:
+                                values = client.service.GetValues(
+                                    site_desc, variable_desc, start_date, end_date, "")
+
+                                values_dict = xmltodict.parse(values)  # Converting xml to dict
+                                values_json_object = json.dumps(values_dict)
+                                values_json = json.loads(values_json_object)
+                                # print(values_json)
+                                # print(values_json.keys())
+                                if 'timeSeriesResponse' in values_json:
+                                # if values_json['timeSeriesResponse'] is not None:
+                                    times_series = values_json['timeSeriesResponse'][
+                                        'timeSeries']  # Timeseries object for the variable
+                                    # print(times_series)
+                                    if times_series['values'] is not None:
+                                        length_values= len(times_series['values']['value'])
+                                        print("this is the length value")
+                                        print(variable_text," ", length_values )
+                                        hs_list.append(layer_obj2)
+
+                                    else:
+                                        length_values = 0
+                                        print(variable_text," ", length_values )
+                                ## Addition for the WHOS PLATA ##
+                                else:
+                                    times_series = values_json['wml1:timeSeriesResponse'][
+                                        'wml1:timeSeries']  # Timeseries object for the variable
+                                    # print(times_series)
+                                    if times_series['wml1:values'] is not None:
+                                        length_values= len(times_series['wml1:values']['wml1:value'])
+                                        print(variable_text," ", length_values )
+                                        hs_list.append(layer_obj2)
+
+                                    else:
+                                        length_values = 0
+                                        print(variable_text," ", length_values )
+
+
+                                array_variables_lengths.append(length_values)
+
+
+                                array_keywords_hydroserver.append(words['variableName'])
+                                array_variables_codes.append(words['variableCode']['#text'])
+                                ijj=ijj+1
+
+                            except Exception as e:
+                                print("OOPS",e.__class__)
+                        # words_to_search[name] = array_keywords_hydroserver
+                if isinstance(array_variables,dict):
+                    print("dict")
+                    print("variable_name")
+                    print(array_variables['variableName'])
+                    print("compared to the following")
+                    print(specific_variables)
+
+                    variable_text = array_variables['variableName']
+                    if variable_text in specific_variables:
+                        print("TRUE compared")
+                        safety_check_intial = safety_check_intial + 1
+                        code_variable = array_variables['variableCode']['#text']
+                        start_date = ""
+                        end_date = ""
+                        variable_desc = network + ':' + code_variable
+
+                        try:
+                            values = client.service.GetValues(
+                                site_desc, variable_desc, start_date, end_date, "")
+                            # print(values)
+
+                            values_dict = xmltodict.parse(values)  # Converting xml to dict
+                            values_json_object = json.dumps(values_dict)
+                            values_json = json.loads(values_json_object)
+                            if 'timeSeriesResponse' in values_json:
+                            # if values_json['timeSeriesResponse'] is not None:
+                                times_series = values_json['timeSeriesResponse'][
+                                    'timeSeries']  # Timeseries object for the variable
+                                # print(times_series)
+                                if times_series['values'] is not None:
+                                    length_values= len(times_series['values']['value'])
+                                    print(variable_text," ", length_values )
+                                    hs_list.append(layer_obj2)
+
+                                else:
+                                    length_values = 0
+                                    # print(variable_text," ", length_values )
+                            ## Addition for the WHOS PLATA ##
+                            else:
+                                times_series = values_json['wml1:timeSeriesResponse'][
+                                    'wml1:timeSeries']  # Timeseries object for the variable
+                                # print(times_series)
+                                if times_series['wml1:values'] is not None:
+                                    length_values= len(times_series['wml1:values']['wml1:value'])
+                                    print(variable_text," ", length_values )
+                                    hs_list.append(layer_obj2)
+
+                                else:
+                                    length_values = 0
+                                    print(variable_text," ", length_values )
+
+
+                            array_variables_lengths.append(length_values)
+
+                            array_keywords_hydroserver.append(array_variables['variableName'])
+                            array_variables_codes.append(array_variables['variableCode']['#text'])
+                        except Exception as e:
+                            print("OOPS",e.__class__)
+
+                return_obj['variables']=array_keywords_hydroserver
+                return_obj['codes']=array_variables_codes
+                return_obj['counts'] = array_variables_lengths
+                return_obj['methodsIDs']= object_with_methods_and_variables
+                return_obj['description'] = object_with_descriptions_and_variables
+                return_obj['times_series'] = object_with_time_and_variables
+                return_obj['siteInfo']= site_info_Mc_json
+
+
+    list_catalog["hydroserver"] = hs_list
+
+    return JsonResponse(list_catalog)

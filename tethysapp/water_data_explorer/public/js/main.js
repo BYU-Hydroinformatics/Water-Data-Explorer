@@ -158,6 +158,13 @@ var water_data_explorer_PACKAGE = (function() {
           'whisker':{}
         },
         cleanGraphs,
+        showVariables,
+        showAvailableSites,
+        filterSites={
+          'group':"none",
+          'hs':"none"
+        },
+        layer_object_filter={}
       /************************************************************************
      *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that
      *************************************************************************/
@@ -2126,6 +2133,169 @@ var water_data_explorer_PACKAGE = (function() {
 
     };
 
+  /*
+  ****** FU1NCTION NAME : showVariables*********
+  ****** FUNCTION PURPOSE: RETRIEVES THE DIFFERENT VARIABLES THAT A HYDROSERVER HAS*********
+  */
+
+ showVariables = function(){
+   console.log("ShowVariables");
+   let groupActual = this.parentElement.parentNode.id.split("_")[0];
+   let hsActual = this.id.split("_")[0];
+   console.log(groupActual);
+   // let requestObject= {};
+   // requestObject['group']=groupActual;
+   // requestObject['hs']=hsActual;
+   filterSites['group']=groupActual;
+   filterSites['hs']=hsActual;
+
+   let $modalVariables = $("#modalShowVariables")
+   $.ajax({
+       type: "GET",
+       url: `get-variables-hs`,
+       dataType: "JSON",
+       data: filterSites,
+       success: result => {
+           console.log(result);
+           var HSTableHtml =
+               `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%">'+'<tbody>`
+           if (result['variables'].length === 0) {
+               $modalVariables
+                   .find(".modal-body")
+                   .html(
+                       "<b>There are no variables in the Hydroserver.</b>"
+                   )
+           }
+           else {
+               for (var i = 0; i < result['variables'].length; i++) {
+                   HSTableHtml +=
+                  '<tr class="odd gradeX2">'+
+                       `<td><input type="checkbox" name="name1" />${result['variables'][i]}
+                       </td>`
+                       +
+                  '</tr>'
+               }
+               HSTableHtml += "</tbody></table>"
+               $modalVariables.find(".modal-body").html(HSTableHtml)
+           }
+
+      }
+    })
+
+ }
+ /*
+ ****** FU1NCTION NAME : showAvailableSites*********
+ ****** FUNCTION PURPOSE: SHOW THE SITES THAT HAVE BEEN FILTERED REQURING SPECIFIC VARIABLES*********
+ */
+ showAvailableSites = function(){
+   let group = this.baseURI.split("/");
+   // ONLY THE KEY WORDS //
+   let datastring = Array.from(document.getElementsByClassName("odd gradeX2"));
+   let hs = datastring[0].offsetParent.id.split("-")[0];
+
+   console.log(group);
+   console.log(hs);
+   // console.log(datastring);
+   let key_words_to_search=[];
+   datastring.forEach(function(data){
+     // console.log(Array.from(data.children));
+     Array.from(data.children).forEach(function(column){
+       if(Array.from(column.children)[0].checked ==true){
+         // console.log();
+         key_words_to_search.push(Array.from(column.children)[0].nextSibling.nodeValue.trim())
+       }
+     })
+   });
+   // filter_words = key_words_to_search;
+   console.log(key_words_to_search);
+
+   let requestObject = {};
+   requestObject['hs'] = filterSites['hs'];
+   requestObject['group'] = filterSites['group'];
+   requestObject['variables'] = key_words_to_search;
+   console.log(requestObject);
+   $.ajax({
+       type: "GET",
+       url: `get-available-sites`,
+       dataType: "JSON",
+       data: requestObject,
+       success: result => {
+           console.log(result);
+           let sites = result['hydroserver'];
+           let title = filterSites['hs'];
+           sites = sites.map(site => {
+               return {
+                   type: "Feature",
+                   geometry: {
+                       type: "Point",
+                       coordinates: ol.proj.transform(
+                           [
+                               parseFloat(site.longitude),
+                               parseFloat(site.latitude)
+                           ],
+                           "EPSG:4326",
+                           "EPSG:3857"
+                       )
+                   },
+                   properties: {
+                       name: site.sitename,
+                       code: site.sitecode,
+                       network: site.network,
+                       hs_url: url,
+                       hs_name: title,
+                       lon: parseFloat(site.longitude),
+                       lat: parseFloat(site.latitude)
+                   }
+               }
+           })
+           console.log(sites);
+           let sitesGeoJSON = {
+               type: "FeatureCollection",
+               crs: {
+                   type: "name",
+                   properties: {
+                       name: "EPSG:3857"
+                   }
+               },
+               features: sites
+           }
+
+           const vectorSource = new ol.source.Vector({
+               features: new ol.format.GeoJSON().readFeatures(
+                   sitesGeoJSON
+               )
+           })
+
+           const vectorLayer = new ol.layer.Vector({
+               source: vectorSource,
+               style: featureStyle()
+           })
+           if(layersDict.hasOwnProperty(requestObject['hs'])){
+              map.removeLayer(layersDict[requestObject['hs']])
+           }
+           console.log("layer added to map");
+           map.addLayer(vectorLayer)
+           ol.extent.extend(extent, vectorSource.getExtent());
+           vectorLayer.set("selectable", true)
+           layer_object_filter[title] = vectorLayer;
+
+           //add the reset button ///
+           $("#btn-var-reset").on("click", function(){
+             map.removeLayer(layer_object_filter[title])
+             layer_object_filter={};
+             if(layersDict.hasOwnProperty(title)){
+               map.addLayer(layersDict[title]);
+             }
+           })
+      }
+    })
+
+
+ }
+ $(`#btn-var-search`).on("click",showAvailableSites);
+
+
+
 /*
 ****** FU1NCTION NAME : load_individual_hydroservers_group*********
 ****** FUNCTION PURPOSE: LOADS THE SERVERS OF A HYDROSERVER WHEN THE HYDROSERVER GROUPS IS CLICKED*********
@@ -2212,6 +2382,12 @@ var water_data_explorer_PACKAGE = (function() {
                        <button type="button" id="${title}_zoom" class="btn btn-dark">
                         <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
                        </button>
+                       <button id="${title}_variables" class="btn btn-dark" data-toggle="modal" data-target="#modalShowVariables"> <span class="glyphicon glyphicon-filter"></span>
+                       </button>
+
+                       <button type="button" id="${title}_variables" class="btn btn-dark">
+                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                       </button>
                        </li>
                        `;
 
@@ -2219,6 +2395,7 @@ var water_data_explorer_PACKAGE = (function() {
                        $(newHtml).appendTo(`#${id_group_separator}`);
                        console.log($(newHtml));
 
+                       $(`#${title}_variables`).on("click",showVariables);
 
 
                        // console.log(document.getElementById("current-servers"));
@@ -2237,77 +2414,90 @@ var water_data_explorer_PACKAGE = (function() {
                        input_check.firstElementChild.addEventListener("change", function(){
                          console.log(this);
                          if(this.checked){
-                           console.log(" it is checked");
-                           // load_individual_hydroservers_group(title);
-                           let sites = JSON.parse(siteInfo)
-                           // console.log(extents);
-                           console.log(sites);
-                           sites = sites.map(site => {
-                               return {
-                                   type: "Feature",
-                                   geometry: {
-                                       type: "Point",
-                                       coordinates: ol.proj.transform(
-                                           [
-                                               parseFloat(site.longitude),
-                                               parseFloat(site.latitude)
-                                           ],
-                                           "EPSG:4326",
-                                           "EPSG:3857"
-                                       )
-                                   },
-                                   properties: {
-                                       name: site.sitename,
-                                       code: site.sitecode,
-                                       network: site.network,
-                                       hs_url: url,
-                                       hs_name: title,
-                                       lon: parseFloat(site.longitude),
-                                       lat: parseFloat(site.latitude)
-                                   }
-                               }
-                           })
-
-                           let sitesGeoJSON = {
-                               type: "FeatureCollection",
-                               crs: {
-                                   type: "name",
-                                   properties: {
-                                       name: "EPSG:3857"
-                                   }
-                               },
-                               features: sites
+                           if(layer_object_filter.hasOwnProperty(title) && layersDict.hasOwnProperty(title)){
+                             map.removeLayer(layersDict[title])
+                             map.addLayer(layer_object_filter[title])
                            }
+                           else{
+                             console.log(" it is checked");
+                             // load_individual_hydroservers_group(title);
+                             let sites = JSON.parse(siteInfo)
+                             // console.log(extents);
+                             console.log(sites);
+                             sites = sites.map(site => {
+                                 return {
+                                     type: "Feature",
+                                     geometry: {
+                                         type: "Point",
+                                         coordinates: ol.proj.transform(
+                                             [
+                                                 parseFloat(site.longitude),
+                                                 parseFloat(site.latitude)
+                                             ],
+                                             "EPSG:4326",
+                                             "EPSG:3857"
+                                         )
+                                     },
+                                     properties: {
+                                         name: site.sitename,
+                                         code: site.sitecode,
+                                         network: site.network,
+                                         hs_url: url,
+                                         hs_name: title,
+                                         lon: parseFloat(site.longitude),
+                                         lat: parseFloat(site.latitude)
+                                     }
+                                 }
+                             })
 
-                           const vectorSource = new ol.source.Vector({
-                               features: new ol.format.GeoJSON().readFeatures(
-                                   sitesGeoJSON
-                               )
-                           })
+                             let sitesGeoJSON = {
+                                 type: "FeatureCollection",
+                                 crs: {
+                                     type: "name",
+                                     properties: {
+                                         name: "EPSG:3857"
+                                     }
+                                 },
+                                 features: sites
+                             }
 
-                           const vectorLayer = new ol.layer.Vector({
-                               source: vectorSource,
-                               style: featureStyle()
-                           })
+                             const vectorSource = new ol.source.Vector({
+                                 features: new ol.format.GeoJSON().readFeatures(
+                                     sitesGeoJSON
+                                 )
+                             })
 
-                           map.addLayer(vectorLayer)
+                             const vectorLayer = new ol.layer.Vector({
+                                 source: vectorSource,
+                                 style: featureStyle()
+                             })
+
+                             map.addLayer(vectorLayer)
 
 
 
-                           ol.extent.extend(extent, vectorSource.getExtent())
+                             ol.extent.extend(extent, vectorSource.getExtent())
 
-                           vectorLayer.set("selectable", true)
+                             vectorLayer.set("selectable", true)
 
 
-                           layersDict[title] = vectorLayer
+                             layersDict[title] = vectorLayer
+                           }
                          }
                          else{
-                           // delete the lsit of hydroservers being display // make a function to delete it
-                           console.log("it is not checked");
-                           // remove the layers from map
-                           map.removeLayer(layersDict[title])
-                           delete layersDict[title]
-                           map.updateSize()
+                           if(layer_object_filter.hasOwnProperty(title) && layersDict.hasOwnProperty(title)){
+                             map.removeLayer(layer_object_filter[title])
+                             map.updateSize()
+                           }
+                           else{
+                             // delete the lsit of hydroservers being display // make a function to delete it
+                             console.log("it is not checked");
+                             // remove the layers from map
+                             map.removeLayer(layersDict[title])
+                             delete layersDict[title]
+                             map.updateSize()
+                           }
+
                          }
 
                        });
@@ -3238,7 +3428,6 @@ var water_data_explorer_PACKAGE = (function() {
   //     console.log("hola nene");
   // })
 
-//The following three functions are necessary to make dynamic ajax requests//
 
   /*
   ****** FU1NCTION NAME: addDefaultBehaviorToAjax *********

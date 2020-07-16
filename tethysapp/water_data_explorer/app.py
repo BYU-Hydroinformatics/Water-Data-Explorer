@@ -85,6 +85,15 @@ class WaterDataExplorer(TethysAppBase):
                    url='get-values-graph-hs',
                    controller='water_data_explorer.controllers.get_values_graph_hs'),
             ## Get the values of a hydroserver
+            UrlMap(name='get-variables-hs',
+                   url='get-variables-hs',
+                   controller='water_data_explorer.controllers.get_variables_hs'),
+            ## Get the values of a hydroserver
+            UrlMap(name='get-available-sites',
+                   url='get-available-sites',
+                   controller='water_data_explorer.controllers.get_available_sites'),
+            ## Get the values of a hydroserver
+
         )
 
         return url_maps
