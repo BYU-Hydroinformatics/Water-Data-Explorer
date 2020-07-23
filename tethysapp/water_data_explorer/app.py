@@ -93,6 +93,9 @@ class WaterDataExplorer(TethysAppBase):
                    url='get-available-sites',
                    controller='water_data_explorer.controllers.get_available_sites'),
             ## Get the values of a hydroserver
+            UrlMap(name='get-hydroserver-info',
+                   url='get-hydroserver-info',
+                   controller='water_data_explorer.controllers.get_hydroserver_info'),
 
         )
 

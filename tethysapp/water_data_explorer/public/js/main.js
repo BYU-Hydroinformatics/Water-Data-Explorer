@@ -73,6 +73,7 @@ var water_data_explorer_PACKAGE = (function() {
         layers,
         layersDict, //Dictionary for keeping track of the new layers that are being added to the map
         map,
+        map2,
         shpSource,
         shpLayer,
         wmsLayer,
@@ -164,7 +165,9 @@ var water_data_explorer_PACKAGE = (function() {
           'group':"none",
           'hs':"none"
         },
-        layer_object_filter={}
+        layer_object_filter={},
+        hydroserver_information,
+        searchSites,
       /************************************************************************
      *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that
      *************************************************************************/
@@ -500,8 +503,103 @@ var water_data_explorer_PACKAGE = (function() {
     $("#type_graph_select").change(change_type_graphs_group)
     $("#type_graph_select2").change(change_type_graphs_individual)
 
-
     /*
+    ************ FUNCTION NAME: SEARCH SITES **********************
+    ************ PURPOSE: MAKES THE TABLE SEARCHABLE ***********
+    */
+
+    searchSites = function() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById(`${filterSites['hs']}-info-table`);
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+     document.getElementById('myInput').addEventListener("keyup", searchSites);
+    /*
+    ************ FUNCTION NAME: HYDROSERVER INFORMATION **********************
+    ************ PURPOSE: THE HYDROSERVER INFORMATION LOOKS FOR THE INFORMATION OF THE SITE, SO IT GIVES METADATA ***********
+    */
+
+    hydroserver_information = function(){
+      let groupActual = this.parentElement.parentNode.id.split("_")[0];
+      let hsActual = this.id.split("_")[0];
+      filterSites['group']=groupActual;
+      filterSites['hs']=hsActual;
+      console.log(filterSites['hs']);
+      $("#hydroserverTitle").html(filterSites['hs']);
+      $.ajax({
+        type:"GET",
+        url: `get-hydroserver-info`,
+        dataType: "JSON",
+        data: filterSites,
+        success: function(result1){
+          // let basemap = new ol.layer.Tile({
+          //                source: new ol.source.OSM()
+          //             })
+          map2 = new ol.Map({
+             target: 'map2',
+             layers: [
+               new ol.layer.Tile({
+                              source: new ol.source.OSM()
+                           })
+             ],
+             view: new ol.View({
+               center: ol.proj.fromLonLat([37.41, 8.82]),
+               zoom: 4
+             })
+           });
+           console.log(layersDict[`${result1['title']}`]);
+
+
+          // map2.addLayer(layersDict[`${result1['title']}`]);
+          //
+          // map2.getView().fit(layersDict[`${result1['title']}`].getSource().getExtent());
+          // map2.updateSize();
+          console.log(result1['url']);
+          $("#urlHydroserver").html(result1['url']);
+          console.log(result1);
+          var HSTableHtml =
+              `<table id="${filterSites['hs']}-info-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+          if (result1['siteInfo'].length === 0) {
+              $("#modalHydroserInformation")
+                  .find("#infoTable")
+                  .html(
+                      "<b>There are no sites in the Hydroserver.</b>"
+                  )
+          }
+          else {
+              for (var i = 0; i < result1['siteInfo'].length; i++) {
+                  HSTableHtml +=
+                 '<tr class="odd gradeX2">'+
+                      `<td>${i+1}.- ${result1['siteInfo'][i]['sitename']}
+                        <p>Site Code: ${result1['siteInfo'][i]['sitecode']}</p>
+                        <p>Network: ${result1['siteInfo'][i]['network']}</p>
+                        <p>Latitude: ${result1['siteInfo'][i]['latitude']}</p>
+                        <p>Longitude: ${result1['siteInfo'][i]['longitude']}</p>
+                      </td>`
+                      +
+                 '</tr>'
+              }
+              HSTableHtml += "</tbody></table>"
+              $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml)
+          }
+        }
+      })
+    }
+    /*
+
     ************ FUNCTION NAME: SELECT_VARIABLE_CHANGE **********************
     ************ PURPOSE: SELECT A VARIABLE FROM A DROPDOWN AND CHANGE THE GRAPH ***********
     */
@@ -2385,7 +2483,7 @@ var water_data_explorer_PACKAGE = (function() {
                        <button id="${title}_variables" class="btn btn-dark" data-toggle="modal" data-target="#modalShowVariables"> <span class="glyphicon glyphicon-filter"></span>
                        </button>
 
-                       <button type="button" id="${title}_variables" class="btn btn-dark">
+                       <button type="button" id="${title}_variables_info" class="btn btn-dark" data-toggle="modal" data-target="#modalHydroserInformation">
                         <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                        </button>
                        </li>
@@ -2396,6 +2494,7 @@ var water_data_explorer_PACKAGE = (function() {
                        console.log($(newHtml));
 
                        $(`#${title}_variables`).on("click",showVariables);
+                       $(`#${title}_variables_info`).on("click",hydroserver_information);
 
 
                        // console.log(document.getElementById("current-servers"));
@@ -2899,18 +2998,39 @@ var water_data_explorer_PACKAGE = (function() {
 
                       }
 
-                      let newHtml = `
-                      <li class="ui-state-default" layer-name="${title}" id="${title}" >
-                      <input class="chkbx-layer" type="checkbox" checked><span class="server-name">${title}</span>
-                      <button type="button" id="${title}_zoom" class="btn btn-dark">
-                       <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
-                      </button>
-                      </li>
-                      `;
+                      let newHtml = ` <li class="ui-state-default" layer-name="${title}" id="${title}" >
+                       <input class="chkbx-layer" type="checkbox" checked><span class="server-name">${title}</span>
+                       <button type="button" id="${title}_zoom" class="btn btn-dark">
+                        <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+                       </button>
+                       <button id="${title}_variables" class="btn btn-dark" data-toggle="modal" data-target="#modalShowVariables"> <span class="glyphicon glyphicon-filter"></span>
+                       </button>
+
+                       <button type="button" id="${title}_variables_info" class="btn btn-dark" data-toggle="modal" data-target="#modalHydroserInformation">
+                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                       </button>
+                       </li>
+                       `;
+
+                       // $(newHtml).appendTo("#current-servers")
+                       $(newHtml).appendTo(`#${id_group_separator}`);
+                       console.log($(newHtml));
+
+                       $(`#${title}_variables`).on("click",showVariables);
+                       $(`#${title}_variables_info`).on("click",hydroserver_information);
+                      // `
+                      // <li class="ui-state-default" layer-name="${title}" id="${title}" >
+                      // <input class="chkbx-layer" type="checkbox" checked><span class="server-name">${title}</span>
+                      // <button type="button" id="${title}_zoom" class="btn btn-dark">
+                      //  <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+                      // </button>
+                      // </li>
+                      // `;
+
 
                       // $(newHtml).appendTo("#current-servers")\
-                      $(newHtml).appendTo(`#${id_group_separator}`); ////////***********ONLY THING THAT CHANGES **********////
-                      // console.log($(newHtml));
+                      // $(newHtml).appendTo(`#${id_group_separator}`); ////////***********ONLY THING THAT CHANGES **********////
+                      // // console.log($(newHtml));
                       document.getElementById(`${title}`).style.visibility = "hidden";
 
 

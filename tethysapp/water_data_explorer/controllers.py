@@ -1608,3 +1608,20 @@ def get_available_sites(request):
         list_catalog["hydrosever"] = []
 
     return JsonResponse(list_catalog)
+def get_hydroserver_info(request):
+    specific_group = request.GET.get('group')
+    specific_hs = request.GET.get('hs')
+    response_obj = {}
+    SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
+    session = SessionMaker()  # Initiate a session
+    hydroservers_group = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
+    h1=session.query(Groups).join("hydroserver")
+    hs_list = []
+    for hydroservers in hydroservers_group:
+        name = hydroservers.title
+        if name == specific_hs:
+            response_obj["url"] = hydroservers.url.strip()
+            response_obj["title"] = hydroservers.title
+            response_obj["siteInfo"] = json.loads(hydroservers.siteinfo)
+
+    return JsonResponse(response_obj)
