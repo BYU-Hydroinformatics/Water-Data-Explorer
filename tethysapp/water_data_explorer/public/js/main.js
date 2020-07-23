@@ -2158,7 +2158,7 @@ var water_data_explorer_PACKAGE = (function() {
        success: result => {
            console.log(result);
            var HSTableHtml =
-               `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%">'+'<tbody>`
+               `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
            if (result['variables'].length === 0) {
                $modalVariables
                    .find(".modal-body")

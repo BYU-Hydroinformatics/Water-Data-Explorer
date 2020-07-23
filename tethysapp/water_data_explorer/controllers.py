@@ -1528,7 +1528,13 @@ def get_available_sites(request):
 
                             except Exception as e:
                                 print("OOPS",e.__class__)
+                        # else:
+                        #     if layer_obj2 in hs_list:
+                        #         hs_list.remove(layer_obj2)
+
                         # words_to_search[name] = array_keywords_hydroserver
+
+
                 if isinstance(array_variables,dict):
                     print("dict")
                     print("variable_name")
@@ -1596,7 +1602,9 @@ def get_available_sites(request):
                 return_obj['times_series'] = object_with_time_and_variables
                 return_obj['siteInfo']= site_info_Mc_json
 
-
-    list_catalog["hydroserver"] = hs_list
+    if safety_check_intial == safety_check_limit:
+        list_catalog["hydroserver"] = hs_list
+    else:
+        list_catalog["hydrosever"] = []
 
     return JsonResponse(list_catalog)
