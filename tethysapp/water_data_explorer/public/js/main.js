@@ -77,7 +77,8 @@ var water_data_explorer_PACKAGE = (function() {
         shpSource,
         shpLayer,
         wmsLayer,
-        wmsSource
+        wmsSource,
+        actualLayerModal;
     /************************************************************************
      *                    PRIVATE FUNCTION DECLARATIONS
      *************************************************************************/
@@ -545,28 +546,39 @@ var water_data_explorer_PACKAGE = (function() {
         dataType: "JSON",
         data: filterSites,
         success: function(result1){
-          // let basemap = new ol.layer.Tile({
-          //                source: new ol.source.OSM()
-          //             })
-          map2 = new ol.Map({
-             target: 'map2',
-             layers: [
-               new ol.layer.Tile({
-                              source: new ol.source.OSM()
-                           })
-             ],
-             view: new ol.View({
-               center: ol.proj.fromLonLat([37.41, 8.82]),
-               zoom: 4
-             })
-           });
-           console.log(layersDict[`${result1['title']}`]);
+          setTimeout(function(){
+            if(map2 ==undefined){
+              console.log("I am undefined");
+              map2 = new ol.Map({
+                     target: 'map2',
+                     layers: [
+                       new ol.layer.Tile({
+                          source: new ol.source.OSM()
+                       })
+                     ],
+                     view: new ol.View({
+                       center: ol.proj.fromLonLat([37.41, 8.82]),
+                       zoom: 4
+                     })
+              });
+              actualLayerModal = layersDict[`${result1['title']}`]
+              map2.addLayer(actualLayerModal);
+              map2.getView().fit(actualLayerModal.getSource().getExtent());
+              map2.updateSize();
+            }
+            else{
+              map2.removeLayer(actualLayerModal);
+              actualLayerModal=layersDict[`${result1['title']}`];
+              map2.addLayer(actualLayerModal);
+
+              map2.getView().fit(actualLayerModal.getSource().getExtent());
+              map2.updateSize();
+            }
 
 
-          // map2.addLayer(layersDict[`${result1['title']}`]);
+          },400)
           //
-          // map2.getView().fit(layersDict[`${result1['title']}`].getSource().getExtent());
-          // map2.updateSize();
+
           console.log(result1['url']);
           $("#urlHydroserver").html(result1['url']);
           console.log(result1);
@@ -918,7 +930,6 @@ var water_data_explorer_PACKAGE = (function() {
 
     // }
   }
-
 
 
     /*

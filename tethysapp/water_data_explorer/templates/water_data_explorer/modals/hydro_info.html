@@ -1,4 +1,6 @@
 
+{% load staticfiles %}
+
 <div id="modalHydroserInformation" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content myModal">
@@ -23,3 +25,31 @@
         </div>
     </div>
 </div>
+<link href="{% static 'water_data_explorer/vendor/openlayers/ol.css' %}" rel="stylesheet">
+
+<script src="{% static 'water_data_explorer/vendor/openlayers/ol.js' %}" type="text/javascript"></script>
+<script src="{% static 'water_data_explorer/js/main.js' %}" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+  function loadMap () {
+    var map2 = new ol.Map({
+           target: 'map2',
+           layers: [
+             new ol.layer.Tile({
+                source: new ol.source.OSM()
+             })
+           ],
+           view: new ol.View({
+             center: ol.proj.fromLonLat([37.41, 8.82]),
+             zoom: 4
+           })
+    });
+    console.log(actualLayerModal)
+    // map2.addLayer(actualLayerModal);
+  }
+ //  $('#modalHydroserInformation').on('shown.bs.modal', function () {
+ //    console.log("jola")
+ //    loadMap();
+ // })
+</script>
