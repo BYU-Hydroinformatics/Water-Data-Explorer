@@ -78,7 +78,8 @@ var water_data_explorer_PACKAGE = (function() {
         shpLayer,
         wmsLayer,
         wmsSource,
-        actualLayerModal;
+        actualLayerModal,
+        actualCoordinatesModal=[];
     /************************************************************************
      *                    PRIVATE FUNCTION DECLARATIONS
      *************************************************************************/
@@ -596,7 +597,7 @@ var water_data_explorer_PACKAGE = (function() {
                   HSTableHtml +=
                  '<tr class="odd gradeX2">'+
                       `<td> <p id="titleSite">${i+1}.- ${result1['siteInfo'][i]['sitename']}
-                      <button type="button" class="btn btn-primary" id="zoomToPoint"><span class="glyphicon glyphicon-pushpin"></span></button></p>
+                      <button type="button" class="btn btn-primary" id="${result1['siteInfo'][i]['sitecode']}_modal"><span class="glyphicon glyphicon-pushpin"></span></button></p>
                         <p>Site Code: ${result1['siteInfo'][i]['sitecode']}</p>
                         <p>Network: ${result1['siteInfo'][i]['network']}</p>
                         <p>Latitude: ${result1['siteInfo'][i]['latitude']}</p>
@@ -604,9 +605,49 @@ var water_data_explorer_PACKAGE = (function() {
                       </td>`
                       +
                  '</tr>'
+
               }
               HSTableHtml += "</tbody></table>"
               $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml);
+              for (var i = 0; i < result1['siteInfo'].length; i++) {
+                console.log(i);
+                console.log(result1['siteInfo'][i]);
+                let lat_modal=result1['siteInfo'][i]['latitude'];
+                let lng_modal=result1['siteInfo'][i]['longitude'];
+                let coordinate_modal = [lat_modal,lng_modal];
+
+                $(`#${result1['siteInfo'][i]['sitecode']}_modal`).click(function(){
+                        if(layersDict['selectedPointModal']){
+                          map2.removeLayer(layersDict['selectedPointModal']);
+                          map2.updateSize()
+                        }
+
+                        let actual_Source = new ol.source.Vector({});
+                        let marker = new ol.Feature({
+                          geometry: new ol.geom.Point(
+                            ol.proj.transform([parseFloat(lng_modal),parseFloat(lat_modal)], 'EPSG:4326','EPSG:3857'))
+                        })
+                        actual_Source.addFeature(marker);
+                        let vectorLayer = new ol.layer.Vector({
+                            source: actual_Source,
+                            style:  new ol.style.Style({
+                                image: new ol.style.Circle({
+                                    radius: 6,
+                                    stroke: new ol.style.Stroke({
+                                        color: "black",
+                                        width: 4
+                                    }),
+                                    fill: new ol.style.Fill({
+                                        color: `#FF0000`
+                                    })
+                                })
+                            })
+                        })
+                        layersDict['selectedPointModal'] = vectorLayer;
+                        map2.addLayer(layersDict['selectedPointModal']);
+                });
+
+              }
 
           }
         }
