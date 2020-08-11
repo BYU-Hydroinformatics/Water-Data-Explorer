@@ -595,7 +595,8 @@ var water_data_explorer_PACKAGE = (function() {
               for (var i = 0; i < result1['siteInfo'].length; i++) {
                   HSTableHtml +=
                  '<tr class="odd gradeX2">'+
-                      `<td>${i+1}.- ${result1['siteInfo'][i]['sitename']}
+                      `<td> <p id="titleSite">${i+1}.- ${result1['siteInfo'][i]['sitename']}
+                      <button type="button" class="btn btn-primary" id="zoomToPoint"><span class="glyphicon glyphicon-pushpin"></span></button></p>
                         <p>Site Code: ${result1['siteInfo'][i]['sitecode']}</p>
                         <p>Network: ${result1['siteInfo'][i]['network']}</p>
                         <p>Latitude: ${result1['siteInfo'][i]['latitude']}</p>
@@ -605,7 +606,8 @@ var water_data_explorer_PACKAGE = (function() {
                  '</tr>'
               }
               HSTableHtml += "</tbody></table>"
-              $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml)
+              $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml);
+
           }
         }
       })

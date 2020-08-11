@@ -320,7 +320,22 @@ tr:hover {
     transition: all 0.2s linear 0s;
 }
 
-
+#modalHydroserInformation .modal{
+    display: block !important;
+}
+#modalHydroserInformation .modal-dialog{
+      overflow-y: initial !important
+}
+#modalHydroserInformation .modal-body #infoTable{
+  height: 250px;
+  overflow-y: auto;
+}
+#titleSite{
+  font-weight: bold;
+}
+#titleSite button{
+  margin-left: 5%;
+}
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;
   border-color:#46b8da !important;
