@@ -128,54 +128,54 @@ class WaterDataExplorer(TethysAppBase):
 
     def custom_settings(self):
         custom_settings = (
-            CustomSetting(
-                name='Hydroserver Group',
-                type = CustomSetting.TYPE_STRING,
-                description='name of the group that will contain the hydroservers',
-                required = True
-            ),
-            CustomSetting(
-                name='Hydroserver Group Description',
-                type = CustomSetting.TYPE_STRING,
-                description='Description of the group that will contain the hydroserver',
-                required = True
-            ),
-            CustomSetting(
-                name='Hydroserver Name # 1',
-                type = CustomSetting.TYPE_STRING,
-                description='Hydroserver # 1 Name',
-                required = True
-            ),
-            CustomSetting(
-                name='Hydroserver Endpoint # 1',
-                type = CustomSetting.TYPE_STRING,
-                description='Hydroserver WSDL Endpoint (e.g. http://hydroportal.cuahsi.org/cedarriver/cuahsi_1_1.asmx?WSDL)',
-                required = True
-            ),
-            CustomSetting(
-                name='Hydroserver Name # 2',
-                type = CustomSetting.TYPE_STRING,
-                description='Hydroserver # 2 Name',
-                required = True
-            ),
-            CustomSetting(
-                name='Hydroserver Endpoint # 2',
-                type = CustomSetting.TYPE_STRING,
-                description='Hydroserver WSDL Endpoint (e.g. http://hydroportal.cuahsi.org/cedarriver/cuahsi_1_1.asmx?WSDL)',
-                required = True
-            ),
-            CustomSetting(
-                name='Hydroserver Name # 3',
-                type = CustomSetting.TYPE_STRING,
-                description='Hydroserver # 3 Name',
-                required = True
-            ),
-            CustomSetting(
-                name='Hydroserver Endpoint # 3',
-                type = CustomSetting.TYPE_STRING,
-                description='Hydroserver WSDL Endpoint (e.g. http://hydroportal.cuahsi.org/cedarriver/cuahsi_1_1.asmx?WSDL)',
-                required = True
-            ),
+            # CustomSetting(
+            #     name='Hydroserver Group',
+            #     type = CustomSetting.TYPE_STRING,
+            #     description='name of the group that will contain the hydroservers',
+            #     required = True
+            # ),
+            # CustomSetting(
+            #     name='Hydroserver Group Description',
+            #     type = CustomSetting.TYPE_STRING,
+            #     description='Description of the group that will contain the hydroserver',
+            #     required = True
+            # ),
+            # CustomSetting(
+            #     name='Hydroserver Name # 1',
+            #     type = CustomSetting.TYPE_STRING,
+            #     description='Hydroserver # 1 Name',
+            #     required = True
+            # ),
+            # CustomSetting(
+            #     name='Hydroserver Endpoint # 1',
+            #     type = CustomSetting.TYPE_STRING,
+            #     description='Hydroserver WSDL Endpoint (e.g. http://hydroportal.cuahsi.org/cedarriver/cuahsi_1_1.asmx?WSDL)',
+            #     required = True
+            # ),
+            # CustomSetting(
+            #     name='Hydroserver Name # 2',
+            #     type = CustomSetting.TYPE_STRING,
+            #     description='Hydroserver # 2 Name',
+            #     required = True
+            # ),
+            # CustomSetting(
+            #     name='Hydroserver Endpoint # 2',
+            #     type = CustomSetting.TYPE_STRING,
+            #     description='Hydroserver WSDL Endpoint (e.g. http://hydroportal.cuahsi.org/cedarriver/cuahsi_1_1.asmx?WSDL)',
+            #     required = True
+            # ),
+            # CustomSetting(
+            #     name='Hydroserver Name # 3',
+            #     type = CustomSetting.TYPE_STRING,
+            #     description='Hydroserver # 3 Name',
+            #     required = True
+            # ),
+            # CustomSetting(
+            #     name='Hydroserver Endpoint # 3',
+            #     type = CustomSetting.TYPE_STRING,
+            #     description='Hydroserver WSDL Endpoint (e.g. http://hydroportal.cuahsi.org/cedarriver/cuahsi_1_1.asmx?WSDL)',
+            #     required = True
+            # ),
             CustomSetting(
                 name='Boundary Geoserver Endpoint',
                 type = CustomSetting.TYPE_STRING,
