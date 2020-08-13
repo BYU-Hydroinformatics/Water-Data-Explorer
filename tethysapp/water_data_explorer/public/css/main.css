@@ -336,6 +336,10 @@ tr:hover {
 #titleSite button{
   margin-left: 5%;
 }
+.view-file{
+  width: 20%;
+  height: 20%;
+}
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;
   border-color:#46b8da !important;
