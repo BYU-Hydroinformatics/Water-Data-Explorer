@@ -1961,7 +1961,7 @@ var water_data_explorer_PACKAGE = (function() {
                 if(can_delete_hydrogroups){
                   newHtml =
                   `
-                  <div class="panel panel-default">
+                  <div class="panel panel-default" id="${title}_panel">
                     <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
                       <h4 class="panel-title">
                         <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
@@ -1986,7 +1986,7 @@ var water_data_explorer_PACKAGE = (function() {
                 else{
                   newHtml =
                   `
-                  <div class="panel panel-default">
+                  <div class="panel panel-default" id="${title}_panel">
                     <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
                       <h4 class="panel-title">
                         <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
@@ -2133,6 +2133,7 @@ var water_data_explorer_PACKAGE = (function() {
         groups_to_delete.push(group_name);
       }
     });
+    console.log("delete REQUEST");
     console.log(groups_to_delete);
     let groups_to_delete_obj={
       groups:groups_to_delete
@@ -2143,6 +2144,7 @@ var water_data_explorer_PACKAGE = (function() {
       dataType: "JSON",
       data: groups_to_delete_obj,
       success: function(result){
+        console.log("Result Delete");
         console.log(result);
         // var json_response = JSON.parse(result)
         let groups_to_erase = result.groups;
@@ -2159,6 +2161,9 @@ var water_data_explorer_PACKAGE = (function() {
           let id_group_separator = `${group}_list_separator`;
           let separator = document.getElementById(id_group_separator);
           separator.parentNode.removeChild(separator);
+          let group_panel_id = `${group}_panel`;
+          let group_panel = document.getElementById(group_panel_id);
+          group_panel.parentNode.removeChild(group_panel);
         });
 
         hydroservers_to_erase.forEach(function(hydroserver){
@@ -2806,7 +2811,7 @@ var water_data_explorer_PACKAGE = (function() {
                   if(can_delete_hydrogroups){
                     newHtml =
                     `
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" id="${title}_panel">
                       <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
                         <h4 class="panel-title">
                           <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
@@ -2840,7 +2845,7 @@ var water_data_explorer_PACKAGE = (function() {
                   else{
                     newHtml =
                     `
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" id="${title}_panel">
                       <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
                         <h4 class="panel-title">
                           <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
