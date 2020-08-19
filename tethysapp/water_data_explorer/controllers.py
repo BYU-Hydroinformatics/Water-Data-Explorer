@@ -3,6 +3,8 @@ import logging
 import sys
 import os
 import json
+import pandas as pd
+import numpy as np
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -1293,6 +1295,30 @@ def get_values_graph_hs(request):
                             return_obj['graphs']=graph_json
 
     print("done with get_values_graph_hs")
+    time_pd, values_pd = zip(*graph_json["values2"])
+    pds={}
+    pds['time'] = time_pd
+    pds['value'] = values_pd
+    df_interpolation= pd.DataFrame(pds,columns = ["time","value"])
+    df_interpolation2= pd.DataFrame(pds,columns = ["time","value"])
+    print(df_interpolation.dtypes)
+    df_interpolation.loc[df_interpolation.value < 0] = np.NaN
+    df_interpolation.replace(0, np.nan, inplace=True)
+    df_interpolation['time'] = pd.to_datetime(df_interpolation['time'])
+    df_interpolation = df_interpolation.set_index('time').resample('D').mean()
+    df_interpolation['value'] = df_interpolation['value'].interpolate()
+    df_interpolation.reset_index(level=0, inplace=True)
+    print(df_interpolation)
+    print(df_interpolation2)
+    listVals = df_interpolation['value'].to_list()
+    listTimes = df_interpolation['time'].to_list()
+    dataInterpolated = []
+    #a count for the number of interpolated can be introduced
+    for t,v in zip(listTimes,listVals):
+        dataInterpolated.append([t,v])
+    graph_json['interpolation']=dataInterpolated
+    # print(time_pd)
+    # print(values_pd)
     return JsonResponse(return_obj)
 
 def get_variables_hs(request):

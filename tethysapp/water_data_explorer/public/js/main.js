@@ -712,6 +712,7 @@ var water_data_explorer_PACKAGE = (function() {
             if(result1.graphs !== undefined){
               console.log(result1);
               let time_series_array = result1['graphs']['values2'];
+              let time_series_array_interpolation = result1['graphs']['interpolation'];
               console.log(time_series_array);
 
               let x_array = [];
@@ -729,6 +730,14 @@ var water_data_explorer_PACKAGE = (function() {
                 }
 
               })
+              let x_array_interpolation = [];
+              time_series_array_interpolation.forEach(function(x){
+                x_array_interpolation.push(x[0]);
+              })
+              let y_array_interpolation=[]
+              time_series_array_interpolation.forEach(function(y){
+                y_array_interpolation.push(y[1]);
+              })
               console.log(x_array);
               console.log(y_array);
               let title_graph = `${result1['graphs']['title']}`;
@@ -738,6 +747,8 @@ var water_data_explorer_PACKAGE = (function() {
               let type= "scatter";
               active_map_feature_graphs['scatter']['x_array'] = x_array;
               active_map_feature_graphs['scatter']['y_array'] = y_array;
+              active_map_feature_graphs['scatter']['x_array_interpolation'] = x_array_interpolation;
+              active_map_feature_graphs['scatter']['y_array_interpolation'] = y_array_interpolation;
               active_map_feature_graphs['scatter']['title_graph'] = title_graph;
               active_map_feature_graphs['scatter']['units_x'] = units_x;
               active_map_feature_graphs['scatter']['units_y'] = units_y;
@@ -751,7 +762,7 @@ var water_data_explorer_PACKAGE = (function() {
 
               if(chart_type ==="Scatter"){
                 console.log("it is an scatter plot for the variable change");
-                initialize_graphs(x_array,y_array,title_graph,units_y, units_x,variable_name_legend,type);
+                initialize_graphs(x_array,y_array,title_graph,units_y, units_x,variable_name_legend,type,x_array_interpolation,y_array_interpolation);
               }
               if(chart_type ==="Whisker and Box"){
                 console.log("it is an whisker and box plot for the variable change");
@@ -792,7 +803,7 @@ var water_data_explorer_PACKAGE = (function() {
     ************ FUNCTION NAME: INITIALIZE_GRAPHS **********************
     ************ PURPOSE: INITIALIZES ANY GRAH IN THE TIME SERIE OR BEGINNING ***********
     */
-    initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,type){
+    initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,type,xArrayIn,yArrayIn){
       let element_graphs=document.getElementById("graph");
       $("#graphs").empty();
       // let element_graphs2=document.getElementById("graph2");
@@ -836,9 +847,23 @@ var water_data_explorer_PACKAGE = (function() {
           marker: { size: 5 },
           line: {color: '#17BECF'}
         };
-
-
-        var data = [trace1];
+        var interpolation_trace;
+        var data = [];
+        data.push(trace1)
+        if(xArrayIn != undefined && yArrayIn != undefined){
+          interpolation_trace = {
+            x: xArrayIn,
+            y: yArrayIn,
+            // mode: 'markers',
+            mode: 'lines',
+            type: type,
+            name: `Mean Interpolation`,
+            text: [],
+            marker: { size: 5 },
+            line: {color: '#FF6347'}
+          };
+          data.push(interpolation_trace);
+        }
 
         var layout = {
           xaxis: {
