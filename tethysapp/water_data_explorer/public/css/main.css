@@ -340,6 +340,14 @@ tr:hover {
   width: 20%;
   height: 20%;
 }
+.titleh{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7em;
+  background-color: #286090;
+  color:white;
+}
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;
   border-color:#46b8da !important;
