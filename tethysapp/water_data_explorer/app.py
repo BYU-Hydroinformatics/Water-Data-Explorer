@@ -9,10 +9,10 @@ class WaterDataExplorer(TethysAppBase):
 
     name = 'Water Data Explorer'
     index = 'water_data_explorer:home'
-    icon = 'water_data_explorer/images/logoo.png'
+    icon = 'water_data_explorer/images/wde.png'
     package = 'water_data_explorer'
     root_url = 'water-data-explorer'
-    color = '#f2910d'
+    color = '#868e96'
     description = '"A tethys app that lets the user to visualize and query WSDL enpoints'
     tags = '"Hydrology", "WMO", "BYU"'
     enable_feedback = False
