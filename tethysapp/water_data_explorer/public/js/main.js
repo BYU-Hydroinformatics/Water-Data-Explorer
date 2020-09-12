@@ -170,6 +170,9 @@ var water_data_explorer_PACKAGE = (function() {
         layer_object_filter={},
         hydroserver_information,
         searchSites,
+        ind2 = "\n\u2022",
+        ind = 1;
+
       /************************************************************************
      *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that
      *************************************************************************/
@@ -2556,7 +2559,6 @@ var water_data_explorer_PACKAGE = (function() {
                    let no_servers = `<button class="btn btn-danger btn-block noGroups"> The group does not have hydroservers</button>`
                    $(no_servers).appendTo(`#${id_group_separator}`) ;
                  }
-
                  servers.forEach(function(server){
                      let {
                          title,
@@ -2571,7 +2573,7 @@ var water_data_explorer_PACKAGE = (function() {
                        console.log(keywords_in_servers.includes(title));
                        let newHtml = `
                        <li class="ui-state-default" layer-name="${title}" id="${title}" >
-                       <span class="server-name">${title}</span>
+                       <span class="server-name"><strong>${ind2}</strong> ${title}</span>
                        <input class="chkbx-layer" type="checkbox" checked>
                        <button type="button" id="${title}_zoom" class="btn btn-dark">
                         <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
@@ -2837,6 +2839,7 @@ var water_data_explorer_PACKAGE = (function() {
               $(".divForServers").empty() //Resetting the catalog
               let extent = ol.extent.createEmpty()
               // console.log(groups);
+              ind = 1;
               groups.forEach(group => {
                   let {
                       title,
@@ -2852,25 +2855,28 @@ var water_data_explorer_PACKAGE = (function() {
                       <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
                         <h4 class="panel-title">
                           <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-                          <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-                              <span class="group-name">${title}</span>
+                          <span class="group-name"><strong>${ind})</strong> ${title}</span>
 
-                              <input class="chkbx-layers" type="checkbox" checked>
-
-                              <button id="load-from-soap" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
-                                <span class="glyphicon glyphicon-plus"></span>
-                              </button>
-                              <button id="delete-server" class="btn btn-danger" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
-                                <span class="glyphicon glyphicon-trash"></span>
-                              </button>
-                               <button class="btn btn-warning" data-toggle="modal" data-target="#modalInterface">
-                                 <span class="glyphicon glyphicon-option-vertical"></span>
-                              </button>
-
-                          </li>
                           </a>
                         </h4>
+                        <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+
+                            <input class="chkbx-layers" type="checkbox" checked>
+
+                            <button id="load-from-soap" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
+                              <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button id="delete-server" class="btn btn-danger" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
+                              <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                             <button class="btn btn-warning" data-toggle="modal" data-target="#modalInterface">
+                               <span class="glyphicon glyphicon-option-vertical"></span>
+                            </button>
+
+                        </li>
+
                       </div>
+
                       <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
                       <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>Broker Endpoints</div>
                         <div class="panel-body">
@@ -2900,7 +2906,7 @@ var water_data_explorer_PACKAGE = (function() {
                           <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
                           <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
                             <input class="chkbx-layers" type="checkbox" checked>
-                              <span class="group-name">${title}</span>
+                            <span class="group-name"><strong>${ind})</strong> ${title}</span>
 
                           </li>
                           </a>
@@ -2959,7 +2965,7 @@ var water_data_explorer_PACKAGE = (function() {
                     $("#pop-up_description2").html(description_html);
 
                   });
-
+                  ind = ind +1;
 
               })
 
@@ -3032,7 +3038,7 @@ var water_data_explorer_PACKAGE = (function() {
           $modalAddSOAP.find(".warning").html("")
       }
       if ($("#soap-title").val() != "") {
-        var regex = new RegExp("^[a-zA-Z ]+$")
+        var regex = new RegExp("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
         var title = $("#soap-title").val()
         if (!regex.test(title)) {
             $modalAddSOAP
@@ -3107,19 +3113,21 @@ var water_data_explorer_PACKAGE = (function() {
 
                       }
 
-                      let newHtml = ` <li class="ui-state-default" layer-name="${title}" id="${title}" >
-                       <input class="chkbx-layer" type="checkbox" checked><span class="server-name">${title}</span>
-                       <button type="button" id="${title}_zoom" class="btn btn-dark">
-                        <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
-                       </button>
-                       <button id="${title}_variables" class="btn btn-dark" data-toggle="modal" data-target="#modalShowVariables"> <span class="glyphicon glyphicon-filter"></span>
-                       </button>
+                      let newHtml = `
+                      <li class="ui-state-default" layer-name="${title}" id="${title}" >
+                      <span class="server-name"><strong>${ind2}</strong> ${title}</span>
+                      <input class="chkbx-layer" type="checkbox" checked>
+                      <button type="button" id="${title}_zoom" class="btn btn-dark">
+                       <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+                      </button>
+                      <button id="${title}_variables" class="btn btn-dark" data-toggle="modal" data-target="#modalShowVariables"> <span class="glyphicon glyphicon-filter"></span>
+                      </button>
 
-                       <button type="button" id="${title}_variables_info" class="btn btn-dark" data-toggle="modal" data-target="#modalHydroserInformation">
-                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                       </button>
-                       </li>
-                       `;
+                      <button type="button" id="${title}_variables_info" class="btn btn-dark" data-toggle="modal" data-target="#modalHydroserInformation">
+                       <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                      </button>
+                      </li>
+                      `;
 
                        // $(newHtml).appendTo("#current-servers")
                        $(newHtml).appendTo(`#${id_group_separator}`);
