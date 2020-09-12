@@ -355,17 +355,15 @@ tr:hover {
 
 }
 #settingsID{
-  position:absolute;
   display: flex;
-  flex-direction: column;
-  width: 60px;
-  height: 80px;
+  flex-direction: row;
+  width: 100%;
+  height: 5%;
   z-index: 999 !important;
   background-color: #286090;
   align-items: center;
   justify-content: center;
   border-radius: 0.25em;
-  left:100em;
 }
 #collapseCP{
   border-radius: 0.25em;
@@ -452,6 +450,10 @@ tr:hover {
     border-color:  #e6e6e6;
     top:1px;
     padding: 0;
+}
+
+.toggle.btn-xs{
+  margin-left: 1em;
 }
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;
