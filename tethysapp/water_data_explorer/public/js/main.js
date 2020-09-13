@@ -129,6 +129,7 @@ var water_data_explorer_PACKAGE = (function() {
         actual_group,
         add_hydroserver,
         delete_hydroserver,
+        delete_hydroserver_Individual,
         get_hs_list_from_hydroserver,
         delete_group_of_hydroservers,
         get_keywords_from_group,
@@ -2595,14 +2596,17 @@ var water_data_explorer_PACKAGE = (function() {
                        <li class="ui-state-default" layer-name="${title}" id="${title}" >
                        <span class="server-name"><strong>${ind2}</strong> ${title}</span>
                        <input class="chkbx-layer" type="checkbox" checked>
-                       <button type="button" id="${title}_zoom" class="btn btn-dark">
+                       <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
                         <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
                        </button>
-                       <button id="${title}_variables" class="btn btn-dark" data-toggle="modal" data-target="#modalShowVariables"> <span class="glyphicon glyphicon-filter"></span>
+                       <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariables"> <span class="glyphicon glyphicon-filter"></span>
                        </button>
 
-                       <button type="button" id="${title}_variables_info" class="btn btn-dark" data-toggle="modal" data-target="#modalHydroserInformation">
+                       <button type="button" id="${title}_variables_info" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalHydroserInformation">
                         <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                       </button>
+                       <button type="button" id="${group_name}_${title}_del_endpoint" class="btn btn-dark btn-sm">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                        </button>
                        </li>
                        `;
@@ -2610,6 +2614,10 @@ var water_data_explorer_PACKAGE = (function() {
                        // $(newHtml).appendTo("#current-servers")
                        $(newHtml).appendTo(`#${id_group_separator}`);
                        console.log($(newHtml));
+                       $(`#${group_name}_${title}_del_endpoint`).on("click", function(){
+                           console.log("Indide new");
+                           delete_hydroserver_Individual(group_name, title)
+                       });
 
                        $(`#${title}_variables`).on("click",showVariables);
                        $(`#${title}_variables_info`).on("click",hydroserver_information);
@@ -3137,18 +3145,37 @@ var water_data_explorer_PACKAGE = (function() {
 
                       }
 
+                      // let newHtml = `
+                      // <li class="ui-state-default" layer-name="${title}" id="${title}" >
+                      // <span class="server-name"><strong>${ind2}</strong> ${title}</span>
+                      // <input class="chkbx-layer" type="checkbox" checked>
+                      // <button type="button" id="${title}_zoom" class="btn btn-dark">
+                      //  <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+                      // </button>
+                      // <button id="${title}_variables" class="btn btn-dark" data-toggle="modal" data-target="#modalShowVariables"> <span class="glyphicon glyphicon-filter"></span>
+                      // </button>
+                      //
+                      // <button type="button" id="${title}_variables_info" class="btn btn-dark" data-toggle="modal" data-target="#modalHydroserInformation">
+                      //  <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                      // </button>
+                      // </li>
+                      // `;
                       let newHtml = `
                       <li class="ui-state-default" layer-name="${title}" id="${title}" >
                       <span class="server-name"><strong>${ind2}</strong> ${title}</span>
                       <input class="chkbx-layer" type="checkbox" checked>
-                      <button type="button" id="${title}_zoom" class="btn btn-dark">
+                      <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
                        <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
                       </button>
-                      <button id="${title}_variables" class="btn btn-dark" data-toggle="modal" data-target="#modalShowVariables"> <span class="glyphicon glyphicon-filter"></span>
+                      <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariables"> <span class="glyphicon glyphicon-filter"></span>
                       </button>
 
-                      <button type="button" id="${title}_variables_info" class="btn btn-dark" data-toggle="modal" data-target="#modalHydroserInformation">
+                      <button type="button" id="${title}_variables_info" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalHydroserInformation">
                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                      </button>
+
+                      <button type="button" id="${group_name}_${title}_del_endpoint" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#DeleteWarning2">
+                       <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                       </button>
                       </li>
                       `;
@@ -3440,6 +3467,84 @@ var water_data_explorer_PACKAGE = (function() {
   }
 
   $("#btn-add-soap").on("click", add_hydroserver);
+  /*
+  ****** FU1NCTION NAME: delete_hydroserver *********
+  ****** FUNCTION PURPOSE: DELETE THE SELECTED HYDROSERVERS OF A GROUP*********
+  */
+
+  delete_hydroserver_Individual= function(group,server){
+
+      var datastring = `csrfmiddlewaretoken=ftdn0UcT3W8C7nNO8PkFbrqJeOo5QGaSKx2zuGkWP2TEyTBjxfKnpaMPXEfiNdGc&server=${server}&actual-group=${group}`
+      console.log(datastring);
+      $.ajax({
+          type: "POST",
+          url: `delete-group-hydroserver/`,
+          data: datastring,
+          dataType: "HTML",
+          success: function(result) {
+              console.log(result);
+              var json_response = JSON.parse(result)
+              console.log(json_response);
+
+              for(let i=0; i<Object.keys(json_response).length; ++i){
+
+                let i_string=i.toString();
+                let title=json_response[i_string];
+                let element = document.getElementById(title);
+                element.parentNode.removeChild(element);
+                //Removing layer from the frontend
+                console.log(title);
+                map.removeLayer(layersDict[title])
+                delete layersDict[title]
+                map.updateSize()
+                console.log(group);
+                // load_individual_hydroservers_group(arrayActual_group) //Reloading the new catalog
+                // get_notification("sucess",`Successfully Deleted the HydroServer!`);
+
+                let id_group_separator = `${group}_list_separator`;
+                let separator_element = document.getElementById(id_group_separator);
+                console.log(separator_element);
+                let children_element = Array.from(separator_element.children);
+                console.log(children_element);
+                if(children_element.length < 1){
+                  let no_servers = `<button class="btn btn-danger btn-block noGroups"> The group does not have hydroservers</button>`
+                      $(no_servers).appendTo(`#${id_group_separator}`) ;
+                }
+
+
+                $.notify(
+                    {
+                        message: `Successfully Deleted the HydroServer!`
+                    },
+                    {
+                        type: "success",
+                        allow_dismiss: true,
+                        z_index: 20000,
+                        delay: 5000
+                    }
+                )
+
+
+              }
+
+          },
+          error: error => {
+              console.log(error);
+              // get_notification("danger",`Something were wrong while deleting a hydroserver or group of hydroservers!`);
+              $.notify(
+                  {
+                      message: `Something were wrong while deleting a hydroserver or group of hydroservers!`
+                  },
+                  {
+                      type: "danger",
+                      allow_dismiss: true,
+                      z_index: 20000,
+                      delay: 5000
+                  }
+              )
+          }
+      })
+  }
 
   /*
   ****** FU1NCTION NAME: delete_hydroserver *********
