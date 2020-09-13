@@ -1993,26 +1993,45 @@ var water_data_explorer_PACKAGE = (function() {
                     <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
                       <h4 class="panel-title">
                         <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-                        <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-                          <input class="chkbx-layer" type="checkbox" checked>
-                            <span class="group-name">${title}</span>
-                            <input type="button" id="load-from-soap" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap" Value="Add New HydroServer">
-                            <input type="button" id="delete-server" class="btn btn-danger" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete" Value="Delete HydroServer">
+                        <span class="group-name"><strong>${ind})</strong> ${title}</span>
 
-                            <button class="btn btn-warning" data-toggle="modal" data-target="#modalInterface">
-                              <span class="glyphicon glyphicon-option-vertical"></span>
-                            </button>
-                        </li>
                         </a>
                       </h4>
+                      <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+
+                          <input class="chkbx-layers" type="checkbox" checked>
+                          <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
+                            <span class=" glyphicon glyphicon-info-sign "></span>
+                          </button>
+                          <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
+                            <span class="glyphicon glyphicon-plus"></span>
+                          </button>
+                          <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
+                            <span class="glyphicon glyphicon-trash"></span>
+                          </button>
+                      </li>
+
                     </div>
+
                     <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
+                    <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>Broker Endpoints</div>
                       <div class="panel-body">
                           <div id= ${id_group_separator} class="divForServers"></div>
                       </div>
                     </div>
                   </div>
                   `
+                  //line 2855
+
+
+                  // <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+                  //   <input class="chkbx-layer" type="checkbox" checked>
+                  //     <span class="group-name">${title}</span>
+                  //     <button class="btn btn-warning" data-toggle="modal" data-target="#modalInterface">
+                  //       <span class="glyphicon glyphicon-option-vertical"></span>
+                  //     </button>
+                  // </li>
+                  // <div id= ${id_group_separator} class="divForServers"></div>
                 }
                 else{
                   newHtml =
@@ -2021,18 +2040,15 @@ var water_data_explorer_PACKAGE = (function() {
                     <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
                       <h4 class="panel-title">
                         <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-                        <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-                        <input class="chkbx-layer" type="checkbox" checked>
-                          <span class="group-name">${title}</span>
-                          <input type="button" id="load-from-soap" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap" Value="Add New HydroServer">
-                          <input type="button" id="delete-server" class="btn btn-danger" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete" Value="Delete HydroServer">
-
-                          <button class="btn btn-warning" data-toggle="modal" data-target="#modalInterface">
-                            <span class="glyphicon glyphicon-option-vertical"></span>
-                          </button>
-                        </li>
+                        <span class="group-name"><strong>${ind})</strong> ${title}</span>
                         </a>
                       </h4>
+                      <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+                        <input class="chkbx-layers" type="checkbox" checked>
+                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
+                          <span class=" glyphicon glyphicon-info-sign "></span>
+                        </button>
+                      </li>
                     </div>
                     <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
                       <div class="panel-body">
@@ -2081,7 +2097,11 @@ var water_data_explorer_PACKAGE = (function() {
 
                   actual_group = `&actual-group=${title}`;
 
-                  let description_html=`<h1><u>${title}</u></h1>
+                  let description_html=`
+                  <h1>Group Metadata<h1>
+                  <h3>Group Title</h3>
+                  <p>${title}</p>
+                  <h3>Group Description</h3>
                   <p>${description}</p>`;
                   // $("#pop-up_description").html(description_html);
                   $("#pop-up_description2").html(description_html);
@@ -2862,17 +2882,15 @@ var water_data_explorer_PACKAGE = (function() {
                         <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
 
                             <input class="chkbx-layers" type="checkbox" checked>
-
-                            <button id="load-from-soap" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
+                              <span class=" glyphicon glyphicon-info-sign "></span>
+                            </button>
+                            <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
                               <span class="glyphicon glyphicon-plus"></span>
                             </button>
-                            <button id="delete-server" class="btn btn-danger" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
+                            <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
                               <span class="glyphicon glyphicon-trash"></span>
                             </button>
-                             <button class="btn btn-warning" data-toggle="modal" data-target="#modalInterface">
-                               <span class="glyphicon glyphicon-option-vertical"></span>
-                            </button>
-
                         </li>
 
                       </div>
@@ -2904,13 +2922,15 @@ var water_data_explorer_PACKAGE = (function() {
                       <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
                         <h4 class="panel-title">
                           <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-                          <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-                            <input class="chkbx-layers" type="checkbox" checked>
-                            <span class="group-name"><strong>${ind})</strong> ${title}</span>
-
-                          </li>
+                          <span class="group-name"><strong>${ind})</strong> ${title}</span>
                           </a>
                         </h4>
+                        <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+                          <input class="chkbx-layers" type="checkbox" checked>
+                          <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
+                            <span class=" glyphicon glyphicon-info-sign "></span>
+                          </button>
+                        </li>
                       </div>
                       <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
                         <div class="panel-body">
@@ -2959,7 +2979,11 @@ var water_data_explorer_PACKAGE = (function() {
 
                     actual_group = `&actual-group=${title}`;
 
-                    let description_html=`<h1><u>${title}</u></h1>
+                    let description_html=`
+                    <h1>Group Metadata<h1>
+                    <h3>Group Title</h3>
+                    <p>${title}</p>
+                    <h3>Group Description</h3>
                     <p>${description}</p>`;
                     // $("#pop-up_description").html(description_html);
                     $("#pop-up_description2").html(description_html);
@@ -3519,6 +3543,7 @@ var water_data_explorer_PACKAGE = (function() {
   ****** FUNCTION PURPOSE: GET THE LIST OF HYDROSERVERS THAT A GROUP OF HYDROSERVER CONTAINS *********
   */
   get_hs_list_from_hydroserver = function(){
+    console.log("inside list");
     if(actual_group == undefined){
       actual_group="";
     }
@@ -3569,7 +3594,7 @@ var water_data_explorer_PACKAGE = (function() {
           }
       })
   }
-  $("#delete-server").on("click", get_hs_list_from_hydroserver);
+  $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
 
 /// NEEDS TO BE ADDED TO THE APP FOR EXISTING CATALOGS //
   const add_central = () => {

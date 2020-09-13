@@ -243,7 +243,7 @@ tr:hover {
   margin-left: 10%;
 }
 
-#pop-up_description2 {
+#pop-up_description2 h1{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -311,8 +311,8 @@ tr:hover {
     padding-right:0.10em;
 }
 .panel-heading.buttonAppearance h4{
-
     width: 100%;
+    align-items: center;
 }
 .ui-state-default.buttonAppearance{
     /* margin: 40px; */
@@ -400,20 +400,25 @@ tr:hover {
 .chkbx-layers{
   -webkit-appearance:none;
   width:2.5em;
-  height:2.2em;
-  border-radius:5px;
-  border:2px solid #555;
-  background: url("https://img.icons8.com/dotty/24/000000/sheets.png") 50% 0 no-repeat fixed;
-  background-color: white;
-  border-color: #5a6268;
-  top:1px;
+  height:2em;
+  background: url("https://img.icons8.com/dotty/24/FFFFFF/sheets.png") 50% 0 no-repeat fixed;
+  background-color: #337ab7;
+  border-color: #007bff;
+  padding: 0;
+}
+.chkbx-layers:hover{
+  -webkit-appearance:none;
+  width:2.5em;
+  height:2em;
+  background: url("https://img.icons8.com/dotty/24/FFFFFF/sheets.png") 50% 0 no-repeat fixed;
+  background-color:  #286090;
+  border-color: #204d74;
   padding: 0;
 }
 .chkbx-layers:checked {
     background: url("https://img.icons8.com/ios/24/FFFFFF/sheets.png") 50% 0 no-repeat fixed;
-    background-color:  #20c997;
-    border-color:  #20c997;
-    top:1px;
+    background-color:  #286090;
+    border-color: #204d74;
     padding: 0;
 }
 .chkbx-layer{
