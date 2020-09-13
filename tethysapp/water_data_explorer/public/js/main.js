@@ -2594,8 +2594,10 @@ var water_data_explorer_PACKAGE = (function() {
                        console.log(keywords_in_servers.includes(title));
                        let newHtml = `
                        <li class="ui-state-default" layer-name="${title}" id="${title}" >
+
                        <span class="server-name"><strong>${ind2}</strong> ${title}</span>
                        <input class="chkbx-layer" type="checkbox" checked>
+
                        <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
                         <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
                        </button>
@@ -2632,11 +2634,12 @@ var water_data_explorer_PACKAGE = (function() {
                        let li_arrays2 = Array.from(lis);
                        console.log(li_arrays2);
 
-                       let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0];
+                       let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
+
                        // let input_check = document.querySelector(newHtml);
                        console.log(input_check);
 
-                       input_check.firstElementChild.addEventListener("change", function(){
+                       input_check.addEventListener("change", function(){
                          console.log(this);
                          if(this.checked){
                            if(layer_object_filter.hasOwnProperty(title) && layersDict.hasOwnProperty(title)){
