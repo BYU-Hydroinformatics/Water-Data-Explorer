@@ -25,7 +25,7 @@
           {% endif %}
 
           {% if can_delete_hydrogroups %}
-          <button class="btn btn-danger"  data-toggle="modal" data-target="#DeleteWarning"> <span class="glyphicon glyphicon-trash"></span></button>
+          <button id="btn-del-groups-f" class="btn btn-danger"  data-toggle="modal" data-target="#modalDeleteGroups"> <span class="glyphicon glyphicon-trash"></span></button>
           {% endif %}
           <button class="btn btn-success" data-toggle="modal" data-target="#modalKeyWordSearch"> <span class="glyphicon glyphicon-search"></span></button>
           <!-- {% if can_block_map %}
@@ -158,6 +158,7 @@
 {% include "water_data_explorer/modals/addGroupHydroserver.html" %}
 {% include "water_data_explorer/modals/keywordSearch.html" %}
 {% include "water_data_explorer/modals/DeleteHydroWarning.html" %}
+{% include "water_data_explorer/modals/DeleteTableGroup.html" %}
 {% include "water_data_explorer/modals/showVariables.html" %}
 {% include "water_data_explorer/modals/hydro_info.html" %}
 

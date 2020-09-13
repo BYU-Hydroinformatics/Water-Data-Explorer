@@ -130,6 +130,7 @@ var water_data_explorer_PACKAGE = (function() {
         add_hydroserver,
         delete_hydroserver,
         delete_hydroserver_Individual,
+        make_list_groups,
         get_hs_list_from_hydroserver,
         delete_group_of_hydroservers,
         get_keywords_from_group,
@@ -2184,77 +2185,92 @@ var water_data_explorer_PACKAGE = (function() {
 ****** FUNCTION PURPOSE: DELETES THE HYDROSERVER GROUP AND THE HYDROSERVERS INSIDE THE GROUP*********
 */
   delete_group_of_hydroservers = function(){
-    let datastring = Object.values($("#current-Groupservers").find(".buttonAppearance > .chkbx-layer"));
+    // let datastring = Object.values($("#current-Groupservers").find(".buttonAppearance > .chkbx-layer"));
+    let datastring = Object.values($("#tbl-hydrogroups").find(".chkbx-group"));
     console.log(datastring);
     let groups_to_delete=[];
     datastring.forEach(function(data){
       if(data.checked== true){
-        let group_name = data.nextElementSibling.innerHTML;
+        let group_name = data.value;
         groups_to_delete.push(group_name);
       }
     });
     console.log("delete REQUEST");
     console.log(groups_to_delete);
-    let groups_to_delete_obj={
-      groups:groups_to_delete
-    };
-    $.ajax({
-      type: "POST",
-      url: `delete-group/`,
-      dataType: "JSON",
-      data: groups_to_delete_obj,
-      success: function(result){
-        console.log("Result Delete");
-        console.log(result);
-        // var json_response = JSON.parse(result)
-        let groups_to_erase = result.groups;
-        let hydroservers_to_erase = result.hydroservers;
-        console.log(groups_to_erase);
-        console.log(hydroservers_to_erase);
-        $("#pop-up_description2").empty();
+    if(groups_to_delete.length > 0){
+      let groups_to_delete_obj={
+        groups:groups_to_delete
+      };
+      $.ajax({
+        type: "POST",
+        url: `delete-group/`,
+        dataType: "JSON",
+        data: groups_to_delete_obj,
+        success: function(result){
+          console.log("Result Delete");
+          console.log(result);
+          // var json_response = JSON.parse(result)
+          let groups_to_erase = result.groups;
+          let hydroservers_to_erase = result.hydroservers;
+          console.log(groups_to_erase);
+          console.log(hydroservers_to_erase);
+          $("#pop-up_description2").empty();
 
+          groups_to_erase.forEach(function(group){
+            let element=document.getElementById(group);
+            element.parentNode.removeChild(element);
+            let id_group_separator = `${group}_list_separator`;
+            let separator = document.getElementById(id_group_separator);
+            separator.parentNode.removeChild(separator);
+            let group_panel_id = `${group}_panel`;
+            let group_panel = document.getElementById(group_panel_id);
+            group_panel.parentNode.removeChild(group_panel);
+          });
 
+          hydroservers_to_erase.forEach(function(hydroserver){
 
-        groups_to_erase.forEach(function(group){
-          let element=document.getElementById(group);
-          element.parentNode.removeChild(element);
-          let id_group_separator = `${group}_list_separator`;
-          let separator = document.getElementById(id_group_separator);
-          separator.parentNode.removeChild(separator);
-          let group_panel_id = `${group}_panel`;
-          let group_panel = document.getElementById(group_panel_id);
-          group_panel.parentNode.removeChild(group_panel);
-        });
+              map.removeLayer(layersDict[hydroserver]);
+              delete layersDict[title]
 
-        hydroservers_to_erase.forEach(function(hydroserver){
+          });
+          map.updateSize();
+          // get_notification("sucess",`Successfully Deleted Group of HydroServer!`);
 
-            map.removeLayer(layersDict[hydroserver]);
-            delete layersDict[title]
+            $.notify(
+                {
+                    message: `Successfully Deleted Group of HydroServer!`
+                },
+                {
+                    type: "success",
+                    allow_dismiss: true,
+                    z_index: 20000,
+                    delay: 5000
+                }
+            )
 
-        });
-        map.updateSize();
-        // get_notification("sucess",`Successfully Deleted Group of HydroServer!`);
+        }
 
-          $.notify(
-              {
-                  message: `Successfully Deleted Group of HydroServer!`
-              },
-              {
-                  type: "success",
-                  allow_dismiss: true,
-                  z_index: 20000,
-                  delay: 5000
-              }
-          )
+      })
+    }
+    else{
+      $.notify(
+          {
+              message: `You need to select at least one group to delete`
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
+          }
+      )
 
-      }
+    }
 
-
-    })
 
   }
 
-  $("#btn-delete-hydroserver-group").on("click", delete_group_of_hydroservers);
+  $("#btn-del-hydro-groups").on("click", delete_group_of_hydroservers);
 
   /*
   ****** FU1NCTION NAME : addExpandableMenu *********
@@ -2617,7 +2633,6 @@ var water_data_explorer_PACKAGE = (function() {
                        $(newHtml).appendTo(`#${id_group_separator}`);
                        console.log($(newHtml));
                        $(`#${group_name}_${title}_del_endpoint`).on("click", function(){
-                           console.log("Indide new");
                            delete_hydroserver_Individual(group_name, title)
                        });
 
@@ -3472,7 +3487,7 @@ var water_data_explorer_PACKAGE = (function() {
   $("#btn-add-soap").on("click", add_hydroserver);
   /*
   ****** FU1NCTION NAME: delete_hydroserver *********
-  ****** FUNCTION PURPOSE: DELETE THE SELECTED HYDROSERVERS OF A GROUP*********
+  ****** FUNCTION PURPOSE: DELETE THE SELECTED HYDROSERVER OF A GROUP*********
   */
 
   delete_hydroserver_Individual= function(group,server){
@@ -3645,6 +3660,50 @@ var water_data_explorer_PACKAGE = (function() {
       })
   }
   $("#btn-del-server").on("click", delete_hydroserver)
+
+  /*
+  ****** FU1NCTION NAME: MAKE_LIST_GROUPS*********
+  ****** FUNCTION PURPOSE: GET THE LIST OF THE GROUPS THAT THE APP CONTAINS *********
+  */
+  make_list_groups = function(){
+    let groupsDiv = $("#current-Groupservers").find(".panel.panel-default");
+    console.log(groupsDiv);
+    let arrayGroups = Object.values(groupsDiv);
+    console.log(arrayGroups);
+    let finalGroupArray=[];
+    arrayGroups.forEach(function(g){
+      if(g.id){
+        let stringGroup = g.id.split("_")[0];
+        finalGroupArray.push(stringGroup);
+      }
+    });
+    var HSTableHtml =
+        '<table id="tbl-hydrogroups"><thead><th>Check</th><th>Title</th></thead><tbody>'
+    if (finalGroupArray.length < 0) {
+      $("#modalDeleteGroups").find(".modal-body")
+            .html(
+                "<b>There are no groups in the Water Data Explorer</b>"
+            )
+    } else {
+        for (var i = 0; i < finalGroupArray.length; i++) {
+            var title = finalGroupArray[i]
+            HSTableHtml +=
+                "<tr>" +
+                '<td><input class="chkbx-group" type="checkbox" name="server" value="' +
+                title +
+                '"></td>' +
+                '<td class="hs_title">' +
+                title +
+                "</td>" +
+                "</tr>"
+        }
+        HSTableHtml += "</tbody></table>"
+        $("#modalDeleteGroups").find(".modal-body").html(HSTableHtml);
+    }
+    console.log(finalGroupArray);
+  }
+
+  $("#btn-del-groups-f").on("click", make_list_groups);
 
   /*
   ****** FU1NCTION NAME: GET_HS_LIST_FROM_HYDRPSERVER *********

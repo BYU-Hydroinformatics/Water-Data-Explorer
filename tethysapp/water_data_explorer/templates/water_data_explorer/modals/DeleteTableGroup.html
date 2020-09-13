@@ -1,0 +1,22 @@
+<form id="modalDeleteGroups" class="modal fade" role="dialog" action="delete/" method="POST">
+    {% csrf_token %}
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Groups</h4>
+                Please, be aware that deleting all the hydroservers that are checked will mean to lose all the HydroServers
+                that are associated to each one of the groups that will be deleted.
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <div class="button-group">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="btn-del-hydro-groups" class="btn btn-danger">Proceed and Delete</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
