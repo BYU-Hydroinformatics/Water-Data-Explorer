@@ -2067,7 +2067,7 @@ var water_data_explorer_PACKAGE = (function() {
                 console.log("hola");
                 // console.log(li_object.children[0]);
                 // let input_check = li_object.children[0];
-                let input_check = li_object.getElementsByClassName("chkbx-layer")[0];
+                let input_check = li_object.getElementsByClassName("chkbx-layers")[0];
 
                 console.log(input_check);
                 if(input_check.checked){
