@@ -463,6 +463,9 @@ tr:hover {
 .toggle.btn-xs{
   margin-left: 1em;
 }
+#tbl-hydrogroups{
+  width: 100%;
+}
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;
   border-color:#46b8da !important;

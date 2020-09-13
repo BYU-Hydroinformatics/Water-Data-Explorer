@@ -3678,7 +3678,7 @@ var water_data_explorer_PACKAGE = (function() {
       }
     });
     var HSTableHtml =
-        '<table id="tbl-hydrogroups"><thead><th>Check</th><th>Title</th></thead><tbody>'
+        '<table id="tbl-hydrogroups"><thead><th>Select</th><th>Title</th></thead><tbody>'
     if (finalGroupArray.length < 0) {
       $("#modalDeleteGroups").find(".modal-body")
             .html(
