@@ -173,7 +173,9 @@ var water_data_explorer_PACKAGE = (function() {
         hydroserver_information,
         searchSites,
         ind2 = "\n\u2022",
-        ind = 1;
+        ind = 1,
+        group_show_actual,
+        hs_show_actual;
 
       /************************************************************************
      *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that
@@ -1602,7 +1604,7 @@ var water_data_explorer_PACKAGE = (function() {
 
         console.log(li_arrays);
 
-
+        console.log(input_check_array);
         // LOOP FOR ALL THE GROUPS THAT ARE CHECKED
         input_check_array.forEach(function(hydroserver_group){
           let allNoneGroups = Array.from(document.getElementsByClassName("noGroups"));
@@ -1890,8 +1892,9 @@ var water_data_explorer_PACKAGE = (function() {
 
     array_active_groups_hydroservers.forEach(function(group){
       let input_type = Array.from(group.getElementsByTagName("INPUT"))[0];
+      console.log(input_type);
       if(input_type.checked){
-        input_check_array.push(group.innerText);
+        input_check_array.push(group.id);
       }
     })
     console.log(input_check_array);
@@ -2375,6 +2378,8 @@ var water_data_explorer_PACKAGE = (function() {
    console.log("ShowVariables");
    let groupActual = this.parentElement.parentNode.id.split("_")[0];
    let hsActual = this.id.split("_")[0];
+   group_show_actual = groupActual;
+   hs_show_actual = hsActual;
    console.log(groupActual);
    // let requestObject= {};
    // requestObject['group']=groupActual;
@@ -3492,7 +3497,7 @@ var water_data_explorer_PACKAGE = (function() {
 
   delete_hydroserver_Individual= function(group,server){
 
-      var datastring = `csrfmiddlewaretoken=ftdn0UcT3W8C7nNO8PkFbrqJeOo5QGaSKx2zuGkWP2TEyTBjxfKnpaMPXEfiNdGc&server=${server}&actual-group=${group}`
+      var datastring = `server=${server}&actual-group=${group}`
       console.log(datastring);
       $.ajax({
           type: "POST",
