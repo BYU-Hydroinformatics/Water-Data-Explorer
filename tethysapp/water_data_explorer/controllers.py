@@ -966,11 +966,11 @@ def get_values_graph_hs(request):
 
 
     client = Client(hs_url)  # Connect to the HydroServer endpoint
-    # print(client)
-    site_info_Mc = client.service.GetSiteInfo(site_desc)
-    site_info_Mc_dict = xmltodict.parse(site_info_Mc)
-    site_info_Mc_json_object = json.dumps(site_info_Mc_dict)
-    site_info_Mc_json = json.loads(site_info_Mc_json_object)
+    # # print(client)
+    # site_info_Mc = client.service.GetSiteInfo(site_desc)
+    # site_info_Mc_dict = xmltodict.parse(site_info_Mc)
+    # site_info_Mc_json_object = json.dumps(site_info_Mc_dict)
+    # site_info_Mc_json = json.loads(site_info_Mc_json_object)
 
     values = client.service.GetValues(
         site_desc, variable_desc, start_date, end_date, "")
@@ -1000,6 +1000,7 @@ def get_values_graph_hs(request):
             print(times_series)
             print("UNITS ERROR")
             print(graph_json)
+            print(times_series['values'])
             graph_json["title"] = times_series['variable']['variableName'] + " (" + graph_json["unit"] + ") vs Time"
             for j in times_series['values']:  # Parsing the timeseries
                 print("first for loop")
@@ -1627,8 +1628,11 @@ def get_available_sites(request):
                 return_obj['description'] = object_with_descriptions_and_variables
                 return_obj['times_series'] = object_with_time_and_variables
                 return_obj['siteInfo']= site_info_Mc_json
-
-    if safety_check_intial == safety_check_limit:
+    print("Safety check limit")
+    print(safety_check_limit)
+    print("Safety check initial")
+    print(safety_check_intial)
+    if safety_check_intial >= safety_check_limit:
         list_catalog["hydroserver"] = hs_list
     else:
         list_catalog["hydrosever"] = []
