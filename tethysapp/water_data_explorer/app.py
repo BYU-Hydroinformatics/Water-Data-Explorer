@@ -28,74 +28,56 @@ class WaterDataExplorer(TethysAppBase):
             UrlMap(
                 name='home',
                 url='water-data-explorer',
-                controller='water_data_explorer.controllers.home'
-            ),
-            UrlMap(name='his-server',
-                   url='his-server',
-                   controller='water_data_explorer.controllers.get_his_server'),
-            # Returns the selected HIS server from the select HIS
-            # server modal.
-
-            UrlMap(name='catalog',
-                   url='catalog',
-                   controller='water_data_explorer.controllers.catalog'),
-           UrlMap(name='delete',
-                   url='delete',
-                   controller='water_data_explorer.controllers.delete'),
-            # Deletes a selected HydroServer from the local database
-            UrlMap(name='add-central',
-                   url='add-central/',
-                   controller='water_data_explorer.controllers.add_central'),
-            # Add a central catalog, but it is still in progress.
+                controller='water_data_explorer.startAll.home'),
             UrlMap(name='create-group',
                    url='create-group/',
-                   controller='water_data_explorer.controllers.create_group'),
+                   controller='water_data_explorer.groups.create_group'),
             # Create a new group for the hydroservers ##
             UrlMap(name='load-groups',
                    url='load-groups/',
-                   controller='water_data_explorer.controllers.get_groups_list'),
+                   controller='water_data_explorer.groups.get_groups_list'),
             # Load groups for the hydroservers ##
             UrlMap(name='add-hydrosever-groups',
                    url='soap-group/',
-                   controller='water_data_explorer.controllers.soap_group'),
+                   controller='water_data_explorer.endpoints.soap_group'),
             # Load groups for the hydroservers ##
             UrlMap(name='load-hydroserver-of-groups',
                    url='catalog-group',
-                   controller='water_data_explorer.controllers.catalog_group'),
+                   controller='water_data_explorer.groups.catalog_group'),
             # Load the hydroservers from a specific group##
 
             UrlMap(name='delete-group-hydroserver',
                    url='delete-group-hydroserver/',
-                   controller='water_data_explorer.controllers.delete_group_hydroserver'),
+                   controller='water_data_explorer.endpoints.delete_group_hydroserver'),
             ## Delete an speicific hydroserver or multiple from a specific group ##
 
             UrlMap(name='delete-group',
                    url='delete-group/',
-                   controller='water_data_explorer.controllers.delete_group'),
+                   controller='water_data_explorer.groups.delete_group'),
             ## Delete an speicific hydroserver or multiple from a specific group ##
             UrlMap(name='keyword-group',
                    url='keyword-group',
-                   controller='water_data_explorer.controllers.keyWordsForGroup'),
+                   controller='water_data_explorer.groups.keyWordsForGroup'),
             ## Find the keywords for each hydrpserver in a group##
             UrlMap(name='get-values-hs',
                    url='get-values-hs',
-                   controller='water_data_explorer.controllers.get_values_hs'),
+                   controller='water_data_explorer.sites.get_values_hs'),
             ## Get the variables of a hydroserver
             UrlMap(name='get-values-hs',
                    url='get-values-graph-hs',
-                   controller='water_data_explorer.controllers.get_values_graph_hs'),
+                   controller='water_data_explorer.sites.get_values_graph_hs'),
             ## Get the values of a hydroserver
             UrlMap(name='get-variables-hs',
                    url='get-variables-hs',
-                   controller='water_data_explorer.controllers.get_variables_hs'),
+                   controller='water_data_explorer.endpoints.get_variables_hs'),
             ## Get the values of a hydroserver
             UrlMap(name='get-available-sites',
                    url='get-available-sites',
-                   controller='water_data_explorer.controllers.get_available_sites'),
+                   controller='water_data_explorer.endpoints.get_available_sites'),
             ## Get the values of a hydroserver
             UrlMap(name='get-hydroserver-info',
                    url='get-hydroserver-info',
-                   controller='water_data_explorer.controllers.get_hydroserver_info'),
+                   controller='water_data_explorer.endpoints.get_hydroserver_info'),
 
         )
 
