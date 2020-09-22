@@ -1017,7 +1017,8 @@ showAvailableSites = function(){
            }
          })
          $("#variablesLoading").addClass("hidden");
-         
+         $("#modalShowVariables").modal("hide")
+
     }
   })
 
