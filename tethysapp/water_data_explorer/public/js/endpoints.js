@@ -1015,10 +1015,12 @@ showAvailableSites = function(){
            if(layersDict.hasOwnProperty(title)){
              map.addLayer(layersDict[title]);
            }
+           $(`#${hs}`).css({'color': '#555555','font-weight':'normal'});
+
          })
          $("#variablesLoading").addClass("hidden");
          $("#modalShowVariables").modal("hide")
-
+         $(`#${hs}`).css({'color': 'red','font-weight':'bold'});
     }
   })
 
