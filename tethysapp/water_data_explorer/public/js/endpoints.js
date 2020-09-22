@@ -903,7 +903,7 @@ showVariables = function(){
                 '</tr>'
              }
              HSTableHtml += "</tbody></table>"
-             $modalVariables.find(".modal-body").html(HSTableHtml)
+             $modalVariables.find("#hideScroll").html(HSTableHtml)
          }
 
     }

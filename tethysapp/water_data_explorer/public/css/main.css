@@ -339,6 +339,16 @@ tr:hover {
   height: 250px;
   overflow-y: auto;
 }
+#modalShowVariables .modal{
+    display: block !important;
+}
+#modalShowVariables .modal-dialog{
+      overflow-y: initial !important
+}
+#modalShowVariables .modal-body #hideScroll{
+  height: 250px;
+  overflow-y: auto;
+}
 #titleSite{
   font-weight: bold;
 }
