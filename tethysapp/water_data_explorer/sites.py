@@ -142,12 +142,13 @@ def get_values_hs(request):
                     times_series = values_json['timeSeriesResponse'][
                         'timeSeries']  # Timeseries object for the variable
                     # print(times_series)
+                    print(times_series['values'])
                     if times_series['values'] is not None:
                         length_values= len(times_series['values']['value'])
                         print(variable_text," ", length_values )
                     else:
                         length_values = 0
-                        print(variable_text," ", length_values )
+                        print("NO variables in ", variable_text," ", length_values )
                 ## Addition for the WHOS PLATA ##
                 else:
                     times_series = values_json['wml1:timeSeriesResponse'][
@@ -168,8 +169,10 @@ def get_values_hs(request):
                 array_variables_codes.append(words['variableCode']['#text'])
                 ijj=ijj+1
             except Exception as e:
-                print("OOPS",e.__class__)
-        # words_to_search[name] = array_keywords_hydroserver
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print("The class value is not in the response ",exc_type, fname, exc_tb.tb_lineno)
+                # words_to_search[name] = array_keywords_hydroserver
     if isinstance(array_variables,dict):
         print("dict")
         print(array_variables['variableName'])
@@ -216,7 +219,9 @@ def get_values_hs(request):
             array_keywords_hydroserver.append(array_variables['variableName'])
             array_variables_codes.append(array_variables['variableCode']['#text'])
         except Exception as e:
-            print("OOPS",e.__class__)
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print("The class value is not in the response ",exc_type, fname, exc_tb.tb_lineno)
 
     return_obj['variables']=array_keywords_hydroserver
     return_obj['codes']=array_variables_codes
