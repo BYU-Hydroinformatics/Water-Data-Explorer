@@ -362,6 +362,7 @@ def get_available_sites(request):
         list_catalog["hydrosever"] = []
     print("Finished the get_available_sites")
     return JsonResponse(list_catalog)
+
 def get_hydroserver_info(request):
     specific_group = request.GET.get('group')
     specific_hs = request.GET.get('hs')

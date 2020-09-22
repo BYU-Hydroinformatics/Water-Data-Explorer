@@ -346,7 +346,7 @@ tr:hover {
   margin-left: 5%;
 }
 .view-file{
-  width: 20%;
+  width: 50%;
   height: 20%;
 }
 .titleh{
@@ -469,6 +469,16 @@ tr:hover {
 #hydroserverTitle{
   display: flex;
   justify-content: center;
+}
+
+#variablesLoading{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  margin:auto;
+
 }
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;

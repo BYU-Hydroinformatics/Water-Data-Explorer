@@ -941,6 +941,8 @@ showAvailableSites = function(){
  requestObject['group'] = filterSites['group'];
  requestObject['variables'] = key_words_to_search;
  console.log(requestObject);
+ $("#variablesLoading").removeClass("hidden");
+
  $.ajax({
      type: "GET",
      url: `get-available-sites`,
@@ -1014,6 +1016,8 @@ showAvailableSites = function(){
              map.addLayer(layersDict[title]);
            }
          })
+         $("#variablesLoading").addClass("hidden");
+         
     }
   })
 
