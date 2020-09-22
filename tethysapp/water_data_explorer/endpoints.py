@@ -163,36 +163,41 @@ def get_available_sites(request):
                 site_info_Mc_json_object = json.dumps(site_info_Mc_dict)
                 site_info_Mc_json = json.loads(site_info_Mc_json_object)
                 # print(site_info_Mc_json)
-                object_methods= site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
+                print(site_info_Mc_json['sitesResponse']['site']['seriesCatalog'])
+
                 # print("GETSITESINFO FUNCTION")
                 # print(object_methods)
                 object_with_methods_and_variables = {}
                 object_with_descriptions_and_variables = {}
                 object_with_time_and_variables = {}
-                if(isinstance(object_methods,(dict))):
-                    # print("adding to the methodID as a dict")
-                    variable_name_ = object_methods['variable']['variableName']
-                    ## this part was added for the WHOS plata broker endpoint ##
-                    if 'method' in object_methods:
-                        object_with_methods_and_variables[variable_name_]= object_methods['method']['@methodID']
-                    else:
-                        object_with_methods_and_variables[variable_name_]= None
-                    ## end of the part for WHOS plata
-                    object_with_descriptions_and_variables[variable_name_]= object_methods['source'];
-                    object_with_time_and_variables[variable_name_]= object_methods['variableTimeInterval'];
-                    # print(object_with_methods_and_variables)
-                else:
-                    for object_method in object_methods:
-                        # print("adding to the methodID as an arraylist")
-                        variable_name_ = object_method['variable']['variableName']
-                        if 'method' in object_method:
-                            object_with_methods_and_variables[variable_name_]= object_method['method']['@methodID']
+                object_methods= {}
+                if 'series' in site_info_Mc_json['sitesResponse']['site']['seriesCatalog']:
+                    object_methods= site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
+
+                    if(isinstance(object_methods,(dict))):
+                        # print("adding to the methodID as a dict")
+                        variable_name_ = object_methods['variable']['variableName']
+                        ## this part was added for the WHOS plata broker endpoint ##
+                        if 'method' in object_methods:
+                            object_with_methods_and_variables[variable_name_]= object_methods['method']['@methodID']
                         else:
                             object_with_methods_and_variables[variable_name_]= None
-                        # print(object_method['source'])
-                        object_with_descriptions_and_variables[variable_name_]= object_method['source'];
-                        object_with_time_and_variables[variable_name_]= object_method['variableTimeInterval'];
+                        ## end of the part for WHOS plata
+                        object_with_descriptions_and_variables[variable_name_]= object_methods['source'];
+                        object_with_time_and_variables[variable_name_]= object_methods['variableTimeInterval'];
                         # print(object_with_methods_and_variables)
+                    else:
+                        for object_method in object_methods:
+                            # print("adding to the methodID as an arraylist")
+                            variable_name_ = object_method['variable']['variableName']
+                            if 'method' in object_method:
+                                object_with_methods_and_variables[variable_name_]= object_method['method']['@methodID']
+                            else:
+                                object_with_methods_and_variables[variable_name_]= None
+                            # print(object_method['source'])
+                            object_with_descriptions_and_variables[variable_name_]= object_method['source'];
+                            object_with_time_and_variables[variable_name_]= object_method['variableTimeInterval'];
+                            # print(object_with_methods_and_variables)
 
 
 
@@ -355,7 +360,7 @@ def get_available_sites(request):
         list_catalog["hydroserver"] = hs_list
     else:
         list_catalog["hydrosever"] = []
-
+    print("Finished the get_available_sites")
     return JsonResponse(list_catalog)
 def get_hydroserver_info(request):
     specific_group = request.GET.get('group')
