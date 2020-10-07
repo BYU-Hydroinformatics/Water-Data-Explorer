@@ -73,6 +73,7 @@ def get_values_hs(request):
     site_info_Mc_dict = xmltodict.parse(site_info_Mc)
     site_info_Mc_json_object = json.dumps(site_info_Mc_dict)
     site_info_Mc_json = json.loads(site_info_Mc_json_object)
+
     print(site_info_Mc_json)
     object_methods= site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
     print("GETSITESINFO FUNCTION")
@@ -80,10 +81,19 @@ def get_values_hs(request):
     object_with_methods_and_variables = {}
     object_with_descriptions_and_variables = {}
     object_with_time_and_variables = {}
+    array_variables_codes = []
+    array_variables_lengths = []
+    array_keywords_hydroserver=[]
+
+
     if(isinstance(object_methods,(dict))):
         print("adding to the methodID as a dict")
         variable_name_ = object_methods['variable']['variableName']
-        ## this part was added for the WHOS plata broker endpoint ##
+        array_keywords_hydroserver.append(variable_name_)
+
+        array_variables_codes.append(object_methods['variable']['variableCode']['#text'])
+        array_variables_lengths.append(object_methods['valueCount'])
+
         if 'method' in object_methods:
             object_with_methods_and_variables[variable_name_]= object_methods['method']['@methodID']
         else:
@@ -96,6 +106,11 @@ def get_values_hs(request):
         for object_method in object_methods:
             print("adding to the methodID as an arraylist")
             variable_name_ = object_method['variable']['variableName']
+            array_keywords_hydroserver.append(variable_name_)
+            array_variables_lengths.append(object_method['valueCount'])
+            array_variables_codes.append(object_method['variable']['variableCode']['#text'])
+
+
             if 'method' in object_method:
                 object_with_methods_and_variables[variable_name_]= object_method['method']['@methodID']
             else:
@@ -106,122 +121,122 @@ def get_values_hs(request):
             print(object_with_methods_and_variables)
 
 
-
-    array_variables=keywords_json['variablesResponse']['variables']['variable']
-    array_keywords_hydroserver=[]
-    array_variables_codes = []
-    array_variables_lengths = []
-    length_values = 0
-
-
-    if isinstance(array_variables,type([])):
-        print("array type")
-        ijj = 0
-        for words in array_variables:
-            print(ijj)
-            print(words['variableName'])
-            variable_text = words['variableName']
-            code_variable = words['variableCode']['#text']
-            start_date = ""
-            end_date = ""
-            variable_desc = network + ':' + code_variable
-            print("variable_desc")
-            print(variable_desc)
-            print(site_desc)
-            try:
-                values = client.service.GetValues(
-                    site_desc, variable_desc, start_date, end_date, "")
-
-                values_dict = xmltodict.parse(values)  # Converting xml to dict
-                values_json_object = json.dumps(values_dict)
-                values_json = json.loads(values_json_object)
-                # print(values_json)
-                # print(values_json.keys())
-                if 'timeSeriesResponse' in values_json:
-                # if values_json['timeSeriesResponse'] is not None:
-                    times_series = values_json['timeSeriesResponse'][
-                        'timeSeries']  # Timeseries object for the variable
-                    # print(times_series)
-                    print(times_series['values'])
-                    if times_series['values'] is not None:
-                        length_values= len(times_series['values']['value'])
-                        print(variable_text," ", length_values )
-                    else:
-                        length_values = 0
-                        print("NO variables in ", variable_text," ", length_values )
-                ## Addition for the WHOS PLATA ##
-                else:
-                    times_series = values_json['wml1:timeSeriesResponse'][
-                        'wml1:timeSeries']  # Timeseries object for the variable
-                    # print(times_series)
-                    if times_series['wml1:values'] is not None:
-                        length_values= len(times_series['wml1:values']['wml1:value'])
-                        print(variable_text," ", length_values )
-                    else:
-                        length_values = 0
-                        print(variable_text," ", length_values )
-
-
-                array_variables_lengths.append(length_values)
-
-
-                array_keywords_hydroserver.append(words['variableName'])
-                array_variables_codes.append(words['variableCode']['#text'])
-                ijj=ijj+1
-            except Exception as e:
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                print("The class value is not in the response ",exc_type, fname, exc_tb.tb_lineno)
-                # words_to_search[name] = array_keywords_hydroserver
-    if isinstance(array_variables,dict):
-        print("dict")
-        print(array_variables['variableName'])
-
-        variable_text = array_variables['variableName']
-        code_variable = array_variables['variableCode']['#text']
-        start_date = ""
-        end_date = ""
-        variable_desc = network + ':' + code_variable
-        try:
-            values = client.service.GetValues(
-                site_desc, variable_desc, start_date, end_date, "")
-            # print(values)
-
-            values_dict = xmltodict.parse(values)  # Converting xml to dict
-            values_json_object = json.dumps(values_dict)
-            values_json = json.loads(values_json_object)
-            if 'timeSeriesResponse' in values_json:
-            # if values_json['timeSeriesResponse'] is not None:
-                times_series = values_json['timeSeriesResponse'][
-                    'timeSeries']  # Timeseries object for the variable
-                # print(times_series)
-                if times_series['values'] is not None:
-                    length_values= len(times_series['values']['value'])
-                    print(variable_text," ", length_values )
-                else:
-                    length_values = 0
-                    print(variable_text," ", length_values )
-            ## Addition for the WHOS PLATA ##
-            else:
-                times_series = values_json['wml1:timeSeriesResponse'][
-                    'wml1:timeSeries']  # Timeseries object for the variable
-                # print(times_series)
-                if times_series['wml1:values'] is not None:
-                    length_values= len(times_series['wml1:values']['wml1:value'])
-                    print(variable_text," ", length_values )
-                else:
-                    length_values = 0
-                    print(variable_text," ", length_values )
-
-
-            array_variables_lengths.append(length_values)
-
-            array_keywords_hydroserver.append(array_variables['variableName'])
-            array_variables_codes.append(array_variables['variableCode']['#text'])
-        except Exception as e:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print("The class value is not in the response ",exc_type, fname, exc_tb.tb_lineno)
+    #
+    # array_variables = keywords_json['variablesResponse']['variables']['variable']
+    # array_keywords_hydroserver=[]
+    # array_variables_codes = []
+    # array_variables_lengths = []
+    # length_values = 0
+    #
+    #
+    # if isinstance(array_variables,type([])):
+    #     print("array type")
+    #     ijj = 0
+    #     for words in array_variables:
+    #         print(ijj)
+    #         print(words['variableName'])
+    #         variable_text = words['variableName']
+    #         code_variable = words['variableCode']['#text']
+    #         start_date = ""
+    #         end_date = ""
+    #         variable_desc = network + ':' + code_variable
+    #         print("variable_desc")
+    #         print(variable_desc)
+    #         print(site_desc)
+    #         try:
+    #             values = client.service.GetValues(
+    #                 site_desc, variable_desc, start_date, end_date, "")
+    #
+    #             values_dict = xmltodict.parse(values)  # Converting xml to dict
+    #             values_json_object = json.dumps(values_dict)
+    #             values_json = json.loads(values_json_object)
+    #             # print(values_json)
+    #             # print(values_json.keys())
+    #             if 'timeSeriesResponse' in values_json:
+    #             # if values_json['timeSeriesResponse'] is not None:
+    #                 times_series = values_json['timeSeriesResponse'][
+    #                     'timeSeries']  # Timeseries object for the variable
+    #                 # print(times_series)
+    #                 print(times_series['values'])
+    #                 if times_series['values'] is not None:
+    #                     length_values= len(times_series['values']['value'])
+    #                     print(variable_text," ", length_values )
+    #                 else:
+    #                     length_values = 0
+    #                     print("NO variables in ", variable_text," ", length_values )
+    #             ## Addition for the WHOS PLATA ##
+    #             else:
+    #                 times_series = values_json['wml1:timeSeriesResponse'][
+    #                     'wml1:timeSeries']  # Timeseries object for the variable
+    #                 # print(times_series)
+    #                 if times_series['wml1:values'] is not None:
+    #                     length_values= len(times_series['wml1:values']['wml1:value'])
+    #                     print(variable_text," ", length_values )
+    #                 else:
+    #                     length_values = 0
+    #                     print(variable_text," ", length_values )
+    #
+    #
+    #             array_variables_lengths.append(length_values)
+    #
+    #
+    #             array_keywords_hydroserver.append(words['variableName'])
+    #             array_variables_codes.append(words['variableCode']['#text'])
+    #             ijj=ijj+1
+    #         except Exception as e:
+    #             exc_type, exc_obj, exc_tb = sys.exc_info()
+    #             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+    #             print("The class value is not in the response ",exc_type, fname, exc_tb.tb_lineno)
+    #             # words_to_search[name] = array_keywords_hydroserver
+    # if isinstance(array_variables,dict):
+    #     print("dict")
+    #     print(array_variables['variableName'])
+    #
+    #     variable_text = array_variables['variableName']
+    #     code_variable = array_variables['variableCode']['#text']
+    #     start_date = ""
+    #     end_date = ""
+    #     variable_desc = network + ':' + code_variable
+    #     try:
+    #         values = client.service.GetValues(
+    #             site_desc, variable_desc, start_date, end_date, "")
+    #         # print(values)
+    #
+    #         values_dict = xmltodict.parse(values)  # Converting xml to dict
+    #         values_json_object = json.dumps(values_dict)
+    #         values_json = json.loads(values_json_object)
+    #         if 'timeSeriesResponse' in values_json:
+    #         # if values_json['timeSeriesResponse'] is not None:
+    #             times_series = values_json['timeSeriesResponse'][
+    #                 'timeSeries']  # Timeseries object for the variable
+    #             # print(times_series)
+    #             if times_series['values'] is not None:
+    #                 length_values= len(times_series['values']['value'])
+    #                 print(variable_text," ", length_values )
+    #             else:
+    #                 length_values = 0
+    #                 print(variable_text," ", length_values )
+    #         ## Addition for the WHOS PLATA ##
+    #         else:
+    #             times_series = values_json['wml1:timeSeriesResponse'][
+    #                 'wml1:timeSeries']  # Timeseries object for the variable
+    #             # print(times_series)
+    #             if times_series['wml1:values'] is not None:
+    #                 length_values= len(times_series['wml1:values']['wml1:value'])
+    #                 print(variable_text," ", length_values )
+    #             else:
+    #                 length_values = 0
+    #                 print(variable_text," ", length_values )
+    #
+    #
+    #         array_variables_lengths.append(length_values)
+    #
+    #         array_keywords_hydroserver.append(array_variables['variableName'])
+    #         array_variables_codes.append(array_variables['variableCode']['#text'])
+    #     except Exception as e:
+    #         exc_type, exc_obj, exc_tb = sys.exc_info()
+    #         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+    #         print("The class value is not in the response ",exc_type, fname, exc_tb.tb_lineno)
 
     return_obj['variables']=array_keywords_hydroserver
     return_obj['codes']=array_variables_codes
@@ -229,7 +244,8 @@ def get_values_hs(request):
     return_obj['methodsIDs']= object_with_methods_and_variables
     return_obj['description'] = object_with_descriptions_and_variables
     return_obj['times_series'] = object_with_time_and_variables
-    return_obj['siteInfo']= site_info_Mc_json
+    ## SAFE GUARD TO SEE THE RESPONSE OF THE SITE INFO##
+    # return_obj['siteInfo']= site_info_Mc_json
 
     print("finished with the get_values_hs")
     return JsonResponse(return_obj)
@@ -251,9 +267,9 @@ def get_values_graph_hs(request):
     code_variable =request.GET.get ('code_variable')
     dates_request = request.GET.getlist('timeFrame[]')
     print(dates_request)
-    start_date = dates_request[0];
+    start_date = dates_request[0]
     end_date = dates_request[1];
-    actual_methodsID = request.GET.get('actual_method');
+    actual_methodsID = request.GET.get('actual_method')
 
     variable_desc = network + ':' + code_variable
     print(variable_desc)
@@ -594,7 +610,6 @@ def get_values_graph_hs(request):
                             graph_json["count"] = 1
                             return_obj['graphs']=graph_json
 
-    print("done with get_values_graph_hs")
     time_pd, values_pd = zip(*graph_json["values2"])
     pds={}
     pds['time'] = time_pd
@@ -619,4 +634,6 @@ def get_values_graph_hs(request):
     graph_json['interpolation']=dataInterpolated
     # print(time_pd)
     # print(values_pd)
+    print("done with get_values_graph_hs")
+
     return JsonResponse(return_obj)
