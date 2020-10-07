@@ -617,14 +617,18 @@ def get_values_graph_hs(request):
     df_interpolation= pd.DataFrame(pds,columns = ["time","value"])
     df_interpolation2= pd.DataFrame(pds,columns = ["time","value"])
     print(df_interpolation.dtypes)
+    print(df_interpolation2)
+
     df_interpolation.loc[df_interpolation.value < 0] = np.NaN
-    df_interpolation.replace(0, np.nan, inplace=True)
+    df_interpolation.replace(0, np.NaN, inplace=True)
     df_interpolation['time'] = pd.to_datetime(df_interpolation['time'])
     df_interpolation = df_interpolation.set_index('time').resample('D').mean()
+    print(df_interpolation)
     df_interpolation['value'] = df_interpolation['value'].interpolate()
     df_interpolation.reset_index(level=0, inplace=True)
+    df_interpolation.replace(np.NaN,0, inplace=True)
+
     print(df_interpolation)
-    print(df_interpolation2)
     listVals = df_interpolation['value'].to_list()
     listTimes = df_interpolation['time'].to_list()
     dataInterpolated = []
