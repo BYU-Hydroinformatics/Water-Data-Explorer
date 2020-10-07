@@ -45,98 +45,105 @@ select_variable_change = function(){
     object_request_variable['network'] =  object_request_graphs['network'];
     // console.log(object_request_graphs);
     console.log(object_request_variable);
-    $("#graphAddLoading").css({left:'50%',bottom:"15%", position:'absolute',"z-index": 9999});
-    $("#graphAddLoading").removeClass("hidden");
-    $.ajax({
-      type:"GET",
-      url: `get-values-graph-hs`,
-      dataType: "JSON",
-      data: object_request_variable,
-      success: function(result1){
-        console.log(result1);
-        if(result1.graphs !== undefined){
+    console.log(typeof(selectedItem));
+
+    if(selectedItem !== "0"){
+      $("#graphAddLoading").css({left:'50%',bottom:"15%", position:'absolute',"z-index": 9999});
+      $("#graphAddLoading").removeClass("hidden");
+      $.ajax({
+        type:"GET",
+        url: `get-values-graph-hs`,
+        dataType: "JSON",
+        data: object_request_variable,
+        success: function(result1){
           console.log(result1);
-          let time_series_array = result1['graphs']['values2'];
-          let time_series_array_interpolation = result1['graphs']['interpolation'];
-          console.log(time_series_array);
+          if(result1.graphs !== undefined){
+            console.log(result1);
+            let time_series_array = result1['graphs']['values2'];
+            let time_series_array_interpolation = result1['graphs']['interpolation'];
+            console.log(time_series_array);
 
-          let x_array = [];
-          time_series_array.forEach(function(x){
-            x_array.push(x[0]);
-          })
-          let y_array=[]
-          time_series_array.forEach(function(y){
-            // console.log(y[1]);
-            if(y[1]===-9999){
-              y_array.push(null)
+            let x_array = [];
+            time_series_array.forEach(function(x){
+              x_array.push(x[0]);
+            })
+            let y_array=[]
+            time_series_array.forEach(function(y){
+              // console.log(y[1]);
+              if(y[1]===-9999){
+                y_array.push(null)
+              }
+              else{
+                y_array.push(y[1]);
+              }
+
+            })
+            let x_array_interpolation = [];
+            time_series_array_interpolation.forEach(function(x){
+              x_array_interpolation.push(x[0]);
+            })
+            let y_array_interpolation=[]
+            time_series_array_interpolation.forEach(function(y){
+              y_array_interpolation.push(y[1]);
+            })
+            console.log(x_array);
+            console.log(y_array);
+            let title_graph = `${result1['graphs']['title']}`;
+            let units_x = `${result1['graphs']['unit']}` ;
+            let units_y = "Time";
+            let variable_name_legend = `${result1['graphs']['variable']}`;
+            let type= "scatter";
+            active_map_feature_graphs['scatter']['x_array'] = x_array;
+            active_map_feature_graphs['scatter']['y_array'] = y_array;
+            active_map_feature_graphs['scatter']['x_array_interpolation'] = x_array_interpolation;
+            active_map_feature_graphs['scatter']['y_array_interpolation'] = y_array_interpolation;
+            active_map_feature_graphs['scatter']['title_graph'] = title_graph;
+            active_map_feature_graphs['scatter']['units_x'] = units_x;
+            active_map_feature_graphs['scatter']['units_y'] = units_y;
+            active_map_feature_graphs['scatter']['variable_name_legend'] = variable_name_legend;
+            active_map_feature_graphs['scatter']['type'] = type;
+
+            // defining the Whiskers and plot //
+            active_map_feature_graphs['whisker']['y_array'] = y_array;
+            active_map_feature_graphs['whisker']['title_graph'] = title_graph;
+            active_map_feature_graphs['whisker']['type'] = "whisker";
+
+            if(chart_type ==="Scatter"){
+              console.log("it is an scatter plot for the variable change");
+              initialize_graphs(x_array,y_array,title_graph,units_y, units_x,variable_name_legend,type,x_array_interpolation,y_array_interpolation);
             }
-            else{
-              y_array.push(y[1]);
+            if(chart_type ==="Whisker and Box"){
+              console.log("it is an whisker and box plot for the variable change");
+
+              initialize_graphs(undefined,y_array,title_graph,undefined, undefined,undefined,"whisker");
             }
+            $("#graphAddLoading").addClass("hidden")
 
-          })
-          let x_array_interpolation = [];
-          time_series_array_interpolation.forEach(function(x){
-            x_array_interpolation.push(x[0]);
-          })
-          let y_array_interpolation=[]
-          time_series_array_interpolation.forEach(function(y){
-            y_array_interpolation.push(y[1]);
-          })
-          console.log(x_array);
-          console.log(y_array);
-          let title_graph = `${result1['graphs']['title']}`;
-          let units_x = `${result1['graphs']['unit']}` ;
-          let units_y = "Time";
-          let variable_name_legend = `${result1['graphs']['variable']}`;
-          let type= "scatter";
-          active_map_feature_graphs['scatter']['x_array'] = x_array;
-          active_map_feature_graphs['scatter']['y_array'] = y_array;
-          active_map_feature_graphs['scatter']['x_array_interpolation'] = x_array_interpolation;
-          active_map_feature_graphs['scatter']['y_array_interpolation'] = y_array_interpolation;
-          active_map_feature_graphs['scatter']['title_graph'] = title_graph;
-          active_map_feature_graphs['scatter']['units_x'] = units_x;
-          active_map_feature_graphs['scatter']['units_y'] = units_y;
-          active_map_feature_graphs['scatter']['variable_name_legend'] = variable_name_legend;
-          active_map_feature_graphs['scatter']['type'] = type;
+         }
+         else{
+           let title_graph=  `${object_request_graphs['site_name']} - ${selectedItemText}
+           No Data Available`
+           initialize_graphs([],[],title_graph,"","","","scatter");
+           $("#graphAddLoading").addClass("hidden")
+           $.notify(
+               {
+                   message: `There is no data for this variable, Sorry`
+               },
+               {
+                   type: "danger",
+                   allow_dismiss: true,
+                   z_index: 20000,
+                   delay: 5000
+               }
+           )
 
-          // defining the Whiskers and plot //
-          active_map_feature_graphs['whisker']['y_array'] = y_array;
-          active_map_feature_graphs['whisker']['title_graph'] = title_graph;
-          active_map_feature_graphs['whisker']['type'] = "whisker";
+         }
+        }
+      })
 
-          if(chart_type ==="Scatter"){
-            console.log("it is an scatter plot for the variable change");
-            initialize_graphs(x_array,y_array,title_graph,units_y, units_x,variable_name_legend,type,x_array_interpolation,y_array_interpolation);
-          }
-          if(chart_type ==="Whisker and Box"){
-            console.log("it is an whisker and box plot for the variable change");
+    }
 
-            initialize_graphs(undefined,y_array,title_graph,undefined, undefined,undefined,"whisker");
-          }
-          $("#graphAddLoading").addClass("hidden")
 
-       }
-       else{
-         let title_graph=  `${object_request_graphs['site_name']} - ${selectedItemText}
-         No Data Available`
-         initialize_graphs([],[],title_graph,"","","","scatter");
-         $("#graphAddLoading").addClass("hidden")
-         $.notify(
-             {
-                 message: `There is no data for this variable, Sorry`
-             },
-             {
-                 type: "danger",
-                 allow_dismiss: true,
-                 z_index: 20000,
-                 delay: 5000
-             }
-         )
-
-       }
-      }
-    })
 
   }
 
