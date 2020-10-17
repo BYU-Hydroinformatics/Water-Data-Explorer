@@ -92,7 +92,10 @@ def get_values_hs(request):
         array_keywords_hydroserver.append(variable_name_)
 
         array_variables_codes.append(object_methods['variable']['variableCode']['#text'])
-        array_variables_lengths.append(object_methods['valueCount'])
+        if object_methods['valueCount'] is not None:
+            array_variables_lengths.append(object_methods['valueCount'])
+        else:
+            array_variables_lengths.append("")
 
         if 'method' in object_methods:
             object_with_methods_and_variables[variable_name_]= object_methods['method']['@methodID']
@@ -107,7 +110,10 @@ def get_values_hs(request):
             print("adding to the methodID as an arraylist")
             variable_name_ = object_method['variable']['variableName']
             array_keywords_hydroserver.append(variable_name_)
-            array_variables_lengths.append(object_method['valueCount'])
+            if object_method['valueCount'] is not None:
+                array_variables_lengths.append(object_method['valueCount'])
+            else:
+                array_variables_lengths.append("")
             array_variables_codes.append(object_method['variable']['variableCode']['#text'])
 
 
@@ -245,7 +251,7 @@ def get_values_hs(request):
     return_obj['description'] = object_with_descriptions_and_variables
     return_obj['times_series'] = object_with_time_and_variables
     ## SAFE GUARD TO SEE THE RESPONSE OF THE SITE INFO##
-    # return_obj['siteInfo']= site_info_Mc_json
+    return_obj['siteInfo']= site_info_Mc_json
 
     print("finished with the get_values_hs")
     return JsonResponse(return_obj)
@@ -622,6 +628,7 @@ def get_values_graph_hs(request):
     df_interpolation.loc[df_interpolation.value < 0] = np.NaN
     df_interpolation.replace(0, np.NaN, inplace=True)
     df_interpolation['time'] = pd.to_datetime(df_interpolation['time'])
+    print(df_interpolation)
     df_interpolation = df_interpolation.set_index('time').resample('D').mean()
     print(df_interpolation)
     df_interpolation['value'] = df_interpolation['value'].interpolate()
