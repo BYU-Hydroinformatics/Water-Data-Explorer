@@ -315,6 +315,8 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
        },
        rangemode: 'tozero'
       },
+      autosize: true,
+
     };
     Plotly.newPlot('plots', data, layout,config);
 
@@ -330,15 +332,17 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
 
     var layout = {
       title: title_graph,
-      height: 400,
-      width: 900,
+      // height: 400,
+      // width: 900,
       showlegend: true,
       legend: {
         xanchor:"center",
         yanchor:"top",
         y:-0.3, // play with it
         x:0.5   // play with it
-      }
+      },
+      autosize: true,
+
 
     };
 
@@ -359,12 +363,20 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
     let data = [trace1];
 
     let layout = {
-      title: title_graph
+      title: title_graph,
+      autosize: true,
+
     };
     Plotly.newPlot('plots', data, layout,config);
 
   }
 
+  // window.onresize = function() {
+  //     Plotly.relayout('plots', {
+  //         'xaxis.autorange': true,
+  //         'yaxis.autorange': true
+  //     });
+  // };
 }
 function featureStyle() {
     var style = new ol.style.Style({
