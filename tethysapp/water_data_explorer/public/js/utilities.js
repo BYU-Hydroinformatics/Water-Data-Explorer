@@ -214,6 +214,7 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
         link.click();
         document.body.removeChild(link);
         } }],
+        responsive: true
     }
   if(type === "scatter"){
     var trace1 = {
@@ -264,7 +265,7 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
       },
       title: title_graph,
       autosize: true,
-      showlegend:true
+      showlegend:true,
     };
 
     Plotly.newPlot('plots', data, layout,config);
