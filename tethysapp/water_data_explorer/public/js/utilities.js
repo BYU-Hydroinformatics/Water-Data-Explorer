@@ -318,7 +318,7 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
       autosize: true,
 
     };
-    Plotly.newPlot('plots', data, layout,config);
+    Plotly.newPlot('plotsDis', data, layout,config);
 
   }
   if(type === "pie"){
@@ -346,7 +346,7 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
 
     };
 
-    Plotly.newPlot('plots', data, layout,config);
+    Plotly.newPlot('plotsDis', data, layout,config);
 
   }
   if(type === "whisker"){

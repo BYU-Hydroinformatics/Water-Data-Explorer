@@ -330,6 +330,7 @@ var water_data_explorer_PACKAGE = (function() {
     activate_layer_values();
     let empty_array=[];
     initialize_graphs([],[],"No data Available","","","","scatter");
+    initialize_graphs([],[],"No data Available","","","","pie");
     add_boundary_map(geoServerColor, geoServerWidth, map);
     activate_deactivate_graphs();
 
