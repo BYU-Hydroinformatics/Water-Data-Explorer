@@ -58,31 +58,28 @@
 
     <div id="options">
       <h3 id= "siteName_title"> Select a Station</h3>
-      <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
-        in this part such as a name and a description.
-      </p>
+        <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
+          in this part such as a name and a description.
+        </p>
+        <p>Select a plot to describe the variable distribution in the selected site
+          <select id="type_graph_select" class="selectpicker" data-width="auto">
+            <optgroup label="Gropup Plots">
+              <option> Pie </option>
+              <option> Bar </option>
+            </optgroup>
+          </select>
+          </p>
+      <div id="plotsDis"></div>
 
-      <br>
+
+      <div id="table_div"></div>
+
     </div>
     <img id="graphAddLoading" class="view-file hidden" src="https://media.giphy.com/media/3ohs7Xldjh7DndQnBu/giphy.gif"  />
-    <div id="variables_id">
-      <h3 id= "siteName_title"> Site Variables Info</h3>
-      <p><em>Site Variable Distribution</em></p>
-      <p>Select a plot to describe the variable distribution in the selected site</p>
-      <p>
-        <select id="type_graph_select" class="selectpicker" data-width="auto">
-          <optgroup label="Gropup Plots">
-            <option> Pie </option>
-            <option> Bar </option>
-          </optgroup>
 
-        </select>
-      </p>
-
-
-      <p ><em> Variables Plot </em></p>
-      <p> Select a variable and its kind of Plot </p>
-      <p>
+    <div id="plots2">
+      <div id="plots"></div>
+      <div id="controlGraphs">
         <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info"width: '100%'>
           <option > No Variables Available . . .</option>
         </select>
@@ -93,45 +90,33 @@
             <option> Whisker and Box </option>
         </optgroup>
         </select>
+        <div class="containerTime">
+            <div class='col-md-5'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
+                        <input type='text' class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-5'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
+                        <input type='text' class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" id= "update_graphs" class="btn btn-danger">Update</button>
 
-      </p>
-      <p><em>Variables Time Range</em></p>
-      <p>Select a Range of time for the given variables</p>
-      <div class="containerTime">
-          <div class='col-md-5'>
-              <div class="form-group">
-                  <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
-                      <input type='text' class="form-control" />
-                      <span class="input-group-addon">
-                          <span class="glyphicon glyphicon-calendar"></span>
-                      </span>
-                  </div>
-              </div>
-          </div>
-          <div class='col-md-5'>
-              <div class="form-group">
-                  <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
-                      <input type='text' class="form-control" />
-                      <span class="input-group-addon">
-                          <span class="glyphicon glyphicon-calendar"></span>
-                      </span>
-                  </div>
-              </div>
-          </div>
       </div>
-
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <button type="button" id= "update_graphs" class="btn btn-danger">Update</button>
-
-
-    <div id="table_div"></div>
     </div>
-    <div id="plots">
-    </div>
+
 
   </div>
   <!-- <div id="graph" style="display:none"><h1>HOLA</h1></div> -->
