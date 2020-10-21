@@ -41,6 +41,10 @@ class WaterDataExplorer(TethysAppBase):
                    url='soap-group/',
                    controller='water_data_explorer.endpoints.soap_group'),
             # Load groups for the hydroservers ##
+            UrlMap(name='update-hydrosever-groups',
+                   url='soap-update/',
+                   controller='water_data_explorer.endpoints.upload_hs'),
+            # Load groups for the hydroservers ##
             UrlMap(name='load-hydroserver-of-groups',
                    url='catalog-group',
                    controller='water_data_explorer.groups.catalog_group'),
