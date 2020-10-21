@@ -383,34 +383,11 @@ def get_hydroserver_info(request):
 
 def upload_hs(request):
     return_obj = {}
-    client = Client(url, timeout= 500)
+    difference = 0
 
-    sites = client.service.GetSites('[:]')
-    print("this are the sites")
-    print(sites)
-    print(type(sites))
-    sites_json={}
-    if isinstance(sites, str):
-        print("here")
-        sites_dict = xmltodict.parse(sites)
-        sites_json_object = json.dumps(sites_dict)
-        sites_json = json.loads(sites_json_object)
-    else:
-        sites_json_object = suds_to_json(sites)
-        sites_json = json.loads(sites_json_object)
-
-    # Parsing the sites and creating a sites object. See auxiliary.py
-    print("-------------------------------------")
-    # print(sites_json)
-    sites_object = parseJSON(sites_json)
-    # print(sites_object)
-    # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
-
-    # sites_parsed_json = json.dumps(converted_sites_object)
-    sites_parsed_json = json.dumps(sites_object)
     if request.is_ajax() and request.method == 'POST':
-        specific_group = request.GET.get('group')
-        specific_hs = request.GET.get('hs')
+        specific_group = request.POST.get('group')
+        specific_hs = request.POST.get('hs')
         response_obj = {}
         SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
         session = SessionMaker()  # Initiate a session
@@ -419,16 +396,46 @@ def upload_hs(request):
         hs_list = []
         for hydroservers in hydroservers_group:
             name = hydroservers.title
+            url = hydroservers.url
             if name == specific_hs:
+                difference = len(json.loads(hydroservers.siteinfo))
+                client = Client(url, timeout= 500)
+
+                sites = client.service.GetSites('[:]')
+                print("Updating HS")
+                print("sites")
+                print(sites)
+                print(type(sites))
+                sites_json={}
+                if isinstance(sites, str):
+                    print("here")
+                    sites_dict = xmltodict.parse(sites)
+                    sites_json_object = json.dumps(sites_dict)
+                    sites_json = json.loads(sites_json_object)
+                else:
+                    sites_json_object = suds_to_json(sites)
+                    sites_json = json.loads(sites_json_object)
+
+                # Parsing the sites and creating a sites object. See auxiliary.py
+                print("-------------------------------------")
+                # print(sites_json)
+                sites_object = parseJSON(sites_json)
+                # print(sites_object)
+                # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
+
+                # sites_parsed_json = json.dumps(converted_sites_object)
+                sites_parsed_json = json.dumps(sites_object)
+                difference = len(sites_object) - difference
                 hydroservers.siteinfo = sites_parsed_json
+                return_obj["siteInfo"] = json.loads(sites_parsed_json)
+                return_obj["sitesAdded"]= difference
+
         session.commit()
         session.close()
-        response_obj["siteInfo"] = json.loads(sites_parsed_json)
 
 
     else:
-        return_obj[
-            'message'] = 'This request can only be made through a "POST" AJAX call.'
+        return_obj['message'] = 'This request can only be made through a "POST" AJAX call.'
 
     return JsonResponse(return_obj)
 
