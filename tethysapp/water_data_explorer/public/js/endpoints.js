@@ -1190,10 +1190,8 @@ update_hydroserver = function(){
       hs: hsActual,
       group: group_name
     }
-    //Submitting the data to the controller
-    // $("#soapAddLoading").removeClass("hidden");
-    //
-    // $("#btn-add-soap").hide();
+    $("#graphAddLoading").removeClass("hidden");
+
 
     $.ajax({
         type: "POST",
@@ -1285,13 +1283,8 @@ update_hydroserver = function(){
                           }
                       )
 
-                    // $("#soapAddLoading").addClass("hidden")
-                    // $("#btn-add-soap").show()
-                    //
-                    // $("#modalAddSoap").modal("hide")
-                    // $("#modalAddSoap").each(function() {
-                    //     this.reset()
-                    // })
+                    $("#graphAddLoading").addClass("hidden")
+
 
             }
           },
