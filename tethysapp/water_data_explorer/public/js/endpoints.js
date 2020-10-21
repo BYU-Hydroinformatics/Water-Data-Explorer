@@ -71,8 +71,7 @@
                        console.log(keywords_in_servers.includes(title));
                        let newHtml = `
                        <li class="ui-state-default" layer-name="${title}" id="${title}" >
-
-                       <span class="server-name"><strong>${ind2}</strong> ${title}</span>
+                         <span class="server-name">${title}</span>   
                        <input class="chkbx-layer" type="checkbox" checked>
 
                        <button type="button" id="${title}_${group_name}_reload" class="btn btn-dark btn-sm">
