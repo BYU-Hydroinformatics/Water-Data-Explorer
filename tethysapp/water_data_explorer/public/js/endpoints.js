@@ -1184,11 +1184,11 @@ document.getElementById('myInput').addEventListener("keyup", searchSites);
 
 update_hydroserver = function(){
     let hsActual = this.id.split("_")[0];
-    // let group_name = this.id.split("_")[1]
+    let group_name = this.id.split("_")[1]
     let requestObject = {
-      hs: hsActual
-      // hs: hsActual,
-      // group: group_name
+      // hs: hsActual
+      hs: hsActual,
+      group: group_name
     }
     //Submitting the data to the controller
     // $("#soapAddLoading").removeClass("hidden");
@@ -1272,12 +1272,6 @@ update_hydroserver = function(){
                     map.updateSize();
 
                     layersDict[title] = vectorLayer;
-                    $(`#${title}_zoom`).on("click",function(){
-                      map.getView().fit(vectorSource.getExtent());
-                      map.updateSize();
-                    });
-
-
 
                       $.notify(
                           {
