@@ -75,6 +75,9 @@
                        <span class="server-name"><strong>${ind2}</strong> ${title}</span>
                        <input class="chkbx-layer" type="checkbox" checked>
 
+                       <button type="button" id="${title}_${group_name}_reload" class="btn btn-dark btn-sm">
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                       </button>
                        <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
                         <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
                        </button>
@@ -1175,3 +1178,145 @@ searchSites = function() {
   }
 }
 document.getElementById('myInput').addEventListener("keyup", searchSites);
+
+
+
+
+update_hydroserver = function(){
+    let hsActual = this.id.split("_")[0];
+    // let group_name = this.id.split("_")[1]
+    let requestObject = {
+      hs: hsActual
+      // hs: hsActual,
+      // group: group_name
+    }
+    //Submitting the data to the controller
+    // $("#soapAddLoading").removeClass("hidden");
+    //
+    // $("#btn-add-soap").hide();
+
+    $.ajax({
+        type: "POST",
+        url: `soap-update/`,
+        dataType: "JSON",
+        data: requestObject,
+        success: function(result) {
+            if(layersDict.hasOwnProperty(title)){
+              map.removeLayer(layersDict[title])
+            }
+            //Returning the geoserver layer metadata from the controller
+            var json_response = JSON.parse(result)
+            console.log(json_response);
+            let {title, siteInfo, url, group} = json_response
+
+
+            if (json_response.status === "true") {
+
+                    let sites = JSON.parse(siteInfo)
+                    // console.log(extents);
+                    console.log(sites);
+                    sites = sites.map(site => {
+                        return {
+                            type: "Feature",
+                            geometry: {
+                                type: "Point",
+                                coordinates: ol.proj.transform(
+                                    [
+                                        parseFloat(site.longitude),
+                                        parseFloat(site.latitude)
+                                    ],
+                                    "EPSG:4326",
+                                    "EPSG:3857"
+                                )
+                            },
+                            properties: {
+                                name: site.sitename,
+                                code: site.sitecode,
+                                network: site.network,
+                                hs_url: url,
+                                hs_name: title,
+                                lon: parseFloat(site.longitude),
+                                lat: parseFloat(site.latitude)
+                            }
+                        }
+                    })
+
+                    let sitesGeoJSON = {
+                        type: "FeatureCollection",
+                        crs: {
+                            type: "name",
+                            properties: {
+                                name: "EPSG:3857"
+                            }
+                        },
+                        features: sites
+                    }
+
+                    const vectorSource = new ol.source.Vector({
+                        features: new ol.format.GeoJSON().readFeatures(
+                            sitesGeoJSON
+                        )
+                    })
+
+                    const vectorLayer = new ol.layer.Vector({
+                        source: vectorSource,
+                        style: featureStyle()
+                    })
+
+                    map.addLayer(vectorLayer)
+                    ol.extent.extend(extent, vectorSource.getExtent())
+                    vectorLayer.set("selectable", true)
+                    layersDict[title] = vectorLayer;
+
+                    map.getView().fit(vectorSource.getExtent());
+                    map.updateSize();
+
+                    layersDict[title] = vectorLayer;
+                    $(`#${title}_zoom`).on("click",function(){
+                      map.getView().fit(vectorSource.getExtent());
+                      map.updateSize();
+                    });
+
+
+
+                      $.notify(
+                          {
+                              message: `Successfully Reloaded the HydroServer to the Map`
+                          },
+                          {
+                              type: "success",
+                              allow_dismiss: true,
+                              z_index: 20000,
+                              delay: 5000
+                          }
+                      )
+
+                    // $("#soapAddLoading").addClass("hidden")
+                    // $("#btn-add-soap").show()
+                    //
+                    // $("#modalAddSoap").modal("hide")
+                    // $("#modalAddSoap").each(function() {
+                    //     this.reset()
+                    // })
+
+            }
+          },
+        error: function(error) {
+            // $("#soapAddLoading").addClass("hidden")
+            // $("#btn-add-soap").show();
+            console.log(error);
+            $.notify(
+                {
+                    message: `There was an error realoading the hydroserver.`
+                },
+                {
+                    type: "danger",
+                    allow_dismiss: true,
+                    z_index: 20000,
+                    delay: 5000
+                }
+            )
+        }
+    })
+
+}
