@@ -102,6 +102,7 @@
 
                        $(`#${title}_variables`).on("click",showVariables);
                        $(`#${title}_variables_info`).on("click",hydroserver_information);
+                       $(`#${title}_${group_name}_reload`).on("click",update_hydroserver);
 
 
                        let lis = document.getElementById(`${id_group_separator}`).getElementsByTagName("li");
@@ -419,6 +420,9 @@ add_hydroserver = function(){
                     <li class="ui-state-default" layer-name="${title}" id="${title}" >
                     <span class="server-name"><strong>${ind2}</strong> ${title}</span>
                     <input class="chkbx-layer" type="checkbox" checked>
+                    <button type="button" id="${title}_${group_name}_reload" class="btn btn-dark btn-sm">
+                     <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                    </button>
                     <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
                      <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
                     </button>
@@ -441,6 +445,8 @@ add_hydroserver = function(){
 
                      $(`#${title}_variables`).on("click",showVariables);
                      $(`#${title}_variables_info`).on("click",hydroserver_information);
+                     $(`#${title}_${group_name}_reload`).on("click",update_hydroserver);
+
                     document.getElementById(`${title}`).style.visibility = "hidden";
 
 
@@ -1190,7 +1196,14 @@ update_hydroserver = function(){
       hs: hsActual,
       group: group_name
     }
-    $("#graphAddLoading").removeClass("hidden");
+    $("#GeneralLoading").css({
+       position:'fixed',
+       "z-index": 9999,
+       top: '50%',
+       left: '50%',
+       transform: 'translate(-50%, -50%)'
+     });
+    $("#GeneralLoading").removeClass("hidden");
 
 
     $.ajax({
@@ -1199,18 +1212,19 @@ update_hydroserver = function(){
         dataType: "JSON",
         data: requestObject,
         success: function(result) {
+            console.log(result)
             if(layersDict.hasOwnProperty(title)){
               map.removeLayer(layersDict[title])
             }
             //Returning the geoserver layer metadata from the controller
-            var json_response = JSON.parse(result)
-            console.log(json_response);
-            let {title, siteInfo, url, group} = json_response
+            // var json_response = JSON.parse(result[siteInfo])
+            // console.log(json_response);
+            let {siteInfo,sitesAdded} = result
 
+            console.log(siteInfo)
+            // if (json_response.status === "true") {
 
-            if (json_response.status === "true") {
-
-                    let sites = JSON.parse(siteInfo)
+                    let sites = siteInfo
                     // console.log(extents);
                     console.log(sites);
                     sites = sites.map(site => {
@@ -1273,7 +1287,7 @@ update_hydroserver = function(){
 
                       $.notify(
                           {
-                              message: `Successfully Reloaded the HydroServer to the Map`
+                              message: `Successfully Reloaded the HydroServer to the Map, ${sitesAdded} have been added to the Hydroserver `
                           },
                           {
                               type: "success",
@@ -1282,11 +1296,10 @@ update_hydroserver = function(){
                               delay: 5000
                           }
                       )
+                    $("#GeneralLoading").addClass("hidden");
 
-                    $("#graphAddLoading").addClass("hidden")
 
-
-            }
+            // }
           },
         error: function(error) {
             // $("#soapAddLoading").addClass("hidden")
