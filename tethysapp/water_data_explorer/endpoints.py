@@ -402,9 +402,6 @@ def upload_hs(request):
                 client = Client(url, timeout= 500)
 
                 sites = client.service.GetSites('[:]')
-                print("Updating HS")
-                print("sites")
-                print(sites)
                 print(type(sites))
                 sites_json={}
                 if isinstance(sites, str):
