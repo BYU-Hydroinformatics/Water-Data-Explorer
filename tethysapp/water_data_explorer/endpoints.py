@@ -461,6 +461,7 @@ def soap_group(request):
         # some of the bigger HydroServers.
         if true_extent == 'on':
             extent_value = request.POST['extent_val']
+            print("Extent",extent_value)
             return_obj['zoom'] = 'true'
             return_obj['level'] = extent_value
             ext_list = extent_value.split(',')

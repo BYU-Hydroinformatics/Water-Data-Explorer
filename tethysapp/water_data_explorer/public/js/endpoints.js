@@ -71,7 +71,7 @@
                        console.log(keywords_in_servers.includes(title));
                        let newHtml = `
                        <li class="ui-state-default" layer-name="${title}" id="${title}" >
-                         <span class="server-name">${title}</span>   
+                         <span class="server-name">${title}</span>
                        <input class="chkbx-layer" type="checkbox" checked>
 
                        <button type="button" id="${title}_${group_name}_reload" class="btn btn-dark btn-sm">
@@ -314,6 +314,7 @@ add_hydroserver = function(){
     }
     $('#chk_val').empty()
     var level=map.getView().calculateExtent(map.getSize())
+    print("LEVELMAP"+ level)
     $(
           '<input type="text" name="extent_val" id="extent_val" value=' +
               '"' +

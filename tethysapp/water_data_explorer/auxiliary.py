@@ -233,21 +233,42 @@ def parseJSON(json):
     print(json.keys())
     sites_object = None
     # This is to handle the WMO la Plata endpoints ##
+    try:
+        if "sitesResponse" in json:
+            sites_object = json['sitesResponse']['site']
 
-    if "Site" in json:
-        sites_object = json['Site']
-        # If statement is executed for multiple sites within the HydroServer, if there is a single site then it goes to the else statement
-        # Parse through the HydroServer and each site with its metadata as a
-        # dictionary object to the hs_sites list
-        if type(sites_object) is list:
-            for site in sites_object:
+            # If statement is executed for multiple sites within the HydroServer, if there is a single site then it goes to the else statement
+            # Parse through the HydroServer and each site with its metadata as a
+            # dictionary object to the hs_sites list
+            if type(sites_object) is list:
+                for site in sites_object:
+                    hs_json = {}
+                    latitude = site['siteInfo']['geoLocation'][
+                        'geogLocation']['latitude']
+                    longitude = site['siteInfo']['geoLocation'][
+                        'geogLocation']['longitude']
+                    site_name = site['siteInfo']['siteName']
+                    site_name = site_name.encode("utf-8")
+                    network = site['siteInfo']['siteCode']["@network"]
+                    sitecode = site['siteInfo']['siteCode']["#text"]
+
+                    hs_json["sitename"] = site_name.decode("UTF-8")
+                    hs_json["latitude"] = latitude
+                    hs_json["longitude"] = longitude
+                    hs_json["sitecode"] = sitecode
+                    hs_json["network"] = network
+                    hs_json["service"] = "SOAP"
+                    hs_sites.append(hs_json)
+            else:
                 hs_json = {}
-                latitude = site['Latitude']
-                longitude = site['Longitude']
-                site_name = site['SiteName']
+                latitude = sites_object['siteInfo'][
+                    'geoLocation']['geogLocation']['latitude']
+                longitude = sites_object['siteInfo'][
+                    'geoLocation']['geogLocation']['longitude']
+                site_name = sites_object['siteInfo']['siteName']
                 site_name = site_name.encode("utf-8")
-                network = site["servURL"]
-                sitecode = site['SiteCode']
+                network = sites_object['siteInfo']['siteCode']["@network"]
+                sitecode = sites_object['siteInfo']['siteCode']["#text"]
 
                 hs_json["sitename"] = site_name.decode("UTF-8")
                 hs_json["latitude"] = latitude
@@ -256,66 +277,8 @@ def parseJSON(json):
                 hs_json["network"] = network
                 hs_json["service"] = "SOAP"
                 hs_sites.append(hs_json)
-        else:
-            hs_json = {}
-            latitude = site['Latitude']
-            longitude = site['Longitude']
-            site_name = site['SiteName']
-            site_name = site_name.encode("utf-8")
-            network = site["servURL"]
-            sitecode = site['SiteCode']
-
-            hs_json["sitename"] = site_name.decode("UTF-8")
-            hs_json["latitude"] = latitude
-            hs_json["longitude"] = longitude
-            hs_json["sitecode"] = sitecode
-            hs_json["network"] = network
-            hs_json["service"] = "SOAP"
-            hs_sites.append(hs_json)
-
-    if "sitesResponse" in json:
-        sites_object = json['sitesResponse']['site']
-
-        # If statement is executed for multiple sites within the HydroServer, if there is a single site then it goes to the else statement
-        # Parse through the HydroServer and each site with its metadata as a
-        # dictionary object to the hs_sites list
-        if type(sites_object) is list:
-            for site in sites_object:
-                hs_json = {}
-                latitude = site['siteInfo']['geoLocation'][
-                    'geogLocation']['latitude']
-                longitude = site['siteInfo']['geoLocation'][
-                    'geogLocation']['longitude']
-                site_name = site['siteInfo']['siteName']
-                site_name = site_name.encode("utf-8")
-                network = site['siteInfo']['siteCode']["@network"]
-                sitecode = site['siteInfo']['siteCode']["#text"]
-
-                hs_json["sitename"] = site_name.decode("UTF-8")
-                hs_json["latitude"] = latitude
-                hs_json["longitude"] = longitude
-                hs_json["sitecode"] = sitecode
-                hs_json["network"] = network
-                hs_json["service"] = "SOAP"
-                hs_sites.append(hs_json)
-        else:
-            hs_json = {}
-            latitude = sites_object['siteInfo'][
-                'geoLocation']['geogLocation']['latitude']
-            longitude = sites_object['siteInfo'][
-                'geoLocation']['geogLocation']['longitude']
-            site_name = sites_object['siteInfo']['siteName']
-            site_name = site_name.encode("utf-8")
-            network = sites_object['siteInfo']['siteCode']["@network"]
-            sitecode = sites_object['siteInfo']['siteCode']["#text"]
-
-            hs_json["sitename"] = site_name.decode("UTF-8")
-            hs_json["latitude"] = latitude
-            hs_json["longitude"] = longitude
-            hs_json["sitecode"] = sitecode
-            hs_json["network"] = network
-            hs_json["service"] = "SOAP"
-            hs_sites.append(hs_json)
+    except ValueError:
+        print("There is a discrepancy in the structure of the response. It is possible that the respond object does not contain the sitesResponse attribute")
 
     return hs_sites
 
