@@ -55,6 +55,7 @@ def home(request):
     boundaryMovement = app.get_custom_setting('Boundary Movement')
     boundaryColor = app.get_custom_setting('Boundary Color')
     boundaryWidth = app.get_custom_setting('Boundary Width')
+    nameViews = app.get_custom_setting('Views Names')
     print(boundaryEndpoint)
     print(type(boundaryEndpoint))
     context = {
@@ -65,7 +66,8 @@ def home(request):
      "geoColor": boundaryColor,
      "geoWidth":boundaryWidth,
      'can_delete_hydrogroups': has_permission(request, 'delete_hydrogroups'),
-     'can_block_map': has_permission(request, 'block_map')
+     'can_block_map': has_permission(request, 'block_map'),
+     'views_names': has_permission(request,'nameViews')
     }
     # else:
     #     context = {

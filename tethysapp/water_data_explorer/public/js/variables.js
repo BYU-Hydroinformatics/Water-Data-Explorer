@@ -106,7 +106,8 @@ var filter_words,
     ind2 = "\n\u2022",
     ind = 1,
     group_show_actual,
-    hs_show_actual;
+    hs_show_actual,
+    give_name;
 
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that

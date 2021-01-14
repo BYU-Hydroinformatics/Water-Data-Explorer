@@ -162,6 +162,13 @@ class WaterDataExplorer(TethysAppBase):
             #     description='Hydroserver WSDL Endpoint (e.g. http://hydroportal.cuahsi.org/cedarriver/cuahsi_1_1.asmx?WSDL)',
             #     required = True
             # ),
+
+            CustomSetting(
+                name='Views Names',
+                type = CustomSetting.TYPE_STRING,
+                description='Name of the region holding the views (e.g. La Plata Basin)',
+                required=False
+            ),
             CustomSetting(
                 name='Boundary Geoserver Endpoint',
                 type = CustomSetting.TYPE_STRING,

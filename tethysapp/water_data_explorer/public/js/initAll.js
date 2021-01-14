@@ -305,6 +305,13 @@ var water_data_explorer_PACKAGE = (function() {
             })
             .change()
     }
+    give_name = function(){
+      $(".titleh").html(`${views_names} Views`)
+      $(".app-title").html(`${views_names} Data Explorer`)
+      console.log("GIVE_NAME");
+      console.log(views_names);
+    }
+
 
     /*
     ************ FUNCTION NAME: INIT_JEQUERY_VAR**********************
@@ -333,6 +340,7 @@ var water_data_explorer_PACKAGE = (function() {
     initialize_graphs([],[],"No data Available","","","","pie");
     add_boundary_map(geoServerColor, geoServerWidth, map);
     activate_deactivate_graphs();
+    give_name();
 
   })
 })() // End of package wrapper
