@@ -74,7 +74,7 @@ def create_group(request):
             service_info = client.service.GetWaterOneFlowServiceInfo()
             services = service_info.ServiceInfo
             views = giveServices(services)
-
+            group_obj['views'] = addMultipleViews(views,title)
 
     else:
         group_obj[
@@ -104,6 +104,66 @@ def giveServices(services):
         list['servers'] = hs_list
         # list['errors'] = error_list
     return hs_list
+
+def addMultipleViews(hs_list,group):
+    ret_object = []
+    for hs in hs_list:
+        return_obj = {}
+        client = Client(hs.url, timeout= 500)
+        sites = client.service.GetSites('[:]')
+        # sites = client.service.GetSites('')
+        print("this are the sites")
+        print(sites)
+        print(type(sites))
+        sites_json={}
+        if isinstance(sites, str):
+            print("here")
+            sites_dict = xmltodict.parse(sites)
+            sites_json_object = json.dumps(sites_dict)
+            sites_json = json.loads(sites_json_object)
+        else:
+            sites_json_object = suds_to_json(sites)
+            sites_json = json.loads(sites_json_object)
+
+        # Parsing the sites and creating a sites object. See auxiliary.py
+        print("-------------------------------------")
+        # print(sites_json)
+        sites_object = parseJSON(sites_json)
+        # print(sites_object)
+        # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
+
+        # sites_parsed_json = json.dumps(converted_sites_object)
+        sites_parsed_json = json.dumps(sites_object)
+
+        return_obj['title'] = title
+        return_obj['url'] = url
+        return_obj['siteInfo'] = sites_parsed_json
+        return_obj['group'] = group
+        return_obj['status'] = "true"
+
+        ret_object.append(ret_object)
+
+        SessionMaker = app.get_persistent_store_database(
+            Persistent_Store_Name, as_sessionmaker=True)
+        session = SessionMaker()
+
+        hydroservers_group = session.query(Groups).filter(Groups.title == group)[0]
+        # hydroservers_g = session.query(Groups).filter(Groups.title == group)
+        print(hydroservers_group.title)
+        print(hydroservers_group.description)
+
+        hs_one = HydroServer_Individual(title=title,
+                         url=url,
+                         siteinfo=sites_parsed_json)
+
+        hydroservers_group.hydroserver.append(hs_one)
+        print(hydroservers_group.hydroserver)
+        session.add(hydroservers_group)
+        session.commit()
+        session.close()
+
+    return ret_object
+
 ######*****************************************************************************************################
 ######************RETRIEVES THE GROUPS OF HYDROSERVERS THAT WERE CREATED BY THE USER **********################
 ######*****************************************************************************************################
