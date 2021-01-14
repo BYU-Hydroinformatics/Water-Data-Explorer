@@ -73,6 +73,7 @@ def create_group(request):
             client = Client(url_catalog, timeout= 500)
             service_info = client.service.GetWaterOneFlowServiceInfo()
             services = service_info.ServiceInfo
+            views = giveServices(services)
 
 
     else:
@@ -82,7 +83,27 @@ def create_group(request):
 
     return JsonResponse(group_obj)
 
-
+def giveServices(services):
+    hs_list = []
+    for i in services:
+        hs = {}
+        url = i.servURL
+        title = i.Title
+        try:
+            print("Testing %s" % (url))
+            # url_client = Client(url)
+            hs['url'] = url
+            hs['title'] = title
+            hs_list.append(hs)
+            print("%s Works" % (url))
+        except Exception as e:
+            print(e)
+            hs['url'] = url
+            print("%s Failed" % (url))
+            # error_list.append(hs)
+        list['servers'] = hs_list
+        # list['errors'] = error_list
+    return hs_list
 ######*****************************************************************************************################
 ######************RETRIEVES THE GROUPS OF HYDROSERVERS THAT WERE CREATED BY THE USER **********################
 ######*****************************************************************************************################
