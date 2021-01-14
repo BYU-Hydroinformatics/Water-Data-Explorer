@@ -68,7 +68,7 @@ def create_group(request):
         session.commit()
         session.close()
 
-        if not url_catalog:
+        if url_catalog:
             url_catalog = unquote(url_catalog)
             client = Client(url_catalog, timeout= 500)
             service_info = client.service.GetWaterOneFlowServiceInfo()
