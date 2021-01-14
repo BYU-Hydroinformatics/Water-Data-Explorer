@@ -32,7 +32,8 @@ from suds.xsd.doctor import Import, ImportDoctor
 from json import dumps, loads
 from pyproj import Proj, transform  # Reprojecting/Transforming coordinates
 from datetime import datetime
-
+from urllib.parse import unquote
+from .endpoints import *
 
 from django.http import JsonResponse, HttpResponse
 from .app import WaterDataExplorer as app
@@ -48,7 +49,6 @@ def create_group(request):
     group_obj={}
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()  # Initiate a session
-
     # Query DB for hydroservers
 
     # print(request.POST)
@@ -58,12 +58,22 @@ def create_group(request):
 
         # print(description)
         title = request.POST.get('addGroup-title')
+
         group_obj['title']=title
-        group_obj['description']=description
+        group_obj['description']= description
+        url_catalog = request.POST.get('url')
+
         group_hydroservers=Groups(title=title, description=description)
         session.add(group_hydroservers)
         session.commit()
         session.close()
+
+        if not url_catalog:
+            url_catalog = unquote(url_catalog)
+            client = Client(url_catalog, timeout= 500)
+            service_info = client.service.GetWaterOneFlowServiceInfo()
+            services = service_info.ServiceInfo
+
 
     else:
         group_obj[
@@ -71,6 +81,7 @@ def create_group(request):
 
 
     return JsonResponse(group_obj)
+
 
 ######*****************************************************************************************################
 ######************RETRIEVES THE GROUPS OF HYDROSERVERS THAT WERE CREATED BY THE USER **********################
