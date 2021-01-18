@@ -491,8 +491,20 @@ make_list_groups = function(){
   let finalGroupArray=[];
   arrayGroups.forEach(function(g){
     if(g.id){
-      let stringGroup = g.id.split("_")[0];
+      let stringGroups = g.id.split("_");
+      let stringGroup = ""
+      for(var i = 0; i < stringGroups.length - 1 ; i++){
+        if (i >0){
+          stringGroup = stringGroup +"_"+stringGroups[i]
+        }
+        else{
+          stringGroup = stringGroup + stringGroups[i]
+        }
+      }
+      // let stringGroup = g.id.split("_")[0];
       finalGroupArray.push(stringGroup);
+
+
     }
   });
   var HSTableHtml =
