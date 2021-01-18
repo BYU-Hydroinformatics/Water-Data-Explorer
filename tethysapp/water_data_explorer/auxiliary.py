@@ -53,7 +53,9 @@ def checkCentral(centralUrl):
 
 def parseService(centralUrl):
     url = centralUrl + "/GetWaterOneFlowServiceInfo"
+    print(url)
     response = urllib.request.urlopen(url)
+    # response = request.get(url)
     data = response.read()
     parse_xml = et.fromstring(data)
 

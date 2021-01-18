@@ -5,7 +5,7 @@ import os
 import json
 import pandas as pd
 import numpy as np
-
+from urllib.error import HTTPError
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
@@ -28,19 +28,19 @@ import psycopg2
 from owslib.waterml.wml11 import WaterML_1_1 as wml11
 from suds.client import Client  # For parsing WaterML/XML
 from suds.xsd.doctor import Import, ImportDoctor
+from suds.transport import TransportError
 # from suds.sudsobject import SudObject
 from json import dumps, loads
 from pyproj import Proj, transform  # Reprojecting/Transforming coordinates
 from datetime import datetime
 from urllib.parse import unquote
 from .endpoints import *
-
 from django.http import JsonResponse, HttpResponse
 from .app import WaterDataExplorer as app
 
 Persistent_Store_Name = 'catalog_db'
-
-logging.getLogger('suds.client').setLevel(logging.CRITICAL)
+logging.basicConfig(level=logging.INFO)
+logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
 ######*****************************************************************************************################
 ######***********************CREATE AN EMPTY GROUP OF HYDROSERVERS ****************************################
@@ -50,7 +50,9 @@ def create_group(request):
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()  # Initiate a session
     # Query DB for hydroservers
-
+# http://gs-service-production.geodab.eu/gs-service/services/essi/view/whos-plata/hiscentral.asmx/GetWaterOneFlowServiceInfo?
+# http://gs-service-production.geodab.eu/gs-service/services/essi/view/whos-plata/hiscentral.asmx?WSDL
+# http://gs-service-production.geodab.eu/gs-service/services/essi/view/whos-plata/hiscentral.asmx
     # print(request.POST)
     if request.is_ajax() and request.method == 'POST':
         print("inside first if statement of create group")
@@ -62,19 +64,30 @@ def create_group(request):
         group_obj['title']=title
         group_obj['description']= description
         url_catalog = request.POST.get('url')
-
         group_hydroservers=Groups(title=title, description=description)
         session.add(group_hydroservers)
         session.commit()
         session.close()
 
         if url_catalog:
-            url_catalog = unquote(url_catalog)
-            client = Client(url_catalog, timeout= 500)
-            service_info = client.service.GetWaterOneFlowServiceInfo()
-            services = service_info.ServiceInfo
-            views = giveServices(services)
-            group_obj['views'] = addMultipleViews(views,title)
+            try:
+                # url_catalog = unquote(url_catalog)
+                print("THIS ", url_catalog)
+                url_catalog2 = url_catalog + "?WSDL"
+                client = Client(url_catalog2, timeout= 500)
+                logging.getLogger('suds.client').setLevel(logging.DEBUG)
+
+                service_info = client.service.GetWaterOneFlowServiceInfo()
+                # print(logging.getLogger('suds.client').setLevel(logging.DEBUG))
+                # print(logging.getLogger('suds.client').setLevel(logging.CRITICAL))
+                services = service_info.ServiceInfo
+                views = giveServices(services)
+                group_obj['views'] = addMultipleViews(views,title)
+            except Exception as e:
+                services = parseService(url_catalog)
+                views = giveServices(services)
+                print(views)
+                group_obj['views'] = addMultipleViews(views,title)
 
     else:
         group_obj[
@@ -87,11 +100,11 @@ def giveServices(services):
     hs_list = []
     for i in services:
         hs = {}
-        url = i.servURL
-        title = i.Title
+        url = i['servURL']
+        title = i['Title']
         try:
             print("Testing %s" % (url))
-            # url_client = Client(url)
+            url_client = Client(url)
             hs['url'] = url
             hs['title'] = title
             hs_list.append(hs)
@@ -101,66 +114,84 @@ def giveServices(services):
             hs['url'] = url
             print("%s Failed" % (url))
             # error_list.append(hs)
-        list['servers'] = hs_list
+        # hs_list['servers'] = hs_list
         # list['errors'] = error_list
     return hs_list
 
 def addMultipleViews(hs_list,group):
     ret_object = []
     for hs in hs_list:
+        # new_url = hs['url'] + "?WSDL"
+        new_url = hs['url']
         return_obj = {}
-        client = Client(hs.url, timeout= 500)
-        sites = client.service.GetSites('[:]')
-        # sites = client.service.GetSites('')
-        print("this are the sites")
-        print(sites)
-        print(type(sites))
-        sites_json={}
-        if isinstance(sites, str):
-            print("here")
-            sites_dict = xmltodict.parse(sites)
-            sites_json_object = json.dumps(sites_dict)
-            sites_json = json.loads(sites_json_object)
-        else:
-            sites_json_object = suds_to_json(sites)
-            sites_json = json.loads(sites_json_object)
+        print("********************")
+        print(hs)
+        try:
+            # response = urllib.request.urlopen(new_url)
 
-        # Parsing the sites and creating a sites object. See auxiliary.py
-        print("-------------------------------------")
-        # print(sites_json)
-        sites_object = parseJSON(sites_json)
-        # print(sites_object)
-        # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
+            # print(response.getcode())
+            print(new_url)
+            client = Client(new_url, timeout= 500)
+            sites = client.service.GetSites('[:]')
+            # sites = client.service.GetSites('')
+            print("this are the sites")
+            print(sites)
+            print(type(sites))
+            sites_json={}
+            if isinstance(sites, str):
+                print("here")
+                sites_dict = xmltodict.parse(sites)
+                sites_json_object = json.dumps(sites_dict)
+                sites_json = json.loads(sites_json_object)
+            else:
+                sites_json_object = suds_to_json(sites)
+                sites_json = json.loads(sites_json_object)
 
-        # sites_parsed_json = json.dumps(converted_sites_object)
-        sites_parsed_json = json.dumps(sites_object)
+            # Parsing the sites and creating a sites object. See auxiliary.py
+            print("-------------------------------------")
+            # print(sites_json)
+            sites_object = parseJSON(sites_json)
+            # print(sites_object)
+            # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
 
-        return_obj['title'] = title
-        return_obj['url'] = url
-        return_obj['siteInfo'] = sites_parsed_json
-        return_obj['group'] = group
-        return_obj['status'] = "true"
+            # sites_parsed_json = json.dumps(converted_sites_object)
+            sites_parsed_json = json.dumps(sites_object)
 
-        ret_object.append(ret_object)
+            return_obj['title'] = hs['title']
+            return_obj['url'] = hs['url']
+            return_obj['siteInfo'] = sites_parsed_json
+            return_obj['group'] = group
+            return_obj['status'] = "true"
 
-        SessionMaker = app.get_persistent_store_database(
-            Persistent_Store_Name, as_sessionmaker=True)
-        session = SessionMaker()
+            ret_object.append(ret_object)
 
-        hydroservers_group = session.query(Groups).filter(Groups.title == group)[0]
-        # hydroservers_g = session.query(Groups).filter(Groups.title == group)
-        print(hydroservers_group.title)
-        print(hydroservers_group.description)
+            SessionMaker = app.get_persistent_store_database(
+                Persistent_Store_Name, as_sessionmaker=True)
+            session = SessionMaker()
 
-        hs_one = HydroServer_Individual(title=title,
-                         url=url,
-                         siteinfo=sites_parsed_json)
+            hydroservers_group = session.query(Groups).filter(Groups.title == group)[0]
+            # hydroservers_g = session.query(Groups).filter(Groups.title == group)
+            print(hydroservers_group.title)
+            print(hydroservers_group.description)
 
-        hydroservers_group.hydroserver.append(hs_one)
-        print(hydroservers_group.hydroserver)
-        session.add(hydroservers_group)
-        session.commit()
-        session.close()
+            hs_one = HydroServer_Individual(title=hs['title'],
+                             url=hs['url'],
+                             siteinfo=sites_parsed_json)
+
+            hydroservers_group.hydroserver.append(hs_one)
+            print(hydroservers_group.hydroserver)
+            session.add(hydroservers_group)
+            session.commit()
+            session.close()
+
+        except TransportError as e:
+            content = e.read()
+            # place = hs['url'].split("gs-view-source(")
+            # place = place[1].split(")")[0]
+            # new_url = "http://gs-service-production.geodab.eu/gs-service/services/essi/view/" + place + "/cuahsi_1_1.asmx"
+            print("Invalid WSDL service",content)
+            continue
+
 
     return ret_object
 
