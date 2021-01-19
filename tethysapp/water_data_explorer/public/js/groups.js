@@ -14,15 +14,25 @@ create_group_hydroservers = function(){
 
     //CHECKS IF THERE IS AN INPUT THAT IS NOT ALLOWED//
     if ($("#addGroup-title").val() != "") {
-      var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9_]+$")
-      var title = $("#addGroup-title").val()
+      var regex = new RegExp("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
+      var title = $("#soap-title").val()
       if (!regex.test(title)) {
-          $modalAddGroupHydro
+        $modalAddGroupHydro
               .find(".warning")
-              .html("<b>Please note that only numbers and other characters besides the underscore ( _ ) are not allowed</b>");
+              .html("<b>Please enter Letters only for the title.</b>");
           return false
       }
     }
+    // if ($("#addGroup-title").val() != "") {
+    //   var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9_]+$")
+    //   var title = $("#addGroup-title").val()
+    //   if (!regex.test(title)) {
+    //       $modalAddGroupHydro
+    //           .find(".warning")
+    //           .html("<b>Please note that only numbers and other characters besides the underscore ( _ ) are not allowed</b>");
+    //       return false
+    //   }
+    // }
     else {
         $modalAddGroupHydro.find(".warning").html("");
     }

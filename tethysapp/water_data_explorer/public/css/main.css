@@ -26,8 +26,9 @@
 }
 
 .hsinfo{
-    font-size: 1.5em;
+    font-size: 1.3em;
     font-weight: bold;
+    color: #666;
 }
 table #tbl-hydroservers{
   border-collapse: collapse;
@@ -529,8 +530,8 @@ tr:hover {
   width: 100%;
 }
 #hydroserverTitle{
-  display: flex;
-  justify-content: center;
+  /* display: flex; */
+  /* justify-content: center; */
 }
 
 #variablesLoading{
