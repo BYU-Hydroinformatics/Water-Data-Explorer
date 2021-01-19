@@ -32,7 +32,7 @@ select_variable_change = function(){
   // console.log(object_request_graphs);
 
   if(chart_type == "Scatter" || chart_type =="Whisker and Box"){
-    $("#type_graph_select")['0'].disabled = false;
+    // $("#type_graph_select")['0'].disabled = false;
 
     // console.log(selectedItem);
 
@@ -155,7 +155,7 @@ $("#update_graphs").on("click",select_variable_change);
 ************ PURPOSE: CHANGE THE GRAPHS THAT ARE PART OF THE ***********
 */
 change_type_graphs_group = function(){
-  let chart_type= $("#type_graph_select")['0'].value;
+  // let chart_type= $("#type_graph_select")['0'].value;
 
   if(chart_type === "Bar"){
     console.log("inside the bar type");
@@ -230,5 +230,5 @@ change_type_graphs_group = function(){
   }
 
 }
-$("#type_graph_select").change(change_type_graphs_group)
-$("#type_graph_select2").change(change_type_graphs_individual)
+// $("#type_graph_select").change(change_type_graphs_group)
+// $("#type_graph_select2").change(change_type_graphs_individual)
