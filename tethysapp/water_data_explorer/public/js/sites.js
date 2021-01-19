@@ -91,16 +91,17 @@ activate_layer_values = function (){
         <p>Table of Variables</p>
         <table id="siteVariableTable" class="table table-striped table-hover table-condensed">
             <tr class="danger">
-              <th>Variable</th>
-              <th>Code</th>
+              <th>Observerd Variable</th>
+              <th>Time Extent</th>
               <th>Data Points</th>
             </tr>`;
           for(let i=0; i<result['variables'].length ; ++i){
+            let variable_new = result['variables'][i]
             let newRow =
             `
             <tr>
               <th>${result['variables'][i]}</th>
-              <th>${result['codes'][i]}</th>
+              <th>${result['times_series']['${variable_new}']['beginningDateTime']} / ${result['time_series'][i]['endDateTime']}</th>
               <th>${result['counts'][i]}</th>
             </tr>
             `

@@ -305,7 +305,7 @@
 add_hydroserver = function(){
   if($("#extent").is(":checked")){
     var zoom= map.getView().getZoom();
-    if(zoom < 8){
+    if(zoom < 5){
         $modalAddSOAP.find(".warning").html("<b>The zoom level has to be 8 or greater. Please check and try again.</b>")
         return false
     }
@@ -314,7 +314,7 @@ add_hydroserver = function(){
     }
     $('#chk_val').empty()
     var level=map.getView().calculateExtent(map.getSize())
-    print("LEVELMAP"+ level)
+    console.log("LEVELMAP"+ level)
     $(
           '<input type="text" name="extent_val" id="extent_val" value=' +
               '"' +
@@ -546,8 +546,15 @@ add_hydroserver = function(){
                     }
 
 
+                    console.log("this are the sites");
+                    console.log(siteInfo);
+                    // let sites = JSON.parse(siteInfo);
+                    // console.log(sites);
+                    let sites = siteInfo
 
-                    let sites = JSON.parse(siteInfo)
+                    if (typeof(sites) == "string"){
+                      sites = JSON.parse(siteInfo);
+                    }
                     // console.log(extents);
                     console.log(sites);
                     sites = sites.map(site => {
