@@ -7,7 +7,8 @@ function featureStyle() {
                 width: 1
             }),
             fill: new ol.style.Fill({
-                color: `#${(((1 << 24) * Math.random()) | 0).toString(16)}`
+                // color: `#${(((1 << 24) * Math.random()) | 0).toString(16)}`
+                color: "#00FF00"
             })
         })
     })
@@ -387,9 +388,17 @@ function featureStyle() {
                 width: 1
             }),
             fill: new ol.style.Fill({
-                color: `#${(((1 << 24) * Math.random()) | 0).toString(16)}`
+                // color: `#${(((1 << 24) * Math.random()) | 0).toString(16)}`
+                color: get_new_color()
             })
         })
     })
     return style
+}
+function get_new_color(){
+  var new_color = colors_unique[0]
+  colors_used.push(new_color)
+  colors_unique.shift()
+  // var color_new = colors_unique[Math.floor(Math.random() * colors_unique.length)];
+  return new_color
 }
