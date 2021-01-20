@@ -56,7 +56,7 @@ class Groups(Base):
     __tablename__ = 'Group_Hydroserver_Individuals'
 
     id = Column(Integer, primary_key=True)  # Record number.
-    title = Column(String(50))  # Tile as given by the admin
+    title = Column(String(1000))  # Tile as given by the admin
     description = Column(Text)  # URL of the SOAP endpointx
     hydroserver = relationship("HydroServer_Individual", back_populates ="group", cascade = "all,delete, delete-orphan" )
     #all, delete-orphan,save-update
@@ -71,7 +71,7 @@ class HydroServer_Individual(Base):
     __tablename__ = 'Hydroserver_Singular'
 
     id = Column(Integer, primary_key=True)  # Record number.
-    title = Column(String(50))  # Tile as given by the admin
+    title = Column(String(1000))  # Tile as given by the admin
     url = Column(String(2083))  # URL of the SOAP endpointx
     siteinfo = Column(JSON)
     group_id = Column(Integer, ForeignKey('Group_Hydroserver_Individuals.id'))
