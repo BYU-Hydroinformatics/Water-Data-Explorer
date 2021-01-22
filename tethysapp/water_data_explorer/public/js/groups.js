@@ -13,26 +13,26 @@ create_group_hydroservers = function(){
     }
 
     //CHECKS IF THERE IS AN INPUT THAT IS NOT ALLOWED//
-    if ($("#addGroup-title").val() != "") {
-      var regex = new RegExp("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
-      var title = $("#soap-title").val()
-      if (!regex.test(title)) {
-        $modalAddGroupHydro
-              .find(".warning")
-              .html("<b>Please enter Letters only for the title.</b>");
-          return false
-      }
-    }
     // if ($("#addGroup-title").val() != "") {
-    //   var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9_]+$")
-    //   var title = $("#addGroup-title").val()
+    //   var regex = new RegExp("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
+    //   var title = $("#soap-title").val()
     //   if (!regex.test(title)) {
-    //       $modalAddGroupHydro
+    //     $modalAddGroupHydro
     //           .find(".warning")
-    //           .html("<b>Please note that only numbers and other characters besides the underscore ( _ ) are not allowed</b>");
+    //           .html("<b>Please enter Letters only for the title.</b>");
     //       return false
     //   }
     // }
+    if ($("#addGroup-title").val() != "") {
+      var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9_]+$")
+      var title = $("#addGroup-title").val()
+      if (!regex.test(title)) {
+          $modalAddGroupHydro
+              .find(".warning")
+              .html("<b>Please note that only numbers and other characters besides the underscore ( _ ) are not allowed</b>");
+          return false
+      }
+    }
     else {
         $modalAddGroupHydro.find(".warning").html("");
     }
@@ -50,7 +50,7 @@ create_group_hydroservers = function(){
     let datastring= elementForm.serialize();
     console.log(typeof(datastring));
     console.log(datastring);
-    $("#soapAddLoading").removeClass("hidden");
+    $("#soapAddLoading-group").removeClass("hidden");
 
     $.ajax({
         type: "POST",
@@ -178,14 +178,10 @@ create_group_hydroservers = function(){
 
               });
 
-
-
-
               $(".ui-state-default").click(function(){
                 console.log("hola");
               });
-                  $("#soapAddLoading").addClass("hidden")
-                  $("#soapAddLoading").addClass("hidden")
+                  $("#soapAddLoading-group").addClass("hidden")
                   $("#btn-add-addHydro").show()
 
                   $("#modalAddGroupServer").modal("hide")
@@ -343,6 +339,8 @@ create_group_hydroservers = function(){
                  console.log(input_check);
                  if(input_check.checked){
                    load_individual_hydroservers_group(title);
+                   labels_x = document.getElementById(`heading_${title}`)
+                   labels_x.style.backgroundColor = colors_unique[0]
                  }
 
                  input_check.addEventListener("change", function(){
@@ -736,7 +734,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
             let send_group={
               group: hydroserver_group
             };
-            $("#KeywordLoading").css({"margin-left":'40%', position:'relative',"z-index": 9999});
+            // $("#KeywordLoading").css({"margin-left":'40%', position:'relative',"z-index": 9999});
             $("#KeywordLoading").removeClass("hidden");
             $("#btn-key-search").hide();
 
@@ -841,7 +839,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
                   $("#KeywordLoading").addClass("hidden");
 
                   $("#btn-key-search").show();
-                  $("#modalKeyWordSearch").modal("hide");
+                  // $("#modalKeyWordSearch").modal("hide");
                   $("#modalKeyWordSearch").each(function() {
                       this.reset()
                   })

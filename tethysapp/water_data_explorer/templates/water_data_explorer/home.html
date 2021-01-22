@@ -12,7 +12,9 @@
 <!-- id= "buttonsBar" for the button bar -->
 <br>
 
-<img id="GeneralLoading" class="view-file hidden" src="https://media.giphy.com/media/3ohs7Xldjh7DndQnBu/giphy.gif" />
+{# <img id="GeneralLoading" class="view-file hidden" src="https://media.giphy.com/media/xTk9ZvMnbIiIew7IpW/giphy.gif" /> #}
+<img id="GeneralLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
+{# <img id="graphAddLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" /> #}
 
 <div class="accordion" id="groups_hydroservers">
 
@@ -65,11 +67,14 @@
         <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
           in this part such as a name and a description.
         </p>
+      <div id="plotsDis"></div>
+
 
       <div id="table_div"></div>
 
     </div>
-    <img id="graphAddLoading" class="view-file hidden" src="https://media.giphy.com/media/3ohs7Xldjh7DndQnBu/giphy.gif"  />
+    {# <img id="graphAddLoading" class="view-file hidden" src="https://media.giphy.com/media/jAYUbVXgESSti/giphy.gif"  /> #}
+    <img id="graphAddLoading" class="view-file hidden" alt="loading gif" src="{% static 'water_data_explorer/images/loading.gif' %}">
 
     <div id="plots2">
       <div id="plots"></div>
