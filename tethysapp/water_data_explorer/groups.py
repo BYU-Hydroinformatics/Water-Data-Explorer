@@ -5,6 +5,8 @@ import os
 import json
 import pandas as pd
 import numpy as np
+import pywaterml.waterML as pwml
+
 from urllib.error import HTTPError
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -26,9 +28,11 @@ from .auxiliary import *
 import xml.etree.ElementTree as ET
 import psycopg2
 from owslib.waterml.wml11 import WaterML_1_1 as wml11
+import suds
 from suds.client import Client  # For parsing WaterML/XML
 from suds.xsd.doctor import Import, ImportDoctor
 from suds.transport import TransportError
+# from suds.WebFault import webFault
 # from suds.sudsobject import SudObject
 from json import dumps, loads
 from pyproj import Proj, transform  # Reprojecting/Transforming coordinates
@@ -123,38 +127,42 @@ def addMultipleViews(hs_list,group):
     for hs in hs_list:
         # new_url = hs['url'] + "?WSDL"
         new_url = hs['url']
+        water = pwml.WaterMLOperations(url = new_url)
+
         return_obj = {}
         print("********************")
         print(hs)
         try:
-            # response = urllib.request.urlopen(new_url)
+            # # response = urllib.request.urlopen(new_url)
+            #
+            # # print(response.getcode())
+            # print(new_url)
+            # client = Client(new_url, timeout= 500)
+            # sites = client.service.GetSites('[:]')
+            # # sites = client.service.GetSites('')
+            # print("this are the sites")
+            # print(sites)
+            # print(type(sites))
+            # sites_json={}
+            # if isinstance(sites, str):
+            #     print("here")
+            #     sites_dict = xmltodict.parse(sites)
+            #     sites_json_object = json.dumps(sites_dict)
+            #     sites_json = json.loads(sites_json_object)
+            # else:
+            #     sites_json_object = suds_to_json(sites)
+            #     sites_json = json.loads(sites_json_object)
+            #
+            # # Parsing the sites and creating a sites object. See auxiliary.py
+            # print("-------------------------------------")
+            # # print(sites_json)
+            # sites_object = parseJSON(sites_json)
+            # # print(sites_object)
+            # # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
+            #
+            # # sites_parsed_json = json.dumps(converted_sites_object)
+            sites_object = water.GetSites()
 
-            # print(response.getcode())
-            print(new_url)
-            client = Client(new_url, timeout= 500)
-            sites = client.service.GetSites('[:]')
-            # sites = client.service.GetSites('')
-            print("this are the sites")
-            print(sites)
-            print(type(sites))
-            sites_json={}
-            if isinstance(sites, str):
-                print("here")
-                sites_dict = xmltodict.parse(sites)
-                sites_json_object = json.dumps(sites_dict)
-                sites_json = json.loads(sites_json_object)
-            else:
-                sites_json_object = suds_to_json(sites)
-                sites_json = json.loads(sites_json_object)
-
-            # Parsing the sites and creating a sites object. See auxiliary.py
-            print("-------------------------------------")
-            # print(sites_json)
-            sites_object = parseJSON(sites_json)
-            # print(sites_object)
-            # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
-
-            # sites_parsed_json = json.dumps(converted_sites_object)
             sites_parsed_json = json.dumps(sites_object)
 
             return_obj['title'] = hs['title']
@@ -184,12 +192,12 @@ def addMultipleViews(hs_list,group):
             session.commit()
             session.close()
 
-        except TransportError as e:
-            content = e.read()
+#CHANGE LAST
+        except (suds.WebFault, KeyError) as detail:
             # place = hs['url'].split("gs-view-source(")
             # place = place[1].split(")")[0]
             # new_url = "http://gs-service-production.geodab.eu/gs-service/services/essi/view/" + place + "/cuahsi_1_1.asmx"
-            print("Invalid WSDL service",content)
+            print("Invalid WSDL service",detail)
             continue
 
 
@@ -303,7 +311,7 @@ def delete_group(request):
             print(group.title)
 
         for group in groups:
-            # print(session.query(Groups).filter(Groups.title == group).first())
+            print("print the group",session.query(Groups).filter(Groups.title == group).first())
             hydroservers_group = session.query(Groups).filter(Groups.title == group)[0].hydroserver
             print("printing hydroserver_groups")
             print(hydroservers_group)
