@@ -68,8 +68,9 @@ activate_layer_values = function (){
       object_request['code']=feature.values_['code'];
       object_request['network']=feature.values_['network'];
       // $("#plots").hide();
-      $("#graphAddLoading").css({left:'50%',bottom:"15%", position:'absolute',"z-index": 9999});
-      $("#graphAddLoading").removeClass("hidden");
+      // $("#graphAddLoading").css({left:'50%',bottom:"15%", position:'absolute',"z-index": 9999});
+      // $("#graphAddLoading").removeClass("hidden");
+      $("#GeneralLoading").removeClass("hidden");
       console.log(object_request);
 
       $.ajax({
@@ -267,7 +268,8 @@ activate_layer_values = function (){
           $('#datetimepicker6').datepicker('setEndDate', dateUTC_end);
           // $('#datetimepicker7').datepicker('setStartDate',dateUTC_end);
           $('#datetimepicker7').datepicker('setEndDate',dateUTC_end);
-           $("#graphAddLoading").addClass("hidden")
+           // $("#graphAddLoading").addClass("hidden")
+           $("#GeneralLoading").addClass("hidden")
 
 
         }
