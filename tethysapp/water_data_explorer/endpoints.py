@@ -462,6 +462,7 @@ def soap_group(request):
         print(url)
         title = request.POST.get('soap-title')
         title = title.replace(" ", "")
+        title = title.translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
         print(title)
         group = request.POST.get('actual-group')
         print(group)
@@ -496,7 +497,7 @@ def soap_group(request):
             # print(wml_sites)
             # sites_parsed_json = json.dumps(wml_sites)
             sitesByBoundingBox = water.GetSitesByBoxObject(ext_list,'epsg:3857')
-            sites_parsed_json = json.dumps(sitesByBoundingBox)
+            # sites_parsed_json = json.dumps(sitesByBoundingBox)
 
 
             return_obj['title'] = title

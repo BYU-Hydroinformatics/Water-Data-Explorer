@@ -65,7 +65,7 @@ def create_group(request):
         # print(description)
         title = request.POST.get('addGroup-title')
 
-        group_obj['title']=title
+        group_obj['title']= title.translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
         group_obj['description']= description
         url_catalog = request.POST.get('url')
         group_hydroservers=Groups(title=title, description=description)
@@ -165,7 +165,7 @@ def addMultipleViews(hs_list,group):
 
             sites_parsed_json = json.dumps(sites_object)
 
-            return_obj['title'] = hs['title']
+            return_obj['title'] = hs['title'].translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
             return_obj['url'] = hs['url']
             return_obj['siteInfo'] = sites_parsed_json
             return_obj['group'] = group
@@ -193,7 +193,7 @@ def addMultipleViews(hs_list,group):
             session.close()
 
 #CHANGE LAST
-        except (suds.WebFault, KeyError) as detail:
+        except (suds.WebFault, KeyError, TypeError, ValueError) as detail:
             # place = hs['url'].split("gs-view-source(")
             # place = place[1].split(")")[0]
             # new_url = "http://gs-service-production.geodab.eu/gs-service/services/essi/view/" + place + "/cuahsi_1_1.asmx"
