@@ -24,12 +24,14 @@ create_group_hydroservers = function(){
     //   }
     // }
     if ($("#addGroup-title").val() != "") {
-      var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9_]+$")
+      // var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9_]+$")
+      var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9]+$")
       var title = $("#addGroup-title").val()
       if (!regex.test(title)) {
           $modalAddGroupHydro
               .find(".warning")
-              .html("<b>Please note that only numbers and other characters besides the underscore ( _ ) are not allowed</b>");
+              // .html("<b>Please note that only numbers and other characters besides the underscore ( _ ) are not allowed</b>");
+              .html("<b>Please enter Letters only for the title.</b>");
           return false
       }
     }

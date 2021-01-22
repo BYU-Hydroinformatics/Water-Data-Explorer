@@ -119,7 +119,12 @@
                            }
                            else{
                              // load_individual_hydroservers_group(title);
-                             let sites = JSON.parse(siteInfo)
+                             let sites = siteInfo
+
+                             if (typeof(sites) == "string"){
+                               sites = JSON.parse(siteInfo);
+                             }
+                             // let sites = JSON.parse(siteInfo)
                              // console.log(extents);
                              sites = sites.map(site => {
                                  return {
@@ -198,7 +203,14 @@
                        });
 
 
-                       let sites = JSON.parse(siteInfo)
+                       let sites = siteInfo
+                       console.log(title)
+                       console.log(typeof(sites))
+                       console.log(sites);
+                       if (typeof(sites) == "string"){
+                         console.log("inside strng");
+                         sites = JSON.parse(siteInfo);
+                       }
                        sites = sites.map(site => {
                            return {
                                type: "Feature",
@@ -345,7 +357,10 @@ add_hydroserver = function(){
         $modalAddSOAP.find(".warning").html("")
     }
     if ($("#soap-title").val() != "") {
-      var regex = new RegExp("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
+      // var regex = new RegExp("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
+      // var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9_]+$")
+      var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9]+$")
+
       var title = $("#soap-title").val()
       if (!regex.test(title)) {
           $modalAddSOAP
@@ -466,7 +481,12 @@ add_hydroserver = function(){
                       console.log(this);
                       if(this.checked){
                         console.log(" it is checked");
-                        let sites = JSON.parse(siteInfo)
+                        // let sites = JSON.parse(siteInfo)
+                        let sites = siteInfo
+
+                        if (typeof(sites) == "string"){
+                          sites = JSON.parse(siteInfo);
+                        }
                         console.log(sites);
                         sites = sites.map(site => {
                             return {
@@ -1050,7 +1070,27 @@ $(`#btn-var-search`).on("click",showAvailableSites);
 
 hydroserver_information = function(){
   let groupActual = this.parentElement.parentNode.id.split("_")[0];
+  // let stringGroups = this.parentElement.parentNode.id.split("_");
+  // let groupActual = ""
+  // for(var i = 0; i < stringGroups.length - 1 ; i++){
+  //   if (i >0){
+  //     groupActual = groupActual +"_"+stringGroups[i]
+  //   }
+  //   else{
+  //     groupActual = groupActual + stringGroups[i]
+  //   }
+  // }
   let hsActual = this.id.split("_")[0];
+  // let string_hs = this.id.split("_");
+  // let hsActual = ""
+  // for(var i = 0; i < string_hs.length - 1 ; i++){
+  //   if (i >0){
+  //     hsActual = hsActual +"_"+string_hs[i]
+  //   }
+  //   else{
+  //     hsActual = hsActual + string_hs[i]
+  //   }
+  // }
   filterSites['group']=groupActual;
   filterSites['hs']=hsActual;
   console.log(filterSites['hs']);
