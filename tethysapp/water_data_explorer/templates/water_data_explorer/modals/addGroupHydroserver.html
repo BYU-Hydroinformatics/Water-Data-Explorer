@@ -21,17 +21,36 @@
                     <div class="col-md-12 mb-3 form-group">
                         <label for="url">URL (Optional):</label>
                         <input type="text" class="form-control" name="url" id="url" placeholder="Please enter a hiscentral compliant endpoint " required>
+                        <br>
+                        <button id= "btn-check_available_serv" type="button" class="btn btn-primary">Check Services</button>
+
                     </div>
                 </div>
                 <br>
-                <br>
+
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 form-group hidden" id="available_services">
+                      <p>Available Services</p>
+                      <table class="table table-sm">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Add</th>
+                            <th scope="col">Service Name</th>
+                          </tr>
+                        </thead>
+                        <tbody id= "rows_servs">
+
+                        </tbody>
+                    </table>
+                  </div>
+                </div>
                 <div class="loading_id">
                   <img id="soapAddLoading-group" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
                 </div>
                 <div class="warning"> </div>
 
               </form>
-
             </div>
             <div class="modal-footer">
                 <div class="button-group">

@@ -562,6 +562,14 @@ tr:hover {
   font-weight: 400;
   letter-spacing: .5px;
 }
+#available_services{
+  overflow-x: scroll;
+  height: 500px;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;
   border-color:#46b8da !important;

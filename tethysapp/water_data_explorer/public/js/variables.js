@@ -150,7 +150,8 @@ var filter_words,
     ind = 1,
     group_show_actual,
     hs_show_actual,
-    give_name;
+    give_name,
+    give_available_services;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that
  *************************************************************************/

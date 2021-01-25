@@ -46,6 +46,28 @@ Persistent_Store_Name = 'catalog_db'
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
+
+def available_services(request):
+    url_catalog = request.GET.get('url')
+    hs_services = {}
+    if url_catalog:
+        try:
+            # url_catalog = unquote(url_catalog)
+            print("THIS ", url_catalog)
+            url_catalog2 = url_catalog + "?WSDL"
+            client = Client(url_catalog2, timeout= 500)
+            logging.getLogger('suds.client').setLevel(logging.DEBUG)
+
+            service_info = client.service.GetWaterOneFlowServiceInfo()
+            services = service_info.ServiceInfo
+            views = giveServices(services)
+            hs_services['services'] = views
+        except Exception as e:
+            services = parseService(url_catalog)
+            views = giveServices(services)
+            hs_services['services'] = views
+    return JsonResponse(hs_services)
+
 ######*****************************************************************************************################
 ######***********************CREATE AN EMPTY GROUP OF HYDROSERVERS ****************************################
 ######*****************************************************************************************################

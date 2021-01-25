@@ -1,3 +1,69 @@
+
+give_available_services = function(){
+  //change to vissible//
+  let elementForm= $("#modalAddGroupServerForm");
+  let datastring= elementForm.serialize();
+  let form_elements = datastring.split("&");
+  let url_alone = form_elements[form_elements.length -1]
+  console.log(url_alone)
+  $("#soapAddLoading-group").removeClass("hidden");
+
+  $.ajax({
+    type: "GET",
+    url: `available-services/`,
+    dataType: "HTML",
+    data: url_alone,
+    success: function(data){
+      $("#rows_servs").empty();
+      console.log(data)
+      var json_response = JSON.parse(data)
+      var services_ava = json_response['services']
+      var i = 1;
+      var row = ""
+      services_ava.forEach(function(serv){
+        row += `<tr>
+                  <th scope="row">${i}</th>
+                  <td><input type="checkbox" name="server" id="server" value=${serv['title']}</td>
+                  <td>${serv['title']}</td>
+                </tr>`
+        i += 1;
+        // for (var i = 0; i < server.length; i++) {
+        //     var title = server[i].title
+        //     var url = server[i].url
+        //     HSTableHtml +=
+        //         "<tr>" +
+        //         '<td><input type="checkbox" name="server" id="server" value="' +
+        //         title +
+        //         '"></td>' +
+        //         '<td class="hs_title">' +
+        //         title +
+        //         "</td>" +
+        //         '<td class="hs_url">' +
+        //         url +
+        //         "</td>" +
+        //         "</tr>"
+        // }
+        // HSTableHtml += "</tbody></table>"
+        // $modalDelete.find(".modal-body").html(HSTableHtml)
+      })
+      $("#modalAddGroupServer").find("#rows_servs").html(row)
+
+      $("#available_services").removeClass("hidden");
+      $("#soapAddLoading-group").addClass("hidden")
+
+    },
+    error: function(error){
+
+    }
+
+  })
+  // console.log(url_catalog)
+}
+$("#btn-check_available_serv").on("click", give_available_services);
+
+
+
+
 /*
 ************ FUNCTION NAME : CREATE_GROUP_HYDROSERVERS
 ************ PURPOSE : CREATES A GROUP OF HYDRSOERVERS AND ADDS IT TO THE MENU
