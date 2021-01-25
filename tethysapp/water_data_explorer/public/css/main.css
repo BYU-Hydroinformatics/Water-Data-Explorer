@@ -544,6 +544,24 @@ tr:hover {
   justify-content: center;
   width: 100%
 }
+.image_button{
+  /* display: flex; */
+  /* justify-content: center; */
+  width: 100%
+}
+.image_button img{
+  border-radius: 0.5em;
+  border-color: gray;
+  width: 6.5%;
+  border: 2px solid gray;
+  display: inline-block;
+}
+.imitate_p{
+  font-size: 14px;
+  color: #666;
+  font-weight: 400;
+  letter-spacing: .5px;
+}
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;
   border-color:#46b8da !important;

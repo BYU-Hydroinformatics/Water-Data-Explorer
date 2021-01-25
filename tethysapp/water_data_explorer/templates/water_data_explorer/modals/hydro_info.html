@@ -6,25 +6,34 @@
         <div class="modal-content myModal">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h1> Endpoint Information </h1>
+                <h1 id="hydroserverTitle"> Endpoint Information </h1>
 
             </div>
             <div class="modal-body">
-                <span class="hsinfo">Title:</span>
-                <span id="hydroserverTitle"></span>
-                <br>
-                <span class="hsinfo"> Endpoint Url:</span>
-                <span id="urlHydroserver"></span>
-                <br>
-                <span class="hsinfo">Description:</span>
-                <span id="description_Hydroserver"></span>
-                <br>
-                <p class="hsinfo">Explore in Google colab/Jupyter Notebook </p>
-                <p> Click on the button below and it will redirect you to a python notebook with the same functionality that the Water Data Explorer.
-                You only need to copy the URL for the endpoint/hydroserver, and put it in the notebook to start exploring functionality. </p>
-                <button type="button" class="btn btn-dark btn-block">
-                  <a href="https://colab.research.google.com/github/BYU-Hydroinformatics/Water-Data-Explorer/blob/master/tethysapp/water_data_explorer/ExploreColab.ipynb" target="_blank">Open Google Colaboratory</a>
-                </button>
+                {# <span class="hsinfo">Title:</span> #}
+                {# <span id="hydroserverTitle"></span> #}
+                {# <br> #}
+                <p class="hsinfo">Description</p>
+                <p id="description_Hydroserver"></p>
+                <p class="hsinfo"> Endpoint Url</p>
+                <p id="urlHydroserver"></p>
+                <div class="image_button">
+                  <span class="hsinfo">Resources Availables</span>
+                  <br>
+                  <br>
+                  <span>
+                    <a href="https://colab.research.google.com/github/BYU-Hydroinformatics/Water-Data-Explorer/blob/master/tethysapp/water_data_explorer/ExploreColab.ipynb" target="_blank">
+                      <img src="{% static 'water_data_explorer/images/colab_icon.png' %}" alt="google_colab" />
+                    </a>
+                  </span>
+                  <span class="imitate_p">Google Colab</span>
+                  <br>
+                  <br>
+                  <button id="btn-download-colab" class="btn btn-success" > <span class="glyphicon glyphicon-download"></span></button>
+                  <span class="imitate_p">Download Python Notebook</span>
+
+                </div>
+
                 <br>
                 <h2 class="hsinfo">Explore Sites</h2>
                 <div id="map2">
