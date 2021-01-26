@@ -378,6 +378,7 @@ def get_available_sites(request):
 def get_hydroserver_info(request):
     specific_group = request.GET.get('group')
     specific_hs = request.GET.get('hs')
+    print(specific_group, specific_hs)
     response_obj = {}
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()  # Initiate a session

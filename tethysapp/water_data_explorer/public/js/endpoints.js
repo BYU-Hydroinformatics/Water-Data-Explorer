@@ -66,6 +66,7 @@
                          extents,
                          siteInfo
                      } = server
+                     title = title.replace(/ /g,"-");
 
                      if(keywords_in_servers.includes(title) || key_words_to_search.length == 0){
                        console.log(keywords_in_servers.includes(title));
@@ -91,7 +92,6 @@
                        </button>
                        </li>
                        `;
-
                        // $(newHtml).appendTo("#current-servers")
                        $(newHtml).appendTo(`#${id_group_separator}`);
                        console.log($(newHtml));
@@ -1081,6 +1081,7 @@ hydroserver_information = function(){
   //   }
   // }
   let hsActual = this.id.split("_")[0];
+  hsActual = hsActual.replace(/-/g, ' ');
   // let string_hs = this.id.split("_");
   // let hsActual = ""
   // for(var i = 0; i < string_hs.length - 1 ; i++){
