@@ -21,9 +21,10 @@ give_available_services = function(){
       var i = 1;
       var row = ""
       services_ava.forEach(function(serv){
+        var title_new = serv['title'].replace(/ /g,"_");
         row += `<tr>
                   <th scope="row">${i}</th>
-                  <td><input type="checkbox" name="server" id="server" value=${serv['title']}</td>
+                  <td><input type="checkbox" name="server_${i}" id="server" value=${title_new}></td>
                   <td>${serv['title']}</td>
                 </tr>`
         i += 1;

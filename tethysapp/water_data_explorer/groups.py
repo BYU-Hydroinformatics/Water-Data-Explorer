@@ -56,7 +56,7 @@ def available_services(request):
             print("THIS ", url_catalog)
             url_catalog2 = url_catalog + "?WSDL"
             client = Client(url_catalog2, timeout= 500)
-            logging.getLogger('suds.client').setLevel(logging.DEBUG)
+            # logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
             service_info = client.service.GetWaterOneFlowServiceInfo()
             services = service_info.ServiceInfo
@@ -86,10 +86,20 @@ def create_group(request):
 
         # print(description)
         title = request.POST.get('addGroup-title')
+        url_catalog = request.POST.get('url')
+
+        selected_services = []
+        for key, value in request.POST.items():
+            print(key)
+            if value not in (title, description,url_catalog):
+                selected_services.append(value.replace("_"," "))
+
+        # selected_services = request.POST.get('server')
+        print(selected_services)
 
         group_obj['title']= title.translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
         group_obj['description']= description
-        url_catalog = request.POST.get('url')
+        # url_catalog = request.POST.get('url')
         group_hydroservers=Groups(title=title, description=description)
         session.add(group_hydroservers)
         session.commit()
@@ -97,51 +107,69 @@ def create_group(request):
 
         if url_catalog:
             try:
+                print("NORMAL")
                 # url_catalog = unquote(url_catalog)
                 print("THIS ", url_catalog)
                 url_catalog2 = url_catalog + "?WSDL"
                 client = Client(url_catalog2, timeout= 500)
-                logging.getLogger('suds.client').setLevel(logging.DEBUG)
+                # logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
                 service_info = client.service.GetWaterOneFlowServiceInfo()
-                # print(logging.getLogger('suds.client').setLevel(logging.DEBUG))
-                # print(logging.getLogger('suds.client').setLevel(logging.CRITICAL))
+
                 services = service_info.ServiceInfo
-                views = giveServices(services)
+                views = giveServices(services,selected_services)
                 group_obj['views'] = addMultipleViews(views,title)
             except Exception as e:
+                print("EXCEPT")
                 services = parseService(url_catalog)
-                views = giveServices(services)
+                views = giveServices(services,selected_services)
                 print(views)
                 group_obj['views'] = addMultipleViews(views,title)
 
     else:
-        group_obj[
-            'message'] = 'There was an error while adding th group.'
+        group_obj['message'] = 'There was an error while adding th group.'
 
-
+    print(group_obj['views'])
     return JsonResponse(group_obj)
 
-def giveServices(services):
+def giveServices(services,filter_serv=None):
     hs_list = []
     for i in services:
         hs = {}
         url = i['servURL']
         title = i['Title']
-        try:
-            print("Testing %s" % (url))
-            url_client = Client(url)
-            hs['url'] = url
-            hs['title'] = title
-            hs_list.append(hs)
-            print("%s Works" % (url))
-        except Exception as e:
-            print(e)
-            hs['url'] = url
-            print("%s Failed" % (url))
-            # error_list.append(hs)
-        # hs_list['servers'] = hs_list
-        # list['errors'] = error_list
+        if filter_serv is not None:
+            if title in filter_serv:
+                try:
+                    print("Testing %s" % (url))
+                    url_client = Client(url)
+                    hs['url'] = url
+                    hs['title'] = title
+                    hs_list.append(hs)
+                    print("%s Works" % (url))
+                except Exception as e:
+                    print(e)
+                    hs['url'] = url
+                    print("%s Failed" % (url))
+                    # error_list.append(hs)
+                # hs_list['servers'] = hs_list
+                # list['errors'] = error_list
+        else:
+            try:
+                print("Testing %s" % (url))
+                url_client = Client(url)
+                hs['url'] = url
+                hs['title'] = title
+                hs_list.append(hs)
+                print("%s Works" % (url))
+            except Exception as e:
+                print(e)
+                hs['url'] = url
+                print("%s Failed" % (url))
+                # error_list.append(hs)
+            # hs_list['servers'] = hs_list
+            # list['errors'] = error_list
+
     return hs_list
 
 def addMultipleViews(hs_list,group):
@@ -193,7 +221,7 @@ def addMultipleViews(hs_list,group):
             return_obj['group'] = group
             return_obj['status'] = "true"
 
-            ret_object.append(ret_object)
+            ret_object.append(return_obj)
 
             SessionMaker = app.get_persistent_store_database(
                 Persistent_Store_Name, as_sessionmaker=True)
