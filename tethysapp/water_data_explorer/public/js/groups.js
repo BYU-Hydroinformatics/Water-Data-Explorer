@@ -27,24 +27,6 @@ give_available_services = function(){
                   <td>${serv['title']}</td>
                 </tr>`
         i += 1;
-        // for (var i = 0; i < server.length; i++) {
-        //     var title = server[i].title
-        //     var url = server[i].url
-        //     HSTableHtml +=
-        //         "<tr>" +
-        //         '<td><input type="checkbox" name="server" id="server" value="' +
-        //         title +
-        //         '"></td>' +
-        //         '<td class="hs_title">' +
-        //         title +
-        //         "</td>" +
-        //         '<td class="hs_url">' +
-        //         url +
-        //         "</td>" +
-        //         "</tr>"
-        // }
-        // HSTableHtml += "</tbody></table>"
-        // $modalDelete.find(".modal-body").html(HSTableHtml)
       })
       $("#modalAddGroupServer").find("#rows_servs").html(row)
 
@@ -53,7 +35,19 @@ give_available_services = function(){
 
     },
     error: function(error){
-
+      $("#soapAddLoading-group").addClass("hidden")
+      console.log(error)
+      $.notify(
+          {
+              message: `There was an error retrieving the different web services from the HIS catalog  `
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
+          }
+      )
     }
 
   })
