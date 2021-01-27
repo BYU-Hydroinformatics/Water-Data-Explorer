@@ -61,7 +61,8 @@ activate_layer_values = function (){
       }
       console.log(feature.values_['hs_name']);
 
-      $("#siteName_title").html(feature.values_['name']);
+      // $("#siteName_title").html(feature.values_['name']);
+      $("#siteName_title").html("Site Information");
       // object_request['hs_name']=feature.values_['hs_name'];
       // object_request['site_name']=feature.values_['name'];
       object_request['hs_url']=feature.values_['hs_url'];
@@ -83,8 +84,10 @@ activate_layer_values = function (){
           let description_site = document.getElementById('siteDes')
           console.log(description_site);
           description_site.innerHTML =
-            ` <p> <em>Organization:</em> ${result['description'][Object.keys(result['description'])[0]]['organization']} <p>
-              <p> <em>Citation:</em> ${result['description'][Object.keys(result['description'])[0]]['citation']} <p>
+            ` <p> <em> Station/Platform Name:</em> ${feature.values_['name']}<p>
+              <p> <em> Territory of origin of data:</em> in construction<p>
+              <p> <em> Supervising Organization:</em> ${result['description'][Object.keys(result['description'])[0]]['organization']} <p>
+              <p> <em> Geospatial Location:</em> in construction <p>
               <p> <em>Description:</em> ${result['description'][Object.keys(result['description'])[0]]['sourceDescription']}</p>`
 
           let table_begin =
@@ -190,12 +193,14 @@ activate_layer_values = function (){
               if(i === 1){
                 console.log("initial");
                 // option = `<option selected = "selected>Variables Ready ..</option>`;
-                option_begin = `<option value=${i}>${variable} (${result['counts'][i-1]}) Data Points Counted </option>`;
+                // option_begin = `<option value=${i}>${variable} (${result['counts'][i-1]}) Data Points Counted </option>`;
+                option_begin = `<option value=${i}>${variable} </option>`;
                 variable_select.append(option_begin)
 
               }
               else{
-                option = `<option value=${i} >${variable} (${result['counts'][i-1]}) Data Points Counted</option>`;
+                // option = `<option value=${i} >${variable} (${result['counts'][i-1]}) Data Points Counted</option>`;
+                option = `<option value=${i} >${variable} </option>`;
 
               }
               variable_select.append(option)
