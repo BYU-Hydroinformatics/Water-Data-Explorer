@@ -98,11 +98,13 @@ activate_layer_values = function (){
             </tr>`;
           for(let i=0; i<result['variables'].length ; ++i){
             let variable_new = result['variables'][i]
+            let time_serie_range = result['times_series'][variable_new]
+            console.log(time_serie_range)
             let newRow =
             `
             <tr>
               <th>${result['variables'][i]}</th>
-              <th>${result['times_series']['${variable_new}']['beginningDateTime']} / ${result['time_series'][i]['endDateTime']}</th>
+              <th>${time_serie_range['beginDateTime']} / ${time_serie_range['endDateTime']}</th>
               <th>${result['counts'][i]}</th>
             </tr>
             `
