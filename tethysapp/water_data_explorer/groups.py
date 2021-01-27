@@ -56,13 +56,14 @@ def available_services(request):
             print("THIS ", url_catalog)
             url_catalog2 = url_catalog + "?WSDL"
             client = Client(url_catalog2, timeout= 500)
-            # logging.getLogger('suds.client').setLevel(logging.DEBUG)
+            logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
             service_info = client.service.GetWaterOneFlowServiceInfo()
             services = service_info.ServiceInfo
             views = giveServices(services)
             hs_services['services'] = views
         except Exception as e:
+            print("I AM HERE OR NOT")
             services = parseService(url_catalog)
             views = giveServices(services)
             hs_services['services'] = views
@@ -135,10 +136,15 @@ def create_group(request):
 def giveServices(services,filter_serv=None):
     hs_list = []
     for i in services:
+        print(i)
         hs = {}
         url = i['servURL']
+        if not url.endswith('?WSDL'):
+            url = url + "?WSDL"
         title = i['Title']
-        description = i['aabstract']
+        description = "None was provided by the organiation in charge of the Web Service"
+        if 'aabstract' in i:
+            description = i['aabstract']
         if filter_serv is not None:
             if title in filter_serv:
                 try:
@@ -146,6 +152,7 @@ def giveServices(services,filter_serv=None):
                     url_client = Client(url)
                     hs['url'] = url
                     hs['title'] = title
+
                     hs['description'] = description
                     hs_list.append(hs)
                     print("%s Works" % (url))
