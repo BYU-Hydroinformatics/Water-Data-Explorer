@@ -66,8 +66,9 @@
                          extents,
                          siteInfo
                      } = server
+                     information_model[`${group_name}`].push(title);
+                     
                      title = title.replace(/ /g,"-");
-
                      if(keywords_in_servers.includes(title) || key_words_to_search.length == 0){
                        console.log(keywords_in_servers.includes(title));
                        let newHtml = `
@@ -184,6 +185,8 @@
 
 
                              layersDict[title] = vectorLayer
+                             ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
+                             layersDictExt[title] = ext;
                            }
                          }
                          else{
@@ -260,6 +263,11 @@
                        })
 
                        map.addLayer(vectorLayer)
+                       ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
+                       layersDictExt[title] = ext;
+
+                       console.log(ext)
+
                        ol.extent.extend(extent, vectorSource.getExtent())
 
                        vectorLayer.set("selectable", true)
@@ -540,7 +548,8 @@ add_hydroserver = function(){
                           // ol.extent.extend(extent, vectorSource.getExtent())
                           vectorLayer.set("selectable", true)
                           layersDict[title] = vectorLayer
-
+                          ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
+                          layersDictExt[title] = ext;
 
                       }
                       else{
@@ -634,6 +643,8 @@ add_hydroserver = function(){
                     map.updateSize();
 
                     layersDict[title] = vectorLayer;
+                    ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
+                    layersDictExt[title] = ext;
                     $(`#${title}_zoom`).on("click",function(){
                       map.getView().fit(vectorSource.getExtent());
                       map.updateSize();
@@ -1233,8 +1244,6 @@ searchSites = function() {
   }
 }
 document.getElementById('myInput').addEventListener("keyup", searchSites);
-
-
 
 
 update_hydroserver = function(){

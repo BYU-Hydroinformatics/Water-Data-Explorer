@@ -128,6 +128,7 @@ create_group_hydroservers = function(){
             if(group.message !== "There was an error while adding th group.") {
               let title=group.title;
               let description=group.description;
+              information_model[`${title}`] = [];
               let id_group_separator = `${title}_list_separator`;
               let newHtml;
               if(can_delete_hydrogroups){
@@ -328,7 +329,7 @@ create_group_hydroservers = function(){
                      description
                  } = group
                  let id_group_separator = `${title}_list_separator`;
-
+                 information_model[`${title}`] = []
                  let newHtml;
                  if(can_delete_hydrogroups){
                    newHtml =
@@ -1100,3 +1101,53 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
       console.log(keywords_in_servers);
       return keywords_in_servers;
     }
+
+    generateListServices = function(){
+
+      var HSTableHtml =
+          `<table id="infoModel-info-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+      if (information_model.length === 0) {
+          $("#modalKeyWordSearch")
+              .find("#groups_services")
+              .html(
+                  "<b>There are no data available, please add a group.</b>"
+              )
+      }
+      else {
+          for (var i = 0; i < result1['siteInfo'].length; i++) {
+              HSTableHtml +=
+             '<tr class="odd gradeX2">'+
+                  `<td> <p id="titleSite">${i+1}.- ${result1['siteInfo'][i]['sitename']}
+                  <button type="button" class="btn btn-primary" id="${result1['siteInfo'][i]['sitecode']}_modal"><span class="glyphicon glyphicon-pushpin"></span></button></p>
+                    <p>Site Code: ${result1['siteInfo'][i]['sitecode']}</p>
+                    <p>Network: ${result1['siteInfo'][i]['network']}</p>
+                    <p>Latitude: ${result1['siteInfo'][i]['latitude']}</p>
+                    <p>Longitude: ${result1['siteInfo'][i]['longitude']}</p>
+                  </td>`
+                  +
+             '</tr>'
+
+          }
+          HSTableHtml += "</tbody></table>"
+          $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml);
+    }
+  }
+    searchGroups = function() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInputKeyword");
+      filter = input.value.toUpperCase();
+      table = document.getElementById(`${filterSites['hs']}-info-table`);
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    document.getElementById('myInputKeyword').addEventListener("keyup", searchGroups);

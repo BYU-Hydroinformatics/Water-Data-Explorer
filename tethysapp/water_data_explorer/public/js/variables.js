@@ -5,6 +5,8 @@ var colors,
     current_layer,
     layers,
     layersDict, //Dictionary for keeping track of the new layers that are being added to the map
+    layersDictExt=[],
+    information_model = {},
     map,
     map2,
     shpSource,
@@ -151,7 +153,9 @@ var filter_words,
     group_show_actual,
     hs_show_actual,
     give_name,
-    give_available_services;
+    give_available_services,
+    searchGroups,
+    generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that
  *************************************************************************/
