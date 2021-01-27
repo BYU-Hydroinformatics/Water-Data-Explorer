@@ -1137,6 +1137,7 @@ hydroserver_information = function(){
 
       console.log(result1['url']);
       $("#urlHydroserver").html(result1['url']);
+      $("#description_Hydroserver").html(result1['description']);
       console.log(result1);
       var HSTableHtml =
           `<table id="${filterSites['hs']}-info-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`

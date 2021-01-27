@@ -390,6 +390,7 @@ def get_hydroserver_info(request):
         if name == specific_hs:
             response_obj["url"] = hydroservers.url.strip()
             response_obj["title"] = hydroservers.title
+            response_obj["description"] = hydroservers.description
             response_obj["siteInfo"] = json.loads(hydroservers.siteinfo)
 
     return JsonResponse(response_obj)
@@ -467,6 +468,7 @@ def soap_group(request):
         print(title)
         group = request.POST.get('actual-group')
         print(group)
+        description = request.POST.get('textarea')
         # Getting the current map extent
         true_extent = request.POST.get('extent')
 
@@ -503,6 +505,8 @@ def soap_group(request):
 
             return_obj['title'] = title
             return_obj['url'] = url
+            return_obj['description'] = description
+
             # return_obj['siteInfo'] = sites_parsed_json
             return_obj['siteInfo'] = sitesByBoundingBox
             return_obj['group']= group
@@ -518,6 +522,7 @@ def soap_group(request):
 
             hs_one = HydroServer_Individual(title=title,
                              url=url,
+                             description = description,
                              siteinfo=sites_parsed_json)
                              # siteinfo=sitesByBoundingBoxs)
 
@@ -562,6 +567,7 @@ def soap_group(request):
 
             return_obj['title'] = title
             return_obj['url'] = url
+            return_obj['description'] = description
             return_obj['siteInfo'] = sites
             # return_obj['siteInfo'] = sites_parsed_json
             return_obj['group'] = group
@@ -583,6 +589,7 @@ def soap_group(request):
 
             hs_one = HydroServer_Individual(title=title,
                              url=url,
+                             description = description,
                              siteinfo=sites_parsed_json)
 
             hydroservers_group.hydroserver.append(hs_one)

@@ -138,6 +138,7 @@ def giveServices(services,filter_serv=None):
         hs = {}
         url = i['servURL']
         title = i['Title']
+        description = i['aabstract']
         if filter_serv is not None:
             if title in filter_serv:
                 try:
@@ -145,6 +146,7 @@ def giveServices(services,filter_serv=None):
                     url_client = Client(url)
                     hs['url'] = url
                     hs['title'] = title
+                    hs['description'] = description
                     hs_list.append(hs)
                     print("%s Works" % (url))
                 except Exception as e:
@@ -160,6 +162,7 @@ def giveServices(services,filter_serv=None):
                 url_client = Client(url)
                 hs['url'] = url
                 hs['title'] = title
+                hs['description'] = description
                 hs_list.append(hs)
                 print("%s Works" % (url))
             except Exception as e:
@@ -217,6 +220,7 @@ def addMultipleViews(hs_list,group):
 
             return_obj['title'] = hs['title'].translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
             return_obj['url'] = hs['url']
+            return_obj['description'] = hs['description']
             return_obj['siteInfo'] = sites_parsed_json
             return_obj['group'] = group
             return_obj['status'] = "true"
@@ -234,6 +238,7 @@ def addMultipleViews(hs_list,group):
 
             hs_one = HydroServer_Individual(title=hs['title'],
                              url=hs['url'],
+                             description=hs['description'],
                              siteinfo=sites_parsed_json)
 
             hydroservers_group.hydroserver.append(hs_one)
