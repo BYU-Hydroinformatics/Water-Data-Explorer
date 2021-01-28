@@ -1171,13 +1171,30 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
         td = tr[i].getElementsByTagName("td")[0];
         if (td) {
           txtValue = td.textContent || td.innerText;
-          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+
+          // if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          //   tr[i].style.display = "";
+          // } else {
+          //   tr[i].style.display = "none";
+          // }
+          console.log(layersDictExt)
+          // second country filter //
+          // Object.keys(layersDictExt).forEach(function(key) {
+
+          console.log(key);
+          // bbox = layersDictExt[key]
+          bbox = layersDictExt[txtValue]
+          if (findIntersection(txtValue, bbox) == true){
             tr[i].style.display = "";
-          } else {
+          }
+          else{
             tr[i].style.display = "none";
           }
+          // })
         }
+
       }
+
 
     }
     // document.getElementById('myInputKeyword').addEventListener("keyup", searchGroups);
