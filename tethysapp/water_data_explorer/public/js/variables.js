@@ -154,6 +154,7 @@ var filter_words,
     hs_show_actual,
     give_name,
     give_available_services,
+    load_info_model,
     searchGroups,
     generateListServices;
   /************************************************************************

@@ -441,6 +441,8 @@ create_group_hydroservers = function(){
 
                  });
                  ind = ind +1;
+                 console.log(layersDictExt);
+                 console.log(information_model);
 
              })
 
@@ -1132,6 +1134,27 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
           $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml);
     }
   }
+
+  load_info_model = function(){
+    var HSTableHtml =
+        `<table id="groups-info-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+      Object.keys(information_model).forEach(function(key) {
+      console.log(key, information_model[key]);
+      HSTableHtml +=
+         '<tr class="odd gradeX2">'+
+              `<td> <p id="titleSite">${key}</p>`
+      information_model[key].forEach(function(serviceView){
+        HSTableHtml +=
+        `<p>${serviceView}</p>`
+      })
+      HSTableHtml += '</td>'+'</tr>'
+
+      HSTableHtml += "</tbody></table>"
+    });
+    $("#modalKeyWordSearch").find("#groups_services").html(HSTableHtml);
+  }
+  $("#btn-filter-groups-f").on("click", load_info_model);
+
     searchGroups = function() {
       var input, filter, table, tr, td, i, txtValue;
       input = document.getElementById("myInputKeyword");
