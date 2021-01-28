@@ -1141,13 +1141,17 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
       Object.keys(information_model).forEach(function(key) {
       console.log(key, information_model[key]);
       HSTableHtml +=
-         '<tr class="odd gradeX2">'+
-              `<td> <p id="titleSite">${key}</p>`
+        `<p id="titleSite">${key}</p>`
+              // `<td> <p id="titleSite">${key}</p>`
       information_model[key].forEach(function(serviceView){
         HSTableHtml +=
-        `<p>${serviceView}</p>`
+         '<tr class="odd gradeX2">'+
+         `<td><p>${serviceView}</p></td>`+
+         '</tr>'
+
       })
-      HSTableHtml += '</td>'+'</tr>'
+      // HSTableHtml += '</td>'+'</tr>'
+      // HSTableHtml += '</tr>'
 
       HSTableHtml += "</tbody></table>"
     });
@@ -1159,8 +1163,10 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
       var input, filter, table, tr, td, i, txtValue;
       input = document.getElementById("myInputKeyword");
       filter = input.value.toUpperCase();
-      table = document.getElementById(`${filterSites['hs']}-info-table`);
+      table = document.getElementById(`groups-info-table`);
       tr = table.getElementsByTagName("tr");
+
+      //first word filter //
       for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td")[0];
         if (td) {
@@ -1172,5 +1178,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
           }
         }
       }
+
     }
-    document.getElementById('myInputKeyword').addEventListener("keyup", searchGroups);
+    // document.getElementById('myInputKeyword').addEventListener("keyup", searchGroups);
+    $("#groupsFiltering").on("click", searchGroups);
