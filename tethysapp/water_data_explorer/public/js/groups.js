@@ -56,7 +56,81 @@ give_available_services = function(){
 }
 $("#btn-check_available_serv").on("click", give_available_services);
 
+show_variables_groups = function(){
+  $.ajax({
+    type: "GET",
+    url: `available-variables/`,
+    dataType: "JSON",
+    success: function(data){
 
+      // $("#rows_servs").empty();
+      console.log(data)
+      variables_list = data['variables'];
+      const chunk = (arr, size) =>
+        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+          arr.slice(i * size, i * size + size)
+        );
+      let arr=chunk(variables_list, 3);
+      console.log(arr)
+
+      var HSTableHtml =
+          `<table id="data-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+
+        arr.forEach(l_arr => {
+          HSTableHtml +=  '<tr class="odd gradeX">'
+          l_arr.forEach(i =>{
+            HSTableHtml +=  `<td><input type="checkbox" name="name1" /> ${i}</td>`;
+          })
+
+              HSTableHtml += '</tr>';
+        })
+
+        // HSTableHtml += '</td>'+'</tr>'
+        // HSTableHtml += '</tr>'
+
+        HSTableHtml += "</tbody></table>"
+      console.log(HSTableHtml)
+      $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
+      // var json_response = JSON.parse(data)
+      // var services_ava = json_response['services']
+      // var i = 1;
+      // var row = ""
+      // services_ava.forEach(function(serv){
+      //   var title_new = serv['title'].replace(/ /g,"_");
+      //   row += `<tr>
+      //             <th scope="row">${i}</th>
+      //             <td><input type="checkbox" name="server_${i}" id="server" value=${title_new}></td>
+      //             <td>${serv['title']}</td>
+      //           </tr>`
+      //   i += 1;
+      // })
+      // $("#modalAddGroupServer").find("#rows_servs").html(row)
+      //
+      // $("#available_services").removeClass("hidden");
+      // $("#soapAddLoading-group").addClass("hidden")
+
+    },
+    error: function(error){
+      $("#soapAddLoading-group").addClass("hidden")
+      console.log(error)
+      $.notify(
+          {
+              message: `There was an error retrieving the different web services from the HIS catalog  `
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
+          }
+      )
+    }
+
+  })
+
+
+
+}
 
 
 /*
@@ -1150,6 +1224,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
          '</tr>'
 
       })
+
       // HSTableHtml += '</td>'+'</tr>'
       // HSTableHtml += '</tr>'
 
@@ -1157,9 +1232,16 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
     });
     $("#modalKeyWordSearch").find("#groups_services").html(HSTableHtml);
   }
-  $("#btn-filter-groups-f").on("click", load_info_model);
+
+  load_search_modal = function(){
+    load_info_model();
+    show_variables_groups();
+
+  }
+  $("#btn-filter-groups-f").on("click", load_search_modal);
 
     searchGroups = function() {
+      //intersection of two bounding boxes lat/long python library
       var input, filter, table, tr, td, i, txtValue;
       input = document.getElementById("myInputKeyword");
       filter = input.value.toUpperCase();
@@ -1181,10 +1263,11 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
           // second country filter //
           // Object.keys(layersDictExt).forEach(function(key) {
 
-          console.log(key);
+          console.log(txtValue);
+          // console.log(key);
           // bbox = layersDictExt[key]
           bbox = layersDictExt[txtValue]
-          if (findIntersection(txtValue, bbox) == true){
+          if (findIntersection(input.value, bbox) == true){
             tr[i].style.display = "";
           }
           else{
@@ -1197,5 +1280,22 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
 
 
     }
-    // document.getElementById('myInputKeyword').addEventListener("keyup", searchGroups);
     $("#groupsFiltering").on("click", searchGroups);
+    reset_k= function(){
+      input = document.getElementById("myInputKeyword");
+      console.log(input)
+      if(input.value == ""){
+        table = document.getElementById(`groups-info-table`);
+        tr = table.getElementsByTagName("tr");
+
+        //first word filter //
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            tr[i].style.display = "";
+          }
+        }
+      }
+    }
+    document.getElementById('myInputKeyword').addEventListener("keyup", reset_k);

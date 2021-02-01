@@ -25,6 +25,14 @@
   margin-bottom: 12px;
 }
 
+.searchBars{
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
 .hsinfo{
     font-size: 1.3em;
     font-weight: bold;
@@ -381,6 +389,10 @@ tr:hover {
 }
 #modalHydroserInformation .modal-body #infoTable{
   height: 250px;
+  overflow-y: auto;
+}
+#modalKeyWordSearch .modal-body #groups_variables{
+  height: 150px;
   overflow-y: auto;
 }
 #modalShowVariables .modal{

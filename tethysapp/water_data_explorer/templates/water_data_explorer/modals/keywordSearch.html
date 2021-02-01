@@ -12,51 +12,23 @@
                 the search will give any server that has at least one of the selected keywords</em>
             </div>
             <div class="modal-body">
-              <p> Filter Search </p>
-              <input type="text" id="myInputKeyword" placeholder="Search for country or variable" title="Type in a keyword">
-              <button type="button" id = "groupsFiltering" class="btn btn-primary">Filter</button>
+              <p> Region Data Discovery </p>
+              <input type="text" id="myInputKeyword" placeholder="Search for country" title="Type in a keyword">
               <br>
+              <p> Variable Data Discovery </p>
+              <input type="text" id="myInputKeyword2" class= "searchBars" placeholder="Search variable" title="Type in a keyword">
+              <div id="groups_variables">
+
+              </div>
+              <br>
+
+              <button type="button" id = "groupsFiltering" class="btn btn-primary">Search</button>
+
               <p>Available Catalogs and Services</p>
               <div id="groups_services">
 
               </div>
-              <table id="data-table" class="table table-striped table-bordered nowrap" width="100%">
 
-                  <tbody>
-                      <tr class="odd gradeX">
-                          <td><input type="checkbox" name="name1" /> Actual Evaporation</td>
-                          <td><input type="checkbox" name="name1" /> Precipitation</td>
-                      </tr>
-                      <tr class="odd gradeX">
-                          <td><input type="checkbox" name="name2" /> Air Temperature</td>
-                          <td><input type="checkbox" name="name2" /> Snow Water Equivalent</td>
-                      </tr>
-                      <tr class="odd gradeX">
-                          <td><input type="checkbox" name="name3" /> Discharge</td>
-                          <td><input type="checkbox" name="name3" /> Soil Moisture</td>
-                      </tr>
-                      <tr class="odd gradeX">
-                          <td><input type="checkbox" name="name3" /> Dissolved Oxygen </td>
-                          <td><input type="checkbox" name="name3" /> Specific Conductance</td>
-                      </tr>
-                      <tr class="odd gradeX">
-                          <td><input type="checkbox" name="name3" /> Groundwater Level</td>
-                          <td><input type="checkbox" name="name3" /> Total Suspended Solids</td>
-                      </tr>
-                      <tr class="odd gradeX">
-                          <td><input type="checkbox" name="name3" /> Methane</td>
-                          <td><input type="checkbox" name="name3" /> Turbidity</td>
-                      </tr>
-                      <tr class="odd gradeX">
-                          <td><input type="checkbox" name="name3" /> Nutrient</td>
-                          <td><input type="checkbox" name="name3" /> Water Temperature</td>
-                      </tr>
-                      <tr class="odd gradeX">
-                          <td><input type="checkbox" name="name4" /> pH</td>
-                          <td><input type="checkbox" name="name4" /> Water Level</td>
-                      </tr>
-                  </tbody>
-              </table>
               <div class="loading_id">
                 <img id="KeywordLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
               </div>

@@ -47,6 +47,28 @@ logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
 
+def available_variables(request):
+    # Query DB for hydroservers
+    SessionMaker = app.get_persistent_store_database(
+        Persistent_Store_Name, as_sessionmaker=True)
+    session = SessionMaker()
+
+    hydroservers_groups = session.query(Groups).all()
+    varaibles_list = {}
+    hydroserver_variable_list = []
+
+    for server in session.query(HydroServer_Individual).all():
+        print("URL", server.url.strip())
+        water = pwml.WaterMLOperations(url = server.url.strip())
+        hs_variables = water.GetVariables()
+        print(hs_variables)
+        for hs_variable in hs_variables:
+            if hs_variable not in hydroserver_variable_list:
+                hydroserver_variable_list.append(hs_variable)
+
+    varaibles_list["variables"] = hydroserver_variable_list
+    return JsonResponse(varaibles_list)
+
 def available_services(request):
     url_catalog = request.GET.get('url')
     hs_services = {}

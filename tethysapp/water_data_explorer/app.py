@@ -85,6 +85,9 @@ class WaterDataExplorer(TethysAppBase):
             UrlMap(name='available-services',
                    url='available-services',
                    controller='water_data_explorer.groups.available_services'),
+            UrlMap(name='available-variables',
+                   url='available-variables',
+                   controller='water_data_explorer.groups.available_variables'),
 
         )
 
