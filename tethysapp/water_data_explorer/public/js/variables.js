@@ -159,6 +159,7 @@ var filter_words,
     reset_k,
     show_variables_groups,
     load_search_modal,
+    available_regions,
     generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that

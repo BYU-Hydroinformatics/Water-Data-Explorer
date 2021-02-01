@@ -4,9 +4,10 @@ import sys
 import os
 import json
 import pandas as pd
+import geopandas as gpd
 import numpy as np
 import pywaterml.waterML as pwml
-
+import shapely.speedups
 from urllib.error import HTTPError
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -41,10 +42,65 @@ from urllib.parse import unquote
 from .endpoints import *
 from django.http import JsonResponse, HttpResponse
 from .app import WaterDataExplorer as app
+from tethys_sdk.workspaces import app_workspace
 
 Persistent_Store_Name = 'catalog_db'
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.client').setLevel(logging.DEBUG)
+
+@app_workspace
+def available_regions(request, app_workspace):
+    shapely.speedups.enable()
+    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
+    countries_gdf = gpd.read_file(countries_geojson_file_path)
+    print(countries_gdf)
+    ret_object = {}
+    list_regions = []
+    SessionMaker = app.get_persistent_store_database(
+        Persistent_Store_Name, as_sessionmaker=True)
+    session = SessionMaker()
+
+    region_list = []
+    hydroserver_lat_list = []
+    hydroserver_long_list = []
+    hydroserver_name_list = []
+
+    for server in session.query(HydroServer_Individual).all():
+        sites = json.loads(server.siteinfo)
+        ls_lats = []
+        ls_longs = []
+        site_names = []
+        # print(sites)
+        for site in sites:
+            ls_lats.append(site['latitude'])
+            ls_longs.append(site['longitude'])
+            site_names.append(site['sitename'])
+        hydroserver_lat_list.append(ls_lats)
+        hydroserver_long_list.append(ls_longs)
+        hydroserver_name_list.append(site_names)
+
+
+    for indx in range(0,len(hydroserver_name_list)):
+        df = pd.DataFrame({'SiteName': hydroserver_name_list[indx],'Latitude': hydroserver_lat_list[indx],'Longitude': hydroserver_long_list[indx]})
+        gdf = gpd.GeoDataFrame(
+            df, geometry=gpd.points_from_xy(df.Longitude, df.Latitude))
+        print(gdf)
+        # gdf.assign(**{key: gdf.within(geom) for key, geom in countries_gdf.items()})
+        pip_mask = gdf.within(countries_gdf[name].loc[0,'geometry'])
+        values_mask = pip_mask.values
+        print(pip_mask)
+        if True in values_mask:
+            print("STOP")
+            continue
+        # for index, row in countries_gdf.iterrows():
+        #     print("INSIDE")
+        #     print(row)
+        #     if row['name'] == "Uruguay":
+        #         # row.reset_index(drop=True, inplace=True)
+        #         pip_mask = gdf.within(row.loc[0,'geometry'])
+        #         print(pip_mask)
+
+    return JsonResponse(ret_object)
 
 
 def available_variables(request):

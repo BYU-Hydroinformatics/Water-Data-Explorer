@@ -132,7 +132,36 @@ show_variables_groups = function(){
 
 }
 
+available_regions = function(){
+  // countries_json['features']
+  $.ajax({
+    type: "GET",
+    url: `available-regions/`,
+    dataType: "JSON",
+    success: function(data){
 
+
+    },
+    error: function(error){
+      $("#soapAddLoading-group").addClass("hidden")
+      console.log(error)
+      $.notify(
+          {
+              message: `There was an error retrieving the different web services from the HIS catalog  `
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
+          }
+      )
+    }
+
+  })
+
+
+}
 /*
 ************ FUNCTION NAME : CREATE_GROUP_HYDROSERVERS
 ************ PURPOSE : CREATES A GROUP OF HYDRSOERVERS AND ADDS IT TO THE MENU
@@ -1236,6 +1265,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
   load_search_modal = function(){
     load_info_model();
     show_variables_groups();
+    available_regions();
 
   }
   $("#btn-filter-groups-f").on("click", load_search_modal);
