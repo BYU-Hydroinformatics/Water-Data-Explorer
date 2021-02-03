@@ -6,6 +6,7 @@ var colors,
     layers,
     layersDict, //Dictionary for keeping track of the new layers that are being added to the map
     layersDictExt=[],
+    layerColorDict = {},
     information_model = {},
     map,
     map2,

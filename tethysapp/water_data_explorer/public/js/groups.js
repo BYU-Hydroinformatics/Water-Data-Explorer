@@ -57,6 +57,7 @@ give_available_services = function(){
 $("#btn-check_available_serv").on("click", give_available_services);
 
 show_variables_groups = function(){
+  $("#KeywordLoading").removeClass("hidden");
   $.ajax({
     type: "GET",
     url: `available-variables/`,
@@ -70,7 +71,7 @@ show_variables_groups = function(){
         Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
           arr.slice(i * size, i * size + size)
         );
-      let arr=chunk(variables_list, 3);
+      let arr=chunk(variables_list, 2);
       console.log(arr)
 
       var HSTableHtml =
@@ -91,6 +92,8 @@ show_variables_groups = function(){
         HSTableHtml += "</tbody></table>"
       console.log(HSTableHtml)
       $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
+      $("#KeywordLoading").addClass("hidden");
+
       // var json_response = JSON.parse(data)
       // var services_ava = json_response['services']
       // var i = 1;
@@ -447,7 +450,7 @@ create_group_hydroservers = function(){
                        </h4>
                        <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
 
-                           <input class="chkbx-layers" type="checkbox" checked>
+                           <input class="chkbx-layers" type="checkbox">
                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
                              <span class=" glyphicon glyphicon-info-sign "></span>
                            </button>
@@ -481,7 +484,7 @@ create_group_hydroservers = function(){
                          </a>
                        </h4>
                        <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-                         <input class="chkbx-layers" type="checkbox" checked>
+                         <input class="chkbx-layers" type="checkbox">
                          <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
                            <span class=" glyphicon glyphicon-info-sign "></span>
                          </button>
@@ -504,8 +507,20 @@ create_group_hydroservers = function(){
 
                  let input_check = li_object.getElementsByClassName("chkbx-layers")[0];
                  console.log(input_check);
+                 load_individual_hydroservers_group(title);
+                 let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
+                 console.log(servers_checks);
                  if(input_check.checked){
-                   load_individual_hydroservers_group(title);
+                   // load_individual_hydroservers_group(title);
+                   let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
+                   console.log(servers_checks);
+                   for(i = 0; i < servers_checks.length; i++) {
+                      servers_checks[i].checked = true;
+                      let server_name = servers_checks[i].parentElement.id;
+                      map.removeLayer(layersDict[server_name])
+                      map.addLayer(layer_object_filter[server_name])
+                    }
+
                    labels_x = document.getElementById(`heading_${title}`)
                    labels_x.style.backgroundColor = colors_unique[0]
                  }
@@ -514,11 +529,52 @@ create_group_hydroservers = function(){
                    console.log(this);
                    if(this.checked){
                      console.log(" it is checked");
-                     load_individual_hydroservers_group(title);
+                     // load_individual_hydroservers_group(title);
+                     let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
+                     console.log(servers_checks);
+                     for(i = 0; i < servers_checks.length; i++) {
+                       let server_name = servers_checks[i].id;
+                        let checkbox = Array.from(servers_checks[i].children)
+                        for (var j = 0; j < checkbox.length; j++) {
+                            if (checkbox[j].className == "chkbx-layer") {
+                              console.log(checkbox[j])
+                              checkbox[j].checked = true;
+                            }
+                        }
+                        console.log(checkbox);
+                        map.getLayers().forEach(function(layer) {
+                             if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
+                               console.log(layer)
+                               layer.setStyle(featureStyle(layerColorDict[server_name]));
+                             }
+                         });
+                      }
+
+
                    }
                    else{
                      console.log("it is not checked");
-                     remove_individual_hydroservers_group(title);
+                     // remove_individual_hydroservers_group(title);
+                     let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
+                     console.log(servers_checks);
+                     for(i = 0; i < servers_checks.length; i++) {
+                       let server_name = servers_checks[i].id;
+                        let checkbox = Array.from(servers_checks[i].children)
+                        for (var j = 0; j < checkbox.length; j++) {
+                            if (checkbox[j].className == "chkbx-layer") {
+                              console.log(checkbox[j])
+                              checkbox[j].checked = false;
+                            }
+                        }
+                        console.log(checkbox);
+                        map.getLayers().forEach(function(layer) {
+                             if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
+                               console.log(layer)
+                               layer.setStyle(new ol.style.Style({}));
+                             }
+                         });
+                      }
+
                    }
 
                  });
@@ -618,8 +674,8 @@ create_group_hydroservers = function(){
                        siteInfo
                    } = server
 
-                   map.removeLayer(layersDict[title])
-                   delete layersDict[title]
+                   // map.removeLayer(layersDict[title])
+                   // delete layersDict[title]
                    map.updateSize()
                    let lis_to_delete = li_arrays.filter(x => title === x.attributes['layer-name'].value);
 
@@ -629,9 +685,9 @@ create_group_hydroservers = function(){
                    // let ul_servers = document.getElementById("current-Groupservers");
                    let ul_servers = document.getElementById(`${id_group_separator}`);
 
-                   lis_to_delete.forEach(function(li_tag){
-                     ul_servers.removeChild(li_tag);
-                   });
+                   // lis_to_delete.forEach(function(li_tag){
+                   //   ul_servers.removeChild(li_tag);
+                   // });
 
 
                })
@@ -1265,7 +1321,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
   load_search_modal = function(){
     load_info_model();
     show_variables_groups();
-    available_regions();
+    // available_regions();
 
   }
   $("#btn-filter-groups-f").on("click", load_search_modal);

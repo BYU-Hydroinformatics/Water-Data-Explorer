@@ -379,7 +379,7 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
   //     });
   // };
 }
-function featureStyle() {
+function featureStyle(myColor) {
     var style = new ol.style.Style({
         image: new ol.style.Circle({
             radius: 6,
@@ -389,16 +389,24 @@ function featureStyle() {
             }),
             fill: new ol.style.Fill({
                 // color: `#${(((1 << 24) * Math.random()) | 0).toString(16)}`
-                color: get_new_color()
+                // color: get_new_color()
+                color: myColor
             })
         })
     })
     return style
 }
+
 function get_new_color(){
-  var new_color = colors_unique[0]
-  colors_used.push(new_color)
-  colors_unique.shift()
+  var color_new = colors_unique[Math.floor(Math.random() * colors_unique.length)];
+  if (!colors_used.includes(color_new)) {
+    colors_used.push(color_new)
+    console.log(color_new)
+    return color_new
+  }
+  // var new_color = colors_unique[0]
+  // colors_used.push(new_color)
+  // colors_unique.shift()
   // var color_new = colors_unique[Math.floor(Math.random() * colors_unique.length)];
-  return new_color
+  // return color_new
 }

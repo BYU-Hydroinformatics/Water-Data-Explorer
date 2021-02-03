@@ -67,14 +67,14 @@
                          siteInfo
                      } = server
                      information_model[`${group_name}`].push(title);
-                     
+
                      title = title.replace(/ /g,"-");
                      if(keywords_in_servers.includes(title) || key_words_to_search.length == 0){
                        console.log(keywords_in_servers.includes(title));
                        let newHtml = `
                        <li class="ui-state-default" layer-name="${title}" id="${title}" >
                          <span class="server-name">${title}</span>
-                       <input class="chkbx-layer" type="checkbox" checked>
+                       <input class="chkbx-layer" type="checkbox">
 
                        <button type="button" id="${title}_${group_name}_reload" class="btn btn-dark btn-sm">
                         <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
@@ -114,92 +114,105 @@
 
                        input_check.addEventListener("change", function(){
                          if(this.checked){
-                           if(layer_object_filter.hasOwnProperty(title) && layersDict.hasOwnProperty(title)){
-                             map.removeLayer(layersDict[title])
-                             map.addLayer(layer_object_filter[title])
-                           }
-                           else{
-                             // load_individual_hydroservers_group(title);
-                             let sites = siteInfo
+                           map.getLayers().forEach(function(layer) {
+                                if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                  console.log(layer)
+                                  layer.setStyle(featureStyle(layerColorDict[title]));
+                                }
+                            });
 
-                             if (typeof(sites) == "string"){
-                               sites = JSON.parse(siteInfo);
-                             }
-                             // let sites = JSON.parse(siteInfo)
-                             // console.log(extents);
-                             sites = sites.map(site => {
-                                 return {
-                                     type: "Feature",
-                                     geometry: {
-                                         type: "Point",
-                                         coordinates: ol.proj.transform(
-                                             [
-                                                 parseFloat(site.longitude),
-                                                 parseFloat(site.latitude)
-                                             ],
-                                             "EPSG:4326",
-                                             "EPSG:3857"
-                                         )
-                                     },
-                                     properties: {
-                                         name: site.sitename,
-                                         code: site.sitecode,
-                                         network: site.network,
-                                         hs_url: url,
-                                         hs_name: title,
-                                         lon: parseFloat(site.longitude),
-                                         lat: parseFloat(site.latitude)
-                                     }
-                                 }
-                             })
-
-                             let sitesGeoJSON = {
-                                 type: "FeatureCollection",
-                                 crs: {
-                                     type: "name",
-                                     properties: {
-                                         name: "EPSG:3857"
-                                     }
-                                 },
-                                 features: sites
-                             }
-
-                             const vectorSource = new ol.source.Vector({
-                                 features: new ol.format.GeoJSON().readFeatures(
-                                     sitesGeoJSON
-                                 )
-                             })
-
-                             const vectorLayer = new ol.layer.Vector({
-                                 source: vectorSource,
-                                 style: featureStyle()
-                             })
-
-                             map.addLayer(vectorLayer)
-
-
-
-                             ol.extent.extend(extent, vectorSource.getExtent())
-
-                             vectorLayer.set("selectable", true)
-
-
-                             layersDict[title] = vectorLayer
-                             ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
-                             layersDictExt[title] = ext;
-                           }
+                           // if(layer_object_filter.hasOwnProperty(title) && layersDict.hasOwnProperty(title)){
+                           //   map.removeLayer(layersDict[title])
+                           //   map.addLayer(layer_object_filter[title])
+                           // }
+                           // else{
+                           //   // load_individual_hydroservers_group(title);
+                           //   let sites = siteInfo
+                           //
+                           //   if (typeof(sites) == "string"){
+                           //     sites = JSON.parse(siteInfo);
+                           //   }
+                           //   // let sites = JSON.parse(siteInfo)
+                           //   // console.log(extents);
+                           //   sites = sites.map(site => {
+                           //       return {
+                           //           type: "Feature",
+                           //           geometry: {
+                           //               type: "Point",
+                           //               coordinates: ol.proj.transform(
+                           //                   [
+                           //                       parseFloat(site.longitude),
+                           //                       parseFloat(site.latitude)
+                           //                   ],
+                           //                   "EPSG:4326",
+                           //                   "EPSG:3857"
+                           //               )
+                           //           },
+                           //           properties: {
+                           //               name: site.sitename,
+                           //               code: site.sitecode,
+                           //               network: site.network,
+                           //               hs_url: url,
+                           //               hs_name: title,
+                           //               lon: parseFloat(site.longitude),
+                           //               lat: parseFloat(site.latitude)
+                           //           }
+                           //       }
+                           //   })
+                           //
+                           //   let sitesGeoJSON = {
+                           //       type: "FeatureCollection",
+                           //       crs: {
+                           //           type: "name",
+                           //           properties: {
+                           //               name: "EPSG:3857"
+                           //           }
+                           //       },
+                           //       features: sites
+                           //   }
+                           //
+                           //   const vectorSource = new ol.source.Vector({
+                           //       features: new ol.format.GeoJSON().readFeatures(
+                           //           sitesGeoJSON
+                           //       )
+                           //   })
+                           //
+                           //   const vectorLayer = new ol.layer.Vector({
+                           //       source: vectorSource,
+                           //       style: featureStyle()
+                           //   })
+                           //
+                           //   map.addLayer(vectorLayer)
+                           //
+                           //
+                           //
+                           //   ol.extent.extend(extent, vectorSource.getExtent())
+                           //
+                           //   vectorLayer.set("selectable", true)
+                           //
+                           //
+                           //   layersDict[title] = vectorLayer
+                           //   ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
+                           //   layersDictExt[title] = ext;
+                           // }
                          }
                          else{
-                           if(layer_object_filter.hasOwnProperty(title) && layersDict.hasOwnProperty(title)){
-                             map.removeLayer(layer_object_filter[title])
-                             map.updateSize()
-                           }
-                           else{
-                             // remove the layers from map
-                             map.removeLayer(layersDict[title])
-                             delete layersDict[title]
-                             map.updateSize()
-                           }
+                           map.getLayers().forEach(function(layer) {
+                                if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                  console.log(layer)
+                                  layer.setStyle(new ol.style.Style({}));
+                                }
+                            });
+                           // if(layer_object_filter.hasOwnProperty(title) && layersDict.hasOwnProperty(title)){
+                           //   map.removeLayer(layer_object_filter[title])
+                           //   map.updateSize()
+                           // }
+                           // else{
+                           //   // remove the layers from map
+                           //   map.removeLayer(layersDict[title])
+                           //   delete layersDict[title]
+                           //   map.updateSize()
+                           // }
 
                          }
 
@@ -256,13 +269,19 @@
                                sitesGeoJSON
                            )
                        })
-
+                       layerColorDict[title] = get_new_color();
                        const vectorLayer = new ol.layer.Vector({
                            source: vectorSource,
-                           style: featureStyle()
+                           style: featureStyle(layerColorDict[title])
                        })
 
-                       map.addLayer(vectorLayer)
+                       // const vectorLayer = new ol.layer.Vector({
+                       //     source: vectorSource,
+                       //     style: featureStyle()
+                       // })
+
+                       map.addLayer(vectorLayer);
+                       vectorLayer.setStyle(new ol.style.Style({}));
                        ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
                        layersDictExt[title] = ext;
 
@@ -539,9 +558,10 @@ add_hydroserver = function(){
                             )
                         })
 
+                        layerColorDict[title] = get_new_color();
                         const vectorLayer = new ol.layer.Vector({
                             source: vectorSource,
-                            style: featureStyle()
+                            style: featureStyle(layerColorDict[title])
                         })
 
                           map.addLayer(vectorLayer)
