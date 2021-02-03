@@ -129,7 +129,7 @@ var water_data_explorer_PACKAGE = (function() {
         var baseLayer = new ol.layer.Tile({
             source: new ol.source.BingMaps({
                 key:
-                    "5TC0yID7CYaqv3nVQLKe~xWVt4aXWMJq2Ed72cO4xsA~ApdeyQwHyH_btMjQS1NJ7OHKY8BK-W-EMQMrIavoQUMYXeZIQOUURnKGBOC7UCt4",
+                    "As822KVqVMwb1JcFVv2JG9lqZB6G0v08RWNHogMBpVAZAXI5PMASZAPiNdnHjf6B",
                 imagerySet: "AerialWithLabels" // Options 'Aerial', 'AerialWithLabels', 'Road'
             })
         })
