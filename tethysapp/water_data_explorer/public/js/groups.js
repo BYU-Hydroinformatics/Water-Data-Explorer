@@ -137,16 +137,44 @@ show_variables_groups = function(){
 
 available_regions = function(){
   // countries_json['features']
+  console.log("MNOE ME USES")
+  $("#KeywordLoading").removeClass("hidden");
   $.ajax({
     type: "GET",
     url: `available-regions/`,
     dataType: "JSON",
     success: function(data){
+      countries_available = data['countries']
+      console.log(data)
+      const chunk = (arr, size) =>
+        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+          arr.slice(i * size, i * size + size)
+        );
+      let arr=chunk(countries_available, 2);
+      console.log(arr)
 
+      var HSTableHtml =
+          `<table id="data-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
 
+        arr.forEach(l_arr => {
+          HSTableHtml +=  '<tr class="odd gradeX">'
+          l_arr.forEach(i =>{
+            HSTableHtml +=  `<td><input type="checkbox" name="name1" /> ${i}</td>`;
+          })
+
+              HSTableHtml += '</tr>';
+        })
+
+        // HSTableHtml += '</td>'+'</tr>'
+        // HSTableHtml += '</tr>'
+
+        HSTableHtml += "</tbody></table>"
+      console.log(HSTableHtml)
+      $("#modalKeyWordSearch").find("#groups_countries").html(HSTableHtml);
+      $("#KeywordLoading").addClass("hidden");
     },
     error: function(error){
-      $("#soapAddLoading-group").addClass("hidden")
+      $("#KeywordLoading").addClass("hidden")
       console.log(error)
       $.notify(
           {
@@ -1326,7 +1354,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
   load_search_modal = function(){
     load_info_model();
     show_variables_groups();
-    // available_regions();
+    available_regions();
 
   }
   $("#btn-filter-groups-f").on("click", load_search_modal);

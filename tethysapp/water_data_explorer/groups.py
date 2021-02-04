@@ -44,6 +44,8 @@ from django.http import JsonResponse, HttpResponse
 from .app import WaterDataExplorer as app
 from tethys_sdk.workspaces import app_workspace
 
+from shapely.geometry import Point, Polygon
+
 Persistent_Store_Name = 'catalog_db'
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.client').setLevel(logging.DEBUG)
@@ -53,7 +55,17 @@ def available_regions(request, app_workspace):
     shapely.speedups.enable()
     countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
     countries_gdf = gpd.read_file(countries_geojson_file_path)
+    countries_series = countries_gdf.loc[:,'geometry']
     print(countries_gdf)
+    print(type(countries_gdf))
+    print(type(countries_series))
+    print(countries_series)
+
+    polys = gpd.GeoSeries({
+        'foo': Polygon([(5, 5), (5, 13), (13, 13), (13, 5)]),
+        'bar': Polygon([(10, 10), (10, 15), (15, 15), (15, 10)]),
+    })
+    print(polys)
     ret_object = {}
     list_regions = []
     SessionMaker = app.get_persistent_store_database(
@@ -82,16 +94,33 @@ def available_regions(request, app_workspace):
 
     for indx in range(0,len(hydroserver_name_list)):
         df = pd.DataFrame({'SiteName': hydroserver_name_list[indx],'Latitude': hydroserver_lat_list[indx],'Longitude': hydroserver_long_list[indx]})
-        gdf = gpd.GeoDataFrame(
-            df, geometry=gpd.points_from_xy(df.Longitude, df.Latitude))
+        gdf = gpd.GeoDataFrame(geometry=gpd.points_from_xy(df.Longitude, df.Latitude), index = hydroserver_name_list[indx])
         print(gdf)
+        # for key, geom in countries_series.items():
+        #     print(key, geom)
+        print("STOPS")
+        gdf = gdf.assign(**{str(key): gdf.within(geom) for key, geom in countries_series.items()})
+        print(gdf)
+        trues_onlys = gdf.loc[:,gdf.any()]
+        countries_index = list(trues_onlys.columns)
+        countries_index = [x for x in countries_index if x != 'geometry']
+        countries_index = [int(i) for i in countries_index]
+        print(countries_index)
+        countries_selected = countries_gdf.iloc[countries_index]
+        list_countries_selected = list(countries_selected['name'])
+        print(list_countries_selected)
+        for coun in list_countries_selected:
+            if coun not in region_list:
+                region_list.append(coun)
+        # print(countries_selected)
+        # break
         # gdf.assign(**{key: gdf.within(geom) for key, geom in countries_gdf.items()})
-        pip_mask = gdf.within(countries_gdf[name].loc[0,'geometry'])
-        values_mask = pip_mask.values
-        print(pip_mask)
-        if True in values_mask:
-            print("STOP")
-            continue
+        # pip_mask = gdf.within(countries_gdf.loc[0,'geometry'])
+        # values_mask = pip_mask.values
+        # print(pip_mask)
+        # print("STOP")
+        # if True in values_mask:
+            # continue
         # for index, row in countries_gdf.iterrows():
         #     print("INSIDE")
         #     print(row)
@@ -99,7 +128,8 @@ def available_regions(request, app_workspace):
         #         # row.reset_index(drop=True, inplace=True)
         #         pip_mask = gdf.within(row.loc[0,'geometry'])
         #         print(pip_mask)
-
+    print(region_list)    
+    ret_object['countries'] = region_list
     return JsonResponse(ret_object)
 
 

@@ -392,7 +392,7 @@ tr:hover {
   overflow-y: auto;
 }
 #modalKeyWordSearch .modal-body #groups_variables{
-  height: 150px;
+  height: 250px;
   overflow-y: auto;
 }
 #modalShowVariables .modal{
@@ -582,6 +582,14 @@ tr:hover {
   flex-direction: column;
 }
 
+#keyword-modal-body{
+  display: flex;
+}
+#left-content, #right-content {
+  justify-content:center;
+  width: 100%;
+  padding: 0.5em;
+}
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;
   border-color:#46b8da !important;

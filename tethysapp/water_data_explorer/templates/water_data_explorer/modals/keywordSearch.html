@@ -1,7 +1,7 @@
 {% load staticfiles %}
 <form id="modalKeyWordSearch" class="modal fade" role="dialog" action="delete/" method="POST">
     {% csrf_token %}
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -11,27 +11,32 @@
                 <em>Note: Everytime the user selects a keyword, this one is added, and the search is done using an "OR". In other words,
                 the search will give any server that has at least one of the selected keywords</em>
             </div>
-            <div class="modal-body">
-              <p> Region Data Discovery </p>
-              <input type="text" id="myInputKeyword" placeholder="Search for country" title="Type in a keyword">
-              <br>
-              <p> Variable Data Discovery </p>
-              <input type="text" id="myInputKeyword2" class= "searchBars" placeholder="Search variable" title="Type in a keyword">
-              <div id="groups_variables">
+            <div class="modal-body" id = "keyword-modal-body">
+              <div id="left-content">
+                <p> Region Data Discovery </p>
+                <input type="text" id="myInputKeyword" placeholder="Search for country" title="Type in a keyword">
+                <div id="groups_countries"></div>
+                <br>
+                <p> Variable Data Discovery </p>
+                <input type="text" id="myInputKeyword2" class= "searchBars" placeholder="Search variable" title="Type in a keyword">
+                <div id="groups_variables">
 
+                </div>
+                {# <img id="KeywordLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" /> #}
+
+                {# <br> #}
+                <button type="button" id = "groupsFiltering" class="btn btn-primary">Search</button>
               </div>
-              <br>
+              <div id="right-content">
+                <p>Available Catalogs and Services</p>
+                <div id="groups_services"></div>
 
-              <button type="button" id = "groupsFiltering" class="btn btn-primary">Search</button>
-
-              <p>Available Catalogs and Services</p>
-              <div id="groups_services">
-
+                <div class="loading_id">
+                  <img id="KeywordLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
+                </div>
               </div>
 
-              <div class="loading_id">
-                <img id="KeywordLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
-              </div>
+
 
             </div>
 
