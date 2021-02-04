@@ -161,6 +161,8 @@ var filter_words,
     show_variables_groups,
     load_search_modal,
     available_regions,
+    html_for_groups,
+    change_effect_groups,
     generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that

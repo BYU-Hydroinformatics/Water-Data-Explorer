@@ -410,3 +410,98 @@ function get_new_color(){
   // var color_new = colors_unique[Math.floor(Math.random() * colors_unique.length)];
   // return color_new
 }
+
+function html_for_groups(isAdmin, title, id_group_separator){
+   let newHtml;
+  if (isAdmin){
+    newHtml =
+    `
+    <div class="panel panel-default" id="${title}_panel">
+      <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
+        <h4 class="panel-title">
+          <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
+          <span class="group-name"><strong>${ind})</strong> ${title}</span>
+
+          </a>
+        </h4>
+        <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+
+            <input class="chkbx-layers" type="checkbox">
+            <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
+              <span class=" glyphicon glyphicon-info-sign "></span>
+            </button>
+            <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+        </li>
+
+      </div>
+
+      <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
+      <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>Broker Endpoints</div>
+        <div class="panel-body">
+            <div id= ${id_group_separator} class="divForServers"></div>
+        </div>
+      </div>
+    </div>
+    `
+    return newHtml
+  }
+  else{
+    newHtml =
+    `
+    <div class="panel panel-default" id="${title}_panel">
+      <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
+        <h4 class="panel-title">
+          <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
+          <span class="group-name"><strong>${ind})</strong> ${title}</span>
+          </a>
+        </h4>
+        <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+          <input class="chkbx-layers" type="checkbox">
+          <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
+            <span class=" glyphicon glyphicon-info-sign "></span>
+          </button>
+        </li>
+      </div>
+      <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
+        <div class="panel-body">
+            <div id= ${id_group_separator} class="divForServers"></div>
+        </div>
+      </div>
+    </div>
+    `
+    return newHtml
+  }
+}
+function change_effect_groups(element_to_check,id_group_separator){
+  let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
+  for(i = 0; i < servers_checks.length; i++) {
+    let server_name = servers_checks[i].id;
+     let checkbox = Array.from(servers_checks[i].children)
+     for (var j = 0; j < checkbox.length; j++) {
+         if (checkbox[j].className == "chkbx-layer") {
+           console.log(checkbox[j])
+           checkbox[j].checked = element_to_check.checked;
+         }
+     }
+     console.log(checkbox);
+     map.getLayers().forEach(function(layer) {
+          if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
+            if(element_to_check.checked){
+              layer.setStyle(featureStyle(layerColorDict[server_name]));
+            }
+            else{
+              layer.setStyle(new ol.style.Style({}));
+            }
+          }
+      });
+   }
+}
+function html_for_servers(){
+
+  
+}
