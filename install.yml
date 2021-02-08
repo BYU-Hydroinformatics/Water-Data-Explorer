@@ -21,7 +21,9 @@ requirements:
       - suds-jurko
       - xmltodict
       - pyshp
+      - geopandas
 
   pip:
+    - pywaterml
 
 post:
