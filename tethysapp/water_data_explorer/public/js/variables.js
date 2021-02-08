@@ -163,6 +163,7 @@ var filter_words,
     available_regions,
     html_for_groups,
     change_effect_groups,
+    toDegreesMinutesAndSeconds,
     generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that

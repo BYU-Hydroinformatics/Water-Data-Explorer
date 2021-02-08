@@ -76,6 +76,7 @@ def get_values_hs(request):
 
     print(site_info_Mc_json)
     object_methods= site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
+    geolocation= site_info_Mc_json['sitesResponse']['site']['siteInfo']['geoLocation']['geogLocation']
     print("GETSITESINFO FUNCTION")
     print(object_methods)
     object_with_methods_and_variables = {}
@@ -84,13 +85,15 @@ def get_values_hs(request):
     array_variables_codes = []
     array_variables_lengths = []
     array_keywords_hydroserver=[]
+    array_units_variables = []
 
 
     if(isinstance(object_methods,(dict))):
         print("adding to the methodID as a dict")
         variable_name_ = object_methods['variable']['variableName']
+        variable_unit_ = object_methods['variable']['unit']['unitAbbreviation']
         array_keywords_hydroserver.append(variable_name_)
-
+        array_units_variables.append(variable_unit_)
         array_variables_codes.append(object_methods['variable']['variableCode']['#text'])
         if object_methods['valueCount'] is not None:
             array_variables_lengths.append(object_methods['valueCount'])
@@ -109,7 +112,9 @@ def get_values_hs(request):
         for object_method in object_methods:
             print("adding to the methodID as an arraylist")
             variable_name_ = object_method['variable']['variableName']
+            variable_unit_ = object_method['variable']['unit']['unitAbbreviation']
             array_keywords_hydroserver.append(variable_name_)
+            array_units_variables.append(variable_unit_)
             if object_method['valueCount'] is not None:
                 array_variables_lengths.append(object_method['valueCount'])
             else:
@@ -245,6 +250,8 @@ def get_values_hs(request):
     #         print("The class value is not in the response ",exc_type, fname, exc_tb.tb_lineno)
 
     return_obj['variables']=array_keywords_hydroserver
+    return_obj['geolo'] = geolocation
+    return_obj['units'] = array_units_variables
     return_obj['codes']=array_variables_codes
     return_obj['counts'] = array_variables_lengths
     return_obj['methodsIDs']= object_with_methods_and_variables

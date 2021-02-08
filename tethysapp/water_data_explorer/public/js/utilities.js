@@ -503,5 +503,14 @@ function change_effect_groups(element_to_check,id_group_separator){
 }
 function html_for_servers(){
 
-  
+
+}
+function toDegreesMinutesAndSeconds(coordinate) {
+    var absolute = Math.abs(coordinate);
+    var degrees = Math.floor(absolute);
+    var minutesNotTruncated = (absolute - degrees) * 60;
+    var minutes = Math.floor(minutesNotTruncated);
+    var seconds = Math.floor((minutesNotTruncated - minutes) * 60);
+
+    return degrees + "°" + minutes + "'" + seconds + "''";
 }

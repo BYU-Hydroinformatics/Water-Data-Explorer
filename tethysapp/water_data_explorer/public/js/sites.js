@@ -83,11 +83,19 @@ activate_layer_values = function (){
           console.log(result);
           let description_site = document.getElementById('siteDes')
           console.log(description_site);
+          let geolocations = result['geolo']
+          let lats = parseFloat(geolocations['latitude'])
+          let lons = parseFloat(geolocations['longitude'])
+          let new_lat = toDegreesMinutesAndSeconds(lats)
+          let new_lon = toDegreesMinutesAndSeconds(lons)
+          console.log(new_lat)
+          console.log(new_lon)
+
           description_site.innerHTML =
             ` <p> <em> Station/Platform Name:</em> ${feature.values_['name']}<p>
               <p> <em> Territory of origin of data:</em> in construction<p>
               <p> <em> Supervising Organization:</em> ${result['description'][Object.keys(result['description'])[0]]['organization']} <p>
-              <p> <em> Geospatial Location:</em> in construction <p>
+              <p> <em> Geospatial Location:</em> lat: ${new_lat} lon: ${new_lon} <p>
               <p> <em>Description:</em> ${result['description'][Object.keys(result['description'])[0]]['sourceDescription']}</p>`
 
           let table_begin =
@@ -96,19 +104,23 @@ activate_layer_values = function (){
         <table id="siteVariableTable" class="table table-striped table-hover table-condensed">
             <tr class="danger">
               <th>Observerd Variable</th>
+              <th>Units</th>
               <th>Time Extent</th>
-              <th>Data Points</th>
             </tr>`;
           for(let i=0; i<result['variables'].length ; ++i){
             let variable_new = result['variables'][i]
+            let variable_unit = result['units'][i]
             let time_serie_range = result['times_series'][variable_new]
+            let begin_date = time_serie_range['beginDateTime'].split('T')[0];
+            let end_date = time_serie_range['endDateTime'].split('T')[0];
             console.log(time_serie_range)
             let newRow =
             `
             <tr>
-              <th>${result['variables'][i]}</th>
-              <th>${time_serie_range['beginDateTime']} / ${time_serie_range['endDateTime']}</th>
-              <th>${result['counts'][i]}</th>
+              <th>${variable_new}</th>
+              <th>${variable_unit}</th>
+              <th>${begin_date} - ${end_date}</th>
+
             </tr>
             `
             table_begin = table_begin + newRow;
