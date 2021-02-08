@@ -12,6 +12,8 @@
                 <input type="text" class="form-control" name="soap-title" id="soap-title" placeholder="Please enter a valid HydroServer Title">
                 <label for="soap-url">URL (Required):</label>
                 <input type="text" class="form-control" name="soap-url" id="soap-url" placeholder="Please enter a valid HydroServer SOAP Endpoint">
+                <label for="soap-description">Description (Required):</label>
+                <textarea name="textarea" rows="10" cols="50" class="form-control" name="hs-description" id="hs-description" placeholder="Please enter a valid description for the service"></textarea>
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" name="extent" id="extent">Get Values for the Zoomed Area</label>
@@ -22,8 +24,8 @@
                 <div id="chk_val" name="chk_val"></div>
                 <div class="warning">
                 </div>
-                <div id="addSoapIdCentering">
-                  <img id="soapAddLoading" class="view-file hidden" src="https://media.giphy.com/media/3ohs7Xldjh7DndQnBu/giphy.gif" />
+                <div class="loading_id">
+                  <img id="soapAddLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
                 </div>
             </div>
             <div class="modal-footer">

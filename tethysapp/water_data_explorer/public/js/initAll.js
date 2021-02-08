@@ -129,7 +129,7 @@ var water_data_explorer_PACKAGE = (function() {
         var baseLayer = new ol.layer.Tile({
             source: new ol.source.BingMaps({
                 key:
-                    "5TC0yID7CYaqv3nVQLKe~xWVt4aXWMJq2Ed72cO4xsA~ApdeyQwHyH_btMjQS1NJ7OHKY8BK-W-EMQMrIavoQUMYXeZIQOUURnKGBOC7UCt4",
+                    "As822KVqVMwb1JcFVv2JG9lqZB6G0v08RWNHogMBpVAZAXI5PMASZAPiNdnHjf6B",
                 imagerySet: "AerialWithLabels" // Options 'Aerial', 'AerialWithLabels', 'Road'
             })
         })
@@ -305,6 +305,13 @@ var water_data_explorer_PACKAGE = (function() {
             })
             .change()
     }
+    give_name = function(){
+      $(".titleh").html(`${views_names} Views`)
+      $(".app-title").html(`${views_names} Data Explorer`)
+      console.log("GIVE_NAME");
+      console.log(views_names);
+    }
+
 
     /*
     ************ FUNCTION NAME: INIT_JEQUERY_VAR**********************
@@ -333,6 +340,7 @@ var water_data_explorer_PACKAGE = (function() {
     initialize_graphs([],[],"No data Available","","","","pie");
     add_boundary_map(geoServerColor, geoServerWidth, map);
     activate_deactivate_graphs();
+    give_name();
 
   })
 })() // End of package wrapper

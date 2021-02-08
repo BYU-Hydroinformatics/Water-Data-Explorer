@@ -2,6 +2,7 @@
 
 {% load staticfiles %}
 
+
 {% block title %}{{ tethys_app.name }}{% endblock %}
 
 {% block app_icon %}
@@ -77,7 +78,8 @@
     var geoServerColor = "{{ geoColor|safe }}";
     var geoServerWidth = "{{ geoWidth|safe }}";
     var geoServerMovement = {{geoMovement|yesno:"true,false"}};
-
+    var views_names = "{{ views_names|safe }}";
+    console.log(views_names);
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" type="text/javascript"></script>

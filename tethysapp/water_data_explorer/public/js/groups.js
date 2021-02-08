@@ -1,3 +1,198 @@
+
+give_available_services = function(){
+  //change to vissible//
+  let elementForm= $("#modalAddGroupServerForm");
+  let datastring= elementForm.serialize();
+  let form_elements = datastring.split("&");
+  let url_alone = form_elements[form_elements.length -1]
+  console.log(url_alone)
+  $("#soapAddLoading-group").removeClass("hidden");
+
+  $.ajax({
+    type: "GET",
+    url: `available-services/`,
+    dataType: "HTML",
+    data: url_alone,
+    success: function(data){
+      $("#rows_servs").empty();
+      console.log(data)
+      var json_response = JSON.parse(data)
+      var services_ava = json_response['services']
+      var i = 1;
+      var row = ""
+      services_ava.forEach(function(serv){
+        var title_new = serv['title'].replace(/ /g,"_");
+        row += `<tr>
+                  <th scope="row">${i}</th>
+                  <td><input type="checkbox" name="server_${i}" id="server" value=${title_new}></td>
+                  <td>${serv['title']}</td>
+                </tr>`
+        i += 1;
+      })
+      $("#modalAddGroupServer").find("#rows_servs").html(row)
+
+      $("#available_services").removeClass("hidden");
+      $("#soapAddLoading-group").addClass("hidden")
+
+    },
+    error: function(error){
+      $("#soapAddLoading-group").addClass("hidden")
+      console.log(error)
+      $.notify(
+          {
+              message: `There was an error retrieving the different web services from the HIS catalog  `
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
+          }
+      )
+    }
+
+  })
+  // console.log(url_catalog)
+}
+$("#btn-check_available_serv").on("click", give_available_services);
+
+show_variables_groups = function(){
+  $("#KeywordLoading").removeClass("hidden");
+  $.ajax({
+    type: "GET",
+    url: `available-variables/`,
+    dataType: "JSON",
+    success: function(data){
+
+      // $("#rows_servs").empty();
+      console.log(data)
+      variables_list = data['variables'];
+      const chunk = (arr, size) =>
+        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+          arr.slice(i * size, i * size + size)
+        );
+      let arr=chunk(variables_list, 2);
+      console.log(arr)
+
+      var HSTableHtml =
+          `<table id="data-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+
+        arr.forEach(l_arr => {
+          HSTableHtml +=  '<tr class="odd gradeX">'
+          l_arr.forEach(i =>{
+            HSTableHtml +=  `<td><input type="checkbox" name="name1" /> ${i}</td>`;
+          })
+
+              HSTableHtml += '</tr>';
+        })
+
+        // HSTableHtml += '</td>'+'</tr>'
+        // HSTableHtml += '</tr>'
+
+        HSTableHtml += "</tbody></table>"
+      console.log(HSTableHtml)
+      $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
+      $("#KeywordLoading").addClass("hidden");
+
+      // var json_response = JSON.parse(data)
+      // var services_ava = json_response['services']
+      // var i = 1;
+      // var row = ""
+      // services_ava.forEach(function(serv){
+      //   var title_new = serv['title'].replace(/ /g,"_");
+      //   row += `<tr>
+      //             <th scope="row">${i}</th>
+      //             <td><input type="checkbox" name="server_${i}" id="server" value=${title_new}></td>
+      //             <td>${serv['title']}</td>
+      //           </tr>`
+      //   i += 1;
+      // })
+      // $("#modalAddGroupServer").find("#rows_servs").html(row)
+      //
+      // $("#available_services").removeClass("hidden");
+      // $("#soapAddLoading-group").addClass("hidden")
+
+    },
+    error: function(error){
+      $("#soapAddLoading-group").addClass("hidden")
+      console.log(error)
+      $.notify(
+          {
+              message: `There was an error retrieving the different web services from the HIS catalog  `
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
+          }
+      )
+    }
+
+  })
+
+
+
+}
+
+available_regions = function(){
+  // countries_json['features']
+  console.log("MNOE ME USES")
+  $("#KeywordLoading").removeClass("hidden");
+  $.ajax({
+    type: "GET",
+    url: `available-regions/`,
+    dataType: "JSON",
+    success: function(data){
+      countries_available = data['countries']
+      console.log(data)
+      const chunk = (arr, size) =>
+        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+          arr.slice(i * size, i * size + size)
+        );
+      let arr=chunk(countries_available, 2);
+      console.log(arr)
+
+      var HSTableHtml =
+          `<table id="data-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+
+        arr.forEach(l_arr => {
+          HSTableHtml +=  '<tr class="odd gradeX">'
+          l_arr.forEach(i =>{
+            HSTableHtml +=  `<td><input type="checkbox" name="name1" /> ${i}</td>`;
+          })
+
+              HSTableHtml += '</tr>';
+        })
+
+        // HSTableHtml += '</td>'+'</tr>'
+        // HSTableHtml += '</tr>'
+
+        HSTableHtml += "</tbody></table>"
+      console.log(HSTableHtml)
+      $("#modalKeyWordSearch").find("#groups_countries").html(HSTableHtml);
+      $("#KeywordLoading").addClass("hidden");
+    },
+    error: function(error){
+      $("#KeywordLoading").addClass("hidden")
+      console.log(error)
+      $.notify(
+          {
+              message: `There was an error retrieving the different web services from the HIS catalog  `
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
+          }
+      )
+    }
+
+  })
+
+
+}
 /*
 ************ FUNCTION NAME : CREATE_GROUP_HYDROSERVERS
 ************ PURPOSE : CREATES A GROUP OF HYDRSOERVERS AND ADDS IT TO THE MENU
@@ -13,13 +208,25 @@ create_group_hydroservers = function(){
     }
 
     //CHECKS IF THERE IS AN INPUT THAT IS NOT ALLOWED//
+    // if ($("#addGroup-title").val() != "") {
+    //   var regex = new RegExp("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
+    //   var title = $("#soap-title").val()
+    //   if (!regex.test(title)) {
+    //     $modalAddGroupHydro
+    //           .find(".warning")
+    //           .html("<b>Please enter Letters only for the title.</b>");
+    //       return false
+    //   }
+    // }
     if ($("#addGroup-title").val() != "") {
-      var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9_]+$")
+      // var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9_]+$")
+      var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9]+$")
       var title = $("#addGroup-title").val()
       if (!regex.test(title)) {
           $modalAddGroupHydro
               .find(".warning")
-              .html("<b>Please note that only numbers and other characters besides the underscore ( _ ) are not allowed</b>");
+              // .html("<b>Please note that only numbers and other characters besides the underscore ( _ ) are not allowed</b>");
+              .html("<b>Please enter Letters only for the title.</b>");
           return false
       }
     }
@@ -40,7 +247,7 @@ create_group_hydroservers = function(){
     let datastring= elementForm.serialize();
     console.log(typeof(datastring));
     console.log(datastring);
-    $("#soapAddLoading").removeClass("hidden");
+    $("#soapAddLoading-group").removeClass("hidden");
 
     $.ajax({
         type: "POST",
@@ -55,68 +262,71 @@ create_group_hydroservers = function(){
             if(group.message !== "There was an error while adding th group.") {
               let title=group.title;
               let description=group.description;
+              information_model[`${title}`] = [];
               let id_group_separator = `${title}_list_separator`;
               let newHtml;
               if(can_delete_hydrogroups){
-                newHtml =
-                `
-                <div class="panel panel-default" id="${title}_panel">
-                  <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-                    <h4 class="panel-title">
-                      <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-                      <span class="group-name"><strong>${ind})</strong> ${title}</span>
-
-                      </a>
-                    </h4>
-                    <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-
-                        <input class="chkbx-layers" type="checkbox" checked>
-                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
-                          <span class=" glyphicon glyphicon-info-sign "></span>
-                        </button>
-                        <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
-                          <span class="glyphicon glyphicon-plus"></span>
-                        </button>
-                        <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
-                          <span class="glyphicon glyphicon-trash"></span>
-                        </button>
-                    </li>
-
-                  </div>
-
-                  <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-                  <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>Broker Endpoints</div>
-                    <div class="panel-body">
-                        <div id= ${id_group_separator} class="divForServers"></div>
-                    </div>
-                  </div>
-                </div>
-                `
+                newHtml = html_for_groups(can_delete_hydrogroups, title, id_group_separator);
+                // newHtml =
+                // `
+                // <div class="panel panel-default" id="${title}_panel">
+                //   <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
+                //     <h4 class="panel-title">
+                //       <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
+                //       <span class="group-name"><strong>${ind})</strong> ${title}</span>
+                //
+                //       </a>
+                //     </h4>
+                //     <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+                //
+                //         <input class="chkbx-layers" type="checkbox" checked>
+                //         <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
+                //           <span class=" glyphicon glyphicon-info-sign "></span>
+                //         </button>
+                //         <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
+                //           <span class="glyphicon glyphicon-plus"></span>
+                //         </button>
+                //         <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
+                //           <span class="glyphicon glyphicon-trash"></span>
+                //         </button>
+                //     </li>
+                //
+                //   </div>
+                //
+                //   <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
+                //   <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>Broker Endpoints</div>
+                //     <div class="panel-body">
+                //         <div id= ${id_group_separator} class="divForServers"></div>
+                //     </div>
+                //   </div>
+                // </div>
+                // `
               }
               else{
-                newHtml =
-                `
-                <div class="panel panel-default" id="${title}_panel">
-                  <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-                    <h4 class="panel-title">
-                      <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-                      <span class="group-name"><strong>${ind})</strong> ${title}</span>
-                      </a>
-                    </h4>
-                    <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-                      <input class="chkbx-layers" type="checkbox" checked>
-                      <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
-                        <span class=" glyphicon glyphicon-info-sign "></span>
-                      </button>
-                    </li>
-                  </div>
-                  <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-                    <div class="panel-body">
-                        <div id= ${id_group_separator} class="divForServers"></div>
-                    </div>
-                  </div>
-                </div>
-                `
+                newHtml = html_for_groups(false, title, id_group_separator);
+                // newHtml =
+                // `
+                // <div class="panel panel-default" id="${title}_panel">
+                //   <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
+                //     <h4 class="panel-title">
+                //       <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
+                //       <span class="group-name"><strong>${ind})</strong> ${title}</span>
+                //       </a>
+                //     </h4>
+                //     <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+                //       <input class="chkbx-layers" type="checkbox" checked>
+                //       <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
+                //         <span class=" glyphicon glyphicon-info-sign "></span>
+                //       </button>
+                //     </li>
+                //   </div>
+                //   <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
+                //     <div class="panel-body">
+                //         <div id= ${id_group_separator} class="divForServers"></div>
+                //     </div>
+                //   </div>
+                // </div>
+                // `
               }
 
               $(newHtml).appendTo("#current-Groupservers");
@@ -137,7 +347,6 @@ create_group_hydroservers = function(){
                 if(this.checked){
                   console.log(" it is checked");
                   load_individual_hydroservers_group(title);
-
                 }
                 else{
                   // delete the lsit of hydroservers being display // make a function to delete it
@@ -168,14 +377,10 @@ create_group_hydroservers = function(){
 
               });
 
-
-
-
               $(".ui-state-default").click(function(){
                 console.log("hola");
               });
-                  $("#soapAddLoading").addClass("hidden")
-                  $("#soapAddLoading").addClass("hidden")
+                  $("#soapAddLoading-group").addClass("hidden")
                   $("#btn-add-addHydro").show()
 
                   $("#modalAddGroupServer").modal("hide")
@@ -259,68 +464,70 @@ create_group_hydroservers = function(){
                      description
                  } = group
                  let id_group_separator = `${title}_list_separator`;
-
+                 information_model[`${title}`] = []
                  let newHtml;
                  if(can_delete_hydrogroups){
-                   newHtml =
-                   `
-                   <div class="panel panel-default" id="${title}_panel">
-                     <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-                       <h4 class="panel-title">
-                         <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-                         <span class="group-name"><strong>${ind})</strong> ${title}</span>
-
-                         </a>
-                       </h4>
-                       <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-
-                           <input class="chkbx-layers" type="checkbox" checked>
-                           <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
-                             <span class=" glyphicon glyphicon-info-sign "></span>
-                           </button>
-                           <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
-                             <span class="glyphicon glyphicon-plus"></span>
-                           </button>
-                           <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
-                             <span class="glyphicon glyphicon-trash"></span>
-                           </button>
-                       </li>
-
-                     </div>
-
-                     <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-                     <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>Broker Endpoints</div>
-                       <div class="panel-body">
-                           <div id= ${id_group_separator} class="divForServers"></div>
-                       </div>
-                     </div>
-                   </div>
-                   `
+                   newHtml = html_for_groups(can_delete_hydrogroups, title, id_group_separator);
+                   // `
+                   // <div class="panel panel-default" id="${title}_panel">
+                   //   <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
+                   //     <h4 class="panel-title">
+                   //       <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
+                   //       <span class="group-name"><strong>${ind})</strong> ${title}</span>
+                   //
+                   //       </a>
+                   //     </h4>
+                   //     <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+                   //
+                   //         <input class="chkbx-layers" type="checkbox">
+                   //         <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
+                   //           <span class=" glyphicon glyphicon-info-sign "></span>
+                   //         </button>
+                   //         <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
+                   //           <span class="glyphicon glyphicon-plus"></span>
+                   //         </button>
+                   //         <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
+                   //           <span class="glyphicon glyphicon-trash"></span>
+                   //         </button>
+                   //     </li>
+                   //
+                   //   </div>
+                   //
+                   //   <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
+                   //   <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>Broker Endpoints</div>
+                   //     <div class="panel-body">
+                   //         <div id= ${id_group_separator} class="divForServers"></div>
+                   //     </div>
+                   //   </div>
+                   // </div>
+                   // `
                  }
                  else{
-                   newHtml =
-                   `
-                   <div class="panel panel-default" id="${title}_panel">
-                     <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-                       <h4 class="panel-title">
-                         <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-                         <span class="group-name"><strong>${ind})</strong> ${title}</span>
-                         </a>
-                       </h4>
-                       <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-                         <input class="chkbx-layers" type="checkbox" checked>
-                         <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
-                           <span class=" glyphicon glyphicon-info-sign "></span>
-                         </button>
-                       </li>
-                     </div>
-                     <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-                       <div class="panel-body">
-                           <div id= ${id_group_separator} class="divForServers"></div>
-                       </div>
-                     </div>
-                   </div>
-                   `
+                   newHtml = html_for_groups(false, title, id_group_separator);
+
+                   // newHtml =
+                   // `
+                   // <div class="panel panel-default" id="${title}_panel">
+                   //   <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
+                   //     <h4 class="panel-title">
+                   //       <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
+                   //       <span class="group-name"><strong>${ind})</strong> ${title}</span>
+                   //       </a>
+                   //     </h4>
+                   //     <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+                   //       <input class="chkbx-layers" type="checkbox">
+                   //       <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
+                   //         <span class=" glyphicon glyphicon-info-sign "></span>
+                   //       </button>
+                   //     </li>
+                   //   </div>
+                   //   <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
+                   //     <div class="panel-body">
+                   //         <div id= ${id_group_separator} class="divForServers"></div>
+                   //     </div>
+                   //   </div>
+                   // </div>
+                   // `
                  }
                  $(newHtml).appendTo("#current-Groupservers");
 
@@ -331,20 +538,76 @@ create_group_hydroservers = function(){
 
                  let input_check = li_object.getElementsByClassName("chkbx-layers")[0];
                  console.log(input_check);
-                 if(input_check.checked){
-                   load_individual_hydroservers_group(title);
-                 }
+                 load_individual_hydroservers_group(title);
+                 let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
+                 console.log(servers_checks);
+                 // if(input_check.checked){
+                 //   // load_individual_hydroservers_group(title);
+                 //   let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
+                 //   console.log(servers_checks);
+                 //   for(i = 0; i < servers_checks.length; i++) {
+                 //      servers_checks[i].checked = true;
+                 //      let server_name = servers_checks[i].parentElement.id;
+                 //      map.removeLayer(layersDict[server_name])
+                 //      map.addLayer(layer_object_filter[server_name])
+                 //    }
+                 //
+                 //   labels_x = document.getElementById(`heading_${title}`)
+                 //   labels_x.style.backgroundColor = colors_unique[0]
+                 // }
 
                  input_check.addEventListener("change", function(){
-                   console.log(this);
-                   if(this.checked){
-                     console.log(" it is checked");
-                     load_individual_hydroservers_group(title);
-                   }
-                   else{
-                     console.log("it is not checked");
-                     remove_individual_hydroservers_group(title);
-                   }
+                   change_effect_groups(this,id_group_separator);
+                   // console.log(this);
+                   // if(this.checked){
+                   //   console.log(" it is checked");
+                   //   // load_individual_hydroservers_group(title);
+                   //   let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
+                   //   console.log(servers_checks);
+                   //   for(i = 0; i < servers_checks.length; i++) {
+                   //     let server_name = servers_checks[i].id;
+                   //      let checkbox = Array.from(servers_checks[i].children)
+                   //      for (var j = 0; j < checkbox.length; j++) {
+                   //          if (checkbox[j].className == "chkbx-layer") {
+                   //            console.log(checkbox[j])
+                   //            checkbox[j].checked = true;
+                   //          }
+                   //      }
+                   //      console.log(checkbox);
+                   //      map.getLayers().forEach(function(layer) {
+                   //           if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
+                   //             console.log(layer)
+                   //             layer.setStyle(featureStyle(layerColorDict[server_name]));
+                   //           }
+                   //       });
+                   //    }
+                   //
+                   //
+                   // }
+                   // else{
+                   //   console.log("it is not checked");
+                   //   // remove_individual_hydroservers_group(title);
+                   //   let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
+                   //   console.log(servers_checks);
+                   //   for(i = 0; i < servers_checks.length; i++) {
+                   //     let server_name = servers_checks[i].id;
+                   //      let checkbox = Array.from(servers_checks[i].children)
+                   //      for (var j = 0; j < checkbox.length; j++) {
+                   //          if (checkbox[j].className == "chkbx-layer") {
+                   //            console.log(checkbox[j])
+                   //            checkbox[j].checked = false;
+                   //          }
+                   //      }
+                   //      console.log(checkbox);
+                   //      map.getLayers().forEach(function(layer) {
+                   //           if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
+                   //             console.log(layer)
+                   //             layer.setStyle(new ol.style.Style({}));
+                   //           }
+                   //       });
+                   //    }
+                   //
+                   // }
 
                  });
 
@@ -369,6 +632,8 @@ create_group_hydroservers = function(){
 
                  });
                  ind = ind +1;
+                 console.log(layersDictExt);
+                 console.log(information_model);
 
              })
 
@@ -443,6 +708,7 @@ create_group_hydroservers = function(){
 
                    map.removeLayer(layersDict[title])
                    delete layersDict[title]
+                   delete layerColorDict[title]
                    map.updateSize()
                    let lis_to_delete = li_arrays.filter(x => title === x.attributes['layer-name'].value);
 
@@ -452,9 +718,9 @@ create_group_hydroservers = function(){
                    // let ul_servers = document.getElementById("current-Groupservers");
                    let ul_servers = document.getElementById(`${id_group_separator}`);
 
-                   lis_to_delete.forEach(function(li_tag){
-                     ul_servers.removeChild(li_tag);
-                   });
+                   // lis_to_delete.forEach(function(li_tag){
+                   //   ul_servers.removeChild(li_tag);
+                   // });
 
 
                })
@@ -491,8 +757,20 @@ make_list_groups = function(){
   let finalGroupArray=[];
   arrayGroups.forEach(function(g){
     if(g.id){
-      let stringGroup = g.id.split("_")[0];
+      let stringGroups = g.id.split("_");
+      let stringGroup = ""
+      for(var i = 0; i < stringGroups.length - 1 ; i++){
+        if (i >0){
+          stringGroup = stringGroup +"_"+stringGroups[i]
+        }
+        else{
+          stringGroup = stringGroup + stringGroups[i]
+        }
+      }
+      // let stringGroup = g.id.split("_")[0];
       finalGroupArray.push(stringGroup);
+
+
     }
   });
   var HSTableHtml =
@@ -714,7 +992,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
             let send_group={
               group: hydroserver_group
             };
-            $("#KeywordLoading").css({"margin-left":'40%', position:'relative',"z-index": 9999});
+            // $("#KeywordLoading").css({"margin-left":'40%', position:'relative',"z-index": 9999});
             $("#KeywordLoading").removeClass("hidden");
             $("#btn-key-search").hide();
 
@@ -819,7 +1097,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
                   $("#KeywordLoading").addClass("hidden");
 
                   $("#btn-key-search").show();
-                  $("#modalKeyWordSearch").modal("hide");
+                  // $("#modalKeyWordSearch").modal("hide");
                   $("#modalKeyWordSearch").each(function() {
                       this.reset()
                   })
@@ -1017,3 +1295,126 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
       console.log(keywords_in_servers);
       return keywords_in_servers;
     }
+
+    generateListServices = function(){
+
+      var HSTableHtml =
+          `<table id="infoModel-info-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+      if (information_model.length === 0) {
+          $("#modalKeyWordSearch")
+              .find("#groups_services")
+              .html(
+                  "<b>There are no data available, please add a group.</b>"
+              )
+      }
+      else {
+          for (var i = 0; i < result1['siteInfo'].length; i++) {
+              HSTableHtml +=
+             '<tr class="odd gradeX2">'+
+                  `<td> <p id="titleSite">${i+1}.- ${result1['siteInfo'][i]['sitename']}
+                  <button type="button" class="btn btn-primary" id="${result1['siteInfo'][i]['sitecode']}_modal"><span class="glyphicon glyphicon-pushpin"></span></button></p>
+                    <p>Site Code: ${result1['siteInfo'][i]['sitecode']}</p>
+                    <p>Network: ${result1['siteInfo'][i]['network']}</p>
+                    <p>Latitude: ${result1['siteInfo'][i]['latitude']}</p>
+                    <p>Longitude: ${result1['siteInfo'][i]['longitude']}</p>
+                  </td>`
+                  +
+             '</tr>'
+
+          }
+          HSTableHtml += "</tbody></table>"
+          $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml);
+    }
+  }
+
+  load_info_model = function(){
+    var HSTableHtml =
+        `<table id="groups-info-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+      Object.keys(information_model).forEach(function(key) {
+      console.log(key, information_model[key]);
+      HSTableHtml +=
+        `<p id="titleSite">${key}</p>`
+              // `<td> <p id="titleSite">${key}</p>`
+      information_model[key].forEach(function(serviceView){
+        HSTableHtml +=
+         '<tr class="odd gradeX2">'+
+         `<td><p>${serviceView}</p></td>`+
+         '</tr>'
+
+      })
+
+      // HSTableHtml += '</td>'+'</tr>'
+      // HSTableHtml += '</tr>'
+
+      HSTableHtml += "</tbody></table>"
+    });
+    $("#modalKeyWordSearch").find("#groups_services").html(HSTableHtml);
+  }
+
+  load_search_modal = function(){
+    load_info_model();
+    show_variables_groups();
+    available_regions();
+
+  }
+  $("#btn-filter-groups-f").on("click", load_search_modal);
+
+    searchGroups = function() {
+      //intersection of two bounding boxes lat/long python library
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInputKeyword");
+      filter = input.value.toUpperCase();
+      table = document.getElementById(`groups-info-table`);
+      tr = table.getElementsByTagName("tr");
+
+      //first word filter //
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+
+          // if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          //   tr[i].style.display = "";
+          // } else {
+          //   tr[i].style.display = "none";
+          // }
+          console.log(layersDictExt)
+          // second country filter //
+          // Object.keys(layersDictExt).forEach(function(key) {
+
+          console.log(txtValue);
+          // console.log(key);
+          // bbox = layersDictExt[key]
+          bbox = layersDictExt[txtValue]
+          if (findIntersection(input.value, bbox) == true){
+            tr[i].style.display = "";
+          }
+          else{
+            tr[i].style.display = "none";
+          }
+          // })
+        }
+
+      }
+
+
+    }
+    $("#groupsFiltering").on("click", searchGroups);
+    reset_k= function(){
+      input = document.getElementById("myInputKeyword");
+      console.log(input)
+      if(input.value == ""){
+        table = document.getElementById(`groups-info-table`);
+        tr = table.getElementsByTagName("tr");
+
+        //first word filter //
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            tr[i].style.display = "";
+          }
+        }
+      }
+    }
+    document.getElementById('myInputKeyword').addEventListener("keyup", reset_k);
