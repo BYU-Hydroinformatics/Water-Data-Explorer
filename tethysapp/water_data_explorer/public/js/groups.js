@@ -960,8 +960,6 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
 
         // ONLY THE KEY WORDS //
         let key_words_to_search= get_all_the_checked_keywords();
-
-
         if(key_words_to_search.length > 0){
 
           // LOOK FOR THE GROUPS TO SEARCH//
@@ -983,7 +981,6 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
             console.log(allNoneGroups);
             allNoneGroups.forEach(function(e){
               e.parentNode.removeChild(e);
-
             })
 
             let servers_with_no_keyword=[]; // SERVERS WITH NO KEYWORD
@@ -1328,26 +1325,19 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
   }
 
   load_info_model = function(){
-    var HSTableHtml =
-        `<table id="groups-info-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+    var HSTableHtml = ''
       Object.keys(information_model).forEach(function(key) {
       console.log(key, information_model[key]);
       HSTableHtml +=
         `<p id="titleSite">${key}</p>`
-              // `<td> <p id="titleSite">${key}</p>`
       information_model[key].forEach(function(serviceView){
         HSTableHtml +=
-         '<tr class="odd gradeX2">'+
-         `<td><p>${serviceView}</p></td>`+
-         '</tr>'
-
+        `<p class= "fakeRow">${serviceView}</p>`
       })
 
-      // HSTableHtml += '</td>'+'</tr>'
-      // HSTableHtml += '</tr>'
 
-      HSTableHtml += "</tbody></table>"
     });
+
     $("#modalKeyWordSearch").find("#groups_services").html(HSTableHtml);
   }
 
