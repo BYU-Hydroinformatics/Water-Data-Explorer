@@ -128,7 +128,7 @@ def available_regions(request, app_workspace):
         #         # row.reset_index(drop=True, inplace=True)
         #         pip_mask = gdf.within(row.loc[0,'geometry'])
         #         print(pip_mask)
-    print(region_list)    
+    print(region_list)
     ret_object['countries'] = region_list
     return JsonResponse(ret_object)
 
@@ -238,7 +238,7 @@ def create_group(request):
     else:
         group_obj['message'] = 'There was an error while adding th group.'
 
-    print(group_obj['views'])
+    # print(group_obj['views'])
     return JsonResponse(group_obj)
 
 def giveServices(services,filter_serv=None):
