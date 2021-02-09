@@ -537,7 +537,7 @@ tr:hover {
   /* justify-content: center; */
 }
 
-#variablesLoading{
+#variablesLoading,#KeywordLoading{
   position:absolute;
   top:0;
   left:0;
@@ -582,9 +582,6 @@ tr:hover {
   flex-direction: column;
 }
 
-#keyword-modal-body{
-  display: flex;
-}
 #left-content {
   justify-content:center;
   width: 100%;

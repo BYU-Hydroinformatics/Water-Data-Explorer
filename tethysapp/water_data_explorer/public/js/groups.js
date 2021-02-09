@@ -75,7 +75,7 @@ show_variables_groups = function(){
       console.log(arr)
 
       var HSTableHtml =
-          `<table id="data-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+          `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
 
         arr.forEach(l_arr => {
           HSTableHtml +=  '<tr class="odd gradeX">'
@@ -1436,62 +1436,79 @@ $("#btn-r-reset").on("click", reset_keywords);
   }
   $("#btn-filter-groups-f").on("click", load_search_modal);
 
-    searchGroups = function() {
-      //intersection of two bounding boxes lat/long python library
-      var input, filter, table, tr, td, i, txtValue;
-      input = document.getElementById("myInputKeyword");
-      filter = input.value.toUpperCase();
-      table = document.getElementById(`groups_services`);
-      tr = table.getElementsByTagName("p");
+searchGroups = function() {
+  general_search("myInputKeyword","data-table");
+}
+document.getElementById('myInputKeyword').addEventListener("keyup", searchGroups);
 
-      //first word filter //
-      for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0];
-        if (td) {
-          txtValue = td.textContent || td.innerText;
-
-          // if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          //   tr[i].style.display = "";
-          // } else {
-          //   tr[i].style.display = "none";
-          // }
-          console.log(layersDictExt)
-          // second country filter //
-          // Object.keys(layersDictExt).forEach(function(key) {
-
-          console.log(txtValue);
-          // console.log(key);
-          // bbox = layersDictExt[key]
-          bbox = layersDictExt[txtValue]
-          if (findIntersection(input.value, bbox) == true){
-            tr[i].style.display = "";
-          }
-          else{
-            tr[i].style.display = "none";
-          }
-          // })
-        }
-
-      }
+searchVariables = function() {
+  general_search("myInputKeyword2","data-table-var");
+}
+document.getElementById('myInputKeyword2').addEventListener("keyup", searchVariables);
 
 
-    }
-    $("#groupsFiltering").on("click", searchGroups);
-    reset_k= function(){
-      input = document.getElementById("myInputKeyword");
-      console.log(input)
-      if(input.value == ""){
-        table = document.getElementById(`groups-info-table`);
-        tr = table.getElementsByTagName("tr");
 
-        //first word filter //
-        for (i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td")[0];
-          if (td) {
-            txtValue = td.textContent || td.innerText;
-            tr[i].style.display = "";
-          }
-        }
+general_search = function(id_search_input, id_table){
+  input = document.getElementById(`${id_search_input}`);
+
+  // input = document.getElementById("myInputKeyword");
+  console.log(input)
+  filter = input.value.toUpperCase();
+  table = document.getElementById(`${id_table}`);
+
+  // table = document.getElementById(`data-table`);
+  tr = table.getElementsByTagName("tr");
+  console.log(tr)
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
       }
     }
-    document.getElementById('myInputKeyword').addEventListener("keyup", reset_k);
+  }
+
+
+  // var input, filter, table, tr, td, i, txtValue;
+  // input = document.getElementById(`${id_search_input}`);
+  // filter = input.value.toUpperCase();
+  // table = document.getElementById(`${id_table}`);
+  // tr = table.getElementsByTagName("p");
+  //
+  // //first word filter //
+  // for (i = 0; i < tr.length; i++) {
+  //   td = tr[i].getElementsByTagName("td")[0];
+  //   if (td) {
+  //     txtValue = td.textContent || td.innerText;
+  //     if (txtValue.toUpperCase().indexOf(filter) > -1) {
+  //       tr[i].style.display = "";
+  //     } else {
+  //       tr[i].style.display = "none";
+  //     }
+  //   }
+  //
+  // }
+}
+    // reset_k= function(){
+    //   input = document.getElementById("myInputKeyword");
+    //   console.log(input)
+    //   filter = input.value.toUpperCase();
+    //   table = document.getElementById(`data-table`);
+    //   tr = table.getElementsByTagName("tr");
+    //   console.log(tr)
+    //   for (i = 0; i < tr.length; i++) {
+    //     td = tr[i].getElementsByTagName("td")[0];
+    //     if (td) {
+    //       txtValue = td.textContent || td.innerText;
+    //       if (txtValue.toUpperCase().indexOf(filter) > -1) {
+    //         tr[i].style.display = "";
+    //       } else {
+    //         tr[i].style.display = "none";
+    //       }
+    //     }
+    //   }
+    // }
+    // document.getElementById('myInputKeyword').addEventListener("keyup", reset_k);
