@@ -164,6 +164,7 @@ var filter_words,
     html_for_groups,
     change_effect_groups,
     toDegreesMinutesAndSeconds,
+    catalog_filter,
     generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that

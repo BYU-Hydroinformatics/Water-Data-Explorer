@@ -298,6 +298,10 @@
                        });
                    }
                  })
+                 let no_servers = `<button class="btn btn-danger btn-block" id = "${group_name}-noGroups"> The group does not have hydroservers</button>`
+                 $(no_servers).appendTo(`#${id_group_separator}`);
+                 $(`#${group_name}-noGroups`).addClass("hidden");
+
 
              },
              error: function(error) {
@@ -483,6 +487,7 @@ add_hydroserver = function(){
 
                      // $(newHtml).appendTo("#current-servers")
                      $(newHtml).appendTo(`#${id_group_separator}`);
+
                      console.log($(newHtml));
 
                      $(`#${title}_variables`).on("click",showVariables);
@@ -985,6 +990,7 @@ showAvailableSites = function(){
  let group = this.baseURI.split("/");
  // ONLY THE KEY WORDS //
  let datastring = Array.from(document.getElementsByClassName("odd gradeX2"));
+ console.log(datastring);
  let hs = datastring[0].offsetParent.id.split("-")[0];
 
  console.log(group);

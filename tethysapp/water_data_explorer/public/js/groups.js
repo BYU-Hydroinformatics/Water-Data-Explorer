@@ -80,7 +80,12 @@ show_variables_groups = function(){
         arr.forEach(l_arr => {
           HSTableHtml +=  '<tr class="odd gradeX">'
           l_arr.forEach(i =>{
-            HSTableHtml +=  `<td><input type="checkbox" name="name1" /> ${i}</td>`;
+            let new_i = i.replace(/ /g,"_");
+            HSTableHtml +=  `<td><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+            // HSTableHtml += `<th scope="row">${i}</th>
+            // <td><input type="checkbox" name="server_${i}" id="server" value=${i}></td>
+            // <td>${i}</td>`
+
           })
 
               HSTableHtml += '</tr>';
@@ -159,7 +164,8 @@ available_regions = function(){
         arr.forEach(l_arr => {
           HSTableHtml +=  '<tr class="odd gradeX">'
           l_arr.forEach(i =>{
-            HSTableHtml +=  `<td><input type="checkbox" name="name1" /> ${i}</td>`;
+            let new_i = i.replace(/ /g,"_");
+            HSTableHtml +=  `<td><input type="checkbox" id= "server" name="countries" value=${new_i} /> ${i}</td>`;
           })
 
               HSTableHtml += '</tr>';
@@ -541,6 +547,7 @@ create_group_hydroservers = function(){
                  load_individual_hydroservers_group(title);
                  let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
                  console.log(servers_checks);
+
                  // if(input_check.checked){
                  //   // load_individual_hydroservers_group(title);
                  //   let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
@@ -956,206 +963,57 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
   ************ PURPOSE : THE FUNCTION LETS YOU FILTER THE HYDROSERVERS LIST FROM THE SELECTED GROUPS OF HYDROSERVERS
 
   */
-    get_keywords_from_group = function(){
+catalog_filter = function(){
+  let elementForm= $("#modalKeyWordSearch");
+  console.log(elementForm)
+  let datastring= elementForm.serialize();
+  console.log(datastring);
+  $.ajax({
+      type: "GET",
+      url: `catalog-filter/`,
+      dataType: "HTML",
+      data: datastring,
+      success: function(result) {
+        let check_for_none = []
+        let hs_available = JSON.parse(result)['hs'];
+        // let hs_available = JSON.parse(result);
+        console.log(hs_available)
+        $("#current-Groupservers").find("li").each(function()
+           {
+              var $li=$(this)['0'];
+              console.log($li)
+              let id_li = $li['id'];
+              console.log(id_li)
 
-        // ONLY THE KEY WORDS //
-        let key_words_to_search= get_all_the_checked_keywords();
-        if(key_words_to_search.length > 0){
-
-          // LOOK FOR THE GROUPS TO SEARCH//
-          let input_check_array= get_active_hydroservers_groups();
-
-          // GET THE LI ELEMENTS OF THE MENU OF THE HYDROSERVERS //
-          // let lis = document.getElementById("current-servers").getElementsByTagName("li");
-          let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
-
-          let li_arrays = Array.from(lis);
-          li_arrays = li_arrays.filter(x => x.attributes['layer-name'].value !== "none");
-
-          console.log(li_arrays);
-
-          console.log(input_check_array);
-          // LOOP FOR ALL THE GROUPS THAT ARE CHECKED
-          input_check_array.forEach(function(hydroserver_group){
-            let allNoneGroups = Array.from(document.getElementsByClassName("noGroups"));
-            console.log(allNoneGroups);
-            allNoneGroups.forEach(function(e){
-              e.parentNode.removeChild(e);
-            })
-
-            let servers_with_no_keyword=[]; // SERVERS WITH NO KEYWORD
-            let all_servers_titles=[]; // ALL THE TITLES OF THE SERVERS
-
-            let send_group={
-              group: hydroserver_group
-            };
-            // $("#KeywordLoading").css({"margin-left":'40%', position:'relative',"z-index": 9999});
-            $("#KeywordLoading").removeClass("hidden");
-            $("#btn-key-search").hide();
-
-
-            $.ajax({
-              type:"GET",
-              url: `keyword-group`,
-              dataType: "JSON",
-              data: send_group,
-              success: function(result){
-                console.log(result);
-
-                //ALL THE SERVERS IN THE SELECTED GROUP //
-                let all_servers_in_group = result.hydroserver;
-                console.log(all_servers_in_group);
-
-                //LOOK FOR THE SERVERS THAT HAVE KEYWORDS //
-                let keywords_in_servers = get_servers_with_keywords_from_group(result, key_words_to_search);
-                // PRINT THE SERVERS WITH KEYWORDS
-                console.log(keywords_in_servers);
-
-
-                // GET ALL THE TITLES OF THE SERVERS ACTIVE OR NOT //
-                all_servers_in_group.forEach(server_in_group => {
-                        let title_add = server_in_group.title;
-                        all_servers_titles.push(title_add);
-                })
-
-                  // SERVERS WITH NO KEYWORDS //
-                  servers_with_no_keyword = all_servers_titles.filter(x => !keywords_in_servers.includes(x));
-
-                  //COMPARISON OF ALL THE SERVERS AND THE ONES ONLY WITH KEYWORDS //
-                  console.log(servers_with_no_keyword.length);
-                  console.log(all_servers_titles.length);
-
-                  // LI ELEMENTS THAT NEED TO BE DELETED
-                  let lis_to_delete = li_arrays.filter(x => servers_with_no_keyword.includes(x.attributes['layer-name'].value));
-                  console.log(lis_to_delete);
-
-
-                  //PRINT THE ARRAYS THAT KNOW WHICH LAYERS AND MENUS HAS BEEN ERRASED//
-                  console.log(lis_deleted);
-                  console.log(layers_deleted);
-
-                  console.log(lis_separators);
-                  console.log(keywords_in_servers);
-
-                  // ADDING THE LAYERS TO THE MAP AND MENUS THAT ARE LEFT //
-                  keywords_in_servers.forEach(function(server_name){
-                    let checks = true;
-                    let index = lis_deleted.length -1 ;
-                    while (index >= 0) {
-                      let title = lis_deleted[index].attributes['layer-name'].value;
-                        if (title === server_name) {
-                          // let title = lis.attributes['layer-name'].value;
-                          console.log(title);
-                          lis_separators[index].appendChild(lis_deleted[index]);
-                          layersDict[title] = layers_deleted[index];
-                          map.addLayer(layers_deleted[index]);
-                          lis_separators.splice(index, 1);
-                          lis_deleted.splice(index, 1);
-                          layers_deleted.splice(index , 1);
-                        }
-                        index -= 1;
-                    }
-
-                  })
-
-
-                  // DELETE THE LAYERS ON THE MAP AND ALSO THE MENUS //
-                  lis_to_delete.forEach(function(li_to_delete){
-                    let layer = li_to_delete.attributes['layer-name'].value;
-                    lis_deleted.push(li_to_delete);
-                    console.log(document.getElementById(`${hydroserver_group}_list_separator`));
-                    lis_separators.push(document.getElementById(`${hydroserver_group}_list_separator`));
-                    document.getElementById(`${hydroserver_group}_list_separator`).removeChild(li_to_delete);
-                    map.removeLayer(layersDict[layer]);
-                    layers_deleted.push(layersDict[layer]);
-                    delete layersDict[layer];
-                    map.updateSize();
-                  })
-
-                  let id_group_separator = `${hydroserver_group}_list_separator`;
-                  let separator_element = document.getElementById(id_group_separator);
-                  console.log(separator_element);
-                  let children_element = Array.from(separator_element.children);
-                  console.log(children_element);
-                  if(children_element.length === 0 ){
-                      let no_servers = `<button class="btn btn-danger btn-block noGroups"> The group does not have hydroservers</button>`
-                      // let no_servers = `<p class="no_groups_tag"> The group does not have hydroservers</p>`
-                        $(no_servers).appendTo(`#${id_group_separator}`) ;
-                  }
-                  else{
-                    let separators = Array.from(document.getElementsByClassName("no_groups_tag"));
-                    if(separators.length){
-                        separators.forEach(function(separator){
-                          separator.parentNode.removeChild(separator);
-                        })
-                    }
-
-                  }
-                  $("#KeywordLoading").addClass("hidden");
-
-                  $("#btn-key-search").show();
-                  // $("#modalKeyWordSearch").modal("hide");
-                  $("#modalKeyWordSearch").each(function() {
-                      this.reset()
-                  })
-
-                  cleanGraphs();
-
-
-              },
-
-              error: function(error) {
-                console.log(error);
-                // get_notification("danger",`Something were wrong when applying the filter with the keywords`);
-                $.notify(
-                    {
-                        message: `Something were wrong when applying the filter with the keywords`
-                    },
-                    {
-                        type: "danger",
-                        allow_dismiss: true,
-                        z_index: 20000,
-                        delay: 5000
-                    }
-                )
-
+              if(hs_available.includes(id_li)){
+                $(`#${id_li}`).removeClass("hidden");
+                check_for_none.push(id_li);
               }
-            });
+              else{
+                $(`#${id_li}`).addClass("hidden");
+              }
+           });
+        console.log(information_model);
+        Object.keys(information_model).forEach(function(key) {
+          console.log(information_model[key].some(r=> check_for_none.includes(r)));
+            if (information_model[key].some(r=> check_for_none.includes(r))) {
+              $(`#${key}-noGroups`).addClass("hidden");
 
-          })
-
-      }
-      else {
-
-        console.log("I am here with no keywords");
-        console.log(lis_deleted);
-        console.log(layers_deleted);
-        console.log(lis_separators);
-        let i = 0;
-        lis_deleted.forEach( function(lis){
-          let title = lis.attributes['layer-name'].value;
-          lis_separators[i].appendChild(lis);
-          layersDict[title] = layers_deleted[i];
-          map.addLayer(layers_deleted[i]);
-          i = i + 1;
-        })
-        lis_deleted = [];
-        layers_deleted = [];
-        lis_separators = [];
-
-        let separator_elements = Array.from(document.getElementsByClassName("no_groups_tag"));
-        separator_elements.forEach(function(element){
-          element.parentNode.removeChild(element);
-        })
-
-
-        // get_notification("info", `You need to select at least one keyword` )
+            }
+            else{
+              $(`#${key}-noGroups`).removeClass("hidden");
+            }
+        });
+      },
+      error: function(error) {
+        console.log(error);
+        // get_notification("danger",`Something were wrong when applying the filter with the keywords`);
         $.notify(
             {
-                message: `You need to select at least one keyword`
+                message: `Something were wrong when applying the filter with variables and regions`
             },
             {
-                type: "info",
+                type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
                 delay: 5000
@@ -1163,67 +1021,296 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
         )
 
       }
-    }
 
-    $("#btn-key-search").on("click", get_keywords_from_group);
+    })
 
-    /*
-    ************ FUNCTION NAME : RESET KEYWORDS
-    ************ PURPOSE : THE FUNCTION LETS YOU RESET ALL THE KEYWORDS
-    */
-    reset_keywords = function(){
-      // UNCHECK ALL THE BOXES AND CHECK IF THERE WAS SOME THAT WERE CHECKED BEFORE //
-      // $("#KeywordLoading").css({"margin-left":'40%', position:'relative',"z-index": 9999});
-      // $("#KeywordLoading").removeClass("hidden");
-      // $("#btn-key-search").hide();
-      console.log("IN THE FUNCTION FOR RESETING ");
-      let allNoneGroups = Array.from(document.getElementsByClassName("noGroups"));
-      console.log(allNoneGroups);
-      allNoneGroups.forEach(function(e){
-        e.parentNode.removeChild(e);
+}
+$("#btn-key-search").on("click", catalog_filter);
+
+reset_keywords = function(){
+  Object.keys(information_model).forEach(function(key) {
+        $(`#${key}-noGroups`).addClass("hidden");
+  });
+  $("#current-Groupservers").find("li").each(function()
+     {
+        var $li=$(this)['0'];
+        let id_li = $li['id'];
+        $(`#${id_li}`).removeClass("hidden");
+     });
+}
+
+get_keywords_from_group = function(){
+
+    // let groups_list_table = document.getElementById(`groups_services`);
+    // let all_groups = groups_list_table.getElementsByTagName("p");
+
+    // ONLY THE KEY WORDS //
+    let key_words_to_search= get_all_the_checked_keywords();
+
+    if(key_words_to_search.length > 0){
+
+      // LOOK FOR THE GROUPS TO SEARCH//
+      let input_check_array= get_active_hydroservers_groups();
+
+      // GET THE LI ELEMENTS OF THE MENU OF THE HYDROSERVERS //
+      // let lis = document.getElementById("current-servers").getElementsByTagName("li");
+      let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
+
+      let li_arrays = Array.from(lis);
+      li_arrays = li_arrays.filter(x => x.attributes['layer-name'].value !== "none");
+
+      console.log(li_arrays);
+
+      console.log(input_check_array);
+      // LOOP FOR ALL THE GROUPS THAT ARE CHECKED
+      input_check_array.forEach(function(hydroserver_group){
+        let allNoneGroups = Array.from(document.getElementsByClassName("noGroups"));
+        console.log(allNoneGroups);
+        allNoneGroups.forEach(function(e){
+          e.parentNode.removeChild(e);
+        })
+
+        let servers_with_no_keyword=[]; // SERVERS WITH NO KEYWORD
+        let all_servers_titles=[]; // ALL THE TITLES OF THE SERVERS
+
+        let send_group={
+          group: hydroserver_group
+        };
+        // $("#KeywordLoading").css({"margin-left":'40%', position:'relative',"z-index": 9999});
+        $("#KeywordLoading").removeClass("hidden");
+        $("#btn-key-search").hide();
+
+
+        $.ajax({
+          type:"GET",
+          url: `keyword-group`,
+          dataType: "JSON",
+          data: send_group,
+          success: function(result){
+            console.log(result);
+
+            //ALL THE SERVERS IN THE SELECTED GROUP //
+            let all_servers_in_group = result.hydroserver;
+            console.log(all_servers_in_group);
+
+            //LOOK FOR THE SERVERS THAT HAVE KEYWORDS //
+            let keywords_in_servers = get_servers_with_keywords_from_group(result, key_words_to_search);
+            // PRINT THE SERVERS WITH KEYWORDS
+            console.log(keywords_in_servers);
+
+
+            // GET ALL THE TITLES OF THE SERVERS ACTIVE OR NOT //
+            all_servers_in_group.forEach(server_in_group => {
+                    let title_add = server_in_group.title;
+                    all_servers_titles.push(title_add);
+            })
+
+              // SERVERS WITH NO KEYWORDS //
+              servers_with_no_keyword = all_servers_titles.filter(x => !keywords_in_servers.includes(x));
+
+              //COMPARISON OF ALL THE SERVERS AND THE ONES ONLY WITH KEYWORDS //
+              console.log(servers_with_no_keyword.length);
+              console.log(all_servers_titles.length);
+
+              // LI ELEMENTS THAT NEED TO BE DELETED
+              let lis_to_delete = li_arrays.filter(x => servers_with_no_keyword.includes(x.attributes['layer-name'].value));
+              console.log(lis_to_delete);
+
+
+              //PRINT THE ARRAYS THAT KNOW WHICH LAYERS AND MENUS HAS BEEN ERRASED//
+              console.log(lis_deleted);
+              console.log(layers_deleted);
+
+              console.log(lis_separators);
+              console.log(keywords_in_servers);
+
+              // ADDING THE LAYERS TO THE MAP AND MENUS THAT ARE LEFT //
+              keywords_in_servers.forEach(function(server_name){
+                let checks = true;
+                let index = lis_deleted.length -1 ;
+                while (index >= 0) {
+                  let title = lis_deleted[index].attributes['layer-name'].value;
+                    if (title === server_name) {
+                      // let title = lis.attributes['layer-name'].value;
+                      console.log(title);
+                      lis_separators[index].appendChild(lis_deleted[index]);
+                      layersDict[title] = layers_deleted[index];
+                      map.addLayer(layers_deleted[index]);
+                      lis_separators.splice(index, 1);
+                      lis_deleted.splice(index, 1);
+                      layers_deleted.splice(index , 1);
+                    }
+                    index -= 1;
+                }
+
+              })
+
+
+              // DELETE THE LAYERS ON THE MAP AND ALSO THE MENUS //
+              lis_to_delete.forEach(function(li_to_delete){
+                let layer = li_to_delete.attributes['layer-name'].value;
+                lis_deleted.push(li_to_delete);
+                console.log(document.getElementById(`${hydroserver_group}_list_separator`));
+                lis_separators.push(document.getElementById(`${hydroserver_group}_list_separator`));
+                document.getElementById(`${hydroserver_group}_list_separator`).removeChild(li_to_delete);
+                map.removeLayer(layersDict[layer]);
+                layers_deleted.push(layersDict[layer]);
+                delete layersDict[layer];
+                map.updateSize();
+              })
+
+              let id_group_separator = `${hydroserver_group}_list_separator`;
+              let separator_element = document.getElementById(id_group_separator);
+              console.log(separator_element);
+              let children_element = Array.from(separator_element.children);
+              console.log(children_element);
+              if(children_element.length === 0 ){
+                  let no_servers = `<button class="btn btn-danger btn-block noGroups"> The group does not have hydroservers</button>`
+                  // let no_servers = `<p class="no_groups_tag"> The group does not have hydroservers</p>`
+                    $(no_servers).appendTo(`#${id_group_separator}`) ;
+              }
+              else{
+                let separators = Array.from(document.getElementsByClassName("no_groups_tag"));
+                if(separators.length){
+                    separators.forEach(function(separator){
+                      separator.parentNode.removeChild(separator);
+                    })
+                }
+
+              }
+              $("#KeywordLoading").addClass("hidden");
+
+              $("#btn-key-search").show();
+              // $("#modalKeyWordSearch").modal("hide");
+              $("#modalKeyWordSearch").each(function() {
+                  this.reset()
+              })
+
+              cleanGraphs();
+
+
+          },
+
+          error: function(error) {
+            console.log(error);
+            // get_notification("danger",`Something were wrong when applying the filter with the keywords`);
+            $.notify(
+                {
+                    message: `Something were wrong when applying the filter with the keywords`
+                },
+                {
+                    type: "danger",
+                    allow_dismiss: true,
+                    z_index: 20000,
+                    delay: 5000
+                }
+            )
+
+          }
+        });
 
       })
-      let datastring = Array.from(document.getElementsByClassName("odd gradeX"));
-      datastring.forEach(function(data){
-        Array.from(data.children).forEach(function(column){
-          if(Array.from(column.children)[0].checked ==true){
-            Array.from(column.children)[0].checked = false;
-          }
-        })
-      });
 
-        console.log("I am here with no keywords");
-        console.log(lis_deleted);
-        console.log(layers_deleted);
-        console.log(typeof(layers_deleted));
-        console.log(lis_separators);
-        let index = 0;
+  }
+  else {
 
-        lis_deleted.forEach( function(lis){
-          lis.style.visibility = "visible";
-          console.log("hola");
-          let title = lis.attributes['layer-name'].value;
+    console.log("I am here with no keywords");
+    console.log(lis_deleted);
+    console.log(layers_deleted);
+    console.log(lis_separators);
+    let i = 0;
+    lis_deleted.forEach( function(lis){
+      let title = lis.attributes['layer-name'].value;
+      lis_separators[i].appendChild(lis);
+      layersDict[title] = layers_deleted[i];
+      map.addLayer(layers_deleted[i]);
+      i = i + 1;
+    })
+    lis_deleted = [];
+    layers_deleted = [];
+    lis_separators = [];
 
-          lis_separators[index].appendChild(lis);
+    let separator_elements = Array.from(document.getElementsByClassName("no_groups_tag"));
+    separator_elements.forEach(function(element){
+      element.parentNode.removeChild(element);
+    })
 
-          layersDict[title] = layers_deleted[index];
 
-          map.addLayer(layersDict[title]);
+    // get_notification("info", `You need to select at least one keyword` )
+    $.notify(
+        {
+            message: `You need to select at least one keyword`
+        },
+        {
+            type: "info",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000
+        }
+    )
 
-          index = index + 1;
-        })
+  }
+}
 
-        lis_deleted = [];
-        layers_deleted = [];
-        lis_separators = [];
-        let separator_elements = Array.from(document.getElementsByClassName("no_groups_tag"));
-        separator_elements.forEach(function(element){
-          element.parentNode.removeChild(element);
-        })
-        // $("#KeywordLoading").addClass("hidden");
+// $("#btn-key-search").on("click", get_keywords_from_group);
 
-    }
-    $("#btn-r-reset").on("click", reset_keywords);
+/*
+************ FUNCTION NAME : RESET KEYWORDS
+************ PURPOSE : THE FUNCTION LETS YOU RESET ALL THE KEYWORDS
+*/
+// reset_keywords = function(){
+//   // UNCHECK ALL THE BOXES AND CHECK IF THERE WAS SOME THAT WERE CHECKED BEFORE //
+//   // $("#KeywordLoading").css({"margin-left":'40%', position:'relative',"z-index": 9999});
+//   // $("#KeywordLoading").removeClass("hidden");
+//   // $("#btn-key-search").hide();
+//   console.log("IN THE FUNCTION FOR RESETING ");
+//   let allNoneGroups = Array.from(document.getElementsByClassName("noGroups"));
+//   console.log(allNoneGroups);
+//   allNoneGroups.forEach(function(e){
+//     e.parentNode.removeChild(e);
+//
+//   })
+//   let datastring = Array.from(document.getElementsByClassName("odd gradeX"));
+//   datastring.forEach(function(data){
+//     Array.from(data.children).forEach(function(column){
+//       if(Array.from(column.children)[0].checked ==true){
+//         Array.from(column.children)[0].checked = false;
+//       }
+//     })
+//   });
+//
+//     console.log("I am here with no keywords");
+//     console.log(lis_deleted);
+//     console.log(layers_deleted);
+//     console.log(typeof(layers_deleted));
+//     console.log(lis_separators);
+//     let index = 0;
+//
+//     lis_deleted.forEach( function(lis){
+//       lis.style.visibility = "visible";
+//       console.log("hola");
+//       let title = lis.attributes['layer-name'].value;
+//
+//       lis_separators[index].appendChild(lis);
+//
+//       layersDict[title] = layers_deleted[index];
+//
+//       map.addLayer(layersDict[title]);
+//
+//       index = index + 1;
+//     })
+//
+//     lis_deleted = [];
+//     layers_deleted = [];
+//     lis_separators = [];
+//     let separator_elements = Array.from(document.getElementsByClassName("no_groups_tag"));
+//     separator_elements.forEach(function(element){
+//       element.parentNode.removeChild(element);
+//     })
+//     // $("#KeywordLoading").addClass("hidden");
+//
+// }
+$("#btn-r-reset").on("click", reset_keywords);
 
     /*
     ************ FUNCTION NAME : GET_ALL_THE_CHECKED_KEYWORDS
@@ -1329,7 +1416,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
       Object.keys(information_model).forEach(function(key) {
       console.log(key, information_model[key]);
       HSTableHtml +=
-        `<p id="titleSite">${key}</p>`
+        `<h4 id="titleSite">${key}</h4>`
       information_model[key].forEach(function(serviceView){
         HSTableHtml +=
         `<p class= "fakeRow">${serviceView}</p>`
@@ -1343,7 +1430,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
 
   load_search_modal = function(){
     load_info_model();
-    show_variables_groups();
+    // show_variables_groups();
     available_regions();
 
   }
@@ -1354,8 +1441,8 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
       var input, filter, table, tr, td, i, txtValue;
       input = document.getElementById("myInputKeyword");
       filter = input.value.toUpperCase();
-      table = document.getElementById(`groups-info-table`);
-      tr = table.getElementsByTagName("tr");
+      table = document.getElementById(`groups_services`);
+      tr = table.getElementsByTagName("p");
 
       //first word filter //
       for (i = 0; i < tr.length; i++) {

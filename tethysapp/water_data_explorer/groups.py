@@ -507,6 +507,118 @@ def delete_group(request):
 
     return JsonResponse(list_response)
 
+@app_workspace
+def catalog_filter(request,app_workspace):
+    ret_obj = {}
+    print("inside first if statement of create group")
+    countries = request.GET.getlist('countries')
+    count_new = []
+    var_new = []
+    for count in countries:
+        count_new.append(count.replace("_"," "))
+    countries = count_new
+    print(countries)
+    variables = request.GET.getlist('variables')
+    for varia in variables:
+        var_new.append(varia.replace("_"," "))
+    variables = var_new
+    print(variables)
+    # shapely.speedups.enable()
+    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
+    hs_filtered_region = filter_region(countries_geojson_file_path,countries)
+    hs_filtered_variable = filter_variable(variables)
+    print("hs_filtered_region",hs_filtered_region)
+    print("hs_filtered_variable",hs_filtered_variable)
+    intersection_hs = []
+    if len(hs_filtered_region) > 0 and len(hs_filtered_variable) > 0:
+        intersection_hs = list(set(hs_filtered_region) & set(hs_filtered_variable))
+    if len(hs_filtered_region) > 0:
+        intersection_hs = hs_filtered_region
+    if len(hs_filtered_variable) > 0:
+        intersection_hs = hs_filtered_variable 
+    print(intersection_hs)
+    ret_obj['hs'] = intersection_hs
+    # countries_gdf = gpd.read_file(countries_geojson_file_path)
+    # countries_gdf = countries_gdf[countries_gdf['name'].isin(countries)]
+    # print(countries_gdf)
+    return JsonResponse(ret_obj)
+
+
+def filter_region(countries_geojson_file_path,list_countries):
+    region_list = []
+    if len(list_countries) > 0:
+        shapely.speedups.enable()
+        # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
+        countries_gdf = gpd.read_file(countries_geojson_file_path)
+        countries_gdf2 = countries_gdf[countries_gdf['name'].isin(list_countries)]
+        countries_series = countries_gdf2.loc[:,'geometry']
+        # print(countries_gdf2)
+        SessionMaker = app.get_persistent_store_database(
+            Persistent_Store_Name, as_sessionmaker=True)
+        session = SessionMaker()
+        hydroserver_lat_list = []
+        hydroserver_long_list = []
+        hydroserver_name_list = []
+        servers = []
+        for server in session.query(HydroServer_Individual).all():
+            servers.append(server.title)
+            sites = json.loads(server.siteinfo)
+            ls_lats = []
+            ls_longs = []
+            site_names = []
+            for site in sites:
+                ls_lats.append(site['latitude'])
+                ls_longs.append(site['longitude'])
+                site_names.append(site['sitename'])
+            hydroserver_lat_list.append(ls_lats)
+            hydroserver_long_list.append(ls_longs)
+            hydroserver_name_list.append(site_names)
+
+        for indx in range(0,len(hydroserver_name_list)):
+            df = pd.DataFrame({'SiteName': hydroserver_name_list[indx],'Latitude': hydroserver_lat_list[indx],'Longitude': hydroserver_long_list[indx]})
+            gdf = gpd.GeoDataFrame(geometry=gpd.points_from_xy(df.Longitude, df.Latitude), index = hydroserver_name_list[indx])
+            # print(gdf)
+
+            gdf = gdf.assign(**{str(key): gdf.within(geom) for key, geom in countries_series.items()})
+            # print(gdf)
+            trues_onlys = gdf.loc[:,gdf.any()]
+            # print('trues')
+            # print(trues_onlys)
+            countries_index = list(trues_onlys.columns)
+            countries_index = [x for x in countries_index if x != 'geometry']
+            countries_index = [int(i) for i in countries_index]
+            # print("indices")
+            # print(countries_index)
+            countries_selected = countries_gdf.iloc[countries_index]
+            # print("selected")
+            # print(countries_selected)
+            list_countries_selected = list(countries_selected['name'])
+            # print(list_countries_selected)
+            if len(list_countries_selected) > 0:
+                # region_list.append(servers[indx])
+                region_list.append(session.query(HydroServer_Individual).all()[indx].title)
+    # print(region_list)
+    return region_list
+def filter_variable(variables_list):
+    hs_list = []
+    if len(variables_list) > 0:
+        list_catalog={}
+        SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
+        session = SessionMaker()  # Initiate a session
+
+        hs_list = []
+        for hydroservers in session.query(HydroServer_Individual).all():
+            name = hydroservers.title
+            water = pwml.WaterMLOperations(url = hydroservers.url.strip())
+            variables_sever = water.GetVariables()
+            print(variables_sever)
+            check = any(item in variables_sever for item in variables_list)
+            if check is True:
+                hs_list.append(name)
+
+    return hs_list
+
+
 ######*****************************************************************************************################
 ############################## Function to retrieve the keywords for all the selected groups #############################
 ######*****************************************************************************************################

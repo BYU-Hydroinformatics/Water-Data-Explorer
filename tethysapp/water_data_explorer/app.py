@@ -91,6 +91,9 @@ class WaterDataExplorer(TethysAppBase):
             UrlMap(name='available-regions',
                    url='available-regions',
                    controller='water_data_explorer.groups.available_regions'),
+            UrlMap(name='catalog-filter',
+                   url='catalog-filter',
+                   controller='water_data_explorer.groups.catalog_filter'),
 
         )
 
