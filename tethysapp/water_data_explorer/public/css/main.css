@@ -585,10 +585,13 @@ tr:hover {
 #keyword-modal-body{
   display: flex;
 }
-#left-content, #right-content {
+#left-content {
   justify-content:center;
   width: 100%;
   padding: 0.5em;
+}
+#groups_countries, #groups_variables{
+  width: 100%;
 }
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;

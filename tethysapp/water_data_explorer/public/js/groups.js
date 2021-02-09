@@ -1430,7 +1430,7 @@ $("#btn-r-reset").on("click", reset_keywords);
 
   load_search_modal = function(){
     load_info_model();
-    // show_variables_groups();
+    show_variables_groups();
     available_regions();
 
   }
