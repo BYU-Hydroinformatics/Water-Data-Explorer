@@ -95,17 +95,16 @@ activate_layer_values = function (){
             ` <p> <em> Station/Platform Name:</em> ${feature.values_['name']}<p>
               <p> <em> Territory of origin of data:</em> in construction<p>
               <p> <em> Supervising Organization:</em> ${result['description'][Object.keys(result['description'])[0]]['organization']} <p>
-              <p> <em> Geospatial Location:</em> lat: ${new_lat} lon: ${new_lon} <p>
-              <p> <em>Description:</em> ${result['description'][Object.keys(result['description'])[0]]['sourceDescription']}</p>`
+              <p> <em> Geospatial Location:</em> lat: ${new_lat} lon: ${new_lon} <p>`
 
           let table_begin =
         `<br>
         <p>Table of Variables</p>
         <table id="siteVariableTable" class="table table-striped table-hover table-condensed">
             <tr class="danger">
-              <th>Observerd Variable</th>
-              <th>Units</th>
-              <th>Time Extent</th>
+              <th>Observed Variables</th>
+              <th>Unit</th>
+              <th>Temporal Extent</th>
             </tr>`;
           for(let i=0; i<result['variables'].length ; ++i){
             let variable_new = result['variables'][i]
