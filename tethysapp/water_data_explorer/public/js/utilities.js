@@ -380,22 +380,38 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
   // };
 }
 function featureStyle(myColor) {
-    var style = new ol.style.Style({
-        image: new ol.style.Circle({
-            radius: 6,
+    console.log("ahuringa")
+    var styleCache = {};
+    var style2 =
+    function (feature) {
+      var size = feature.get('features').length;
+      var style = styleCache[size];
+      if (!style) {
+        style = new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 10,
             stroke: new ol.style.Stroke({
-                color: "white",
-                width: 1
+              color: "white",
             }),
             fill: new ol.style.Fill({
-                // color: `#${(((1 << 24) * Math.random()) | 0).toString(16)}`
-                // color: get_new_color()
-                color: myColor
-            })
-        })
-    })
-    return style
+              color: myColor,
+            }),
+          }),
+          text: new ol.style.Text({
+            text: size.toString(),
+            fill: new ol.style.Fill({
+              color: '#fff',
+            }),
+          }),
+        });
+        styleCache[size] = style;
+      }
+      return style;
+    }
+    return style2
 }
+
+
 
 function get_new_color(){
   var color_new = colors_unique[Math.floor(Math.random() * colors_unique.length)];
@@ -501,8 +517,31 @@ function change_effect_groups(element_to_check,id_group_separator){
       });
    }
 }
-function html_for_servers(){
+function html_for_servers(title,group_name,isNew){
+  let check_var = (( isNew == true ) ? 'checked' : '');
+  let newHtml = `
+  <li class="ui-state-default" layer-name="${title}" id="${title}" >
+  <span class="server-name">${title}</span>
+  <input class="chkbx-layer" type="checkbox" ${check_var}>
+  <button type="button" id="${title}_${group_name}_reload" class="btn btn-dark btn-sm">
+   <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+  </button>
+  <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
+   <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+  </button>
+  <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariables"> <span class="glyphicon glyphicon-filter"></span>
+  </button>
 
+  <button type="button" id="${title}_variables_info" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalHydroserInformation">
+   <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+  </button>
+
+  <button type="button" id="${group_name}_${title}_del_endpoint" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#DeleteWarning2">
+   <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+  </button>
+  </li>
+  `;
+  return newHtml
 
 }
 function toDegreesMinutesAndSeconds(coordinate) {

@@ -14,6 +14,7 @@ activate_layer_values = function (){
     console.log(object_request);
 
     var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+        console.log(feature)
         //you can add a condition on layer to restrict the listener
         if(feature){
 
@@ -59,15 +60,16 @@ activate_layer_values = function (){
         'pie':{},
         'whisker':{}
       }
+      let feature_single = feature.values_.features[0]
       console.log(feature.values_['hs_name']);
 
       // $("#siteName_title").html(feature.values_['name']);
       $("#siteName_title").html("Site Information");
       // object_request['hs_name']=feature.values_['hs_name'];
       // object_request['site_name']=feature.values_['name'];
-      object_request['hs_url']=feature.values_['hs_url'];
-      object_request['code']=feature.values_['code'];
-      object_request['network']=feature.values_['network'];
+      object_request['hs_url']=feature_single.values_['hs_url'];
+      object_request['code']=feature_single.values_['code'];
+      object_request['network']=feature_single.values_['network'];
       // $("#plots").hide();
       // $("#graphAddLoading").css({left:'50%',bottom:"15%", position:'absolute',"z-index": 9999});
       // $("#graphAddLoading").removeClass("hidden");
