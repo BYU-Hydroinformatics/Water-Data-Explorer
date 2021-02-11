@@ -61,7 +61,8 @@ activate_layer_values = function (){
         'whisker':{}
       }
       let feature_single = feature.values_.features[0]
-      console.log(feature.values_['hs_name']);
+      console.log(feature_single)
+      console.log(feature_single.values_['hs_name']);
 
       // $("#siteName_title").html(feature.values_['name']);
       $("#siteName_title").html("Site Information");
@@ -94,8 +95,8 @@ activate_layer_values = function (){
           console.log(new_lon)
 
           description_site.innerHTML =
-            ` <p> <em> Station/Platform Name:</em> ${feature.values_['name']}<p>
-              <p> <em> Territory of origin of data:</em> in construction<p>
+            ` <p> <em> Station/Platform Name:</em> ${feature_single.values_['name']}<p>
+              <p> <em> Territory of origin of data:</em> Data Not available<p>
               <p> <em> Supervising Organization:</em> ${result['description'][Object.keys(result['description'])[0]]['organization']} <p>
               <p> <em> Geospatial Location:</em> lat: ${new_lat} lon: ${new_lon} <p>`
 

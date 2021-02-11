@@ -5,6 +5,7 @@ import os
 import json
 import pandas as pd
 import numpy as np
+sys.path.append("/home/elkin/Projects/condaPackages/pywaterml")
 
 import pywaterml.waterML as pwml
 from django.shortcuts import render
@@ -67,7 +68,7 @@ def get_variables_hs(request):
             # client = Client(url = hydroservers.url.strip(), timeout= 500)
             # keywords = client.service.GetVariables('[:]')
             water = pwml.WaterMLOperations(url = hydroservers.url.strip())
-            keywords = water.GetVariables()
+            keywords = water.GetVariables()['variableName']
             # keywords_dict = xmltodict.parse(keywords)
             # keywords_dict_object = json.dumps(keywords_dict)
             #
