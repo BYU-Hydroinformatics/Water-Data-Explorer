@@ -53,7 +53,7 @@ def checkCentral(centralUrl):
 
 def parseService(centralUrl):
     url = centralUrl + "/GetWaterOneFlowServiceInfo"
-    print(url)
+    # print(url)
     response = urllib.request.urlopen(url)
     # response = request.get(url)
     data = response.read()
@@ -70,6 +70,8 @@ def parseService(centralUrl):
                 newService['Title'] = child.text
             if child.tag == '{http://hiscentral.cuahsi.org/20100205/}organization':
                 newService['organization'] = child.text
+            if child.tag == '{http://hiscentral.cuahsi.org/20100205/}aabstract':
+                newService['aabstract'] = child.text
 
         services.append(newService)
 
