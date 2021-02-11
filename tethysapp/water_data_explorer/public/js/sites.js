@@ -225,11 +225,11 @@ activate_layer_values = function (){
           console.log(object_request);
           console.log($('#variables_graph'));
           let object_request2 = {};
-          object_request2['hs_name']=feature.values_['hs_name'];
-          object_request2['site_name']=feature.values_['name'];
-          object_request2['hs_url']=feature.values_['hs_url'];
-          object_request2['code']=feature.values_['code'];
-          object_request2['network']=feature.values_['network'];
+          object_request2['hs_name']=feature_single.values_['hs_name'];
+          object_request2['site_name']=feature_single.values_['name'];
+          object_request2['hs_url']=feature_single.values_['hs_url'];
+          object_request2['code']=feature_single.values_['code'];
+          object_request2['network']=feature_single.values_['network'];
           //CONTINUE HERE // AND TRY TO SEE HOW IT GOES //
           // console.log(object_request);
           var selectedItem = $('#variables_graph')['0'].value;
