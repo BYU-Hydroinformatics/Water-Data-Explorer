@@ -590,6 +590,14 @@ tr:hover {
 #groups_countries, #groups_variables{
   width: 100%;
 }
+
+#tableLegend{
+  position: absolute;
+  top: 5%;
+  right: 1%;
+  padding: 0.5em;
+  background-color: rgba(255,255,255,0.5);
+}
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;
   border-color:#46b8da !important;

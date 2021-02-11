@@ -353,6 +353,7 @@ create_group_hydroservers = function(){
                 if(this.checked){
                   console.log(" it is checked");
                   load_individual_hydroservers_group(title);
+                  
                 }
                 else{
                   // delete the lsit of hydroservers being display // make a function to delete it

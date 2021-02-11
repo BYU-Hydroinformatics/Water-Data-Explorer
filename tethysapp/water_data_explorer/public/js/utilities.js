@@ -408,6 +408,7 @@ function featureStyle(myColor) {
       }
       return style;
     }
+
     return style2
 }
 
@@ -552,4 +553,36 @@ function toDegreesMinutesAndSeconds(coordinate) {
     var seconds = Math.floor((minutesNotTruncated - minutes) * 60);
 
     return degrees + "°" + minutes + "'" + seconds + "''";
+}
+getIconLegend = function(style,server) {
+  style = style.getImage();
+  var radius = style.getRadius();
+  var strokeWidth = style.getStroke().getWidth();
+  var dx = radius + strokeWidth;
+  // var newHtml = `<svg class='svgs_legend' width =11 height=11>
+  //                   <p> ${server}</p>
+  //                   <circle cx=5, cy=5 r=5 stroke=${style.getStroke().getColor()} stroke-width= ${strokeWidth} fill =${style.getFill().getColor()} ></circle>
+  //               </svg>`
+  // $(newHtml).appendTo('#legendText');
+
+  var svgElem = $('<svg/>')
+  .attr({
+    class: 'svgs_legend',
+    width: 11,
+    height: 11
+  });
+  $('<circle />')
+  .attr({
+    cx: 5,
+    cy: 5,
+    r: 5,
+    stroke: style.getStroke().getColor(),
+    'stroke-width': strokeWidth,
+    fill: style.getFill().getColor()
+  })
+  .appendTo(svgElem);
+
+
+  // Convert DOM object to string to overcome from some SVG manipulation related oddities
+  return $('<div>').append(svgElem).html();
 }

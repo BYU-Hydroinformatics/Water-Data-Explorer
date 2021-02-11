@@ -168,6 +168,8 @@ var filter_words,
     catalog_filter,
     general_search,
     searchVariables,
+    getIconLegend,
+    addLegendMap,
     generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that

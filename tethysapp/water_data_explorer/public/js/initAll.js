@@ -324,7 +324,14 @@ var water_data_explorer_PACKAGE = (function() {
       $modalInterface = $("#modalInterface");
       $hs_list = $("#current-servers-list");
     }
+    addLegendMap = function(map){
+      let element = document.getElementById("tableLegend");
+      var controlPanel = new ol.control.Control({
+        element: element
+      });
+      map.addControl(controlPanel);
 
+    }
   /************************************************************************
    *                  INITIALIZATION / CONSTRUCTOR
    *************************************************************************/
@@ -341,6 +348,8 @@ var water_data_explorer_PACKAGE = (function() {
     add_boundary_map(geoServerColor, geoServerWidth, map);
     activate_deactivate_graphs();
     give_name();
+    addLegendMap(map);
+
 
   })
 })() // End of package wrapper

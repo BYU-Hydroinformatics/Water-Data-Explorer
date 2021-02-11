@@ -172,10 +172,37 @@
                        //     source: vectorSource,
                        //     style: featureStyle(layerColorDict[title])
                        // })
+                       let style_custom = featureStyle(layerColorDict[title])
                        var vectorLayer = new ol.layer.Vector({
                          source: clusterSource,
-                         style: featureStyle(layerColorDict[title])
+                         style: style_custom
                        });
+                       console.log(style_custom)
+
+                       let test_style = new ol.style.Style({
+                         image: new ol.style.Circle({
+                           radius: 10,
+                           stroke: new ol.style.Stroke({
+                             color: "white",
+                           }),
+                           fill: new ol.style.Fill({
+                             color: layerColorDict[title],
+                           }),
+                         })
+                       });
+                       // getIconLegend(test_style,title);
+                       let rowHTML= `<tr id= ${title}-row-complete>
+                                      <th id="${title}-row-legend"></th>
+                                      <th>${title}</th>
+                                    </tr>`
+                      if(!document.getElementById(`${title}-row-complete`)){
+                        $(rowHTML).appendTo('#tableLegend');
+                      }
+                      $(`#${title}-row-legend`).prepend($(getIconLegend(test_style,title)));
+                      // $('#legendSymbol').prepend($(getIconLegend(test_style,title)));
+
+
+                       // $('#legendText').prepend(`<p>${title}</p>`);
 
                        // const vectorLayer = new ol.layer.Vector({
                        //     source: vectorSource,
