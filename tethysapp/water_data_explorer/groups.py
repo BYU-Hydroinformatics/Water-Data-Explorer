@@ -6,6 +6,8 @@ import json
 import pandas as pd
 import geopandas as gpd
 import numpy as np
+import sys
+sys.path.append("/home/elkin/Projects/condaPackages/pywaterml")
 import pywaterml.waterML as pwml
 import shapely.speedups
 from urllib.error import HTTPError
@@ -45,7 +47,7 @@ from .app import WaterDataExplorer as app
 from tethys_sdk.workspaces import app_workspace
 
 from shapely.geometry import Point, Polygon
-
+import zeep
 Persistent_Store_Name = 'catalog_db'
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.client').setLevel(logging.DEBUG)
@@ -101,8 +103,13 @@ def available_regions(request, app_workspace):
         print("STOPS")
         gdf = gdf.assign(**{str(key): gdf.within(geom) for key, geom in countries_series.items()})
         print(gdf)
-        trues_onlys = gdf.loc[:,gdf.any()]
+        trues_onlys = gdf.copy()
+        trues_onlys = trues_onlys.drop(['geometry'],axis=1)
+        print(trues_onlys)
+        # trues_onlys = gdf.loc[:,gdf.any()]
+        trues_onlys = trues_onlys.loc[:,trues_onlys.any()]
         countries_index = list(trues_onlys.columns)
+        print(countries_index)
         countries_index = [x for x in countries_index if x != 'geometry']
         countries_index = [int(i) for i in countries_index]
         print(countries_index)
@@ -146,7 +153,7 @@ def available_variables(request):
     for server in session.query(HydroServer_Individual).all():
         print("URL", server.url.strip())
         water = pwml.WaterMLOperations(url = server.url.strip())
-        hs_variables = water.GetVariables()
+        hs_variables = water.GetVariables()['variableName']
         print(hs_variables)
         for hs_variable in hs_variables:
             if hs_variable not in hydroserver_variable_list:
@@ -173,7 +180,9 @@ def available_services(request):
         except Exception as e:
             print("I AM HERE OR NOT")
             services = parseService(url_catalog)
+            print(services)
             views = giveServices(services)
+            # print(views)
             hs_services['services'] = views
     return JsonResponse(hs_services)
 
@@ -215,25 +224,30 @@ def create_group(request):
         session.close()
 
         if url_catalog:
-            try:
-                print("NORMAL")
-                # url_catalog = unquote(url_catalog)
-                print("THIS ", url_catalog)
-                url_catalog2 = url_catalog + "?WSDL"
-                client = Client(url_catalog2, timeout= 500)
-                # logging.getLogger('suds.client').setLevel(logging.DEBUG)
+            # try:
+            #     print("NORMAL")
+            #     # url_catalog = unquote(url_catalog)
+            #     print("THIS ", url_catalog)
+            #     url_catalog2 = url_catalog + "?WSDL"
+            #     client = zeep.Client(url_catalog2)
+            #     # client = Client(url_catalog2, timeout= 500)
+            #     logging.getLogger('zeep.Client').setLevel(logging.DEBUG)
+            #     service_info = client.service.GetWaterOneFlowServiceInfo()
+            #     # service_info = client.service.GetWaterOneFlowServiceInfo()
+            #     services = service_info.ServiceInfo
+            #     views = giveServices(services,selected_services)
+            #     print("DONE WITH VIEWS IN GETSITEINFO")
+            #     group_obj['views'] = addMultipleViews(views,title)
+            #     print("DONE WITH MULTIPLEVIEWS IN GETSITEINFO")
+            # except Exception as e:
+            print("EXCEPT")
+            services = parseService(url_catalog)
+            views = giveServices(services,selected_services)
+            print("DONE WITH VIEWS IN EXCEPTION")
+            print(views)
+            group_obj['views'] = addMultipleViews(views,title)
+            print("DONE WITH MULTIPLEVIEWS IN EXCEPTION")
 
-                service_info = client.service.GetWaterOneFlowServiceInfo()
-
-                services = service_info.ServiceInfo
-                views = giveServices(services,selected_services)
-                group_obj['views'] = addMultipleViews(views,title)
-            except Exception as e:
-                print("EXCEPT")
-                services = parseService(url_catalog)
-                views = giveServices(services,selected_services)
-                print(views)
-                group_obj['views'] = addMultipleViews(views,title)
 
     else:
         group_obj['message'] = 'There was an error while adding th group.'
@@ -244,7 +258,7 @@ def create_group(request):
 def giveServices(services,filter_serv=None):
     hs_list = []
     for i in services:
-        print(i)
+        # print(i)
         hs = {}
         url = i['servURL']
         if not url.endswith('?WSDL'):
@@ -252,6 +266,7 @@ def giveServices(services,filter_serv=None):
         title = i['Title']
         description = "None was provided by the organiation in charge of the Web Service"
         if 'aabstract' in i:
+            # print("THERE IS ABSTRACH")
             description = i['aabstract']
         if filter_serv is not None:
             if title in filter_serv:
@@ -535,7 +550,7 @@ def catalog_filter(request,app_workspace):
     if len(hs_filtered_region) > 0:
         intersection_hs = hs_filtered_region
     if len(hs_filtered_variable) > 0:
-        intersection_hs = hs_filtered_variable 
+        intersection_hs = hs_filtered_variable
     print(intersection_hs)
     ret_obj['hs'] = intersection_hs
     # countries_gdf = gpd.read_file(countries_geojson_file_path)
