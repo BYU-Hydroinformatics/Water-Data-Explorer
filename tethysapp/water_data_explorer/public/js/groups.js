@@ -344,9 +344,9 @@ create_group_hydroservers = function(){
               let input_check = li_object.getElementsByClassName("chkbx-layers")[0];
 
               console.log(input_check);
-              if(input_check.checked){
+              // if(input_check.checked){
                 load_individual_hydroservers_group(title);
-              }
+              // }
 
               input_check.addEventListener("change", function(){
                 console.log(this);
