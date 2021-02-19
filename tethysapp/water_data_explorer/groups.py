@@ -153,11 +153,11 @@ def available_variables(request):
     for server in session.query(HydroServer_Individual).all():
         print("URL", server.url.strip())
         water = pwml.WaterMLOperations(url = server.url.strip())
-        hs_variables = water.GetVariables()['variableName']
+        hs_variables = water.GetVariables()['variables']
         print(hs_variables)
         for hs_variable in hs_variables:
-            if hs_variable not in hydroserver_variable_list:
-                hydroserver_variable_list.append(hs_variable)
+            if hs_variable['variableName'] not in hydroserver_variable_list:
+                hydroserver_variable_list.append(hs_variable['variableName'])
 
     varaibles_list["variables"] = hydroserver_variable_list
     return JsonResponse(varaibles_list)
