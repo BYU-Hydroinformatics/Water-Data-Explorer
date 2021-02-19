@@ -326,7 +326,6 @@ add_hydroserver = function(){
     //Submitting the data to the controller
     $("#soapAddLoading").removeClass("hidden");
 
-    $("#btn-add-soap").hide();
 
     $.ajax({
         type: "POST",
@@ -352,55 +351,6 @@ add_hydroserver = function(){
                 console.log(group_name_obj);
                   let {title, siteInfo, url, group} = json_response
 
-                    let no_servers_tag = Array.from(document.getElementById(`${id_group_separator}`).getElementsByTagName("P"))[0];
-                    console.log(no_servers_tag);
-
-                    let newHtml = html_for_servers(title,group_name)
-
-                     // $(newHtml).appendTo("#current-servers")
-                     $(newHtml).appendTo(`#${id_group_separator}`);
-
-                     console.log($(newHtml));
-
-                     $(`#${title}_variables`).on("click",showVariables);
-                     $(`#${title}_variables_info`).on("click",hydroserver_information);
-                     $(`#${title}_${group_name}_reload`).on("click",update_hydroserver);
-
-                    document.getElementById(`${title}`).style.visibility = "hidden";
-
-
-                    // MAKES THE LAYER INVISIBLE
-
-                    let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
-                    console.log(lis);
-                    let li_arrays = Array.from(lis);
-                    console.log(li_arrays);
-                    // let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0];
-                    let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
-
-                    console.log(input_check);
-                    input_check.addEventListener("change", function(){
-                      if(this.checked){
-                        map.getLayers().forEach(function(layer) {
-                             if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                               console.log(layer)
-                               layer.setStyle(featureStyle(layerColorDict[title]));
-                             }
-                         });
-                      }
-                      else{
-                        map.getLayers().forEach(function(layer) {
-                             if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                               console.log(layer)
-                               layer.setStyle(new ol.style.Style({}));
-                             }
-                         });
-
-                      }
-
-                    });
-
-
 
                     console.log("this are the sites");
                     console.log(siteInfo);
@@ -413,7 +363,8 @@ add_hydroserver = function(){
                     }
                     // console.log(extents);
                     console.log(sites);
-                    sites = sites.map(site => {
+                    try{
+                      sites = sites.map(site => {
                         return {
                             type: "Feature",
                             geometry: {
@@ -439,7 +390,7 @@ add_hydroserver = function(){
                         }
                     })
 
-                    let sitesGeoJSON = {
+                      let sitesGeoJSON = {
                         type: "FeatureCollection",
                         crs: {
                             type: "name",
@@ -450,60 +401,119 @@ add_hydroserver = function(){
                         features: sites
                     }
 
-                    const vectorSource = new ol.source.Vector({
+                      const vectorSource = new ol.source.Vector({
                         features: new ol.format.GeoJSON().readFeatures(
                             sitesGeoJSON
                         )
                     })
-                    var clusterSource = new ol.source.Cluster({
+                      var clusterSource = new ol.source.Cluster({
                        distance: parseInt(30, 10),
                        source: vectorSource,
                      });
-                    var vectorLayer = new ol.layer.Vector({
+                      var vectorLayer = new ol.layer.Vector({
                       source: clusterSource,
                       style: featureStyle(layerColorDict[title])
                     });
 
-                    //
-                    // const vectorLayer = new ol.layer.Vector({
-                    //     source: vectorSource,
-                    //     style: featureStyle()
-                    // })
+                      map.addLayer(vectorLayer)
+                      ol.extent.extend(extent, vectorSource.getExtent())
+                      vectorLayer.set("selectable", true)
+                      layersDict[title] = vectorLayer;
 
-                    map.addLayer(vectorLayer)
-                    ol.extent.extend(extent, vectorSource.getExtent())
-                    vectorLayer.set("selectable", true)
-                    layersDict[title] = vectorLayer;
-
-                    map.getView().fit(vectorSource.getExtent());
-                    map.updateSize();
-
-                    layersDict[title] = vectorLayer;
-                    ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
-                    layersDictExt[title] = ext;
-                    $(`#${title}_zoom`).on("click",function(){
                       map.getView().fit(vectorSource.getExtent());
                       map.updateSize();
-                    });
-                    $.notify(
-                        {
-                            message: `Successfully Added the HydroServer to the Map`
-                        },
-                        {
-                            type: "success",
-                            allow_dismiss: true,
-                            z_index: 20000,
-                            delay: 5000
+
+                      layersDict[title] = vectorLayer;
+                      ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
+                      layersDictExt[title] = ext;
+
+
+                      let no_servers_tag = Array.from(document.getElementById(`${id_group_separator}`).getElementsByTagName("P"))[0];
+                      console.log(no_servers_tag);
+                      let newHtml = html_for_servers(title,group_name)
+                       // $(newHtml).appendTo("#current-servers")
+                       $(newHtml).appendTo(`#${id_group_separator}`);
+                       console.log($(newHtml));
+                       $(`#${title}_variables`).on("click",showVariables);
+                       $(`#${title}_variables_info`).on("click",hydroserver_information);
+                       $(`#${title}_${group_name}_reload`).on("click",update_hydroserver);
+
+                      // document.getElementById(`${title}`).style.visibility = "hidden";
+
+
+                      // MAKES THE LAYER INVISIBLE
+
+                      let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
+                      console.log(lis);
+                      let li_arrays = Array.from(lis);
+                      console.log(li_arrays);
+                      // let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0];
+                      let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
+
+                      console.log(input_check);
+                      input_check.addEventListener("change", function(){
+                        if(this.checked){
+                          map.getLayers().forEach(function(layer) {
+                               if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                 console.log(layer)
+                                 layer.setStyle(featureStyle(layerColorDict[title]));
+                               }
+                           });
                         }
-                    )
+                        else{
+                          map.getLayers().forEach(function(layer) {
+                               if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                 console.log(layer)
+                                 layer.setStyle(new ol.style.Style({}));
+                               }
+                           });
 
-                    $("#soapAddLoading").addClass("hidden")
-                    $("#btn-add-soap").show()
+                        }
 
-                    $("#modalAddSoap").modal("hide")
-                    $("#modalAddSoap").each(function() {
-                        this.reset()
-                    })
+                      });
+                      $(`#${title}_zoom`).on("click",function(){
+                        map.getView().fit(vectorSource.getExtent());
+                        map.updateSize();
+                      });
+
+
+
+
+                      $.notify(
+                          {
+                              message: `Successfully Added the HydroServer to the Map`
+                          },
+                          {
+                              type: "success",
+                              allow_dismiss: true,
+                              z_index: 20000,
+                              delay: 5000
+                          }
+                      )
+                      $("#soapAddLoading").addClass("hidden")
+                      $("#btn-add-soap").show()
+
+                      $("#modalAddSoap").modal("hide")
+                      $("#modalAddSoap").each(function() {
+                          this.reset()
+                      })
+                    }
+                    catch(err){
+                      $("#soapAddLoading").addClass("hidden")
+                      $.notify(
+                          {
+                              message: `The following error ocurred: ${err}`
+                          },
+                          {
+                              type: "danger",
+                              allow_dismiss: true,
+                              z_index: 20000,
+                              delay: 5000
+                          }
+                      )
+                    }
+
+
               }
 
 

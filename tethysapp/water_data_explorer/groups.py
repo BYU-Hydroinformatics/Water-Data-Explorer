@@ -49,8 +49,8 @@ from tethys_sdk.workspaces import app_workspace
 from shapely.geometry import Point, Polygon
 import zeep
 Persistent_Store_Name = 'catalog_db'
-logging.basicConfig(level=logging.INFO)
-logging.getLogger('suds.client').setLevel(logging.DEBUG)
+# logging.basicConfig(level=logging.INFO)
+# logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
 @app_workspace
 def available_regions(request, app_workspace):
@@ -171,7 +171,7 @@ def available_services(request):
             print("THIS ", url_catalog)
             url_catalog2 = url_catalog + "?WSDL"
             client = Client(url_catalog2, timeout= 500)
-            logging.getLogger('suds.client').setLevel(logging.DEBUG)
+            # logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
             service_info = client.service.GetWaterOneFlowServiceInfo()
             services = service_info.ServiceInfo
@@ -210,7 +210,8 @@ def create_group(request):
         for key, value in request.POST.items():
             print(key)
             if value not in (title, description,url_catalog):
-                selected_services.append(value.replace("_"," "))
+                # selected_services.append(value.replace("_"," "))
+                selected_services.append(value)
 
         # selected_services = request.POST.get('server')
         print(selected_services)
@@ -224,29 +225,29 @@ def create_group(request):
         session.close()
 
         if url_catalog:
-            # try:
-            #     print("NORMAL")
-            #     # url_catalog = unquote(url_catalog)
-            #     print("THIS ", url_catalog)
-            #     url_catalog2 = url_catalog + "?WSDL"
-            #     client = zeep.Client(url_catalog2)
-            #     # client = Client(url_catalog2, timeout= 500)
-            #     logging.getLogger('zeep.Client').setLevel(logging.DEBUG)
-            #     service_info = client.service.GetWaterOneFlowServiceInfo()
-            #     # service_info = client.service.GetWaterOneFlowServiceInfo()
-            #     services = service_info.ServiceInfo
-            #     views = giveServices(services,selected_services)
-            #     print("DONE WITH VIEWS IN GETSITEINFO")
-            #     group_obj['views'] = addMultipleViews(views,title)
-            #     print("DONE WITH MULTIPLEVIEWS IN GETSITEINFO")
-            # except Exception as e:
-            print("EXCEPT")
-            services = parseService(url_catalog)
-            views = giveServices(services,selected_services)
-            print("DONE WITH VIEWS IN EXCEPTION")
-            print(views)
-            group_obj['views'] = addMultipleViews(views,title)
-            print("DONE WITH MULTIPLEVIEWS IN EXCEPTION")
+            try:
+                print("NORMAL")
+                url_catalog = unquote(url_catalog)
+                print("THIS ", url_catalog)
+                url_catalog2 = url_catalog + "?WSDL"
+                # client = zeep.Client(url_catalog2)
+                client = Client(url_catalog2, timeout= 500)
+                service_info = client.service.GetWaterOneFlowServiceInfo()
+                services = service_info.ServiceInfo
+                print("selected_services", selected_services)
+                views = giveServices(services,selected_services)
+                print("DONE WITH VIEWS IN GETSITEINFO")
+                print(views)
+                group_obj['views'] = addMultipleViews(views,title)
+                print("DONE WITH MULTIPLEVIEWS IN GETSITEINFO")
+            except Exception as e:
+                print("EXCEPT")
+                services = parseService(url_catalog)
+                views = giveServices(services,selected_services)
+                print("DONE WITH VIEWS IN EXCEPTION")
+                print(views)
+                group_obj['views'] = addMultipleViews(views,title)
+                print("DONE WITH MULTIPLEVIEWS IN EXCEPTION")
 
 
     else:
@@ -264,16 +265,20 @@ def giveServices(services,filter_serv=None):
         if not url.endswith('?WSDL'):
             url = url + "?WSDL"
         title = i['Title']
+        print(title)
         description = "None was provided by the organiation in charge of the Web Service"
         if 'aabstract' in i:
             # print("THERE IS ABSTRACH")
             description = i['aabstract']
         if filter_serv is not None:
+            print(filter_serv,"not none")
             if title in filter_serv:
+                print(title, filter_serv)
                 try:
                     print("Testing %s" % (url))
                     url_client = Client(url)
                     hs['url'] = url
+                # selected_services.append(value.replace("_"," "))
                     hs['title'] = title
 
                     hs['description'] = description
@@ -340,14 +345,15 @@ def addMultipleViews(hs_list,group):
             # print("-------------------------------------")
             # # print(sites_json)
             # sites_object = parseJSON(sites_json)
-            # # print(sites_object)
-            # # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
-            #
-            # # sites_parsed_json = json.dumps(converted_sites_object)
+
+            # print(sites_object)
+            # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
+            # sites_parsed_json = json.dumps(converted_sites_object)
             sites_object = water.GetSites()
-
+            print(sites_object)
             sites_parsed_json = json.dumps(sites_object)
-
+            print(sites_parsed_json)
+ # http://gs-service-production.geodab.eu/gs-service/services/essi/view/whos-country/hiscentral.asmx
             return_obj['title'] = hs['title'].translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
             return_obj['url'] = hs['url']
             return_obj['description'] = hs['description']

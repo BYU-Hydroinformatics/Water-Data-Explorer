@@ -40,9 +40,10 @@ from django.http import JsonResponse, HttpResponse
 from .app import WaterDataExplorer as app
 
 Persistent_Store_Name = 'catalog_db'
+logging.basicConfig(level=logging.INFO)
+logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
-logging.getLogger('suds.client').setLevel(logging.CRITICAL)
-
+# binding.envns=('SOAP-ENV', 'http://schemas.xmlsoap.org/soap/envelope')
 
 def get_variables_hs(request):
     list_catalog={}
@@ -68,7 +69,10 @@ def get_variables_hs(request):
             # client = Client(url = hydroservers.url.strip(), timeout= 500)
             # keywords = client.service.GetVariables('[:]')
             water = pwml.WaterMLOperations(url = hydroservers.url.strip())
-            keywords = water.GetVariables()['variableName']
+            keywords_response = water.GetVariables()['variables']
+            keywords = []
+            for kyword in keywords_response:
+                keywords.append(kyword['variableCode'])
             # keywords_dict = xmltodict.parse(keywords)
             # keywords_dict_object = json.dumps(keywords_dict)
             #
@@ -133,7 +137,7 @@ def get_available_sites(request):
             water = pwml.WaterMLOperations(url = hydroservers.url.strip())
             sites = json.loads(hydroservers.siteinfo)
             print(type(sites))
-            sitesFiltered = water.GetSitesByVariable(specific_variables)
+            sitesFiltered = water.GetSitesByVariable(specific_variables)['sites']
             hs_list = sitesFiltered
             # print("this is the one selecting hs")
             # name = hydroservers.title
@@ -457,6 +461,9 @@ def upload_hs(request):
 ######**ADD A HYDROSERVER TO THE SELECTED GROUP OF HYDROSERVERS THAT WERE CREATED BY THE USER *################
 ######*****************************************************************************************################
 def soap_group(request):
+    logging.basicConfig(level=logging.INFO)
+    logging.getLogger('suds.client').setLevel(logging.DEBUG)
+    # logging.getLogger('zeep.client').setLevel(logging.DEBUG)
     print("inside SOAP function")
     return_obj = {}
     if request.is_ajax() and request.method == 'POST':
@@ -474,6 +481,9 @@ def soap_group(request):
         true_extent = request.POST.get('extent')
 
         water = pwml.WaterMLOperations(url = url)
+        # imp = Import('http://schemas.xmlsoap.org/soap/envelope')
+        # doctor = ImportDoctor(imp)
+        # water.client = Client(url, doctor = doctor)
         # client = Client(url, timeout= 500)
 
         # True Extent is on and necessary if the user is trying to add USGS or
@@ -536,7 +546,39 @@ def soap_group(request):
         else:
 
             return_obj['zoom'] = 'false'
+            # try:
             sites = water.GetSites()
+
+            # raw_get = water.plugin.last_received_raw
+            # print("RRRRRRRRRRRRRRRRRRRRR")
+            # print (type(raw_get))
+            #
+            # version_soap = 'version="1.0"'
+            # new_raws = raw_get.split(">")
+            # print("**********************************")
+            # print(new_raws[1])
+            #
+            # soap_namespace =  new_raws[1].split("xmlns")[1].split("=")[1]
+            # soap_namespace = soap_namespace.strip('\"')
+            # version =  new_raws[0].split(" ")[1]
+            # print(soap_namespace)
+            # print(version)
+            # if version == "version=\'1.0\'":
+            #     binding.envns=('SOAP-ENV', soap_namespace)
+            #     sites = water.client.service.GetSites('[:]')
+            #     binding.envns=('SOAP-ENV', 'http://schemas.xmlsoap.org/soap/envelope/')
+
+            # except Exception as e:
+            #     print("HOLADSAFASF")
+            #     print(e)
+            # raw_get = water.plugin.last_received_raw
+            # # version_soap = 'version="1.0"'
+            # # if version_soap in raw_get:
+            # #
+            # #     print "Found!"
+            # raw_send = water.plugin.last_sent_raw
+            # print (raw_get)
+            # print (raw_send)
 
             # # Get a list of all the sites and their respective lat lon.
             # sites = client.service.GetSites('[:]')
