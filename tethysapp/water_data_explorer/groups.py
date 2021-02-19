@@ -601,8 +601,10 @@ def filter_region(countries_geojson_file_path,list_countries):
             # print(gdf)
 
             gdf = gdf.assign(**{str(key): gdf.within(geom) for key, geom in countries_series.items()})
-            # print(gdf)
-            trues_onlys = gdf.loc[:,gdf.any()]
+            trues_onlys = gdf.copy()
+            trues_onlys = trues_onlys.drop(['geometry'],axis=1)
+
+            trues_onlys = trues_onlys.loc[:,trues_onlys.any()]
             # print('trues')
             # print(trues_onlys)
             countries_index = list(trues_onlys.columns)
@@ -618,6 +620,7 @@ def filter_region(countries_geojson_file_path,list_countries):
             if len(list_countries_selected) > 0:
                 # region_list.append(servers[indx])
                 region_list.append(session.query(HydroServer_Individual).all()[indx].title)
+
     # print(region_list)
     return region_list
 def filter_variable(variables_list):
@@ -645,6 +648,31 @@ def filter_variable(variables_list):
 
     return hs_list
 
+@app_workspace
+def get_variables_for_country(request,app_workspace):
+    response_obj = {}
+    countries = request.GET.getlist('countries[]')
+    print(countries)
+    variables_hs = []
+    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
+    hs_filtered_region = filter_region(countries_geojson_file_path,countries)
+    print(hs_filtered_region)
+    SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
+    session = SessionMaker()
+    for hs in hs_filtered_region:
+        logging.basicConfig()
+        logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
+        # print(hs)
+        hs_url = session.query(HydroServer_Individual).filter(HydroServer_Individual.title == hs)[0].url
+        # print(hs_url)
+        water = pwml.WaterMLOperations(url = hs_url)
+        variables_sever = water.GetVariables()['variables']
+        df_variables = pd.DataFrame.from_dict(variables_sever)
+        variables_array = df_variables['variableName'].tolist()
+        for vari in variables_array:
+            variables_hs.append(vari)
+    response_obj['variables'] = variables_hs
+    return JsonResponse(response_obj)
 
 ######*****************************************************************************************################
 ############################## Function to retrieve the keywords for all the selected groups #############################

@@ -94,6 +94,9 @@ class WaterDataExplorer(TethysAppBase):
             UrlMap(name='catalog-filter',
                    url='catalog-filter',
                    controller='water_data_explorer.groups.catalog_filter'),
+            UrlMap(name='get-variables-for-country',
+                   url='get-variables-for-country',
+                   controller='water_data_explorer.groups.get_variables_for_country'),
 
         )
 

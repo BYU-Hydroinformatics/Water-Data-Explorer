@@ -81,7 +81,9 @@ show_variables_groups = function(){
           HSTableHtml +=  '<tr class="odd gradeX">'
           l_arr.forEach(i =>{
             let new_i = i.replace(/ /g,"_");
-            HSTableHtml +=  `<td><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+            let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+
+            HSTableHtml +=  `<td id =${new_i2}_td ><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
             // HSTableHtml += `<th scope="row">${i}</th>
             // <td><input type="checkbox" name="server_${i}" id="server" value=${i}></td>
             // <td>${i}</td>`
@@ -178,6 +180,26 @@ available_regions = function(){
       console.log(HSTableHtml)
       $("#modalKeyWordSearch").find("#groups_countries").html(HSTableHtml);
       $("#KeywordLoading").addClass("hidden");
+      let checkboxes = $('#data-table').find("input[type=checkbox][name=countries]")
+      console.log(checkboxes)
+      let countries_selected = [];
+
+      // Attach a change event handler to the checkboxes.
+      checkboxes.click(function() {
+        countries_selected = checkboxes
+          .filter(":checked") // Filter out unchecked boxes.
+          .map(function() { // Extract values using jQuery map.
+            return this.value;
+          })
+          .get() // Get array.
+        if (countries_selected.length > 0){
+          console.log(countries_selected);
+          listener_checkbox(countries_selected)
+        }
+        else{
+          show_variables_groups()
+        }
+      });
     },
     error: function(error){
       $("#KeywordLoading").addClass("hidden")
@@ -196,9 +218,60 @@ available_regions = function(){
     }
 
   })
+}
 
+listener_checkbox = function(list_countries){
+  let le_object = {
+    "countries": list_countries
+  };
+  console.log(le_object);
+  $("#KeywordLoading").removeClass("hidden")
+
+  $.ajax({
+    type: "GET",
+    url: `get-variables-for-country/`,
+    dataType: "JSON",
+    data: le_object,
+    success: function(result){
+
+      $("#modalKeyWordSearch").find("#groups_variables").empty();
+      variables_list = result['variables'];
+      const chunk = (arr, size) =>
+        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+          arr.slice(i * size, i * size + size)
+        );
+      let arr=chunk(variables_list, 2);
+      console.log(arr)
+
+      var HSTableHtml =
+          `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+
+        arr.forEach(l_arr => {
+          HSTableHtml +=  '<tr class="odd gradeX">'
+          l_arr.forEach(i =>{
+            let new_i = i.replace(/ /g,"_");
+            HSTableHtml +=  `<td><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+          })
+
+              HSTableHtml += '</tr>';
+        })
+
+        HSTableHtml += "</tbody></table>"
+      console.log(HSTableHtml)
+      $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
+      $("#KeywordLoading").addClass("hidden");
+
+    },
+    error: function(error){
+      console.log(error)
+    }
+
+  })
 
 }
+
+
+
 /*
 ************ FUNCTION NAME : CREATE_GROUP_HYDROSERVERS
 ************ PURPOSE : CREATES A GROUP OF HYDRSOERVERS AND ADDS IT TO THE MENU
@@ -1471,28 +1544,13 @@ general_search = function(id_search_input, id_table){
       }
     }
   }
-
-
-  // var input, filter, table, tr, td, i, txtValue;
-  // input = document.getElementById(`${id_search_input}`);
-  // filter = input.value.toUpperCase();
-  // table = document.getElementById(`${id_table}`);
-  // tr = table.getElementsByTagName("p");
-  //
-  // //first word filter //
-  // for (i = 0; i < tr.length; i++) {
-  //   td = tr[i].getElementsByTagName("td")[0];
-  //   if (td) {
-  //     txtValue = td.textContent || td.innerText;
-  //     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-  //       tr[i].style.display = "";
-  //     } else {
-  //       tr[i].style.display = "none";
-  //     }
-  //   }
-  //
-  // }
 }
+
+
+
+
+
+
     // reset_k= function(){
     //   input = document.getElementById("myInputKeyword");
     //   console.log(input)
