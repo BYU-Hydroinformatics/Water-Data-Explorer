@@ -631,9 +631,15 @@ def filter_variable(variables_list):
         for hydroservers in session.query(HydroServer_Individual).all():
             name = hydroservers.title
             water = pwml.WaterMLOperations(url = hydroservers.url.strip())
-            variables_sever = water.GetVariables()
-            print(variables_sever)
-            check = any(item in variables_sever for item in variables_list)
+            variables_sever = water.GetVariables()['variables']
+            df_variables = pd.DataFrame.from_dict(variables_sever)
+            variables_array = df_variables['variableName'].tolist()
+            print("**************************88")
+            print(variables_array)
+            print(variables_list)
+            print("**************************88")
+
+            check = any(item in variables_array for item in variables_list)
             if check is True:
                 hs_list.append(name)
 
