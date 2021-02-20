@@ -5,16 +5,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Key Words in the Hydroserver Group</h4>
-                <p> Select from the following keywords to filter the hydroservers that do not contain such keyword/keywords</p>
+                <h4 class="modal-title">Ontology based Search in the WDE Catalogs </h4>
+                <p> Select from the following variable concepts or countries to filter the different WaterOneFlow Web Services conained in ALL the Catalogs contained in the WDE</p>
 
-                <em>Note: Everytime the user selects a keyword, this one is added, and the search is done using an "OR". In other words,
+                <em>Note: Everytime the user selects a variable concept or country region, this one is added, and the search is done using an "OR". In other words,
                 the search will give any server that has at least one of the selected keywords</em>
             </div>
             <div class="modal-body" id = "keyword-modal-body">
-              <div id="leftContent">
+              <div class="leftContent">
                 <p> Region Data Discovery </p>
-                <input type="text" id="myInputKeyword" placeholder="Search for country" title="Type in a keyword">
+                <input type="text" id="myInputKeyword" class= "searchBars" placeholder="Search for country" title="Type in a keyword">
                 <div id="groups_countries"></div>
                 <br>
                 <p> Variable Data Discovery </p>
@@ -28,7 +28,7 @@
             <div class="modal-footer">
                 <div class="button-group">
                   <img id="KeywordLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
-                    <button type="button" id="btn-key-search" class="btn btn-primary">Seach Keywords</button>
+                    <button type="button" id="btn-key-search" class="btn btn-primary">Seach</button>
                     <button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
