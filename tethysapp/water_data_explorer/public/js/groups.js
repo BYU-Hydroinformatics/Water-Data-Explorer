@@ -270,6 +270,209 @@ listener_checkbox = function(list_countries){
 
 }
 
+load_search_group_modal = function(){
+  show_variables_group();
+  available_regions_group();
+
+}
+// $("#btn-filter-group-f").on("click", load_search_group_modal);
+$(document).on("click", "#btn-filter-group-f", load_search_group_modal);
+
+available_regions_group = function(){
+  let group_obj = {
+    'group': actual_group
+  };
+  $("#KeywordLoading2").removeClass("hidden");
+  $.ajax({
+    type: "GET",
+    url: `available-regions/`,
+    dataType: "JSON",
+    data: group_obj,
+
+    success: function(data){
+      countries_available = data['countries']
+      console.log(data)
+      const chunk = (arr, size) =>
+        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+          arr.slice(i * size, i * size + size)
+        );
+      let arr=chunk(countries_available, 2);
+      console.log(arr)
+
+      var HSTableHtml =
+          `<table id="data-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+
+        arr.forEach(l_arr => {
+          HSTableHtml +=  '<tr class="odd gradeX">'
+          l_arr.forEach(i =>{
+            let new_i = i.replace(/ /g,"_");
+            HSTableHtml +=  `<td><input type="checkbox" id= "server" name="countries" value=${new_i} /> ${i}</td>`;
+          })
+
+              HSTableHtml += '</tr>';
+        })
+
+        // HSTableHtml += '</td>'+'</tr>'
+        // HSTableHtml += '</tr>'
+
+        HSTableHtml += "</tbody></table>"
+      console.log(HSTableHtml)
+      $("#modalKeyWordSearch").find("#groups_countries").html(HSTableHtml);
+      $("#KeywordLoading").addClass("hidden");
+      let checkboxes = $('#data-table').find("input[type=checkbox][name=countries]")
+      console.log(checkboxes)
+      let countries_selected = [];
+
+      // Attach a change event handler to the checkboxes.
+      checkboxes.click(function() {
+        countries_selected = checkboxes
+          .filter(":checked") // Filter out unchecked boxes.
+          .map(function() { // Extract values using jQuery map.
+            return this.value;
+          })
+          .get() // Get array.
+        if (countries_selected.length > 0){
+          console.log(countries_selected);
+          listener_checkbox(countries_selected)
+        }
+        else{
+          show_variables_group()
+        }
+      });
+    },
+    error: function(error){
+      $("#KeywordLoading2").addClass("hidden")
+      console.log(error)
+      $.notify(
+          {
+              message: `There was an error retrieving the different web services from the HIS catalog  `
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
+          }
+      )
+    }
+
+  })
+}
+
+listener_checkbox_group = function(list_countries){
+  let le_object = {
+    "countries": list_countries
+  };
+  console.log(le_object);
+  $("#KeywordLoading").removeClass("hidden")
+
+  $.ajax({
+    type: "GET",
+    url: `get-variables-for-country-group/`,
+    dataType: "JSON",
+    data: le_object,
+    success: function(result){
+
+      $("#modalKeyWordSearch").find("#groups_variables").empty();
+      variables_list = result['variables'];
+      const chunk = (arr, size) =>
+        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+          arr.slice(i * size, i * size + size)
+        );
+      let arr=chunk(variables_list, 2);
+      console.log(arr)
+
+      var HSTableHtml =
+          `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+
+        arr.forEach(l_arr => {
+          HSTableHtml +=  '<tr class="odd gradeX">'
+          l_arr.forEach(i =>{
+            let new_i = i.replace(/ /g,"_");
+            HSTableHtml +=  `<td><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+          })
+
+              HSTableHtml += '</tr>';
+        })
+
+        HSTableHtml += "</tbody></table>"
+      console.log(HSTableHtml)
+      $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
+      $("#KeywordLoading").addClass("hidden");
+
+    },
+    error: function(error){
+      console.log(error)
+    }
+
+  })
+
+}
+
+show_variables_group = function(){
+  let group_obj = {
+    'group': actual_group
+  };
+
+  $("#KeywordLoading2").removeClass("hidden");
+  $.ajax({
+    type: "GET",
+    url: `available-variables/`,
+    dataType: "JSON",
+    data: group_obj,
+    success: function(data){
+      console.log(data)
+      variables_list = data['variables'];
+      const chunk = (arr, size) =>
+        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+          arr.slice(i * size, i * size + size)
+        );
+      let arr=chunk(variables_list, 2);
+      console.log(arr)
+
+      var HSTableHtml =
+          `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+
+        arr.forEach(l_arr => {
+          HSTableHtml +=  '<tr class="odd gradeX">'
+          l_arr.forEach(i =>{
+            let new_i = i.replace(/ /g,"_");
+            let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+
+            HSTableHtml +=  `<td id =${new_i2}_td2 ><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+
+          })
+
+              HSTableHtml += '</tr>';
+        })
+
+        HSTableHtml += "</tbody></table>"
+      console.log(HSTableHtml)
+      $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
+      $("#KeywordLoading2").addClass("hidden");
+
+    },
+    error: function(error){
+      $("#soapAddLoading-group").addClass("hidden")
+      console.log(error)
+      $.notify(
+          {
+              message: `There was an error retrieving the different web services from the HIS catalog  `
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
+          }
+      )
+    }
+
+  })
+
+
+
+}
 
 
 /*
@@ -548,66 +751,9 @@ create_group_hydroservers = function(){
                  let newHtml;
                  if(can_delete_hydrogroups){
                    newHtml = html_for_groups(can_delete_hydrogroups, title, id_group_separator);
-                   // `
-                   // <div class="panel panel-default" id="${title}_panel">
-                   //   <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-                   //     <h4 class="panel-title">
-                   //       <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-                   //       <span class="group-name"><strong>${ind})</strong> ${title}</span>
-                   //
-                   //       </a>
-                   //     </h4>
-                   //     <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-                   //
-                   //         <input class="chkbx-layers" type="checkbox">
-                   //         <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
-                   //           <span class=" glyphicon glyphicon-info-sign "></span>
-                   //         </button>
-                   //         <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
-                   //           <span class="glyphicon glyphicon-plus"></span>
-                   //         </button>
-                   //         <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
-                   //           <span class="glyphicon glyphicon-trash"></span>
-                   //         </button>
-                   //     </li>
-                   //
-                   //   </div>
-                   //
-                   //   <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-                   //   <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>Broker Endpoints</div>
-                   //     <div class="panel-body">
-                   //         <div id= ${id_group_separator} class="divForServers"></div>
-                   //     </div>
-                   //   </div>
-                   // </div>
-                   // `
                  }
                  else{
                    newHtml = html_for_groups(false, title, id_group_separator);
-
-                   // newHtml =
-                   // `
-                   // <div class="panel panel-default" id="${title}_panel">
-                   //   <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-                   //     <h4 class="panel-title">
-                   //       <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-                   //       <span class="group-name"><strong>${ind})</strong> ${title}</span>
-                   //       </a>
-                   //     </h4>
-                   //     <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-                   //       <input class="chkbx-layers" type="checkbox">
-                   //       <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
-                   //         <span class=" glyphicon glyphicon-info-sign "></span>
-                   //       </button>
-                   //     </li>
-                   //   </div>
-                   //   <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-                   //     <div class="panel-body">
-                   //         <div id= ${id_group_separator} class="divForServers"></div>
-                   //     </div>
-                   //   </div>
-                   // </div>
-                   // `
                  }
                  $(newHtml).appendTo("#current-Groupservers");
 
@@ -621,75 +767,8 @@ create_group_hydroservers = function(){
                  load_individual_hydroservers_group(title);
                  let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
                  console.log(servers_checks);
-
-                 // if(input_check.checked){
-                 //   // load_individual_hydroservers_group(title);
-                 //   let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
-                 //   console.log(servers_checks);
-                 //   for(i = 0; i < servers_checks.length; i++) {
-                 //      servers_checks[i].checked = true;
-                 //      let server_name = servers_checks[i].parentElement.id;
-                 //      map.removeLayer(layersDict[server_name])
-                 //      map.addLayer(layer_object_filter[server_name])
-                 //    }
-                 //
-                 //   labels_x = document.getElementById(`heading_${title}`)
-                 //   labels_x.style.backgroundColor = colors_unique[0]
-                 // }
-
                  input_check.addEventListener("change", function(){
                    change_effect_groups(this,id_group_separator);
-                   // console.log(this);
-                   // if(this.checked){
-                   //   console.log(" it is checked");
-                   //   // load_individual_hydroservers_group(title);
-                   //   let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
-                   //   console.log(servers_checks);
-                   //   for(i = 0; i < servers_checks.length; i++) {
-                   //     let server_name = servers_checks[i].id;
-                   //      let checkbox = Array.from(servers_checks[i].children)
-                   //      for (var j = 0; j < checkbox.length; j++) {
-                   //          if (checkbox[j].className == "chkbx-layer") {
-                   //            console.log(checkbox[j])
-                   //            checkbox[j].checked = true;
-                   //          }
-                   //      }
-                   //      console.log(checkbox);
-                   //      map.getLayers().forEach(function(layer) {
-                   //           if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
-                   //             console.log(layer)
-                   //             layer.setStyle(featureStyle(layerColorDict[server_name]));
-                   //           }
-                   //       });
-                   //    }
-                   //
-                   //
-                   // }
-                   // else{
-                   //   console.log("it is not checked");
-                   //   // remove_individual_hydroservers_group(title);
-                   //   let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
-                   //   console.log(servers_checks);
-                   //   for(i = 0; i < servers_checks.length; i++) {
-                   //     let server_name = servers_checks[i].id;
-                   //      let checkbox = Array.from(servers_checks[i].children)
-                   //      for (var j = 0; j < checkbox.length; j++) {
-                   //          if (checkbox[j].className == "chkbx-layer") {
-                   //            console.log(checkbox[j])
-                   //            checkbox[j].checked = false;
-                   //          }
-                   //      }
-                   //      console.log(checkbox);
-                   //      map.getLayers().forEach(function(layer) {
-                   //           if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
-                   //             console.log(layer)
-                   //             layer.setStyle(new ol.style.Style({}));
-                   //           }
-                   //       });
-                   //    }
-                   //
-                   // }
-
                  });
 
 
