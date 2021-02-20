@@ -47,7 +47,6 @@ from .app import WaterDataExplorer as app
 from tethys_sdk.workspaces import app_workspace
 
 from shapely.geometry import Point, Polygon
-import zeep
 Persistent_Store_Name = 'catalog_db'
 # logging.basicConfig(level=logging.INFO)
 # logging.getLogger('suds.client').setLevel(logging.DEBUG)
@@ -79,7 +78,13 @@ def available_regions(request, app_workspace):
     hydroserver_long_list = []
     hydroserver_name_list = []
 
-    for server in session.query(HydroServer_Individual).all():
+    if request.method == 'GET' and 'group' in request.GET:
+        hydroservers_selected = session.query(HydroServer_Individual).all()
+    else:
+        specific_group=request.GET.get('group')
+        hydroservers_selected = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
+    # for server in session.query(HydroServer_Individual).all():
+    for server in hydroservers_selected:
         sites = json.loads(server.siteinfo)
         ls_lats = []
         ls_longs = []
@@ -146,7 +151,14 @@ def available_variables(request):
         Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
 
-    hydroservers_groups = session.query(Groups).all()
+    if request.method == 'GET' and 'group' in request.GET:
+        hydroservers_groups = session.query(HydroServer_Individual).all()
+    else:
+        specific_group=request.GET.get('group')
+        hydroservers_groups = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
+
+
+    # hydroservers_groups = session.query(Groups).all()
     varaibles_list = {}
     hydroserver_variable_list = []
 
@@ -185,6 +197,35 @@ def available_services(request):
             # print(views)
             hs_services['services'] = views
     return JsonResponse(hs_services)
+
+
+
+# def available_variables_group(request):
+#     specific_group=request.GET.get('group')
+#     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
+#     session = SessionMaker()  # Initiate a session
+#
+#
+#     hydroservers_group = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
+#
+#     varaibles_list = {}
+#     hydroserver_variable_list = []
+#
+#     for server in hydroservers_group:
+#         print("URL", server.url.strip())
+#         water = pwml.WaterMLOperations(url = server.url.strip())
+#         hs_variables = water.GetVariables()['variables']
+#         print(hs_variables)
+#         for hs_variable in hs_variables:
+#             if hs_variable['variableName'] not in hydroserver_variable_list:
+#                 hydroserver_variable_list.append(hs_variable['variableName'])
+#
+#     varaibles_list["variables"] = hydroserver_variable_list
+#     return JsonResponse(varaibles_list)
+
+
+
+
 
 ######*****************************************************************************************################
 ######***********************CREATE AN EMPTY GROUP OF HYDROSERVERS ****************************################
@@ -660,9 +701,6 @@ def get_variables_for_country(request,app_workspace):
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
     for hs in hs_filtered_region:
-        logging.basicConfig()
-        logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
-        # print(hs)
         hs_url = session.query(HydroServer_Individual).filter(HydroServer_Individual.title == hs)[0].url
         # print(hs_url)
         water = pwml.WaterMLOperations(url = hs_url)
