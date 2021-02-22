@@ -121,7 +121,7 @@ show_variables_groups = function(){
 
     },
     error: function(error){
-      $("#soapAddLoading-group").addClass("hidden")
+      $("#KeywordLoading").addClass("hidden")
       console.log(error)
       $.notify(
           {
@@ -264,6 +264,19 @@ listener_checkbox = function(list_countries){
     },
     error: function(error){
       console.log(error)
+      $("#KeywordLoading").addClass("hidden")
+      console.log(error)
+      $.notify(
+          {
+              message: `There was an error retrieving the different web services from the HIS catalog  `
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
+          }
+      )
     }
 
   })
@@ -276,7 +289,7 @@ load_search_group_modal = function(){
   $("#modalFilterGroup").find("#groups_countries2").empty();
   $("#modalFilterGroup").find("#groups_variables2").empty();
   show_variables_group();
-  // available_regions_group();
+  available_regions_group();
 
 }
 // $("#btn-filter-group-f").on("click", load_search_group_modal);
@@ -302,7 +315,7 @@ available_regions_group = function(){
           arr.slice(i * size, i * size + size)
         );
       let arr=chunk(countries_available, 2);
-      console.log(arr)
+      // console.log(arr)
 
       var HSTableHtml =
           `<table id="data-table2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
@@ -317,14 +330,14 @@ available_regions_group = function(){
               HSTableHtml += '</tr>';
         })
 
-        // HSTableHtml += '</td>'+'</tr>'
-        // HSTableHtml += '</tr>'
 
         HSTableHtml += "</tbody></table>"
-      console.log(HSTableHtml)
+      // console.log(HSTableHtml)
       $("#modalFilterGroup").find("#groups_countries2").html(HSTableHtml);
       $("#KeywordLoading2").addClass("hidden");
-      let checkboxes = $('#data-table2').find("input[type=checkbox][name=countries]")
+      // let ts = $('#data-table2')
+      // console.log(ts)
+      let checkboxes = $('#data-table2 input[type=checkbox][name=countries]')
       console.log(checkboxes)
       let countries_selected = [];
 
@@ -338,7 +351,7 @@ available_regions_group = function(){
           .get() // Get array.
         if (countries_selected.length > 0){
           console.log(countries_selected);
-          listener_checkbox(countries_selected)
+          listener_checkbox_group(countries_selected)
         }
         else{
           show_variables_group()
@@ -365,20 +378,23 @@ available_regions_group = function(){
 }
 
 listener_checkbox_group = function(list_countries){
+  let arrayActual_group=actual_group.split('=')[1];
+
   let le_object = {
-    "countries": list_countries
+    "countries": list_countries,
+    "group":arrayActual_group
   };
   console.log(le_object);
-  $("#KeywordLoading").removeClass("hidden")
+  $("#KeywordLoading2").removeClass("hidden")
 
   $.ajax({
     type: "GET",
-    url: `get-variables-for-country-group/`,
+    url: `get-variables-for-country/`,
     dataType: "JSON",
     data: le_object,
     success: function(result){
 
-      $("#modalKeyWordSearch").find("#groups_variables").empty();
+      $("#modalFilterGroup").find("#groups_variables2").empty();
       variables_list = result['variables'];
       const chunk = (arr, size) =>
         Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -388,7 +404,7 @@ listener_checkbox_group = function(list_countries){
       console.log(arr)
 
       var HSTableHtml =
-          `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+          `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
 
         arr.forEach(l_arr => {
           HSTableHtml +=  '<tr class="odd gradeX">'
@@ -402,12 +418,24 @@ listener_checkbox_group = function(list_countries){
 
         HSTableHtml += "</tbody></table>"
       console.log(HSTableHtml)
-      $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
-      $("#KeywordLoading").addClass("hidden");
+      $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
+      $("#KeywordLoading2").addClass("hidden");
 
     },
     error: function(error){
+      $("#KeywordLoading2").addClass("hidden")
       console.log(error)
+      $.notify(
+          {
+              message: `There was an error trying to find the varaiables for the selected country`
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
+          }
+      )
     }
 
   })
@@ -458,7 +486,7 @@ show_variables_group = function(){
 
     },
     error: function(error){
-      $("#soapAddLoading-group").addClass("hidden")
+      $("#KeywordLoading2").addClass("hidden")
       console.log(error)
       $.notify(
           {

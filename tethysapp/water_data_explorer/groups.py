@@ -181,7 +181,7 @@ def available_services(request):
     if url_catalog:
         try:
             # url_catalog = unquote(url_catalog)
-            print("THIS ", url_catalog)
+            # print("THIS ", url_catalog)
             url_catalog2 = url_catalog + "?WSDL"
             client = Client(url_catalog2, timeout= 500)
             # logging.getLogger('suds.client').setLevel(logging.DEBUG)
@@ -191,40 +191,13 @@ def available_services(request):
             views = giveServices(services)
             hs_services['services'] = views
         except Exception as e:
-            print("I AM HERE OR NOT")
+            # print("I AM HERE OR NOT")
             services = parseService(url_catalog)
-            print(services)
+            # print(services)
             views = giveServices(services)
             # print(views)
             hs_services['services'] = views
     return JsonResponse(hs_services)
-
-
-
-# def available_variables_group(request):
-#     specific_group=request.GET.get('group')
-#     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
-#     session = SessionMaker()  # Initiate a session
-#
-#
-#     hydroservers_group = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
-#
-#     varaibles_list = {}
-#     hydroserver_variable_list = []
-#
-#     for server in hydroservers_group:
-#         print("URL", server.url.strip())
-#         water = pwml.WaterMLOperations(url = server.url.strip())
-#         hs_variables = water.GetVariables()['variables']
-#         print(hs_variables)
-#         for hs_variable in hs_variables:
-#             if hs_variable['variableName'] not in hydroserver_variable_list:
-#                 hydroserver_variable_list.append(hs_variable['variableName'])
-#
-#     varaibles_list["variables"] = hydroserver_variable_list
-#     return JsonResponse(varaibles_list)
-
-
 
 
 
@@ -607,7 +580,7 @@ def catalog_filter(request,app_workspace):
     return JsonResponse(ret_obj)
 
 
-def filter_region(countries_geojson_file_path,list_countries):
+def filter_region(countries_geojson_file_path,list_countries, actual_group = None):
     region_list = []
     if len(list_countries) > 0:
         shapely.speedups.enable()
@@ -623,7 +596,14 @@ def filter_region(countries_geojson_file_path,list_countries):
         hydroserver_long_list = []
         hydroserver_name_list = []
         servers = []
-        for server in session.query(HydroServer_Individual).all():
+        if actual_group is None:
+            hydroservers_selected = session.query(HydroServer_Individual).all()
+        else:
+            specific_group = actual_group
+            print(specific_group)
+            hydroservers_selected = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
+
+        for server in hydroservers_selected:
             servers.append(server.title)
             sites = json.loads(server.siteinfo)
             ls_lats = []
@@ -661,19 +641,25 @@ def filter_region(countries_geojson_file_path,list_countries):
             # print(list_countries_selected)
             if len(list_countries_selected) > 0:
                 # region_list.append(servers[indx])
-                region_list.append(session.query(HydroServer_Individual).all()[indx].title)
+                # region_list.append(session.query(HydroServer_Individual).all()[indx].title)
+                region_list.append(hydroservers_selected[indx].title)
 
     # print(region_list)
     return region_list
-def filter_variable(variables_list):
+def filter_variable(variables_list, actual_group = None):
     hs_list = []
     if len(variables_list) > 0:
         list_catalog={}
         SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
         session = SessionMaker()  # Initiate a session
-
+        if actual_group is None:
+            hydroservers_selected = session.query(HydroServer_Individual).all()
+        else:
+            specific_group = actual_group
+            print(specific_group)
+            hydroservers_selected = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
         hs_list = []
-        for hydroservers in session.query(HydroServer_Individual).all():
+        for hydroservers in hydroservers_selected:
             name = hydroservers.title
             water = pwml.WaterMLOperations(url = hydroservers.url.strip())
             variables_sever = water.GetVariables()['variables']
@@ -692,15 +678,23 @@ def filter_variable(variables_list):
 
 @app_workspace
 def get_variables_for_country(request,app_workspace):
+
+
     response_obj = {}
     countries = request.GET.getlist('countries[]')
     print(countries)
     variables_hs = []
     countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
-    hs_filtered_region = filter_region(countries_geojson_file_path,countries)
+    if request.method == 'GET' and 'group' in request.GET:
+        specific_group=request.GET.get('group')
+        hs_filtered_region = filter_region(countries_geojson_file_path,countries,actual_group = specific_group )
+    else:
+        hs_filtered_region = filter_region(countries_geojson_file_path,countries)
     print(hs_filtered_region)
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
+
+
     for hs in hs_filtered_region:
         hs_url = session.query(HydroServer_Individual).filter(HydroServer_Individual.title == hs)[0].url
         # print(hs_url)
