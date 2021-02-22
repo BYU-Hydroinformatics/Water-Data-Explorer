@@ -189,7 +189,7 @@ available_regions = function(){
         countries_selected = checkboxes
           .filter(":checked") // Filter out unchecked boxes.
           .map(function() { // Extract values using jQuery map.
-            return this.value;
+            return this.value.replace(/_/g, ' ');
           })
           .get() // Get array.
         if (countries_selected.length > 0){
@@ -346,7 +346,7 @@ available_regions_group = function(){
         countries_selected = checkboxes
           .filter(":checked") // Filter out unchecked boxes.
           .map(function() { // Extract values using jQuery map.
-            return this.value;
+            return this.value.replace(/_/g, ' ');
           })
           .get() // Get array.
         if (countries_selected.length > 0){

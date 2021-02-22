@@ -584,11 +584,15 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
     region_list = []
     if len(list_countries) > 0:
         shapely.speedups.enable()
+        print(list_countries)
         # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
         countries_gdf = gpd.read_file(countries_geojson_file_path)
+        print(countries_gdf['name'].tolist())
+        if list_countries[0] in countries_gdf['name'].tolist():
+            print("YEAHH")
         countries_gdf2 = countries_gdf[countries_gdf['name'].isin(list_countries)]
         countries_series = countries_gdf2.loc[:,'geometry']
-        # print(countries_gdf2)
+        print(countries_gdf2)
         SessionMaker = app.get_persistent_store_database(
             Persistent_Store_Name, as_sessionmaker=True)
         session = SessionMaker()
@@ -617,18 +621,20 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
             hydroserver_long_list.append(ls_longs)
             hydroserver_name_list.append(site_names)
 
+        print(hydroservers_selected)
         for indx in range(0,len(hydroserver_name_list)):
             df = pd.DataFrame({'SiteName': hydroserver_name_list[indx],'Latitude': hydroserver_lat_list[indx],'Longitude': hydroserver_long_list[indx]})
             gdf = gpd.GeoDataFrame(geometry=gpd.points_from_xy(df.Longitude, df.Latitude), index = hydroserver_name_list[indx])
-            # print(gdf)
+            print(gdf)
 
             gdf = gdf.assign(**{str(key): gdf.within(geom) for key, geom in countries_series.items()})
             trues_onlys = gdf.copy()
+            # print('trues')
+            # print(trues_onlys)
             trues_onlys = trues_onlys.drop(['geometry'],axis=1)
 
             trues_onlys = trues_onlys.loc[:,trues_onlys.any()]
-            # print('trues')
-            # print(trues_onlys)
+
             countries_index = list(trues_onlys.columns)
             countries_index = [x for x in countries_index if x != 'geometry']
             countries_index = [int(i) for i in countries_index]
@@ -644,7 +650,7 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
                 # region_list.append(session.query(HydroServer_Individual).all()[indx].title)
                 region_list.append(hydroservers_selected[indx].title)
 
-    # print(region_list)
+    print(region_list)
     return region_list
 def filter_variable(variables_list, actual_group = None):
     hs_list = []
@@ -690,7 +696,7 @@ def get_variables_for_country(request,app_workspace):
         hs_filtered_region = filter_region(countries_geojson_file_path,countries,actual_group = specific_group )
     else:
         hs_filtered_region = filter_region(countries_geojson_file_path,countries)
-    print(hs_filtered_region)
+    print("FILTERD REGIONS",hs_filtered_region)
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
 
