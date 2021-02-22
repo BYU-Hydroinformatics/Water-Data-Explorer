@@ -1632,6 +1632,17 @@ searchVariables = function() {
 }
 document.getElementById('myInputKeyword2').addEventListener("keyup", searchVariables);
 
+// for only one group
+searchGroups_group = function() {
+  general_search("myInputKeywordGroup","data-table2");
+}
+document.getElementById('myInputKeywordGroup').addEventListener("keyup", searchGroups_group);
+
+searchVariablesGroup = function() {
+  general_search("myInputKeywordGroup2","data-table-var2");
+}
+document.getElementById('myInputKeywordGroup2').addEventListener("keyup", searchVariablesGroup);
+
 
 
 general_search = function(id_search_input, id_table){
