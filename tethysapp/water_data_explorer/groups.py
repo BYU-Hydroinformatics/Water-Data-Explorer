@@ -78,10 +78,11 @@ def available_regions(request, app_workspace):
     hydroserver_long_list = []
     hydroserver_name_list = []
 
-    if request.method == 'GET' and 'group' in request.GET:
+    if request.method == 'GET' and 'group' not in request.GET:
         hydroservers_selected = session.query(HydroServer_Individual).all()
     else:
         specific_group=request.GET.get('group')
+        print(specific_group)
         hydroservers_selected = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
     # for server in session.query(HydroServer_Individual).all():
     for server in hydroservers_selected:
@@ -151,7 +152,7 @@ def available_variables(request):
         Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
 
-    if request.method == 'GET' and 'group' in request.GET:
+    if request.method == 'GET' and 'group' not in request.GET:
         hydroservers_groups = session.query(HydroServer_Individual).all()
     else:
         specific_group=request.GET.get('group')
@@ -162,7 +163,7 @@ def available_variables(request):
     varaibles_list = {}
     hydroserver_variable_list = []
 
-    for server in session.query(HydroServer_Individual).all():
+    for server in hydroservers_groups:
         print("URL", server.url.strip())
         water = pwml.WaterMLOperations(url = server.url.strip())
         hs_variables = water.GetVariables()['variables']

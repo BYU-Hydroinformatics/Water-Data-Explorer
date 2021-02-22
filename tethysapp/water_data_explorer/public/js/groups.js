@@ -271,16 +271,21 @@ listener_checkbox = function(list_countries){
 }
 
 load_search_group_modal = function(){
+
+  // clean the modal //
+  $("#modalFilterGroup").find("#groups_countries2").empty();
+  $("#modalFilterGroup").find("#groups_variables2").empty();
   show_variables_group();
-  available_regions_group();
+  // available_regions_group();
 
 }
 // $("#btn-filter-group-f").on("click", load_search_group_modal);
 $(document).on("click", "#btn-filter-group-f", load_search_group_modal);
 
 available_regions_group = function(){
+  let arrayActual_group=actual_group.split('=')[1];
   let group_obj = {
-    'group': actual_group
+    'group': arrayActual_group
   };
   $("#KeywordLoading2").removeClass("hidden");
   $.ajax({
@@ -300,7 +305,7 @@ available_regions_group = function(){
       console.log(arr)
 
       var HSTableHtml =
-          `<table id="data-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+          `<table id="data-table2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
 
         arr.forEach(l_arr => {
           HSTableHtml +=  '<tr class="odd gradeX">'
@@ -317,9 +322,9 @@ available_regions_group = function(){
 
         HSTableHtml += "</tbody></table>"
       console.log(HSTableHtml)
-      $("#modalKeyWordSearch").find("#groups_countries").html(HSTableHtml);
-      $("#KeywordLoading").addClass("hidden");
-      let checkboxes = $('#data-table').find("input[type=checkbox][name=countries]")
+      $("#modalFilterGroup").find("#groups_countries2").html(HSTableHtml);
+      $("#KeywordLoading2").addClass("hidden");
+      let checkboxes = $('#data-table2').find("input[type=checkbox][name=countries]")
       console.log(checkboxes)
       let countries_selected = [];
 
@@ -410,10 +415,10 @@ listener_checkbox_group = function(list_countries){
 }
 
 show_variables_group = function(){
+  let arrayActual_group=actual_group.split('=')[1];
   let group_obj = {
-    'group': actual_group
+    'group': arrayActual_group
   };
-
   $("#KeywordLoading2").removeClass("hidden");
   $.ajax({
     type: "GET",
