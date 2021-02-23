@@ -2019,7 +2019,7 @@ var water_data_explorer_PACKAGE = (function() {
                     </div>
 
                     <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-                    <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>Broker Endpoints</div>
+                    <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
                       <div class="panel-body">
                           <div id= ${id_group_separator} class="divForServers"></div>
                       </div>
@@ -2927,7 +2927,7 @@ var water_data_explorer_PACKAGE = (function() {
                       </div>
 
                       <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-                      <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>Broker Endpoints</div>
+                      <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
                         <div class="panel-body">
                             <div id= ${id_group_separator} class="divForServers"></div>
                         </div>

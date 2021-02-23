@@ -463,7 +463,7 @@ function html_for_groups(isAdmin, title, id_group_separator){
       </div>
 
       <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-      <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>Broker Endpoints</div>
+      <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
         <div class="panel-body">
             <div id= ${id_group_separator} class="divForServers"></div>
         </div>
