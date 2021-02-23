@@ -1225,6 +1225,8 @@ reset_keywords = function(){
      });
 }
 
+
+
 // get_keywords_from_group = function(){
 //
 //     // let groups_list_table = document.getElementById(`groups_services`);
@@ -1497,6 +1499,7 @@ reset_keywords = function(){
 //
 // }
 $("#btn-r-reset").on("click", reset_keywords);
+$("#btn-r-reset-server").on("click", reset_keywords);
 
     /*
     ************ FUNCTION NAME : GET_ALL_THE_CHECKED_KEYWORDS
