@@ -1213,6 +1213,77 @@ catalog_filter = function(){
 }
 $("#btn-key-search").on("click", catalog_filter);
 
+catalog_filter_server = function(){
+  let elementForm= $("#modalFilterGroup");
+  console.log(elementForm)
+  let datastring= elementForm.serialize();
+  datastring += actual_group;
+  console.log(datastring);
+  $.ajax({
+      type: "GET",
+      url: `catalog-filter/`,
+      dataType: "HTML",
+      data: datastring,
+      success: function(result) {
+        let check_for_none = []
+        let hs_available = JSON.parse(result)['hs'];
+        // let hs_available = JSON.parse(result);
+        console.log(hs_available)
+        let arrayActual_group=actual_group.split('=')[1];
+        $(`#${arrayActual_group}_list_separator`).find("li").each(function()
+           {
+              var $li=$(this)['0'];
+              console.log($li)
+              let id_li = $li['id'];
+              console.log(id_li)
+
+              if(hs_available.includes(id_li)){
+                // $(`#${id_li}`).removeClass("hidden");
+                $(`#${id_li}`).css({"opacity": "1",
+                                    "border-color": "#ac2925",
+                                    "border-width": "2px",
+                                    "border-style": "solid",
+                                    "color": "black",
+                                    "font-weight": "bold"});
+                // $(`#${id_li}`).css("border-color", "#ac2925");
+                // check_for_none.push(id_li);
+              }
+              else{
+                // $(`#${id_li}`).addClass("hidden");
+                // $(`#${id_li}`).css("opacity", "0.5");
+                // $(`#${id_li}`).css("border-color", "#d3d3d3");
+                $(`#${id_li}`).css({"opacity": "0.5",
+                                    "border-color": "#d3d3d3",
+                                    "border-width":"1px",
+                                    "border-style":"solid",
+                                    "color":"#555555",
+                                    "font-weight": "normal"});
+              }
+           });
+
+      },
+      error: function(error) {
+        console.log(error);
+        // get_notification("danger",`Something were wrong when applying the filter with the keywords`);
+        $.notify(
+            {
+                message: `Something were wrong when applying the filter with variables and regions`
+            },
+            {
+                type: "danger",
+                allow_dismiss: true,
+                z_index: 20000,
+                delay: 5000
+            }
+        )
+
+      }
+
+    })
+
+}
+$("#btn-key-search-server").on("click", catalog_filter_server);
+
 reset_keywords = function(){
   Object.keys(information_model).forEach(function(key) {
         $(`#${key}-noGroups`).addClass("hidden");
@@ -1222,6 +1293,13 @@ reset_keywords = function(){
         var $li=$(this)['0'];
         let id_li = $li['id'];
         $(`#${id_li}`).removeClass("hidden");
+        $(`#${id_li}`).css({"opacity": "1",
+                            "border-color": "#d3d3d3",
+                            "border-width":"1px",
+                            "border-style":"solid",
+                            "color":"#555555",
+                            "font-weight": "normal"});
+
      });
 }
 

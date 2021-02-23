@@ -546,6 +546,12 @@ def delete_group(request):
 @app_workspace
 def catalog_filter(request,app_workspace):
     ret_obj = {}
+    actual_group = None
+    print(request.GET)
+    if request.method == 'GET' and 'actual-group' in request.GET:
+        print("YEAH")
+        actual_group = request.GET.getlist('actual-group')[0]
+    print(actual_group)
     print("inside first if statement of create group")
     countries = request.GET.getlist('countries')
     count_new = []
@@ -559,10 +565,12 @@ def catalog_filter(request,app_workspace):
         var_new.append(varia.replace("_"," "))
     variables = var_new
     print(variables)
+
+
     # shapely.speedups.enable()
     countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
-    hs_filtered_region = filter_region(countries_geojson_file_path,countries)
-    hs_filtered_variable = filter_variable(variables)
+    hs_filtered_region = filter_region(countries_geojson_file_path,countries, actual_group= actual_group)
+    hs_filtered_variable = filter_variable(variables, actual_group=actual_group)
     print("hs_filtered_region",hs_filtered_region)
     print("hs_filtered_variable",hs_filtered_variable)
     intersection_hs = []
