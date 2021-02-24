@@ -1,20 +1,3 @@
-function featureStyle() {
-    var style = new ol.style.Style({
-        image: new ol.style.Circle({
-            radius: 6,
-            stroke: new ol.style.Stroke({
-                color: "white",
-                width: 1
-            }),
-            fill: new ol.style.Fill({
-                // color: `#${(((1 << 24) * Math.random()) | 0).toString(16)}`
-                color: "#00FF00"
-            })
-        })
-    })
-    return style
-}
-
 /*
 ************ FUNCTION NAME: DISABLE MAP **********************
 ************ PURPOSE: DISABLES OR ENABLES THE ZOOM OUT AND DRAGGING OF THE MAP ***********

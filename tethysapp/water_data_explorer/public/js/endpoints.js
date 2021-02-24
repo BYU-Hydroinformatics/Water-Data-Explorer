@@ -1,7 +1,69 @@
+map_layers = function(sites,title,url){
+
+  sites = sites.map(site => {
+      return {
+          type: "Feature",
+          geometry: {
+              type: "Point",
+              coordinates: ol.proj.transform(
+                  [
+                      parseFloat(site.longitude),
+                      parseFloat(site.latitude)
+                  ],
+                  "EPSG:4326",
+                  "EPSG:3857"
+              )
+          },
+          properties: {
+              name: site.sitename,
+              code: site.sitecode,
+              network: site.network,
+              hs_url: url,
+              hs_name: title,
+              lon: parseFloat(site.longitude),
+              lat: parseFloat(site.latitude)
+          }
+      }
+  })
+
+  let sitesGeoJSON = {
+      type: "FeatureCollection",
+      crs: {
+          type: "name",
+          properties: {
+              name: "EPSG:3857"
+          }
+      },
+      features: sites
+  }
+
+  const vectorSource = new ol.source.Vector({
+      features: new ol.format.GeoJSON().readFeatures(
+          sitesGeoJSON
+      )
+  })
+  var clusterSource = new ol.source.Cluster({
+     distance: parseInt(30, 10),
+     source: vectorSource,
+   });
+  layerColorDict[title] = get_new_color();
+
+  let style_custom = featureStyle(layerColorDict[title])
+  var vectorLayer = new ol.layer.Vector({
+    source: clusterSource,
+    style: style_custom
+  });
+  return [vectorLayer,vectorSource]
+
+}
+
+
+
+
+
 /*
 ****** FU1NCTION NAME : load_individual_hydroservers_group*********
 ****** FUNCTION PURPOSE: LOADS THE SERVERS OF A HYDROSERVER WHEN THE HYDROSERVER GROUPS IS CLICKED*********
-
 */
   load_individual_hydroservers_group = function(group_name){
      // let servers_with_keywords = [];
@@ -18,20 +80,6 @@
         transform: 'translate(-50%, -50%)'
       });
      $("#GeneralLoading").removeClass("hidden");
-     // $.ajax({
-     //   type:"GET",
-     //   url: `keyword-group`,
-     //   dataType: "JSON",
-     //   data: group_name_obj,
-       // success: function(result){
-         // //console.log(result);
-
-         //ALL THE SERVERS IN THE SELECTED GROUP //
-         // let all_servers_in_group = result.hydroserver;
-
-         //LOOK FOR THE SERVERS THAT HAVE KEYWORDS //
-         // let keywords_in_servers = get_servers_with_keywords_from_group(result, key_words_to_search);
-         // //console.log(keywords_in_servers);
          $.ajax({
              type: "GET",
              url: `catalog-group`,
@@ -58,12 +106,10 @@
                    $(no_servers).appendTo(`#${id_group_separator}`) ;
                  }
                  servers.forEach(function(server){
+                   console.log(server)
                      let {
                          title,
                          url,
-                         geoserver_url,
-                         layer_name,
-                         extents,
                          siteInfo
                      } = server
                      information_model[`${group_name}`].push(title);
@@ -113,70 +159,76 @@
                        });
 
 
+                       // let sites = siteInfo
+                       // // //console.log(title)
+                       // // //console.log(typeof(sites))
+                       // // //console.log(sites);
+                       // if (typeof(sites) == "string"){
+                       //   // //console.log("inside strng");
+                       //   sites = JSON.parse(siteInfo);
+                       // }
+                       // sites = sites.map(site => {
+                       //     return {
+                       //         type: "Feature",
+                       //         geometry: {
+                       //             type: "Point",
+                       //             coordinates: ol.proj.transform(
+                       //                 [
+                       //                     parseFloat(site.longitude),
+                       //                     parseFloat(site.latitude)
+                       //                 ],
+                       //                 "EPSG:4326",
+                       //                 "EPSG:3857"
+                       //             )
+                       //         },
+                       //         properties: {
+                       //             name: site.sitename,
+                       //             code: site.sitecode,
+                       //             network: site.network,
+                       //             hs_url: url,
+                       //             hs_name: title,
+                       //             lon: parseFloat(site.longitude),
+                       //             lat: parseFloat(site.latitude)
+                       //         }
+                       //     }
+                       // })
+                       //
+                       // let sitesGeoJSON = {
+                       //     type: "FeatureCollection",
+                       //     crs: {
+                       //         type: "name",
+                       //         properties: {
+                       //             name: "EPSG:3857"
+                       //         }
+                       //     },
+                       //     features: sites
+                       // }
+                       //
+                       // const vectorSource = new ol.source.Vector({
+                       //     features: new ol.format.GeoJSON().readFeatures(
+                       //         sitesGeoJSON
+                       //     )
+                       // })
+                       // var clusterSource = new ol.source.Cluster({
+                       //    distance: parseInt(30, 10),
+                       //    source: vectorSource,
+                       //  });
+                       // layerColorDict[title] = get_new_color();
+                       // // const vectorLayer = new ol.layer.Vector({
+                       // //     source: vectorSource,
+                       // //     style: featureStyle(layerColorDict[title])
+                       // // })
+                       // let style_custom = featureStyle(layerColorDict[title])
+                       // var vectorLayer = new ol.layer.Vector({
+                       //   source: clusterSource,
+                       //   style: style_custom
+                       // });
                        let sites = siteInfo
-                       // //console.log(title)
-                       // //console.log(typeof(sites))
-                       // //console.log(sites);
                        if (typeof(sites) == "string"){
-                         // //console.log("inside strng");
                          sites = JSON.parse(siteInfo);
                        }
-                       sites = sites.map(site => {
-                           return {
-                               type: "Feature",
-                               geometry: {
-                                   type: "Point",
-                                   coordinates: ol.proj.transform(
-                                       [
-                                           parseFloat(site.longitude),
-                                           parseFloat(site.latitude)
-                                       ],
-                                       "EPSG:4326",
-                                       "EPSG:3857"
-                                   )
-                               },
-                               properties: {
-                                   name: site.sitename,
-                                   code: site.sitecode,
-                                   network: site.network,
-                                   hs_url: url,
-                                   hs_name: title,
-                                   lon: parseFloat(site.longitude),
-                                   lat: parseFloat(site.latitude)
-                               }
-                           }
-                       })
-
-                       let sitesGeoJSON = {
-                           type: "FeatureCollection",
-                           crs: {
-                               type: "name",
-                               properties: {
-                                   name: "EPSG:3857"
-                               }
-                           },
-                           features: sites
-                       }
-
-                       const vectorSource = new ol.source.Vector({
-                           features: new ol.format.GeoJSON().readFeatures(
-                               sitesGeoJSON
-                           )
-                       })
-                       var clusterSource = new ol.source.Cluster({
-                          distance: parseInt(30, 10),
-                          source: vectorSource,
-                        });
-                       layerColorDict[title] = get_new_color();
-                       // const vectorLayer = new ol.layer.Vector({
-                       //     source: vectorSource,
-                       //     style: featureStyle(layerColorDict[title])
-                       // })
-                       let style_custom = featureStyle(layerColorDict[title])
-                       var vectorLayer = new ol.layer.Vector({
-                         source: clusterSource,
-                         style: style_custom
-                       });
+                       var vectorLayer = map_layers(sites,title,url)[0]
+                       var vectorSource = map_layers(sites,title,url)[1]
                        //console.log(style_custom)
 
                        let test_style = new ol.style.Style({
@@ -212,12 +264,12 @@
                        map.addLayer(vectorLayer);
                        // map.addLayer(vectorLayer2);
                        vectorLayer.setStyle(new ol.style.Style({}));
-                       ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
-                       layersDictExt[title] = ext;
+                       // ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
+                       // layersDictExt[title] = ext;
 
                        // //console.log(ext)
 
-                       ol.extent.extend(extent, vectorSource.getExtent())
+                       // ol.extent.extend(extent, vectorSource.getExtent())
 
                        vectorLayer.set("selectable", true)
 
@@ -705,12 +757,17 @@ delete_hydroserver_Individual= function(group,server){
 */
 
 showVariables = function(){
+  Logger.useDefaults({
+    defaultLevel: Logger.WARN,
+    formatter: function (messages, context) {
+      messages.unshift(new Date().toUTCString());
+    },
+  });
  //console.log("ShowVariables");
  let groupActual = this.parentElement.parentNode.id.split("_")[0];
  let hsActual = this.id.split("_")[0];
  group_show_actual = groupActual;
  hs_show_actual = hsActual;
- //console.log(groupActual);
  // let requestObject= {};
  // requestObject['group']=groupActual;
  // requestObject['hs']=hsActual;
@@ -727,7 +784,7 @@ showVariables = function(){
          //console.log(result);
          var HSTableHtml =
              `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
-         if (result['variables'].length === 0) {
+         if (result['variables_name'].length === 0) {
              $modalVariables
                  .find(".modal-body")
                  .html(
@@ -735,11 +792,10 @@ showVariables = function(){
                  )
          }
          else {
-             for (var i = 0; i < result['variables'].length; i++) {
+             for (var i = 0; i < result['variables_name'].length; i++) {
                  HSTableHtml +=
                 '<tr class="odd gradeX2">'+
-                     `<td><input type="checkbox" name="name1" />${result['variables'][i]}
-                     </td>`
+                     `<td><input type="checkbox" name="name1" value="${result['variables_code'][i]}" />${result['variables_name'][i]}</td>`
                      +
                 '</tr>'
              }
@@ -756,14 +812,20 @@ showVariables = function(){
 ****** FUNCTION PURPOSE: SHOW THE SITES THAT HAVE BEEN FILTERED REQURING SPECIFIC VARIABLES*********
 */
 showAvailableSites = function(){
+  Logger.useDefaults({
+    defaultLevel: Logger.WARN,
+    formatter: function (messages, context) {
+      messages.unshift(new Date().toUTCString());
+    },
+  });
  let group = this.baseURI.split("/");
  // ONLY THE KEY WORDS //
  let datastring = Array.from(document.getElementsByClassName("odd gradeX2"));
- //console.log(datastring);
+ console.log(datastring);
  let hs = datastring[0].offsetParent.id.split("-")[0];
 
- //console.log(group);
- //console.log(hs);
+ // console.log(group);
+ console.log(hs);
  // //console.log(datastring);
  let key_words_to_search=[];
  datastring.forEach(function(data){
@@ -771,12 +833,12 @@ showAvailableSites = function(){
    Array.from(data.children).forEach(function(column){
      if(Array.from(column.children)[0].checked ==true){
        // //console.log();
-       key_words_to_search.push(Array.from(column.children)[0].nextSibling.nodeValue.trim())
+       key_words_to_search.push(Array.from(column.children)[0].value.trim())
      }
    })
  });
  // filter_words = key_words_to_search;
- //console.log(key_words_to_search);
+ console.log(key_words_to_search);
 
  let requestObject = {};
  requestObject['hs'] = filterSites['hs'];
@@ -791,56 +853,59 @@ showAvailableSites = function(){
      dataType: "JSON",
      data: requestObject,
      success: result => {
-         //console.log(result);
+         console.log(result);
          let sites = result['hydroserver'];
          let title = filterSites['hs'];
-         sites = sites.map(site => {
-             return {
-                 type: "Feature",
-                 geometry: {
-                     type: "Point",
-                     coordinates: ol.proj.transform(
-                         [
-                             parseFloat(site.longitude),
-                             parseFloat(site.latitude)
-                         ],
-                         "EPSG:4326",
-                         "EPSG:3857"
-                     )
-                 },
-                 properties: {
-                     name: site.sitename,
-                     code: site.sitecode,
-                     network: site.network,
-                     hs_url: url,
-                     hs_name: title,
-                     lon: parseFloat(site.longitude),
-                     lat: parseFloat(site.latitude)
-                 }
-             }
-         })
-         //console.log(sites);
-         let sitesGeoJSON = {
-             type: "FeatureCollection",
-             crs: {
-                 type: "name",
-                 properties: {
-                     name: "EPSG:3857"
-                 }
-             },
-             features: sites
-         }
+         // sites = sites.map(site => {
+         //     return {
+         //         type: "Feature",
+         //         geometry: {
+         //             type: "Point",
+         //             coordinates: ol.proj.transform(
+         //                 [
+         //                     parseFloat(site.longitude),
+         //                     parseFloat(site.latitude)
+         //                 ],
+         //                 "EPSG:4326",
+         //                 "EPSG:3857"
+         //             )
+         //         },
+         //         properties: {
+         //             name: site.sitename,
+         //             code: site.sitecode,
+         //             network: site.network,
+         //             hs_url: url,
+         //             hs_name: title,
+         //             lon: parseFloat(site.longitude),
+         //             lat: parseFloat(site.latitude)
+         //         }
+         //     }
+         // })
+         // //console.log(sites);
+         // let sitesGeoJSON = {
+         //     type: "FeatureCollection",
+         //     crs: {
+         //         type: "name",
+         //         properties: {
+         //             name: "EPSG:3857"
+         //         }
+         //     },
+         //     features: sites
+         // }
+         //
+         // const vectorSource = new ol.source.Vector({
+         //     features: new ol.format.GeoJSON().readFeatures(
+         //         sitesGeoJSON
+         //     )
+         // })
+         //
+         // const vectorLayer = new ol.layer.Vector({
+         //     source: vectorSource,
+         //     style: featureStyle()
+         // })
 
-         const vectorSource = new ol.source.Vector({
-             features: new ol.format.GeoJSON().readFeatures(
-                 sitesGeoJSON
-             )
-         })
-
-         const vectorLayer = new ol.layer.Vector({
-             source: vectorSource,
-             style: featureStyle()
-         })
+         const vectorLayer =  map_layers(sites,title)[0]
+         const vectorSource =  map_layers(sites,title)[1]
          if(layersDict.hasOwnProperty(requestObject['hs'])){
             map.removeLayer(layersDict[requestObject['hs']])
          }

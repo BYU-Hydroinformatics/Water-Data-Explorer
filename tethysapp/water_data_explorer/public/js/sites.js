@@ -4,6 +4,7 @@
 */
 activate_layer_values = function (){
   map.on('singleclick', function(evt) {
+
     $('#variables_graph').selectpicker('setStyle', 'btn-primary');
 
     evt.stopPropagation();
@@ -13,10 +14,10 @@ activate_layer_values = function (){
     let object_request={};
     //console.log(object_request);
 
-    var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-        //console.log(feature)
+    var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature2, layer) {
+        console.log(feature2)
         //you can add a condition on layer to restrict the listener
-        if(feature){
+        if(feature2){
 
 
           if(layersDict['selectedPoint']){
@@ -26,7 +27,7 @@ activate_layer_values = function (){
           }
 
           let actual_Source = new ol.source.Vector({})
-          actual_Source.addFeature(feature);
+          actual_Source.addFeature(feature2);
           let vectorLayer = new ol.layer.Vector({
               source: actual_Source,
               style:  new ol.style.Style({
@@ -47,7 +48,7 @@ activate_layer_values = function (){
           //console.log(vectorLayer);
           map.addLayer(vectorLayer);
         }
-        return feature;
+        return feature2;
         });
     if (feature) {
 
@@ -60,8 +61,9 @@ activate_layer_values = function (){
         'pie':{},
         'whisker':{}
       }
+      console.log(feature);
       let feature_single = feature.values_.features[0]
-      //console.log(feature_single)
+      console.log(feature_single)
       //console.log(feature_single.values_['hs_name']);
 
       // $("#siteName_title").html(feature.values_['name']);
@@ -75,7 +77,7 @@ activate_layer_values = function (){
       // $("#graphAddLoading").css({left:'50%',bottom:"15%", position:'absolute',"z-index": 9999});
       // $("#graphAddLoading").removeClass("hidden");
       $("#GeneralLoading").removeClass("hidden");
-      //console.log(object_request);
+      console.log(object_request);
 
       $.ajax({
         type:"GET",
