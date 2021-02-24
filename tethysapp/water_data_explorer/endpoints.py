@@ -423,28 +423,29 @@ def upload_hs(request):
             url = hydroservers.url
             if name == specific_hs:
                 difference = len(json.loads(hydroservers.siteinfo))
-                client = Client(url, timeout= 500)
-
-                sites = client.service.GetSites('[:]')
-                print(type(sites))
-                sites_json={}
-                if isinstance(sites, str):
-                    print("here")
-                    sites_dict = xmltodict.parse(sites)
-                    sites_json_object = json.dumps(sites_dict)
-                    sites_json = json.loads(sites_json_object)
-                else:
-                    sites_json_object = suds_to_json(sites)
-                    sites_json = json.loads(sites_json_object)
+                # client = Client(url, timeout= 500)
+                water = pwml.WaterMLOperations(url = url)
+                sites_object = water.GetSites()
+                # print(type(sites))
+                # sites_json={}
+                # if isinstance(sites, str):
+                #     print("here")
+                #     sites_dict = xmltodict.parse(sites)
+                #     sites_json_object = json.dumps(sites_dict)
+                #     sites_json = json.loads(sites_json_object)
+                # else:
+                #     sites_json_object = suds_to_json(sites)
+                #     sites_json = json.loads(sites_json_object)
 
                 # Parsing the sites and creating a sites object. See auxiliary.py
-                print("-------------------------------------")
+                # print("-------------------------------------")
                 # print(sites_json)
-                sites_object = parseJSON(sites_json)
+                # sites_object = parseJSON(sites_json)
                 # print(sites_object)
                 # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
 
                 # sites_parsed_json = json.dumps(converted_sites_object)
+                # sites_parsed_json = json.dumps(sites_object)
                 sites_parsed_json = json.dumps(sites_object)
                 difference = len(sites_object) - difference
                 hydroservers.siteinfo = sites_parsed_json
