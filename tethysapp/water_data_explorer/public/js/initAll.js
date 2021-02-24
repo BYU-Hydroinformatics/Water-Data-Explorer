@@ -12,7 +12,7 @@
  *****************************************************************************/
  var staticPath = baseStatic;
  var apiServer = "";
- console.log(apiServer);
+ ////console.log(apiServer);
  window.onbeforeunload = null
  var $myGroup = $("#helpGroup")
  $myGroup.on("show.bs.collapse", ".collapse", function() {
@@ -62,7 +62,7 @@ var water_data_explorer_PACKAGE = (function() {
       }
       if(endpointGeoServer ==="None"){
         endpointGeoServer = "Whole_world";
-        console.log(endpointGeoServer);
+        //console.log(endpointGeoServer);
       }
       if(geoServerWorkspace ==="None"){
         geoServerWorkspace= "Whole_world";
@@ -100,7 +100,7 @@ var water_data_explorer_PACKAGE = (function() {
         vectorSource.once('change',function(e){
           if(vectorSource.getState() === 'ready') {
             var extent = vectorSource.getExtent();
-            console.log(extent);
+            //console.log(extent);
             map.getView().fit(extent, map.getSize());
 
             //disable zoom out //
@@ -308,8 +308,8 @@ var water_data_explorer_PACKAGE = (function() {
     give_name = function(){
       $(".titleh").html(`${views_names} Views`)
       $(".app-title").html(`${views_names} Data Explorer`)
-      console.log("GIVE_NAME");
-      console.log(views_names);
+      //console.log("GIVE_NAME");
+      //console.log(views_names);
     }
 
 

@@ -9,7 +9,7 @@
      let group_name_obj={
        group: group_name
      };
-     console.log(group_name_obj);
+     //console.log(group_name_obj);
      $("#GeneralLoading").css({
         position:'fixed',
         "z-index": 9999,
@@ -24,24 +24,24 @@
      //   dataType: "JSON",
      //   data: group_name_obj,
        // success: function(result){
-         // console.log(result);
+         // //console.log(result);
 
          //ALL THE SERVERS IN THE SELECTED GROUP //
          // let all_servers_in_group = result.hydroserver;
 
          //LOOK FOR THE SERVERS THAT HAVE KEYWORDS //
          // let keywords_in_servers = get_servers_with_keywords_from_group(result, key_words_to_search);
-         // console.log(keywords_in_servers);
+         // //console.log(keywords_in_servers);
          $.ajax({
              type: "GET",
              url: `catalog-group`,
              dataType: "JSON",
              data: group_name_obj,
              success: result => {
-                 console.log(result);
+                 //console.log(result);
                  let servers = result["hydroserver"]
-                 // console.log("this are the servers");
-                 // console.log(servers);
+                 // //console.log("this are the servers");
+                 // //console.log(servers);
 
 
                  // $("#current-servers").empty() //Resetting the catalog
@@ -50,7 +50,7 @@
                  // THE CHECKBOXES VISIBLE //
 
                  let extent = ol.extent.createEmpty()
-                 // console.log(servers);
+                 // //console.log(servers);
                  let id_group_separator = `${group_name}_list_separator`;
 
                  if(servers.length <= 0){
@@ -70,11 +70,11 @@
 
                      title = title.replace(/ /g,"-");
                      // if(keywords_in_servers.includes(title) || key_words_to_search.length == 0){
-                       // console.log(keywords_in_servers.includes(title));
+                       // //console.log(keywords_in_servers.includes(title));
                        let newHtml = html_for_servers(title,group_name);
                        // $(newHtml).appendTo("#current-servers")
                        $(newHtml).appendTo(`#${id_group_separator}`);
-                       console.log($(newHtml));
+                       //console.log($(newHtml));
                        $(`#${group_name}_${title}_del_endpoint`).on("click", function(){
                            delete_hydroserver_Individual(group_name, title)
                        });
@@ -95,7 +95,7 @@
                          if(this.checked){
                            map.getLayers().forEach(function(layer) {
                                 if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                  console.log(layer)
+                                  //console.log(layer)
                                   layer.setStyle(featureStyle(layerColorDict[title]));
                                 }
                             });
@@ -103,7 +103,7 @@
                          else{
                            map.getLayers().forEach(function(layer) {
                                 if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                  console.log(layer)
+                                  //console.log(layer)
                                   layer.setStyle(new ol.style.Style({}));
                                 }
                             });
@@ -114,11 +114,11 @@
 
 
                        let sites = siteInfo
-                       // console.log(title)
-                       // console.log(typeof(sites))
-                       // console.log(sites);
+                       // //console.log(title)
+                       // //console.log(typeof(sites))
+                       // //console.log(sites);
                        if (typeof(sites) == "string"){
-                         // console.log("inside strng");
+                         // //console.log("inside strng");
                          sites = JSON.parse(siteInfo);
                        }
                        sites = sites.map(site => {
@@ -177,7 +177,7 @@
                          source: clusterSource,
                          style: style_custom
                        });
-                       console.log(style_custom)
+                       //console.log(style_custom)
 
                        let test_style = new ol.style.Style({
                          image: new ol.style.Circle({
@@ -215,7 +215,7 @@
                        ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
                        layersDictExt[title] = ext;
 
-                       // console.log(ext)
+                       // //console.log(ext)
 
                        ol.extent.extend(extent, vectorSource.getExtent())
 
@@ -275,7 +275,7 @@ add_hydroserver = function(){
     }
     $('#chk_val').empty()
     var level=map.getView().calculateExtent(map.getSize())
-    console.log("LEVELMAP"+ level)
+    //console.log("LEVELMAP"+ level)
     $(
           '<input type="text" name="extent_val" id="extent_val" value=' +
               '"' +
@@ -321,8 +321,8 @@ add_hydroserver = function(){
     datastring += actual_group;
 
 
-    console.log("This is the serialize string of datastring");
-    console.log(datastring);
+    //console.log("This is the serialize string of datastring");
+    //console.log(datastring);
     //Submitting the data to the controller
     $("#soapAddLoading").removeClass("hidden");
 
@@ -336,7 +336,7 @@ add_hydroserver = function(){
 
             //Returning the geoserver layer metadata from the controller
             var json_response = JSON.parse(result)
-            console.log(json_response);
+            //console.log(json_response);
             let group_name = actual_group.split('=')[1];
             let id_group_separator = `${group_name}_list_separator`;
 
@@ -348,21 +348,21 @@ add_hydroserver = function(){
                 let group_name_obj={
                   group: group_name
                 };
-                console.log(group_name_obj);
+                //console.log(group_name_obj);
                   let {title, siteInfo, url, group} = json_response
 
 
-                    console.log("this are the sites");
-                    console.log(siteInfo);
+                    //console.log("this are the sites");
+                    //console.log(siteInfo);
                     // let sites = JSON.parse(siteInfo);
-                    // console.log(sites);
+                    // //console.log(sites);
                     let sites = siteInfo
 
                     if (typeof(sites) == "string"){
                       sites = JSON.parse(siteInfo);
                     }
-                    // console.log(extents);
-                    console.log(sites);
+                    // //console.log(extents);
+                    //console.log(sites);
                     try{
                       sites = sites.map(site => {
                         return {
@@ -429,11 +429,11 @@ add_hydroserver = function(){
 
 
                       let no_servers_tag = Array.from(document.getElementById(`${id_group_separator}`).getElementsByTagName("P"))[0];
-                      console.log(no_servers_tag);
+                      //console.log(no_servers_tag);
                       let newHtml = html_for_servers(title,group_name)
                        // $(newHtml).appendTo("#current-servers")
                        $(newHtml).appendTo(`#${id_group_separator}`);
-                       console.log($(newHtml));
+                       //console.log($(newHtml));
                        $(`#${title}_variables`).on("click",showVariables);
                        $(`#${title}_variables_info`).on("click",hydroserver_information);
                        $(`#${title}_${group_name}_reload`).on("click",update_hydroserver);
@@ -444,18 +444,18 @@ add_hydroserver = function(){
                       // MAKES THE LAYER INVISIBLE
 
                       let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
-                      console.log(lis);
+                      //console.log(lis);
                       let li_arrays = Array.from(lis);
-                      console.log(li_arrays);
+                      //console.log(li_arrays);
                       // let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0];
                       let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
 
-                      console.log(input_check);
+                      //console.log(input_check);
                       input_check.addEventListener("change", function(){
                         if(this.checked){
                           map.getLayers().forEach(function(layer) {
                                if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                 console.log(layer)
+                                 //console.log(layer)
                                  layer.setStyle(featureStyle(layerColorDict[title]));
                                }
                            });
@@ -463,7 +463,7 @@ add_hydroserver = function(){
                         else{
                           map.getLayers().forEach(function(layer) {
                                if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                 console.log(layer)
+                                 //console.log(layer)
                                  layer.setStyle(new ol.style.Style({}));
                                }
                            });
@@ -521,7 +521,7 @@ add_hydroserver = function(){
         error: function(error) {
             $("#soapAddLoading").addClass("hidden")
             $("#btn-add-soap").show();
-            console.log(error);
+            //console.log(error);
             $.notify(
                 {
                     message: `Invalid Hydroserver SOAP Url. Please check and try again.`
@@ -551,16 +551,16 @@ delete_hydroserver= function(){
     let arrayActual_group=actual_group.split('=')[1];
     var datastring = $modalDelete.serialize() //Delete the record in the database
     datastring += actual_group;
-    console.log(datastring);
+    //console.log(datastring);
     $.ajax({
         type: "POST",
         url: `delete-group-hydroserver/`,
         data: datastring,
         dataType: "HTML",
         success: function(result) {
-            console.log(result);
+            //console.log(result);
             var json_response = JSON.parse(result)
-            console.log(json_response);
+            //console.log(json_response);
             $("#modalDelete").modal("hide")
             $("#modalDelete").each(function() {
                 this.reset()
@@ -572,17 +572,17 @@ delete_hydroserver= function(){
               let element = document.getElementById(title);
               element.parentNode.removeChild(element);
               //Removing layer from the frontend
-              console.log(title);
+              //console.log(title);
               map.removeLayer(layersDict[title])
               delete layersDict[title]
               map.updateSize()
-              console.log(arrayActual_group);
+              //console.log(arrayActual_group);
 
               let id_group_separator = `${arrayActual_group}_list_separator`;
               let separator_element = document.getElementById(id_group_separator);
-              console.log(separator_element);
+              //console.log(separator_element);
               let children_element = Array.from(separator_element.children);
-              console.log(children_element);
+              //console.log(children_element);
               if(children_element.length < 1){
                 let no_servers = `<button class="btn btn-danger btn-block noGroups"> The group does not have hydroservers</button>`
                     $(no_servers).appendTo(`#${id_group_separator}`) ;
@@ -604,7 +604,7 @@ delete_hydroserver= function(){
 
         },
         error: error => {
-            console.log(error);
+            //console.log(error);
             $.notify(
                 {
                     message: `Something were wrong while deleting a hydroserver or group of hydroservers!`
@@ -628,16 +628,16 @@ $("#btn-del-server").on("click", delete_hydroserver)
 delete_hydroserver_Individual= function(group,server){
 
     var datastring = `server=${server}&actual-group=${group}`
-    console.log(datastring);
+    //console.log(datastring);
     $.ajax({
         type: "POST",
         url: `delete-group-hydroserver/`,
         data: datastring,
         dataType: "HTML",
         success: function(result) {
-            console.log(result);
+            //console.log(result);
             var json_response = JSON.parse(result)
-            console.log(json_response);
+            //console.log(json_response);
 
             for(let i=0; i<Object.keys(json_response).length; ++i){
 
@@ -646,19 +646,19 @@ delete_hydroserver_Individual= function(group,server){
               let element = document.getElementById(title);
               element.parentNode.removeChild(element);
               //Removing layer from the frontend
-              console.log(title);
+              //console.log(title);
               map.removeLayer(layersDict[title])
               delete layersDict[title]
               map.updateSize()
-              console.log(group);
+              //console.log(group);
               // load_individual_hydroservers_group(arrayActual_group) //Reloading the new catalog
               // get_notification("sucess",`Successfully Deleted the HydroServer!`);
 
               let id_group_separator = `${group}_list_separator`;
               let separator_element = document.getElementById(id_group_separator);
-              console.log(separator_element);
+              //console.log(separator_element);
               let children_element = Array.from(separator_element.children);
-              console.log(children_element);
+              //console.log(children_element);
               if(children_element.length < 1){
                 let no_servers = `<button class="btn btn-danger btn-block noGroups"> The group does not have hydroservers</button>`
                     $(no_servers).appendTo(`#${id_group_separator}`) ;
@@ -682,7 +682,7 @@ delete_hydroserver_Individual= function(group,server){
 
         },
         error: error => {
-            console.log(error);
+            //console.log(error);
             // get_notification("danger",`Something were wrong while deleting a hydroserver or group of hydroservers!`);
             $.notify(
                 {
@@ -705,12 +705,12 @@ delete_hydroserver_Individual= function(group,server){
 */
 
 showVariables = function(){
- console.log("ShowVariables");
+ //console.log("ShowVariables");
  let groupActual = this.parentElement.parentNode.id.split("_")[0];
  let hsActual = this.id.split("_")[0];
  group_show_actual = groupActual;
  hs_show_actual = hsActual;
- console.log(groupActual);
+ //console.log(groupActual);
  // let requestObject= {};
  // requestObject['group']=groupActual;
  // requestObject['hs']=hsActual;
@@ -724,7 +724,7 @@ showVariables = function(){
      dataType: "JSON",
      data: filterSites,
      success: result => {
-         console.log(result);
+         //console.log(result);
          var HSTableHtml =
              `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
          if (result['variables'].length === 0) {
@@ -759,30 +759,30 @@ showAvailableSites = function(){
  let group = this.baseURI.split("/");
  // ONLY THE KEY WORDS //
  let datastring = Array.from(document.getElementsByClassName("odd gradeX2"));
- console.log(datastring);
+ //console.log(datastring);
  let hs = datastring[0].offsetParent.id.split("-")[0];
 
- console.log(group);
- console.log(hs);
- // console.log(datastring);
+ //console.log(group);
+ //console.log(hs);
+ // //console.log(datastring);
  let key_words_to_search=[];
  datastring.forEach(function(data){
-   // console.log(Array.from(data.children));
+   // //console.log(Array.from(data.children));
    Array.from(data.children).forEach(function(column){
      if(Array.from(column.children)[0].checked ==true){
-       // console.log();
+       // //console.log();
        key_words_to_search.push(Array.from(column.children)[0].nextSibling.nodeValue.trim())
      }
    })
  });
  // filter_words = key_words_to_search;
- console.log(key_words_to_search);
+ //console.log(key_words_to_search);
 
  let requestObject = {};
  requestObject['hs'] = filterSites['hs'];
  requestObject['group'] = filterSites['group'];
  requestObject['variables'] = key_words_to_search;
- console.log(requestObject);
+ //console.log(requestObject);
  $("#variablesLoading").removeClass("hidden");
 
  $.ajax({
@@ -791,7 +791,7 @@ showAvailableSites = function(){
      dataType: "JSON",
      data: requestObject,
      success: result => {
-         console.log(result);
+         //console.log(result);
          let sites = result['hydroserver'];
          let title = filterSites['hs'];
          sites = sites.map(site => {
@@ -819,7 +819,7 @@ showAvailableSites = function(){
                  }
              }
          })
-         console.log(sites);
+         //console.log(sites);
          let sitesGeoJSON = {
              type: "FeatureCollection",
              crs: {
@@ -844,7 +844,7 @@ showAvailableSites = function(){
          if(layersDict.hasOwnProperty(requestObject['hs'])){
             map.removeLayer(layersDict[requestObject['hs']])
          }
-         console.log("layer added to map");
+         //console.log("layer added to map");
          map.addLayer(vectorLayer)
          ol.extent.extend(extent, vectorSource.getExtent());
          vectorLayer.set("selectable", true)
@@ -900,7 +900,7 @@ hydroserver_information = function(){
   // }
   filterSites['group']=groupActual;
   filterSites['hs']=hsActual;
-  console.log(filterSites['hs']);
+  //console.log(filterSites['hs']);
   $("#hydroserverTitle").html(filterSites['hs']);
   $.ajax({
     type:"GET",
@@ -910,7 +910,7 @@ hydroserver_information = function(){
     success: function(result1){
       setTimeout(function(){
         if(map2 ==undefined){
-          console.log("I am undefined");
+          //console.log("I am undefined");
           map2 = new ol.Map({
                  target: 'map2',
                  layers: [
@@ -941,10 +941,10 @@ hydroserver_information = function(){
       },400)
       //
 
-      console.log(result1['url']);
+      //console.log(result1['url']);
       $("#urlHydroserver").html(result1['url']);
       $("#description_Hydroserver").html(result1['description']);
-      console.log(result1);
+      //console.log(result1);
       var HSTableHtml =
           `<table id="${filterSites['hs']}-info-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
       if (result1['siteInfo'].length === 0) {
@@ -972,8 +972,8 @@ hydroserver_information = function(){
           HSTableHtml += "</tbody></table>"
           $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml);
           for (var i = 0; i < result1['siteInfo'].length; i++) {
-            console.log(i);
-            console.log(result1['siteInfo'][i]);
+            //console.log(i);
+            //console.log(result1['siteInfo'][i]);
             let lat_modal=result1['siteInfo'][i]['latitude'];
             let lng_modal=result1['siteInfo'][i]['longitude'];
             let coordinate_modal = [lat_modal,lng_modal];
@@ -1065,21 +1065,21 @@ update_hydroserver = function(){
         dataType: "JSON",
         data: requestObject,
         success: function(result) {
-            console.log(result)
+            //console.log(result)
             if(layersDict.hasOwnProperty(title)){
               map.removeLayer(layersDict[title])
             }
             //Returning the geoserver layer metadata from the controller
             // var json_response = JSON.parse(result[siteInfo])
-            // console.log(json_response);
+            // //console.log(json_response);
             let {siteInfo,sitesAdded} = result
 
-            console.log(siteInfo)
+            //console.log(siteInfo)
             // if (json_response.status === "true") {
 
                     let sites = siteInfo
-                    // console.log(extents);
-                    console.log(sites);
+                    // //console.log(extents);
+                    //console.log(sites);
                     sites = sites.map(site => {
                         return {
                             type: "Feature",
@@ -1157,7 +1157,7 @@ update_hydroserver = function(){
         error: function(error) {
             // $("#soapAddLoading").addClass("hidden")
             // $("#btn-add-soap").show();
-            console.log(error);
+            //console.log(error);
             $.notify(
                 {
                     message: `There was an error realoading the hydroserver.`
