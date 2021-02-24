@@ -22,7 +22,7 @@ activate_layer_values = function (){
 
           if(layersDict['selectedPoint']){
             map.removeLayer(layersDict['selectedPoint'])
-            delete layersDict[title]
+            // delete layersDict[title]
             map.updateSize()
           }
 

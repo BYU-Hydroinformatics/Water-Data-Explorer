@@ -813,12 +813,12 @@ showVariables = function(){
 ****** FUNCTION PURPOSE: SHOW THE SITES THAT HAVE BEEN FILTERED REQURING SPECIFIC VARIABLES*********
 */
 showAvailableSites = function(){
-  Logger.useDefaults({
-    defaultLevel: Logger.WARN,
-    formatter: function (messages, context) {
-      messages.unshift(new Date().toUTCString());
-    },
-  });
+  // Logger.useDefaults({
+  //   defaultLevel: Logger.WARN,
+  //   formatter: function (messages, context) {
+  //     messages.unshift(new Date().toUTCString());
+  //   },
+  // });
  let group = this.baseURI.split("/");
  // ONLY THE KEY WORDS //
  let datastring = Array.from(document.getElementsByClassName("odd gradeX2"));
