@@ -1122,77 +1122,80 @@ update_hydroserver = function(){
         data: requestObject,
         success: function(result) {
             //console.log(result)
-            if(layersDict.hasOwnProperty(title)){
-              map.removeLayer(layersDict[title])
+            if(layersDict.hasOwnProperty(hsActual)){
+              map.removeLayer(layersDict[hsActual])
             }
             //Returning the geoserver layer metadata from the controller
             // var json_response = JSON.parse(result[siteInfo])
             // //console.log(json_response);
-            let {siteInfo,sitesAdded} = result
+            let {siteInfo,sitesAdded,url} = result
 
             //console.log(siteInfo)
             // if (json_response.status === "true") {
 
                     let sites = siteInfo
+                    const vectorLayer = map_layers(sites,hsActual,url)[0]
+                    const vectorSource = map_layers(sites,hsActual,url)[1]
+
                     // //console.log(extents);
                     //console.log(sites);
-                    sites = sites.map(site => {
-                        return {
-                            type: "Feature",
-                            geometry: {
-                                type: "Point",
-                                coordinates: ol.proj.transform(
-                                    [
-                                        parseFloat(site.longitude),
-                                        parseFloat(site.latitude)
-                                    ],
-                                    "EPSG:4326",
-                                    "EPSG:3857"
-                                )
-                            },
-                            properties: {
-                                name: site.sitename,
-                                code: site.sitecode,
-                                network: site.network,
-                                hs_url: url,
-                                hs_name: title,
-                                lon: parseFloat(site.longitude),
-                                lat: parseFloat(site.latitude)
-                            }
-                        }
-                    })
-
-                    let sitesGeoJSON = {
-                        type: "FeatureCollection",
-                        crs: {
-                            type: "name",
-                            properties: {
-                                name: "EPSG:3857"
-                            }
-                        },
-                        features: sites
-                    }
-
-                    const vectorSource = new ol.source.Vector({
-                        features: new ol.format.GeoJSON().readFeatures(
-                            sitesGeoJSON
-                        )
-                    })
-
-                    const vectorLayer = new ol.layer.Vector({
-                        source: vectorSource,
-                        style: featureStyle()
-                    })
+                    // sites = sites.map(site => {
+                    //     return {
+                    //         type: "Feature",
+                    //         geometry: {
+                    //             type: "Point",
+                    //             coordinates: ol.proj.transform(
+                    //                 [
+                    //                     parseFloat(site.longitude),
+                    //                     parseFloat(site.latitude)
+                    //                 ],
+                    //                 "EPSG:4326",
+                    //                 "EPSG:3857"
+                    //             )
+                    //         },
+                    //         properties: {
+                    //             name: site.sitename,
+                    //             code: site.sitecode,
+                    //             network: site.network,
+                    //             hs_url: url,
+                    //             hs_name: hsActual,
+                    //             lon: parseFloat(site.longitude),
+                    //             lat: parseFloat(site.latitude)
+                    //         }
+                    //     }
+                    // })
+                    //
+                    // let sitesGeoJSON = {
+                    //     type: "FeatureCollection",
+                    //     crs: {
+                    //         type: "name",
+                    //         properties: {
+                    //             name: "EPSG:3857"
+                    //         }
+                    //     },
+                    //     features: sites
+                    // }
+                    //
+                    // const vectorSource = new ol.source.Vector({
+                    //     features: new ol.format.GeoJSON().readFeatures(
+                    //         sitesGeoJSON
+                    //     )
+                    // })
+                    //
+                    // const vectorLayer = new ol.layer.Vector({
+                    //     source: vectorSource,
+                    //     style: featureStyle()
+                    // })
 
                     map.addLayer(vectorLayer)
                     ol.extent.extend(extent, vectorSource.getExtent())
                     vectorLayer.set("selectable", true)
-                    layersDict[title] = vectorLayer;
+                    layersDict[hsActual] = vectorLayer;
 
                     map.getView().fit(vectorSource.getExtent());
                     map.updateSize();
 
-                    layersDict[title] = vectorLayer;
+                    layersDict[hsActual] = vectorLayer;
 
                       $.notify(
                           {

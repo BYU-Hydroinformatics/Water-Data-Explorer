@@ -450,6 +450,7 @@ def upload_hs(request):
                 hydroservers.siteinfo = sites_parsed_json
                 return_obj["siteInfo"] = json.loads(sites_parsed_json)
                 return_obj["sitesAdded"]= difference
+                return_obj["url"] = hydroservers.url
 
         session.commit()
         session.close()
