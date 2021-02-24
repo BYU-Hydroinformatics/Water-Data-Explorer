@@ -44,7 +44,7 @@ logging.getLogger('suds.client').setLevel(logging.CRITICAL)
 def get_values_hs(request):
     list_catalog={}
     return_obj={}
-    print(request)
+    # print(request)
     # hs_name = request.GET.get('hs_name')
     hs_url = request.GET.get('hs_url')
     # site_name = request.GET.get('site_name')

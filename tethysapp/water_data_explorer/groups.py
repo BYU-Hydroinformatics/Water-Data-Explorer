@@ -726,6 +726,7 @@ def get_variables_for_country(request,app_workspace):
 ######*****************************************************************************************################
 def keyWordsForGroup(request):
     list_catalog={}
+    print("keyWordsForGroup")
     print("inside the keywordsgroup function")
     specific_group=request.GET.get('group')
 

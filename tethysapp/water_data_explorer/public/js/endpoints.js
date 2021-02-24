@@ -227,6 +227,7 @@ map_layers = function(sites,title,url){
                        if (typeof(sites) == "string"){
                          sites = JSON.parse(siteInfo);
                        }
+                       console.log(sites.length)
                        var vectorLayer = map_layers(sites,title,url)[0]
                        var vectorSource = map_layers(sites,title,url)[1]
                        //console.log(style_custom)
@@ -844,7 +845,7 @@ showAvailableSites = function(){
  requestObject['hs'] = filterSites['hs'];
  requestObject['group'] = filterSites['group'];
  requestObject['variables'] = key_words_to_search;
- //console.log(requestObject);
+ console.log(requestObject);
  $("#variablesLoading").removeClass("hidden");
 
  $.ajax({
@@ -855,63 +856,32 @@ showAvailableSites = function(){
      success: result => {
          console.log(result);
          let sites = result['hydroserver'];
-         let title = filterSites['hs'];
-         // sites = sites.map(site => {
-         //     return {
-         //         type: "Feature",
-         //         geometry: {
-         //             type: "Point",
-         //             coordinates: ol.proj.transform(
-         //                 [
-         //                     parseFloat(site.longitude),
-         //                     parseFloat(site.latitude)
-         //                 ],
-         //                 "EPSG:4326",
-         //                 "EPSG:3857"
-         //             )
-         //         },
-         //         properties: {
-         //             name: site.sitename,
-         //             code: site.sitecode,
-         //             network: site.network,
-         //             hs_url: url,
-         //             hs_name: title,
-         //             lon: parseFloat(site.longitude),
-         //             lat: parseFloat(site.latitude)
-         //         }
-         //     }
-         // })
-         // //console.log(sites);
-         // let sitesGeoJSON = {
-         //     type: "FeatureCollection",
-         //     crs: {
-         //         type: "name",
-         //         properties: {
-         //             name: "EPSG:3857"
-         //         }
-         //     },
-         //     features: sites
-         // }
-         //
-         // const vectorSource = new ol.source.Vector({
-         //     features: new ol.format.GeoJSON().readFeatures(
-         //         sitesGeoJSON
-         //     )
-         // })
-         //
-         // const vectorLayer = new ol.layer.Vector({
-         //     source: vectorSource,
-         //     style: featureStyle()
-         // })
+         console.log(sites.length)
 
-         const vectorLayer =  map_layers(sites,title)[0]
-         const vectorSource =  map_layers(sites,title)[1]
-         if(layersDict.hasOwnProperty(requestObject['hs'])){
-            map.removeLayer(layersDict[requestObject['hs']])
-         }
+         let title = filterSites['hs'];
+         let url = layersDict[title].values_.source.features[0].values_.features[0].values_.hs_url
+         // console.log(layersDict[title])
+         // console.log(url)
+
+         const vectorLayer =  map_layers(sites,title,url)[0]
+         const vectorSource =  map_layers(sites,title,url)[1]
+         // if(layersDict.hasOwnProperty(requestObject['hs'])){
+         //    map.removeLayer(layersDict[requestObject['hs']])
+         // }
+
+         map.getLayers().forEach(function(layer) {
+              if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                  layer.setStyle(new ol.style.Style({}));
+                }
+          });
+
+
+
+
+
          //console.log("layer added to map");
          map.addLayer(vectorLayer)
-         ol.extent.extend(extent, vectorSource.getExtent());
+         // ol.extent.extend(extent, vectorSource.getExtent());
          vectorLayer.set("selectable", true)
          layer_object_filter[title] = vectorLayer;
 
@@ -920,14 +890,35 @@ showAvailableSites = function(){
            map.removeLayer(layer_object_filter[title])
            layer_object_filter={};
            if(layersDict.hasOwnProperty(title)){
-             map.addLayer(layersDict[title]);
+             // map.addLayer(layersDict[title]);
+             map.getLayers().forEach(function(layer) {
+                  if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                    layer.setStyle(featureStyle(layerColorDict[title]));
+                    }
+              });
            }
-           $(`#${hs}`).css({'color': '#555555','font-weight':'normal'});
+
+
+
+           $(`#${hs}`).css({"opacity": "",
+                                "border-color": "#d3d3d3",
+                                "border-width":"1px",
+                                "border-style":"solid",
+                                "color":"#555555",
+                                "font-weight": "normal"});
+
+           // $(`#${hs}`).css({'color': '#555555','font-weight':'normal'});
 
          })
          $("#variablesLoading").addClass("hidden");
          $("#modalShowVariables").modal("hide")
-         $(`#${hs}`).css({'color': 'red','font-weight':'bold'});
+         // $(`#${hs}`).css({'color': 'red','font-weight':'bold'});
+         $(`#${hs}`).css({"opacity": "1",
+                             "border-color": "#ac2925",
+                             "border-width": "2px",
+                             "border-style": "solid",
+                             "color": "black",
+                             "font-weight": "bold"});
     }
   })
 

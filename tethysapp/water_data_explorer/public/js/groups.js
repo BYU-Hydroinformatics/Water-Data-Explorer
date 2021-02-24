@@ -57,6 +57,12 @@ give_available_services = function(){
 $("#btn-check_available_serv").on("click", give_available_services);
 
 show_variables_groups = function(){
+  Logger.useDefaults({
+    defaultLevel: Logger.WARN,
+    formatter: function (messages, context) {
+      messages.unshift(new Date().toUTCString());
+    },
+  });
   $("#KeywordLoading").removeClass("hidden");
   $.ajax({
     type: "GET",

@@ -47,6 +47,7 @@ logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
 def get_variables_hs(request):
     list_catalog={}
+    print("get_variables")
     print("inside the keywordsgroup function")
     specific_group=request.GET.get('group')
     hs_actual = request.GET.get('hs')
@@ -71,8 +72,10 @@ def get_variables_hs(request):
             water = pwml.WaterMLOperations(url = hydroservers.url.strip())
             keywords_response = water.GetVariables()['variables']
             keywords = []
+            keywords_name = []
             for kyword in keywords_response:
                 keywords.append(kyword['variableCode'])
+                keywords_name.append(kyword['variableName'])
             # keywords_dict = xmltodict.parse(keywords)
             # keywords_dict_object = json.dumps(keywords_dict)
             #
@@ -99,7 +102,8 @@ def get_variables_hs(request):
             # variables_show = array_keywords_hydroserver
             variables_show = keywords
 
-    list_catalog["variables"] = variables_show
+    list_catalog["variables_code"] = variables_show
+    list_catalog["variables_name"] = keywords_name
     print("------------------------------------------")
 
     return JsonResponse(list_catalog)
@@ -136,9 +140,10 @@ def get_available_sites(request):
             print("PRESENTE GROUP")
             water = pwml.WaterMLOperations(url = hydroservers.url.strip())
             sites = json.loads(hydroservers.siteinfo)
-            print(type(sites))
+            # print(type(sites))
             sitesFiltered = water.GetSitesByVariable(specific_variables)['sites']
             hs_list = sitesFiltered
+            # print(hs_list)
             # print("this is the one selecting hs")
             # name = hydroservers.title
             # print(name)
