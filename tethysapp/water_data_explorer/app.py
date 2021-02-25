@@ -102,19 +102,6 @@ class WaterDataExplorer(TethysAppBase):
                    url='get-variables-for-country',
                    controller='water_data_explorer.groups.get_variables_for_country'),
 
-            # UrlMap(name='available-variables-group',
-            #        url='available-variables-group',
-            #        controller='water_data_explorer.groups.available_variables_group'),
-            # UrlMap(name='available-regions-group',
-            #        url='available-regions-group',
-            #        controller='water_data_explorer.groups.available_regions_group'),
-
-            # UrlMap(name='catalog-filter',
-            #        url='catalog-filter',
-            #        controller='water_data_explorer.groups.catalog_filter'),
-            # UrlMap(name='get-variables-for-country-group',
-            #        url='get-variables-for-country-group',
-            #        controller='water_data_explorer.groups.get_variables_for_country_group'),
 
         )
 

@@ -57,16 +57,16 @@ def available_regions(request, app_workspace):
     countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
     countries_gdf = gpd.read_file(countries_geojson_file_path)
     countries_series = countries_gdf.loc[:,'geometry']
-    print(countries_gdf)
-    print(type(countries_gdf))
-    print(type(countries_series))
-    print(countries_series)
+    # print(countries_gdf)
+    # print(type(countries_gdf))
+    # print(type(countries_series))
+    # print(countries_series)
 
     polys = gpd.GeoSeries({
         'foo': Polygon([(5, 5), (5, 13), (13, 13), (13, 5)]),
         'bar': Polygon([(10, 10), (10, 15), (15, 15), (15, 10)]),
     })
-    print(polys)
+    # print(polys)
     ret_object = {}
     list_regions = []
     SessionMaker = app.get_persistent_store_database(
@@ -82,7 +82,7 @@ def available_regions(request, app_workspace):
         hydroservers_selected = session.query(HydroServer_Individual).all()
     else:
         specific_group=request.GET.get('group')
-        print(specific_group)
+        # print(specific_group)
         hydroservers_selected = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
     # for server in session.query(HydroServer_Individual).all():
     for server in hydroservers_selected:
@@ -103,25 +103,25 @@ def available_regions(request, app_workspace):
     for indx in range(0,len(hydroserver_name_list)):
         df = pd.DataFrame({'SiteName': hydroserver_name_list[indx],'Latitude': hydroserver_lat_list[indx],'Longitude': hydroserver_long_list[indx]})
         gdf = gpd.GeoDataFrame(geometry=gpd.points_from_xy(df.Longitude, df.Latitude), index = hydroserver_name_list[indx])
-        print(gdf)
+        # print(gdf)
         # for key, geom in countries_series.items():
         #     print(key, geom)
-        print("STOPS")
+        # print("STOPS")
         gdf = gdf.assign(**{str(key): gdf.within(geom) for key, geom in countries_series.items()})
-        print(gdf)
+        # print(gdf)
         trues_onlys = gdf.copy()
         trues_onlys = trues_onlys.drop(['geometry'],axis=1)
-        print(trues_onlys)
+        # print(trues_onlys)
         # trues_onlys = gdf.loc[:,gdf.any()]
         trues_onlys = trues_onlys.loc[:,trues_onlys.any()]
         countries_index = list(trues_onlys.columns)
-        print(countries_index)
+        # print(countries_index)
         countries_index = [x for x in countries_index if x != 'geometry']
         countries_index = [int(i) for i in countries_index]
-        print(countries_index)
+        # print(countries_index)
         countries_selected = countries_gdf.iloc[countries_index]
         list_countries_selected = list(countries_selected['name'])
-        print(list_countries_selected)
+        # print(list_countries_selected)
         for coun in list_countries_selected:
             if coun not in region_list:
                 region_list.append(coun)
@@ -141,7 +141,7 @@ def available_regions(request, app_workspace):
         #         # row.reset_index(drop=True, inplace=True)
         #         pip_mask = gdf.within(row.loc[0,'geometry'])
         #         print(pip_mask)
-    print(region_list)
+    # print(region_list)
     ret_object['countries'] = region_list
     return JsonResponse(ret_object)
 
@@ -241,28 +241,28 @@ def create_group(request):
 
         if url_catalog:
             try:
-                print("NORMAL")
+                # print("NORMAL")
                 url_catalog = unquote(url_catalog)
-                print("THIS ", url_catalog)
+                # print("THIS ", url_catalog)
                 url_catalog2 = url_catalog + "?WSDL"
                 # client = zeep.Client(url_catalog2)
                 client = Client(url_catalog2, timeout= 500)
                 service_info = client.service.GetWaterOneFlowServiceInfo()
                 services = service_info.ServiceInfo
-                print("selected_services", selected_services)
-                views = giveServices(services,selected_services)
+                # print("selected_services", selected_services)
+                # views = giveServices(services,selected_services)
                 print("DONE WITH VIEWS IN GETSITEINFO")
-                print(views)
+                # print(views)
                 group_obj['views'] = addMultipleViews(views,title)
-                print("DONE WITH MULTIPLEVIEWS IN GETSITEINFO")
+                # print("DONE WITH MULTIPLEVIEWS IN GETSITEINFO")
             except Exception as e:
-                print("EXCEPT")
+                # print("EXCEPT")
                 services = parseService(url_catalog)
                 views = giveServices(services,selected_services)
-                print("DONE WITH VIEWS IN EXCEPTION")
-                print(views)
+                # print("DONE WITH VIEWS IN EXCEPTION")
+                # print(views)
                 group_obj['views'] = addMultipleViews(views,title)
-                print("DONE WITH MULTIPLEVIEWS IN EXCEPTION")
+                # print("DONE WITH MULTIPLEVIEWS IN EXCEPTION")
 
 
     else:
@@ -280,15 +280,15 @@ def giveServices(services,filter_serv=None):
         if not url.endswith('?WSDL'):
             url = url + "?WSDL"
         title = i['Title']
-        print(title)
+        # print(title)
         description = "None was provided by the organiation in charge of the Web Service"
         if 'aabstract' in i:
             # print("THERE IS ABSTRACH")
             description = i['aabstract']
         if filter_serv is not None:
-            print(filter_serv,"not none")
+            # print(filter_serv,"not none")
             if title in filter_serv:
-                print(title, filter_serv)
+                # print(title, filter_serv)
                 try:
                     print("Testing %s" % (url))
                     url_client = Client(url)

@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<form id="modalFilterGroup" class="modal fade" role="dialog" action="delete/" method="POST">
+<form id="modalFilterGroup" class="modal fade" role="dialog" >
     {% csrf_token %}
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -28,8 +28,8 @@
             <div class="modal-footer">
                 <div class="button-group">
                   <img id="KeywordLoading2" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
-                    <button type="button" id="btn-key-search-server" class="btn btn-primary">Seach</button>
-                    <button type="button" id="btn-r-reset-server" class="btn btn-danger">Reset</button>
+                    <button type="button" id="btn-key-search-catalog" class="btn btn-primary">Seach</button>
+                    <button type="button" id="btn-r-reset-catalog" class="btn btn-danger">Reset</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>

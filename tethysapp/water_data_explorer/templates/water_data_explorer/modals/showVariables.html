@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<form id="modalShowVariables" class="modal fade" role="dialog" action="delete/" method="POST">
+<form id="modalShowVariables" class="modal fade" role="dialog">
     {% csrf_token %}
     <div class="modal-dialog">
         <div class="modal-content">
@@ -26,8 +26,8 @@
             <div class="modal-footer">
 
                 <div class="button-group">
-                    <button type="button" id="btn-var-search" class="btn btn-primary">Seach Keywords</button>
-                    <button type="button" id="btn-var-reset" class="btn btn-danger">Reset</button>
+                    <button type="button" id="btn-var-search-server" class="btn btn-primary">Seach Keywords</button>
+                    <button type="button" id="btn-var-reset-server" class="btn btn-danger">Reset</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>

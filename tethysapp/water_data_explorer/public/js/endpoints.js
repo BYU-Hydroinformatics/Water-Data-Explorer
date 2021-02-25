@@ -106,7 +106,7 @@ map_layers = function(sites,title,url){
                    $(no_servers).appendTo(`#${id_group_separator}`) ;
                  }
                  servers.forEach(function(server){
-                   console.log(server)
+                   // console.log(server)
                      let {
                          title,
                          url,
@@ -758,12 +758,12 @@ delete_hydroserver_Individual= function(group,server){
 */
 
 showVariables = function(){
-  Logger.useDefaults({
-    defaultLevel: Logger.WARN,
-    formatter: function (messages, context) {
-      messages.unshift(new Date().toUTCString());
-    },
-  });
+  // Logger.useDefaults({
+  //   defaultLevel: Logger.WARN,
+  //   formatter: function (messages, context) {
+  //     messages.unshift(new Date().toUTCString());
+  //   },
+  // });
  //console.log("ShowVariables");
  let groupActual = this.parentElement.parentNode.id.split("_")[0];
  let hsActual = this.id.split("_")[0];
@@ -886,7 +886,7 @@ showAvailableSites = function(){
          layer_object_filter[title] = vectorLayer;
 
          //add the reset button ///
-         $("#btn-var-reset").on("click", function(){
+         $("#btn-var-reset-server").on("click", function(){
            map.removeLayer(layer_object_filter[title])
            layer_object_filter={};
            if(layersDict.hasOwnProperty(title)){
@@ -924,7 +924,9 @@ showAvailableSites = function(){
 
 
 }
-$(`#btn-var-search`).on("click",showAvailableSites);
+$(`#btn-var-search-server`).on("click",showAvailableSites);
+
+
 /*
 ************ FUNCTION NAME: HYDROSERVER INFORMATION **********************
 ************ PURPOSE: THE HYDROSERVER INFORMATION LOOKS FOR THE INFORMATION OF THE SITE, SO IT GIVES METADATA ***********
@@ -1013,7 +1015,7 @@ hydroserver_information = function(){
       else {
           for (var i = 0; i < result1['siteInfo'].length; i++) {
               HSTableHtml +=
-             '<tr class="odd gradeX2">'+
+             '<tr>'+
                   `<td> <p id="titleSite">${i+1}.- ${result1['siteInfo'][i]['sitename']}
                   <button type="button" class="btn btn-primary" id="${result1['siteInfo'][i]['sitecode']}_modal"><span class="glyphicon glyphicon-pushpin"></span></button></p>
                     <p>Site Code: ${result1['siteInfo'][i]['sitecode']}</p>

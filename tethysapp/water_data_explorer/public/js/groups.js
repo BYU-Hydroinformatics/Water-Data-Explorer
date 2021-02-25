@@ -57,12 +57,12 @@ give_available_services = function(){
 $("#btn-check_available_serv").on("click", give_available_services);
 
 show_variables_groups = function(){
-  Logger.useDefaults({
-    defaultLevel: Logger.WARN,
-    formatter: function (messages, context) {
-      messages.unshift(new Date().toUTCString());
-    },
-  });
+  // Logger.useDefaults({
+  //   defaultLevel: Logger.WARN,
+  //   formatter: function (messages, context) {
+  //     messages.unshift(new Date().toUTCString());
+  //   },
+  // });
   $("#KeywordLoading").removeClass("hidden");
   $.ajax({
     type: "GET",
@@ -1288,7 +1288,7 @@ catalog_filter_server = function(){
     })
 
 }
-$("#btn-key-search-server").on("click", catalog_filter_server);
+$("#btn-key-search-catalog").on("click", catalog_filter_server);
 
 reset_keywords = function(){
   Object.keys(information_model).forEach(function(key) {
@@ -1583,7 +1583,7 @@ reset_keywords = function(){
 //
 // }
 $("#btn-r-reset").on("click", reset_keywords);
-$("#btn-r-reset-server").on("click", reset_keywords);
+$("#btn-r-reset-catalog").on("click", reset_keywords);
 
     /*
     ************ FUNCTION NAME : GET_ALL_THE_CHECKED_KEYWORDS
@@ -1667,7 +1667,7 @@ $("#btn-r-reset-server").on("click", reset_keywords);
       else {
           for (var i = 0; i < result1['siteInfo'].length; i++) {
               HSTableHtml +=
-             '<tr class="odd gradeX2">'+
+             '<tr>'+
                   `<td> <p id="titleSite">${i+1}.- ${result1['siteInfo'][i]['sitename']}
                   <button type="button" class="btn btn-primary" id="${result1['siteInfo'][i]['sitecode']}_modal"><span class="glyphicon glyphicon-pushpin"></span></button></p>
                     <p>Site Code: ${result1['siteInfo'][i]['sitecode']}</p>
