@@ -393,165 +393,129 @@ add_hydroserver = function(){
             let group_name = actual_group.split('=')[1];
             let id_group_separator = `${group_name}_list_separator`;
 
+            try{
+              if (json_response.status === "true") {
+                  // put the ajax call and also the filter //
+                  let servers_with_keywords = [];
+                  let key_words_to_search = get_all_the_checked_keywords();
+                  let group_name_obj={
+                    group: group_name
+                  };
+                  //console.log(group_name_obj);
+                    let {title, siteInfo, url, group} = json_response
 
-            if (json_response.status === "true") {
-                // put the ajax call and also the filter //
-                let servers_with_keywords = [];
-                let key_words_to_search = get_all_the_checked_keywords();
-                let group_name_obj={
-                  group: group_name
-                };
-                //console.log(group_name_obj);
-                  let {title, siteInfo, url, group} = json_response
+
+                      let sites = siteInfo
+
+                      if (typeof(sites) == "string"){
+                        sites = JSON.parse(siteInfo);
+                      }
+                      var vectorLayer = map_layers(sites,title,url)[0]
+                      var vectorSource = map_layers(sites,title,url)[1]
+                      //console.log(style_custom)
+
+                      let test_style = new ol.style.Style({
+                        image: new ol.style.Circle({
+                          radius: 10,
+                          stroke: new ol.style.Stroke({
+                            color: "white",
+                          }),
+                          fill: new ol.style.Fill({
+                            color: layerColorDict[title],
+                          }),
+                        })
+                      });
+                      // getIconLegend(test_style,title);
+                      let rowHTML= `<tr id= ${title}-row-complete>
+                                     <th id="${title}-row-legend"></th>
+                                     <th>${title}</th>
+                                   </tr>`
+                     if(!document.getElementById(`${title}-row-complete`)){
+                       $(rowHTML).appendTo('#tableLegend');
+                     }
+                     $(`#${title}-row-legend`).prepend($(getIconLegend(test_style,title)));
 
 
-                    //console.log("this are the sites");
-                    //console.log(siteInfo);
-                    // let sites = JSON.parse(siteInfo);
-                    // //console.log(sites);
-                    let sites = siteInfo
+                      map.addLayer(vectorLayer);
+                      // vectorLayer.setStyle(new ol.style.Style({}));
 
-                    if (typeof(sites) == "string"){
-                      sites = JSON.parse(siteInfo);
-                    }
-                    // //console.log(extents);
-                    //console.log(sites);
-                    try{
-                      sites = sites.map(site => {
-                        return {
-                            type: "Feature",
-                            geometry: {
-                                type: "Point",
-                                coordinates: ol.proj.transform(
-                                    [
-                                        parseFloat(site.longitude),
-                                        parseFloat(site.latitude)
-                                    ],
-                                    "EPSG:4326",
-                                    "EPSG:3857"
-                                )
-                            },
-                            properties: {
-                                name: site.sitename,
-                                code: site.sitecode,
-                                network: site.network,
-                                hs_url: url,
-                                hs_name: title,
-                                lon: parseFloat(site.longitude),
-                                lat: parseFloat(site.latitude)
-                            }
-                        }
-                    })
-
-                      let sitesGeoJSON = {
-                        type: "FeatureCollection",
-                        crs: {
-                            type: "name",
-                            properties: {
-                                name: "EPSG:3857"
-                            }
-                        },
-                        features: sites
-                    }
-
-                      const vectorSource = new ol.source.Vector({
-                        features: new ol.format.GeoJSON().readFeatures(
-                            sitesGeoJSON
-                        )
-                    })
-                      var clusterSource = new ol.source.Cluster({
-                       distance: parseInt(30, 10),
-                       source: vectorSource,
-                     });
-                      var vectorLayer = new ol.layer.Vector({
-                      source: clusterSource,
-                      style: featureStyle(layerColorDict[title])
-                    });
-
-                      map.addLayer(vectorLayer)
-                      ol.extent.extend(extent, vectorSource.getExtent())
                       vectorLayer.set("selectable", true)
-                      layersDict[title] = vectorLayer;
-
                       map.getView().fit(vectorSource.getExtent());
                       map.updateSize();
-
                       layersDict[title] = vectorLayer;
-                      ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
-                      layersDictExt[title] = ext;
 
 
-                      let no_servers_tag = Array.from(document.getElementById(`${id_group_separator}`).getElementsByTagName("P"))[0];
-                      //console.log(no_servers_tag);
-                      let newHtml = html_for_servers(title,group_name)
-                       // $(newHtml).appendTo("#current-servers")
-                       $(newHtml).appendTo(`#${id_group_separator}`);
-                       //console.log($(newHtml));
-                       $(`#${title}_variables`).on("click",showVariables);
-                       $(`#${title}_variables_info`).on("click",hydroserver_information);
-                       $(`#${title}_${group_name}_reload`).on("click",update_hydroserver);
+                        let no_servers_tag = Array.from(document.getElementById(`${id_group_separator}`).getElementsByTagName("P"))[0];
+                        //console.log(no_servers_tag);
+                        let newHtml = html_for_servers(title,group_name)
+                         // $(newHtml).appendTo("#current-servers")
+                         $(newHtml).appendTo(`#${id_group_separator}`);
+                         //console.log($(newHtml));
+                         $(`#${title}_variables`).on("click",showVariables);
+                         $(`#${title}_variables_info`).on("click",hydroserver_information);
+                         $(`#${title}_${group_name}_reload`).on("click",update_hydroserver);
 
-                      // document.getElementById(`${title}`).style.visibility = "hidden";
-
-
-                      // MAKES THE LAYER INVISIBLE
-
-                      let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
-                      //console.log(lis);
-                      let li_arrays = Array.from(lis);
-                      //console.log(li_arrays);
-                      // let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0];
-                      let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
-
-                      //console.log(input_check);
-                      input_check.addEventListener("change", function(){
-                        if(this.checked){
-                          map.getLayers().forEach(function(layer) {
-                               if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                 //console.log(layer)
-                                 layer.setStyle(featureStyle(layerColorDict[title]));
-                               }
-                           });
-                        }
-                        else{
-                          map.getLayers().forEach(function(layer) {
-                               if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                 //console.log(layer)
-                                 layer.setStyle(new ol.style.Style({}));
-                               }
-                           });
-
-                        }
-
-                      });
-                      $(`#${title}_zoom`).on("click",function(){
-                        map.getView().fit(vectorSource.getExtent());
-                        map.updateSize();
-                      });
+                        // document.getElementById(`${title}`).style.visibility = "hidden";
 
 
+                        // MAKES THE LAYER INVISIBLE
 
+                        let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
+                        //console.log(lis);
+                        let li_arrays = Array.from(lis);
+                        //console.log(li_arrays);
+                        // let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0];
+                        let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
 
-                      $.notify(
-                          {
-                              message: `Successfully Added the HydroServer to the Map`
-                          },
-                          {
-                              type: "success",
-                              allow_dismiss: true,
-                              z_index: 20000,
-                              delay: 5000
+                        //console.log(input_check);
+                        input_check.addEventListener("change", function(){
+                          if(this.checked){
+                            map.getLayers().forEach(function(layer) {
+                                 if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                   //console.log(layer)
+                                   layer.setStyle(featureStyle(layerColorDict[title]));
+                                 }
+                             });
                           }
-                      )
-                      $("#soapAddLoading").addClass("hidden")
-                      $("#btn-add-soap").show()
+                          else{
+                            map.getLayers().forEach(function(layer) {
+                                 if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                   //console.log(layer)
+                                   layer.setStyle(new ol.style.Style({}));
+                                 }
+                             });
 
-                      $("#modalAddSoap").modal("hide")
-                      $("#modalAddSoap").each(function() {
-                          this.reset()
-                      })
-                    }
-                    catch(err){
+                          }
+
+                        });
+                        $(`#${title}_zoom`).on("click",function(){
+                          map.getView().fit(vectorSource.getExtent());
+                          map.updateSize();
+                        });
+
+                        $.notify(
+                            {
+                                message: `Successfully Added the HydroServer to the Map`
+                            },
+                            {
+                                type: "success",
+                                allow_dismiss: true,
+                                z_index: 20000,
+                                delay: 5000
+                            }
+                        )
+                        $("#soapAddLoading").addClass("hidden")
+                        $("#btn-add-soap").show()
+
+                        $("#modalAddSoap").modal("hide")
+                        $("#modalAddSoap").each(function() {
+                            this.reset()
+                        })
+
+                      }
+
+            }
+            catch(err){
                       $("#soapAddLoading").addClass("hidden")
                       $.notify(
                           {
@@ -567,7 +531,7 @@ add_hydroserver = function(){
                     }
 
 
-              }
+              // }
 
 
         },
@@ -604,7 +568,7 @@ delete_hydroserver= function(){
     let arrayActual_group=actual_group.split('=')[1];
     var datastring = $modalDelete.serialize() //Delete the record in the database
     datastring += actual_group;
-    //console.log(datastring);
+    console.log(datastring);
     $.ajax({
         type: "POST",
         url: `delete-group-hydroserver/`,
@@ -622,6 +586,8 @@ delete_hydroserver= function(){
 
               let i_string=i.toString();
               let title=json_response[i_string];
+              $("#tableLegend").remove(`#${title}-row-complete`)
+
               let element = document.getElementById(title);
               element.parentNode.removeChild(element);
               //Removing layer from the frontend
@@ -706,6 +672,7 @@ delete_hydroserver_Individual= function(group,server){
               //console.log(group);
               // load_individual_hydroservers_group(arrayActual_group) //Reloading the new catalog
               // get_notification("sucess",`Successfully Deleted the HydroServer!`);
+              $("#tableLegend").remove(`#${title}-row-complete`)
 
               let id_group_separator = `${group}_list_separator`;
               let separator_element = document.getElementById(id_group_separator);
