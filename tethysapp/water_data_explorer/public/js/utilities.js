@@ -498,14 +498,30 @@ function change_effect_groups(element_to_check,id_group_separator){
      }
      //console.log(checkbox);
      map.getLayers().forEach(function(layer) {
-          if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
-            if(element_to_check.checked){
-              layer.setStyle(featureStyle(layerColorDict[server_name]));
-            }
-            else{
-              layer.setStyle(new ol.style.Style({}));
-            }
-          }
+       if(layer_object_filter.hasOwnProperty(server_name) == false){
+         console.log("false")
+         if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
+           if(element_to_check.checked){
+
+             layer.setStyle(featureStyle(layerColorDict[server_name]));
+           }
+           else{
+             layer.setStyle(new ol.style.Style({}));
+           }
+         }
+       }
+       else{
+         console.log("true")
+         if(layer instanceof ol.layer.Vector && layer == layer_object_filter[server_name]){
+           if(element_to_check.checked){
+
+             layer.setStyle(featureStyle(layerColorDict[server_name]));
+           }
+           else{
+             layer.setStyle(new ol.style.Style({}));
+           }
+         }
+       }
       });
    }
 }

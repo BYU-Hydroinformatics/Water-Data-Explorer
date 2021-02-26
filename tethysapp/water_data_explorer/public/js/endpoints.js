@@ -46,7 +46,10 @@ map_layers = function(sites,title,url){
      distance: parseInt(30, 10),
      source: vectorSource,
    });
-  layerColorDict[title] = get_new_color();
+  if(layerColorDict.hasOwnProperty(title) == false){
+    layerColorDict[title] = get_new_color();
+
+  }
 
   let style_custom = featureStyle(layerColorDict[title])
   var vectorLayer = new ol.layer.Vector({
@@ -138,25 +141,59 @@ map_layers = function(sites,title,url){
 
 
                        input_check.addEventListener("change", function(){
-                         if(this.checked){
-                           map.getLayers().forEach(function(layer) {
-                                if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                  //console.log(layer)
-                                  layer.setStyle(featureStyle(layerColorDict[title]));
-                                }
-                            });
-                         }
-                         else{
-                           map.getLayers().forEach(function(layer) {
-                                if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                  //console.log(layer)
-                                  layer.setStyle(new ol.style.Style({}));
-                                }
-                            });
+                         let check_box = this;
+                         map.getLayers().forEach(function(layer) {
+                           if(layer_object_filter.hasOwnProperty(title) == false){
+                             console.log("false")
+                             if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                               console.log(this)
+                               if(check_box.checked){
 
-                         }
+                                 layer.setStyle(featureStyle(layerColorDict[title]));
+                               }
+                               else{
+                                 layer.setStyle(new ol.style.Style({}));
+                               }
+                             }
+                           }
+                           else{
+                             console.log("true")
+                             if(layer instanceof ol.layer.Vector && layer == layer_object_filter[title]){
+                               if(check_box.checked){
+
+                                 layer.setStyle(featureStyle(layerColorDict[title]));
+                               }
+                               else{
+                                 layer.setStyle(new ol.style.Style({}));
+                               }
+                             }
+                           }
+                          });
+
+
+                         // if(this.checked){
+                         //
+                         //
+                         //   map.getLayers().forEach(function(layer) {
+                         //        if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                         //          //console.log(layer)
+                         //          layer.setStyle(featureStyle(layerColorDict[title]));
+                         //        }
+                         //    });
+                         // }
+                         // else{
+                         //   map.getLayers().forEach(function(layer) {
+                         //        if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                         //          //console.log(layer)
+                         //          layer.setStyle(new ol.style.Style({}));
+                         //        }
+                         //    });
+                         //
+                         // }
 
                        });
+
+
 
 
                        // let sites = siteInfo
