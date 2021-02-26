@@ -598,6 +598,13 @@ input[type=checkbox], input[type=radio]{
 #btn-download-waterml, #btn-download-csv{
   margin: 0.1em;
 }
+
+#siteVariableTable th {
+  font-weight: normal;
+}
+#siteVariableTable .danger th {
+  font-weight: bold;
+}
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;
   border-color:#46b8da !important;
