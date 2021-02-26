@@ -1,5 +1,5 @@
-/*
 
+/*
 ************ FUNCTION NAME: SELECT_VARIABLE_CHANGE **********************
 ************ PURPOSE: SELECT A VARIABLE FROM A DROPDOWN AND CHANGE THE GRAPH ***********
 */
@@ -111,7 +111,29 @@ select_variable_change = function(){
             if(chart_type ==="Scatter"){
               //console.log("it is an scatter plot for the variable change");
               initialize_graphs(x_array,y_array,title_graph,units_y, units_x,variable_name_legend,type,x_array_interpolation,y_array_interpolation);
+
+              $("#btn-download-csv").on("click", function(){
+                var csvData = [];
+                var header = [units_y,units_x] //main header.
+                csvData.push(header);
+                for (var i = 0; i < x_array.length; i++){ //data
+                  var line = [x_array[i],y_array[i]];
+                  csvData.push(line);
+                }
+                var csvFile = csvData.map(e=>e.map(a=>'"'+((a||"").toString().replace(/"/gi,'""'))+'"').join(",")).join("\r\n"); //quote all fields, escape quotes by doubling them.
+                var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+                var link = document.createElement("a");
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", title_graph.replace(/[^a-z0-9_.-]/gi,'_') + ".csv");
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              });
             }
+
+
             if(chart_type ==="Whisker and Box"){
               //console.log("it is an whisker and box plot for the variable change");
 

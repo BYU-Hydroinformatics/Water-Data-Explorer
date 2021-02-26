@@ -178,6 +178,7 @@ activate_layer_values = function (){
 
           if (check_array.includes(true)) {
             initialize_graphs(active_map_feature_graphs['pie']['x_array'],result['counts'],title_info, undefined, undefined, undefined,'pie');
+
           }
           else{
             initialize_graphs(['no variable has data'],[1],title_info, undefined, undefined, undefined,'pie');
