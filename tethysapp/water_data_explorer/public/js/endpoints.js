@@ -867,7 +867,7 @@ showAvailableSites = function(){
 
 
 
-           $(`#${hs}`).css({"opacity": "",
+           $(`#${hs}`).css({"opacity": "1",
                                 "border-color": "#d3d3d3",
                                 "border-width":"1px",
                                 "border-style":"solid",

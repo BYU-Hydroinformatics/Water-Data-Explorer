@@ -1160,13 +1160,15 @@ catalog_filter = function(){
   //console.log(elementForm)
   let datastring= elementForm.serialize();
   //console.log(datastring);
+  $("#KeywordLoading").removeClass("hidden");
+
   $.ajax({
       type: "GET",
       url: `catalog-filter/`,
       dataType: "HTML",
       data: datastring,
       success: function(result) {
-        let check_for_none = []
+        // let check_for_none = []
         let hs_available = JSON.parse(result)['hs'];
         // let hs_available = JSON.parse(result);
         //console.log(hs_available)
@@ -1178,26 +1180,42 @@ catalog_filter = function(){
               //console.log(id_li)
 
               if(hs_available.includes(id_li)){
-                $(`#${id_li}`).removeClass("hidden");
-                check_for_none.push(id_li);
+                // $(`#${id_li}`).removeClass("hidden");
+                // check_for_none.push(id_li);
+                $(`#${id_li}`).css({"opacity": "1",
+                                    "border-color": "#ac2925",
+                                    "border-width": "2px",
+                                    "border-style": "solid",
+                                    "color": "black",
+                                    "font-weight": "bold"});
               }
               else{
-                $(`#${id_li}`).addClass("hidden");
+                // $(`#${id_li}`).addClass("hidden");
+                $(`#${id_li}`).css({"opacity": "0.5",
+                                     "border-color": "#d3d3d3",
+                                     "border-width":"1px",
+                                     "border-style":"solid",
+                                     "color":"#555555",
+                                     "font-weight": "normal"});
               }
            });
         //console.log(information_model);
-        Object.keys(information_model).forEach(function(key) {
-          //console.log(information_model[key].some(r=> check_for_none.includes(r)));
-            if (information_model[key].some(r=> check_for_none.includes(r))) {
-              $(`#${key}-noGroups`).addClass("hidden");
+        // Object.keys(information_model).forEach(function(key) {
+        //   //console.log(information_model[key].some(r=> check_for_none.includes(r)));
+        //     if (information_model[key].some(r=> check_for_none.includes(r))) {
+        //       $(`#${key}-noGroups`).addClass("hidden");
+        //
+        //     }
+        //     else{
+        //       $(`#${key}-noGroups`).removeClass("hidden");
+        //     }
+        // });
+        $("#KeywordLoading").addClass("hidden");
 
-            }
-            else{
-              $(`#${key}-noGroups`).removeClass("hidden");
-            }
-        });
       },
       error: function(error) {
+        $("#KeywordLoading").addClass("hidden");
+
         //console.log(error);
         // get_notification("danger",`Something were wrong when applying the filter with the keywords`);
         $.notify(
@@ -1225,6 +1243,8 @@ catalog_filter_server = function(){
   let datastring= elementForm.serialize();
   datastring += actual_group;
   //console.log(datastring);
+  $("#KeywordLoading2").removeClass("hidden");
+
   $.ajax({
       type: "GET",
       url: `catalog-filter/`,
@@ -1266,9 +1286,12 @@ catalog_filter_server = function(){
                                     "font-weight": "normal"});
               }
            });
+           $("#KeywordLoading2").addClass("hidden");
 
       },
       error: function(error) {
+        $("#KeywordLoading2").addClass("hidden");
+
         //console.log(error);
         // get_notification("danger",`Something were wrong when applying the filter with the keywords`);
         $.notify(
@@ -1298,7 +1321,7 @@ reset_keywords = function(){
      {
         var $li=$(this)['0'];
         let id_li = $li['id'];
-        $(`#${id_li}`).removeClass("hidden");
+        // $(`#${id_li}`).removeClass("hidden");
         $(`#${id_li}`).css({"opacity": "1",
                             "border-color": "#d3d3d3",
                             "border-width":"1px",
