@@ -39,15 +39,13 @@
     color: #666;
 }
 table #tbl-hydroservers{
-  border-collapse: collapse;
   width: 100%;
+
 }
 
-th #tbl-hydroservers, td #tbl-hydroservers, tr #tbl-hydroservers {
-
-  padding: 2%;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
+#tbl-hydroservers th, #tbl-hydroservers td, #tbl-hydroservers tr {
+  text-align: center !important;
+  border-bottom: 1px solid #ddd !important;
 }
 
 tr:hover {
