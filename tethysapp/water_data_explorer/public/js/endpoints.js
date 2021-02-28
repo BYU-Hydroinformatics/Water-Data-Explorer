@@ -643,6 +643,7 @@ delete_hydroserver= function(){
                 let no_servers = `<button class="btn btn-danger btn-block noGroups"> The group does not have hydroservers</button>`
                     $(no_servers).appendTo(`#${id_group_separator}`) ;
               }
+              $(`#${title}deleteID`).remove();
 
               $.notify(
                   {

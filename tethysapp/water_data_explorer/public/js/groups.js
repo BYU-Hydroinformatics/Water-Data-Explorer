@@ -991,7 +991,7 @@ get_hs_list_from_hydroserver = function(){
                     var title = server[i].title
                     var url = server[i].url
                     HSTableHtml +=
-                        `<tr>` +
+                        `<tr id="${title}deleteID">` +
                         '<td><input type="checkbox" name="server" id="server" value="' +
                         title +
                         '"></td>' +
