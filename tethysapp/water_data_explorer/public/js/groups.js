@@ -588,95 +588,50 @@ create_group_hydroservers = function(){
               let newHtml;
               if(can_delete_hydrogroups){
                 newHtml = html_for_groups(can_delete_hydrogroups, title, id_group_separator);
-                // newHtml =
-                // `
-                // <div class="panel panel-default" id="${title}_panel">
-                //   <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-                //     <h4 class="panel-title">
-                //       <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-                //       <span class="group-name"><strong>${ind})</strong> ${title}</span>
-                //
-                //       </a>
-                //     </h4>
-                //     <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-                //
-                //         <input class="chkbx-layers" type="checkbox" checked>
-                //         <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
-                //           <span class=" glyphicon glyphicon-info-sign "></span>
-                //         </button>
-                //         <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
-                //           <span class="glyphicon glyphicon-plus"></span>
-                //         </button>
-                //         <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
-                //           <span class="glyphicon glyphicon-trash"></span>
-                //         </button>
-                //     </li>
-                //
-                //   </div>
-                //
-                //   <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-                //   <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
-                //     <div class="panel-body">
-                //         <div id= ${id_group_separator} class="divForServers"></div>
-                //     </div>
-                //   </div>
-                // </div>
-                // `
               }
               else{
                 newHtml = html_for_groups(false, title, id_group_separator);
-                // newHtml =
-                // `
-                // <div class="panel panel-default" id="${title}_panel">
-                //   <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-                //     <h4 class="panel-title">
-                //       <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-                //       <span class="group-name"><strong>${ind})</strong> ${title}</span>
-                //       </a>
-                //     </h4>
-                //     <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-                //       <input class="chkbx-layers" type="checkbox" checked>
-                //       <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
-                //         <span class=" glyphicon glyphicon-info-sign "></span>
-                //       </button>
-                //     </li>
-                //   </div>
-                //   <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-                //     <div class="panel-body">
-                //         <div id= ${id_group_separator} class="divForServers"></div>
-                //     </div>
-                //   </div>
-                // </div>
-                // `
               }
 
               $(newHtml).appendTo("#current-Groupservers");
 
               let li_object = document.getElementById(`${title}`);
-              //console.log("hola");
-              // //console.log(li_object.children[0]);
-              // let input_check = li_object.children[0];
               let input_check = li_object.getElementsByClassName("chkbx-layers")[0];
 
-              //console.log(input_check);
-              // if(input_check.checked){
+
+              // load_individual_hydroservers_group(title);
+              // let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
+              // //console.log(servers_checks);
+              // input_check.addEventListener("change", function(){
+              //   change_effect_groups(this,id_group_separator);
+              // });
+              console.log(input_check);
+
+              if(!input_check.checked){
+                console.log("HERE NOT CHECKEC")
                 load_individual_hydroservers_group(title);
-              // }
-
+              }
               input_check.addEventListener("change", function(){
-                //console.log(this);
-                if(this.checked){
-                  //console.log(" it is checked");
-                  load_individual_hydroservers_group(title);
-
-                }
-                else{
-                  // delete the lsit of hydroservers being display // make a function to delete it
-                  //console.log("it is not checked");
-                  remove_individual_hydroservers_group(title);
-                }
-
+                change_effect_groups(this,id_group_separator);
               });
+
+              // input_check.addEventListener("change", function(){
+              //   //console.log(this);
+              //   if(this.checked){
+              //     console.log("HERE CHECKE CAUSED");
+              //
+              //     //console.log(" it is checked");
+              //     load_individual_hydroservers_group(title);
+              //
+              //   }
+              //   else{
+              //     console.log("HERE NOT CHECKE CAUSED");
+              //     // delete the lsit of hydroservers being display // make a function to delete it
+              //     //console.log("it is not checked");
+              //     remove_individual_hydroservers_group(title);
+              //   }
+              //
+              // });
 
               let $title="#"+title;
               let $title_list="#"+title+"list";
@@ -1036,7 +991,7 @@ get_hs_list_from_hydroserver = function(){
                     var title = server[i].title
                     var url = server[i].url
                     HSTableHtml +=
-                        "<tr>" +
+                        `<tr id="${title}_group_deleteID">` +
                         '<td><input type="checkbox" name="server" id="server" value="' +
                         title +
                         '"></td>' +
@@ -1103,12 +1058,14 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
             let group_panel_id = `${group}_panel`;
             let group_panel = document.getElementById(group_panel_id);
             group_panel.parentNode.removeChild(group_panel);
+            $(`#${group}_group_deleteID`).remove();
           });
 
           hydroservers_to_erase.forEach(function(hydroserver){
 
               map.removeLayer(layersDict[hydroserver]);
-              delete layersDict[title]
+              if (layersDict.hasOwnProperty(hydroserver))
+              delete layersDict[hydroserver]
 
           });
           map.updateSize();
