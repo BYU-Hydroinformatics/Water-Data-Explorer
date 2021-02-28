@@ -938,7 +938,7 @@ make_list_groups = function(){
       for (var i = 0; i < finalGroupArray.length; i++) {
           var title = finalGroupArray[i]
           HSTableHtml +=
-              "<tr>" +
+              `<tr id="${title}deleteID">` +
               '<td><input class="chkbx-group" type="checkbox" name="server" value="' +
               title +
               '"></td>' +
@@ -991,7 +991,7 @@ get_hs_list_from_hydroserver = function(){
                     var title = server[i].title
                     var url = server[i].url
                     HSTableHtml +=
-                        `<tr id="${title}_group_deleteID">` +
+                        `<tr>` +
                         '<td><input type="checkbox" name="server" id="server" value="' +
                         title +
                         '"></td>' +
@@ -1058,7 +1058,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
             let group_panel_id = `${group}_panel`;
             let group_panel = document.getElementById(group_panel_id);
             group_panel.parentNode.removeChild(group_panel);
-            $(`#${group}_group_deleteID`).remove();
+            $(`#${group}deleteID`).remove();
           });
 
           hydroservers_to_erase.forEach(function(hydroserver){
