@@ -1184,6 +1184,24 @@ catalog_filter = function(){
 
               }
            });
+           let groups_divs = Object.keys(information_model);
+           for(let i=0; i< groups_divs.length; ++i){
+             let check_all = true;
+             for(let j=0; j< information_model[groups_divs[i]].length; ++j){
+               let service_div = information_model[groups_divs[i]][j]
+               $(`#${service_div} input[type=checkbox]`).each(function(){
+                 if(!this.checked){
+                   check_all = false;
+                 }
+               });
+             }
+             if(check_all){
+               $(`#${groups_divs[i]} input[type=checkbox]`).each(function() {
+                 this.checked = true;
+               });
+             }
+           }
+
 
         $("#KeywordLoading").addClass("hidden");
 
