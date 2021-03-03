@@ -431,10 +431,6 @@ function html_for_groups(isAdmin, title, id_group_separator){
               <span class=" glyphicon glyphicon-info-sign "></span>
             </button>
 
-            <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
-              <span class=" glyphicon glyphicon-filter"></span>
-            </button>
-
             <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
@@ -453,6 +449,10 @@ function html_for_groups(isAdmin, title, id_group_separator){
       </div>
     </div>
     `
+
+    // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
+    //   <span class=" glyphicon glyphicon-filter"></span>
+    // </button>
     return newHtml
   }
   else{
@@ -467,9 +467,9 @@ function html_for_groups(isAdmin, title, id_group_separator){
         </h4>
         <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
           <input class="chkbx-layers" type="checkbox">
-            <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
-              <span class=" glyphicon glyphicon-filter"></span>
-            </button>
+
+
+
           <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
             <span class=" glyphicon glyphicon-info-sign "></span>
           </button>
@@ -482,6 +482,9 @@ function html_for_groups(isAdmin, title, id_group_separator){
       </div>
     </div>
     `
+    // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
+    //   <span class=" glyphicon glyphicon-filter"></span>
+    // </button>
     return newHtml
   }
 }
