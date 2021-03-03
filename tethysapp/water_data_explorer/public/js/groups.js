@@ -1165,6 +1165,10 @@ catalog_filter = function(){
                                     "border-style": "solid",
                                     "color": "black",
                                     "font-weight": "bold"});
+                $(`#${id_li} input[type=checkbox]`).each(function() {
+                  this.checked = true;
+                });
+
               }
               else{
                 // $(`#${id_li}`).addClass("hidden");
