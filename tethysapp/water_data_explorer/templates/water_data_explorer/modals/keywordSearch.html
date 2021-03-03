@@ -5,23 +5,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Ontology based Search in the WDE Catalogs </h4>
-                <p> Select from the following variable concepts or countries to filter the different WaterOneFlow Web Services conained in ALL the Catalogs contained in the WDE</p>
+                <h4 class="modal-title">Country based Search in the WDE Catalogs </h4>
+                <p> Select from the following countries to filter the different WaterOneFlow Web Services contained in ALL the Catalogs contained in the WDE</p>
 
-                <em>Note: Everytime the user selects a variable concept or country region, this one is added, and the search is done using an "OR". In other words,
-                the search will give any server that has at least one of the selected keywords</em>
+                <em>Note: Everytime the user selects a country region, this one is added to the search, and the search is done using an "OR" criteria. In other words,
+                the search will give any server that has at least one of the selected country</em>
             </div>
             <div class="modal-body" id = "keyword-modal-body">
               <div class="leftContent">
                 <p> Region Data Discovery </p>
                 <input type="text" id="myInputKeyword" class= "searchBars" placeholder="Search for country" title="Type in a keyword">
                 <div id="groups_countries"></div>
-                <br>
-                <p> Variable Data Discovery </p>
-                <input type="text" id="myInputKeyword2" class= "searchBars" placeholder="Search variable" title="Type in a keyword">
-                <div id="groups_variables">
 
-                </div>
               </div>
             </div>
 

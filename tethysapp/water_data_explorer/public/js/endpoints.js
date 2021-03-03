@@ -880,10 +880,6 @@ showAvailableSites = function(){
                 }
           });
 
-
-
-
-
          //console.log("layer added to map");
          map.addLayer(vectorLayer)
          // ol.extent.extend(extent, vectorSource.getExtent());
