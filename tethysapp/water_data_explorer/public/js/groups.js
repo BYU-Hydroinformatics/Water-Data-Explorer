@@ -1171,13 +1171,17 @@ catalog_filter = function(){
 
               }
               else{
+                let groups_divs = Object.keys(information_model);
+                if (!groups_divs.includes(id_li)){
+                  $(`#${id_li}`).css({"opacity": "0.5",
+                                       "border-color": "#d3d3d3",
+                                       "border-width":"1px",
+                                       "border-style":"solid",
+                                       "color":"#555555",
+                                       "font-weight": "normal"});
+                }
                 // $(`#${id_li}`).addClass("hidden");
-                $(`#${id_li}`).css({"opacity": "0.5",
-                                     "border-color": "#d3d3d3",
-                                     "border-width":"1px",
-                                     "border-style":"solid",
-                                     "color":"#555555",
-                                     "font-weight": "normal"});
+
               }
            });
 
