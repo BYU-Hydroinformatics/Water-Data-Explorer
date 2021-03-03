@@ -61,9 +61,9 @@ activate_layer_values = function (){
         'pie':{},
         'whisker':{}
       }
-      console.log(feature);
+      // console.log(feature);
       let feature_single = feature.values_.features[0]
-      console.log(feature_single)
+      // console.log(feature_single)
       //console.log(feature_single.values_['hs_name']);
 
       // $("#siteName_title").html(feature.values_['name']);
@@ -77,7 +77,7 @@ activate_layer_values = function (){
       // $("#graphAddLoading").css({left:'50%',bottom:"15%", position:'absolute',"z-index": 9999});
       // $("#graphAddLoading").removeClass("hidden");
       $("#GeneralLoading").removeClass("hidden");
-      console.log(object_request);
+      // console.log(object_request);
 
       $.ajax({
         type:"GET",
@@ -85,10 +85,10 @@ activate_layer_values = function (){
         dataType: "JSON",
         data: object_request,
         success: function(result){
-          //console.log(result);
+          console.log(result);
           let description_site = document.getElementById('siteDes')
-          //console.log(description_site);
-          let geolocations = result['geolo']
+          let geolocations = result['geolo'];
+          let country_name = result['country'];
           let lats = parseFloat(geolocations['latitude'])
           let lons = parseFloat(geolocations['longitude'])
           let new_lat = toDegreesMinutesAndSeconds(lats)
@@ -98,7 +98,7 @@ activate_layer_values = function (){
 
           description_site.innerHTML =
             ` <p> <em> Station/Platform Name:</em> ${feature_single.values_['name']}<p>
-              <p> <em> Territory of origin of data:</em> Data Not available<p>
+              <p> <em> Territory of origin of data:</em> ${country_name}<p>
               <p> <em> Supervising Organization:</em> ${result['description'][Object.keys(result['description'])[0]]['organization']} <p>
               <p> <em> Geospatial Location:</em> lat: ${new_lat} lon: ${new_lon} <p>`
 

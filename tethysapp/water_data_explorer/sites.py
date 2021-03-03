@@ -44,25 +44,16 @@ logging.getLogger('suds.client').setLevel(logging.CRITICAL)
 def get_values_hs(request):
     list_catalog={}
     return_obj={}
-    # print(request)
-    # hs_name = request.GET.get('hs_name')
     hs_url = request.GET.get('hs_url')
-    # site_name = request.GET.get('site_name')
     site_code =  request.GET.get('code')
     network = request.GET.get('network')
-    # network = "whos-plata"
     site_desc = network + ':' + site_code
-
-
 
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
 
-    # print(SessionMaker)
     session = SessionMaker()  # Initiate a session
-    # hydroservers_group = session.query(HydroServer_Individual).filter(Groups.title == hs_name)
     client = Client(hs_url)
 
-    # print(client)
     keywords = client.service.GetVariables('[:]')
     keywords_dict = xmltodict.parse(keywords)
     keywords_dict_object = json.dumps(keywords_dict)
@@ -75,10 +66,27 @@ def get_values_hs(request):
     site_info_Mc_json = json.loads(site_info_Mc_json_object)
 
     print(site_info_Mc_json)
-    object_methods= site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
+    try:
+        object_methods= site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
+    except KeyError as ke:
+        print(ke)
+        return JsonResponse(return_obj)
+
     geolocation= site_info_Mc_json['sitesResponse']['site']['siteInfo']['geoLocation']['geogLocation']
-    print("GETSITESINFO FUNCTION")
-    print(object_methods)
+    return_obj['geolo'] = geolocation
+
+    try:
+        country_name = site_info_Mc_json['sitesResponse']['site']['siteInfo']['siteProperty']['#text']
+        print(country_name)
+        return_obj['country'] = country_name
+
+    except KeyError as ke:
+        print(ke)
+        country_name = "No Data Provided"
+        return_obj['country'] = country_name
+
+    # print("GETSITESINFO FUNCTION")
+    # print(object_methods)
     object_with_methods_and_variables = {}
     object_with_descriptions_and_variables = {}
     object_with_time_and_variables = {}
@@ -132,125 +140,7 @@ def get_values_hs(request):
             print(object_with_methods_and_variables)
 
 
-    #
-    # array_variables = keywords_json['variablesResponse']['variables']['variable']
-    # array_keywords_hydroserver=[]
-    # array_variables_codes = []
-    # array_variables_lengths = []
-    # length_values = 0
-    #
-    #
-    # if isinstance(array_variables,type([])):
-    #     print("array type")
-    #     ijj = 0
-    #     for words in array_variables:
-    #         print(ijj)
-    #         print(words['variableName'])
-    #         variable_text = words['variableName']
-    #         code_variable = words['variableCode']['#text']
-    #         start_date = ""
-    #         end_date = ""
-    #         variable_desc = network + ':' + code_variable
-    #         print("variable_desc")
-    #         print(variable_desc)
-    #         print(site_desc)
-    #         try:
-    #             values = client.service.GetValues(
-    #                 site_desc, variable_desc, start_date, end_date, "")
-    #
-    #             values_dict = xmltodict.parse(values)  # Converting xml to dict
-    #             values_json_object = json.dumps(values_dict)
-    #             values_json = json.loads(values_json_object)
-    #             # print(values_json)
-    #             # print(values_json.keys())
-    #             if 'timeSeriesResponse' in values_json:
-    #             # if values_json['timeSeriesResponse'] is not None:
-    #                 times_series = values_json['timeSeriesResponse'][
-    #                     'timeSeries']  # Timeseries object for the variable
-    #                 # print(times_series)
-    #                 print(times_series['values'])
-    #                 if times_series['values'] is not None:
-    #                     length_values= len(times_series['values']['value'])
-    #                     print(variable_text," ", length_values )
-    #                 else:
-    #                     length_values = 0
-    #                     print("NO variables in ", variable_text," ", length_values )
-    #             ## Addition for the WHOS PLATA ##
-    #             else:
-    #                 times_series = values_json['wml1:timeSeriesResponse'][
-    #                     'wml1:timeSeries']  # Timeseries object for the variable
-    #                 # print(times_series)
-    #                 if times_series['wml1:values'] is not None:
-    #                     length_values= len(times_series['wml1:values']['wml1:value'])
-    #                     print(variable_text," ", length_values )
-    #                 else:
-    #                     length_values = 0
-    #                     print(variable_text," ", length_values )
-    #
-    #
-    #             array_variables_lengths.append(length_values)
-    #
-    #
-    #             array_keywords_hydroserver.append(words['variableName'])
-    #             array_variables_codes.append(words['variableCode']['#text'])
-    #             ijj=ijj+1
-    #         except Exception as e:
-    #             exc_type, exc_obj, exc_tb = sys.exc_info()
-    #             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-    #             print("The class value is not in the response ",exc_type, fname, exc_tb.tb_lineno)
-    #             # words_to_search[name] = array_keywords_hydroserver
-    # if isinstance(array_variables,dict):
-    #     print("dict")
-    #     print(array_variables['variableName'])
-    #
-    #     variable_text = array_variables['variableName']
-    #     code_variable = array_variables['variableCode']['#text']
-    #     start_date = ""
-    #     end_date = ""
-    #     variable_desc = network + ':' + code_variable
-    #     try:
-    #         values = client.service.GetValues(
-    #             site_desc, variable_desc, start_date, end_date, "")
-    #         # print(values)
-    #
-    #         values_dict = xmltodict.parse(values)  # Converting xml to dict
-    #         values_json_object = json.dumps(values_dict)
-    #         values_json = json.loads(values_json_object)
-    #         if 'timeSeriesResponse' in values_json:
-    #         # if values_json['timeSeriesResponse'] is not None:
-    #             times_series = values_json['timeSeriesResponse'][
-    #                 'timeSeries']  # Timeseries object for the variable
-    #             # print(times_series)
-    #             if times_series['values'] is not None:
-    #                 length_values= len(times_series['values']['value'])
-    #                 print(variable_text," ", length_values )
-    #             else:
-    #                 length_values = 0
-    #                 print(variable_text," ", length_values )
-    #         ## Addition for the WHOS PLATA ##
-    #         else:
-    #             times_series = values_json['wml1:timeSeriesResponse'][
-    #                 'wml1:timeSeries']  # Timeseries object for the variable
-    #             # print(times_series)
-    #             if times_series['wml1:values'] is not None:
-    #                 length_values= len(times_series['wml1:values']['wml1:value'])
-    #                 print(variable_text," ", length_values )
-    #             else:
-    #                 length_values = 0
-    #                 print(variable_text," ", length_values )
-    #
-    #
-    #         array_variables_lengths.append(length_values)
-    #
-    #         array_keywords_hydroserver.append(array_variables['variableName'])
-    #         array_variables_codes.append(array_variables['variableCode']['#text'])
-    #     except Exception as e:
-    #         exc_type, exc_obj, exc_tb = sys.exc_info()
-    #         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-    #         print("The class value is not in the response ",exc_type, fname, exc_tb.tb_lineno)
-
     return_obj['variables']=array_keywords_hydroserver
-    return_obj['geolo'] = geolocation
     return_obj['units'] = array_units_variables
     return_obj['codes']=array_variables_codes
     return_obj['counts'] = array_variables_lengths
