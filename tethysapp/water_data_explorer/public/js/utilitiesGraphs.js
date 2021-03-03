@@ -59,8 +59,10 @@ select_variable_change = function(){
           //console.log(result1);
           if(result1.graphs !== undefined){
             //console.log(result1);
-            let time_series_array = result1['graphs']['values2'];
-            let time_series_array_interpolation = result1['graphs']['interpolation'];
+            let time_series_array = result1['graphs'];
+            let time_series_array_interpolation = result1['interpolation'];
+            // let time_series_array = result1['graphs']['values2'];
+            // let time_series_array_interpolation = result1['graphs']['interpolation'];
             //console.log(time_series_array);
 
             let x_array = [];
