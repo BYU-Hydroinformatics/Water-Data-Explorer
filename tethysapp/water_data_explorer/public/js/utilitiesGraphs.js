@@ -61,6 +61,21 @@ select_variable_change = function(){
             //console.log(result1);
             let time_series_array = result1['graphs'];
             let time_series_array_interpolation = result1['interpolation'];
+            $("#btn-download-waterml").on("click",function(){
+              var xmltext = result1['waterml'];
+              var pom = document.createElement('a');
+              var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
+              var pom = document.createElement('a');
+              var bb = new Blob([xmltext], {type: 'application/octet-stream'});
+              pom.setAttribute('href', window.URL.createObjectURL(bb));
+              pom.setAttribute('download', filename);
+
+              pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
+              pom.draggable = true;
+              pom.classList.add('dragout');
+              pom.click();
+
+            });
             // let time_series_array = result1['graphs']['values2'];
             // let time_series_array_interpolation = result1['graphs']['interpolation'];
             //console.log(time_series_array);
