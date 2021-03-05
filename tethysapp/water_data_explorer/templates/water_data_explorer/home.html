@@ -116,7 +116,14 @@
 
       </div>
       <div id="plots"></div>
+
       <div id="downloads_buttons">
+        <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-style="btn-info"width: '100%'>
+            <option value="Download">Download</option>
+            <option value="CSV" >CSV</option>
+            <option value = "WaterML1.0">WaterML 1.0</option>
+            <option value = "WaterML2.0">WaterML 2.0</option>
+        </select>
         <button id="btn-download-csv" class="btn btn-danger"> <span class=" glyphicon glyphicon-cloud-download ">CSV</span></button>
         <button id="btn-download-waterml" class="btn btn-danger"> <span class=" glyphicon glyphicon-cloud-download "> WaterML </span></button>
       </div>

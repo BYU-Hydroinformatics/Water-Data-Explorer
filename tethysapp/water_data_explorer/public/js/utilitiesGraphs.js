@@ -61,21 +61,6 @@ select_variable_change = function(){
             //console.log(result1);
             let time_series_array = result1['graphs'];
             let time_series_array_interpolation = result1['interpolation'];
-            $("#btn-download-waterml").on("click",function(){
-              var xmltext = result1['waterml'];
-              var pom = document.createElement('a');
-              var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
-              var pom = document.createElement('a');
-              var bb = new Blob([xmltext], {type: 'application/octet-stream'});
-              pom.setAttribute('href', window.URL.createObjectURL(bb));
-              pom.setAttribute('download', filename);
-
-              pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
-              pom.draggable = true;
-              pom.classList.add('dragout');
-              pom.click();
-
-            });
             // let time_series_array = result1['graphs']['values2'];
             // let time_series_array_interpolation = result1['graphs']['interpolation'];
             //console.log(time_series_array);
@@ -105,10 +90,10 @@ select_variable_change = function(){
             })
             //console.log(x_array);
             //console.log(y_array);
-            let title_graph = `${result1['graphs']['title']}`;
-            let units_x = `${result1['graphs']['unit']}` ;
-            let units_y = "Time";
-            let variable_name_legend = `${result1['graphs']['variable']}`;
+            let title_graph = `${result1['variablename']} vs ${result1['timeUnitName']}`;
+            let units_x = `${result1['unit_name']}` ;
+            let units_y = `${result1['timeUnitName']}`;
+            let variable_name_legend = `${result1['variablename']}`;
             let type= "scatter";
             active_map_feature_graphs['scatter']['x_array'] = x_array;
             active_map_feature_graphs['scatter']['y_array'] = y_array;
@@ -129,25 +114,78 @@ select_variable_change = function(){
               //console.log("it is an scatter plot for the variable change");
               initialize_graphs(x_array,y_array,title_graph,units_y, units_x,variable_name_legend,type,x_array_interpolation,y_array_interpolation);
 
-              $("#btn-download-csv").on("click", function(){
-                var csvData = [];
-                var header = [units_y,units_x] //main header.
-                csvData.push(header);
-                for (var i = 0; i < x_array.length; i++){ //data
-                  var line = [x_array[i],y_array[i]];
-                  csvData.push(line);
+
+              $("#download_dropdown").change(function(){
+                let selectedDownloadType = $('#download_dropdown')['0'].value;
+                let selectedDownloadTypeText = $('#download_dropdown')['0'];
+                console.log(selectedDownloadType)
+                if(selectedDownloadType != "Download"){
+                  if(selectedDownloadType == "CSV" ){
+                    console.log("jola CSV")
+                    var csvData = [];
+                    var header = [units_y,units_x] //main header.
+                    csvData.push(header);
+                    for (var i = 0; i < x_array.length; i++){ //data
+                      var line = [x_array[i],y_array[i]];
+                      csvData.push(line);
+                    }
+                    var csvFile = csvData.map(e=>e.map(a=>'"'+((a||"").toString().replace(/"/gi,'""'))+'"').join(",")).join("\r\n"); //quote all fields, escape quotes by doubling them.
+                    var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+                    var link = document.createElement("a");
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", title_graph.replace(/[^a-z0-9_.-]/gi,'_') + ".csv");
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }
+                  else if(selectedDownloadType == "WaterML1.0" ){
+                    var xmltext = result1['waterml'];
+                    var pom = document.createElement('a');
+                    var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
+                    var pom = document.createElement('a');
+                    var bb = new Blob([xmltext], {type: 'application/octet-stream'});
+                    pom.setAttribute('href', window.URL.createObjectURL(bb));
+                    pom.setAttribute('download', filename);
+
+                    pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
+                    pom.draggable = true;
+                    pom.classList.add('dragout');
+                    pom.click();
+                  }
+                  else if(selectedDownloadType == "WaterML2.0" ){
+                    let url_base = object_request_variable['hs_url'].split("?")[0];
+                    let SITE = object_request_variable['code'];
+                    let VARIABLE = object_request_variable['code_variable'];
+                    let BEGINDATE = x_array[0].replace(" ","T");
+                    let ENDDATE = x_array[x_array.length -1].replace(" ","T");
+                    let url_download = `${url_base}?request=GetValuesObject&site=${SITE}&variable=${VARIABLE}&beginDate=${BEGINDATE}&endDate=${ENDDATE}&format=WML2`;
+                    console.log(url_download)
+                    fetch(url_download).then(res => res.blob()) // Gets the response and returns it as a blob
+                      .then(blob => {
+                        var pom = document.createElement('a');
+                        var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
+                        var pom = document.createElement('a');
+                        // var bb = new Blob([xmltext], {type: 'application/octet-stream'});
+                        // pom.setAttribute('href', window.URL.createObjectURL(bb));
+                        pom.setAttribute('href', window.URL.createObjectURL(blob));
+                        pom.setAttribute('download', filename);
+
+                        pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
+                        pom.draggable = true;
+                        pom.classList.add('dragout');
+                        pom.click();
+                    });
+
+                  }
+
                 }
-                var csvFile = csvData.map(e=>e.map(a=>'"'+((a||"").toString().replace(/"/gi,'""'))+'"').join(",")).join("\r\n"); //quote all fields, escape quotes by doubling them.
-                var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
-                var link = document.createElement("a");
-                var url = URL.createObjectURL(blob);
-                link.setAttribute("href", url);
-                link.setAttribute("download", title_graph.replace(/[^a-z0-9_.-]/gi,'_') + ".csv");
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+
+
+
               });
+
             }
 
 
