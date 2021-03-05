@@ -185,12 +185,17 @@ def get_values_graph_hs(request):
     water = pwml.WaterMLOperations(url = hs_url)
     values = water.GetValues(site_desc, variable_desc, start_date, end_date)
     df = pd.DataFrame.from_dict(values['values'])
+    variable_name = df['variableName'].tolist()[0]
+    unit_name = df['unitName'].tolist()[0]
+    time_unit_name = df['timeUnitName'].tolist()[0]
     time_series_vals = df['dataValue'].tolist()
     time_series_timeUTC = df['dateTimeUTC'].tolist()
     return_obj['graphs'] = list(zip(time_series_timeUTC,time_series_vals))
     return_obj['interpolation'] = water.GetInterpolation(values)
     return_obj['waterml'] = water.GetValues(site_desc, variable_desc, start_date, end_date, format='waterml')
-
+    return_obj['unit_name'] = unit_name
+    return_obj['variablename'] = variable_name
+    return_obj['timeUnitName'] = time_unit_name
     # client = Client(hs_url)
     # # Connect to the HydroServer endpoint
     # # # print(client)
