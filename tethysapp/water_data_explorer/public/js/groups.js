@@ -1146,6 +1146,12 @@ catalog_filter = function(){
           // ol.extent.extend(extent, vectorSource.getExtent());
           vectorLayer.set("selectable", true)
           layer_object_filter[title] = vectorLayer;
+          
+          if(layersDict['selectedPoint']){
+            map.removeLayer(layersDict['selectedPoint'])
+            // delete layersDict[title]
+            map.updateSize()
+          }
         }
         // let hs_available = JSON.parse(result);
         //console.log(hs_available)
