@@ -177,13 +177,8 @@ select_variable_change = function(){
                         pom.classList.add('dragout');
                         pom.click();
                     });
-
                   }
-
                 }
-
-
-
               });
 
             }
