@@ -306,8 +306,16 @@ var water_data_explorer_PACKAGE = (function() {
             .change()
     }
     give_name = function(){
-      $(".titleh").html(`${views_names} Views`)
-      $(".app-title").html(`${views_names} Data Explorer`)
+      if(views_names != "None"){
+        $(".titleh").html(`${views_names} Views`)
+        $(".app-title").html(`${views_names} Data Explorer`)
+      }
+      else{
+        $(".titleh").html(`Views`)
+        $(".app-title").html(`Water Data Explorer`)
+      }
+
+
       //console.log("GIVE_NAME");
       //console.log(views_names);
     }
