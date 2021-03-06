@@ -195,25 +195,27 @@ def available_variables(request):
 def available_services(request):
     url_catalog = request.GET.get('url')
     hs_services = {}
+    url_catalog = unquote(url_catalog)
+
     if url_catalog:
         try:
             # url_catalog = unquote(url_catalog)
             # print("THIS ", url_catalog)
             url_catalog2 = url_catalog + "?WSDL"
-            client = Client(url_catalog2, timeout= 500)
-            # logging.getLogger('suds.client').setLevel(logging.DEBUG)
+            # client = Client(url_catalog2, timeout= 500)
+            # service_info = client.service.GetWaterOneFlowServiceInfo()
+            # services = service_info.ServiceInfo
+            # views = giveServices(services)
+            # hs_services['services'] = views
+            water = pwml.WaterMLOperations(url = url_catalog2)
+            hs_services['services'] = water.AvailableServices()['available']
 
-            service_info = client.service.GetWaterOneFlowServiceInfo()
-            services = service_info.ServiceInfo
-            views = giveServices(services)
-            hs_services['services'] = views
         except Exception as e:
             # print("I AM HERE OR NOT")
-            services = parseService(url_catalog)
-            # print(services)
-            views = giveServices(services)
-            # print(views)
-            hs_services['services'] = views
+            # services = parseService(url_catalog)
+            # views = giveServices(services)
+            # hs_services['services'] = views
+            hs_services['services'] = []
     return JsonResponse(hs_services)
 
 
@@ -242,8 +244,8 @@ def create_group(request):
         for key, value in request.POST.items():
             print(key)
             if value not in (title, description,url_catalog):
-                # selected_services.append(value.replace("_"," "))
-                selected_services.append(value)
+                selected_services.append(value.replace("_"," "))
+                # selected_services.append(value)
 
         # selected_services = request.POST.get('server')
         print(selected_services)
@@ -258,29 +260,16 @@ def create_group(request):
 
         if url_catalog:
             try:
-                # print("NORMAL")
                 url_catalog = unquote(url_catalog)
-                # print("THIS ", url_catalog)
                 url_catalog2 = url_catalog + "?WSDL"
-                # client = zeep.Client(url_catalog2)
-                client = Client(url_catalog2, timeout= 500)
-                service_info = client.service.GetWaterOneFlowServiceInfo()
-                services = service_info.ServiceInfo
-                # print("selected_services", selected_services)
-                # views = giveServices(services,selected_services)
-                print("DONE WITH VIEWS IN GETSITEINFO")
-                # print(views)
+                water = pwml.WaterMLOperations(url = url_catalog2)
+                services = water.GetWaterOneFlowServicesInfo()
+                print(services)
+                views = water.aux._giveServices(services,selected_services)['working']
                 group_obj['views'] = addMultipleViews(views,title)
-                # print("DONE WITH MULTIPLEVIEWS IN GETSITEINFO")
             except Exception as e:
-                # print("EXCEPT")
-                services = parseService(url_catalog)
-                views = giveServices(services,selected_services)
-                # print("DONE WITH VIEWS IN EXCEPTION")
-                # print(views)
-                group_obj['views'] = addMultipleViews(views,title)
-                # print("DONE WITH MULTIPLEVIEWS IN EXCEPTION")
-
+                print(e)
+                group_obj['views'] = []
 
     else:
         group_obj['message'] = 'There was an error while adding th group.'
@@ -288,59 +277,59 @@ def create_group(request):
     # print(group_obj['views'])
     return JsonResponse(group_obj)
 
-def giveServices(services,filter_serv=None):
-    hs_list = []
-    for i in services:
-        # print(i)
-        hs = {}
-        url = i['servURL']
-        if not url.endswith('?WSDL'):
-            url = url + "?WSDL"
-        title = i['Title']
-        # print(title)
-        description = "None was provided by the organiation in charge of the Web Service"
-        if 'aabstract' in i:
-            # print("THERE IS ABSTRACH")
-            description = i['aabstract']
-        if filter_serv is not None:
-            # print(filter_serv,"not none")
-            if title in filter_serv:
-                # print(title, filter_serv)
-                try:
-                    print("Testing %s" % (url))
-                    url_client = Client(url)
-                    hs['url'] = url
-                # selected_services.append(value.replace("_"," "))
-                    hs['title'] = title
-
-                    hs['description'] = description
-                    hs_list.append(hs)
-                    print("%s Works" % (url))
-                except Exception as e:
-                    print(e)
-                    hs['url'] = url
-                    print("%s Failed" % (url))
-                    # error_list.append(hs)
-                # hs_list['servers'] = hs_list
-                # list['errors'] = error_list
-        else:
-            try:
-                print("Testing %s" % (url))
-                url_client = Client(url)
-                hs['url'] = url
-                hs['title'] = title
-                hs['description'] = description
-                hs_list.append(hs)
-                print("%s Works" % (url))
-            except Exception as e:
-                print(e)
-                hs['url'] = url
-                print("%s Failed" % (url))
-                # error_list.append(hs)
-            # hs_list['servers'] = hs_list
-            # list['errors'] = error_list
-
-    return hs_list
+# def giveServices(services,filter_serv=None):
+#     hs_list = []
+#     for i in services:
+#         # print(i)
+#         hs = {}
+#         url = i['servURL']
+#         if not url.endswith('?WSDL'):
+#             url = url + "?WSDL"
+#         title = i['Title']
+#         # print(title)
+#         description = "None was provided by the organiation in charge of the Web Service"
+#         if 'aabstract' in i:
+#             # print("THERE IS ABSTRACH")
+#             description = i['aabstract']
+#         if filter_serv is not None:
+#             # print(filter_serv,"not none")
+#             if title in filter_serv:
+#                 # print(title, filter_serv)
+#                 try:
+#                     print("Testing %s" % (url))
+#                     url_client = Client(url)
+#                     hs['url'] = url
+#                 # selected_services.append(value.replace("_"," "))
+#                     hs['title'] = title
+#
+#                     hs['description'] = description
+#                     hs_list.append(hs)
+#                     print("%s Works" % (url))
+#                 except Exception as e:
+#                     print(e)
+#                     hs['url'] = url
+#                     print("%s Failed" % (url))
+#                     # error_list.append(hs)
+#                 # hs_list['servers'] = hs_list
+#                 # list['errors'] = error_list
+#         else:
+#             try:
+#                 print("Testing %s" % (url))
+#                 url_client = Client(url)
+#                 hs['url'] = url
+#                 hs['title'] = title
+#                 hs['description'] = description
+#                 hs_list.append(hs)
+#                 print("%s Works" % (url))
+#             except Exception as e:
+#                 print(e)
+#                 hs['url'] = url
+#                 print("%s Failed" % (url))
+#                 # error_list.append(hs)
+#             # hs_list['servers'] = hs_list
+#             # list['errors'] = error_list
+#
+#     return hs_list
 
 def addMultipleViews(hs_list,group):
     ret_object = []
@@ -353,34 +342,6 @@ def addMultipleViews(hs_list,group):
         print("********************")
         print(hs)
         try:
-            # # response = urllib.request.urlopen(new_url)
-            #
-            # # print(response.getcode())
-            # print(new_url)
-            # client = Client(new_url, timeout= 500)
-            # sites = client.service.GetSites('[:]')
-            # # sites = client.service.GetSites('')
-            # print("this are the sites")
-            # print(sites)
-            # print(type(sites))
-            # sites_json={}
-            # if isinstance(sites, str):
-            #     print("here")
-            #     sites_dict = xmltodict.parse(sites)
-            #     sites_json_object = json.dumps(sites_dict)
-            #     sites_json = json.loads(sites_json_object)
-            # else:
-            #     sites_json_object = suds_to_json(sites)
-            #     sites_json = json.loads(sites_json_object)
-            #
-            # # Parsing the sites and creating a sites object. See auxiliary.py
-            # print("-------------------------------------")
-            # # print(sites_json)
-            # sites_object = parseJSON(sites_json)
-
-            # print(sites_object)
-            # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
-            # sites_parsed_json = json.dumps(converted_sites_object)
             sites_object = water.GetSites()
             print(sites_object)
             sites_parsed_json = json.dumps(sites_object)
