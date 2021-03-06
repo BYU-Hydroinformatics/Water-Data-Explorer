@@ -176,6 +176,19 @@ select_variable_change = function(){
                         pom.draggable = true;
                         pom.classList.add('dragout');
                         pom.click();
+                    }).
+                    catch(error =>{ console
+                      $.notify(
+                          {
+                              message: `There Service ${object_request_variable['hs_url']} does not provide WaterML 2.0 downloads`
+                          },
+                          {
+                              type: "danger",
+                              allow_dismiss: true,
+                              z_index: 20000,
+                              delay: 5000
+                          }
+                      )
                     });
                   }
                 }
