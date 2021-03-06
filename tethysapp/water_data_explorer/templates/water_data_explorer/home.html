@@ -35,10 +35,11 @@
           <button id="btn-filter-groups-f" class="btn btn-success" data-toggle="modal" data-target="#modalKeyWordSearch">
             <img src="{% static 'water_data_explorer/images/countries_filter.png' %}" alt="Icon"/>
           </span></button>
-          <!-- {% if can_block_map %}
-          <input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
-          {% endif %} -->
-          <!-- <input id="sG" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="small" data-onstyle = "danger"></input> -->
+
+          {% if can_block_map %}
+          <input id="blockPosition" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
+          {% endif %}
+          <input id="sG" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="small" data-onstyle = "danger"></input>
       </div>
     </div>
   </div>

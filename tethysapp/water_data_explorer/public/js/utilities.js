@@ -3,33 +3,48 @@
 ************ PURPOSE: DISABLES OR ENABLES THE ZOOM OUT AND DRAGGING OF THE MAP ***********
 */
 disable_map =  function (){
+  try{
+    let map_block=document.getElementById("blockPosition");
+    let layerBoundary = layersDict['boundaryLayer'];
+    let vectorSource = layerBoundary.getSource();
+    if(map_block.checked){
+      var extent = vectorSource.getExtent();
+      //console.log(extent);
+      map.getView().fit(extent, map.getSize());
+      var properties = map.getView().getProperties();
+      properties["minZoom"] = map.getView().getZoom();
+      if(geoServerMovement){
+        properties["extent"]= extent
 
-  let map_block=document.getElementById("blockPosition");
-  let layerBoundary = layersDict['boundaryLayer'];
-  let vectorSource = layerBoundary.getSource();
-  if(map_block.checked){
-    var extent = vectorSource.getExtent();
-    //console.log(extent);
-    map.getView().fit(extent, map.getSize());
-    var properties = map.getView().getProperties();
-    properties["minZoom"] = map.getView().getZoom();
-    if(geoServerMovement){
-      properties["extent"]= extent
-
+      }
+      map.setView(new ol.View(properties));
+      map.addLayer(layersDict['boundaryLayer']);
     }
-    map.setView(new ol.View(properties));
-    map.addLayer(layersDict['boundaryLayer']);
-  }
-  else{
-    var properties = map.getView().getProperties();
-    properties["minZoom"] = 1;
-    if(geoServerMovement){
-      properties["extent"]= extent
+    else{
+      var properties = map.getView().getProperties();
+      properties["minZoom"] = 1;
+      if(geoServerMovement){
+        properties["extent"]= extent
 
+      }
+      map.setView(new ol.View(properties));
+      map.removeLayer(layersDict['boundaryLayer']);
     }
-    map.setView(new ol.View(properties));
-    map.removeLayer(layersDict['boundaryLayer']);
   }
+  catch(err){
+    $.notify(
+        {
+            message: `Boundary layer was not setup, please go to settings and set up the boundary layer`
+        },
+        {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000
+        }
+    )
+  }
+
 }
 
 $('#blockPosition').change(disable_map)

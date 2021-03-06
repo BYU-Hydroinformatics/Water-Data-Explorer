@@ -1146,7 +1146,7 @@ catalog_filter = function(){
           // ol.extent.extend(extent, vectorSource.getExtent());
           vectorLayer.set("selectable", true)
           layer_object_filter[title] = vectorLayer;
-          
+
           if(layersDict['selectedPoint']){
             map.removeLayer(layersDict['selectedPoint'])
             // delete layersDict[title]
@@ -1155,6 +1155,9 @@ catalog_filter = function(){
         }
         // let hs_available = JSON.parse(result);
         //console.log(hs_available)
+        $("#panel-bodyh").append(`<button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>`)
+        $("#btn-r-reset").on("click", reset_keywords);
+
         $("#current-Groupservers").find("li").each(function()
            {
               var $li=$(this)['0'];
@@ -1318,6 +1321,7 @@ catalog_filter_server = function(){
 $("#btn-key-search-catalog").on("click", catalog_filter_server);
 
 reset_keywords = function(){
+  $('#btn-r-reset').last().remove();
   Object.keys(information_model).forEach(function(key) {
         // $(`#${key}-noGroups`).addClass("hidden");
         //add the reset button ///

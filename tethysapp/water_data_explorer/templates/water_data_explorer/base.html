@@ -13,10 +13,10 @@
 {# The name you provided in your app.py is accessible through the tethys_app.name context variable #}
 {% block app_title %}{{ tethys_app.name }}{% endblock %}
 {% block header_buttons %}
-<input id="sG" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="mini" data-onstyle = "default"></input>
+{# <input id="sG" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="mini" data-onstyle = "default"></input> #}
 
 {% if can_block_map %}
-<input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="mini" data-onstyle = "default"></input>
+{# <input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="mini" data-onstyle = "default"></input> #}
 {% endif %}
 
 <div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Manage HydroServers">
