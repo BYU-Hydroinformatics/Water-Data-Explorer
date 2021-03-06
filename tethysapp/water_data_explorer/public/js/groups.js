@@ -847,7 +847,6 @@ create_group_hydroservers = function(){
                        extents,
                        siteInfo
                    } = server
-
                    map.removeLayer(layersDict[title])
                    delete layersDict[title]
                    delete layerColorDict[title]
@@ -1031,6 +1030,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
           //console.log("Result Delete");
           //console.log(result);
           // var json_response = JSON.parse(result)
+
           let groups_to_erase = result.groups;
           let hydroservers_to_erase = result.hydroservers;
           //console.log(groups_to_erase);
@@ -1054,6 +1054,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
               map.removeLayer(layersDict[hydroserver]);
               if (layersDict.hasOwnProperty(hydroserver))
               delete layersDict[hydroserver]
+              $(`#${hydroserver}-row-complete`).remove()
 
           });
           map.updateSize();
