@@ -139,6 +139,17 @@ select_variable_change = function(){
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
+                    $.notify(
+                        {
+                            message: `Download completed for the ${object_request_graphs['variable']} variable in CSV format`
+                        },
+                        {
+                            type: "sucess",
+                            allow_dismiss: true,
+                            z_index: 20000,
+                            delay: 5000
+                        }
+                    )
                   }
                   else if(selectedDownloadType == "WaterML1.0" ){
                     var xmltext = result1['waterml'];
@@ -153,8 +164,20 @@ select_variable_change = function(){
                     pom.draggable = true;
                     pom.classList.add('dragout');
                     pom.click();
+                    $.notify(
+                        {
+                            message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 1.0 format`
+                        },
+                        {
+                            type: "success",
+                            allow_dismiss: true,
+                            z_index: 20000,
+                            delay: 5000
+                        }
+                    )
                   }
                   else if(selectedDownloadType == "WaterML2.0" ){
+                    $("#graphAddLoading").removeClass("hidden");
                     let url_base = object_request_variable['hs_url'].split("?")[0];
                     let SITE = object_request_variable['code'];
                     let VARIABLE = object_request_variable['code_variable'];
@@ -176,6 +199,19 @@ select_variable_change = function(){
                         pom.draggable = true;
                         pom.classList.add('dragout');
                         pom.click();
+                        $("#graphAddLoading").addClass("hidden");
+
+                        $.notify(
+                            {
+                                message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 2.0 format`
+                            },
+                            {
+                                type: "success",
+                                allow_dismiss: true,
+                                z_index: 20000,
+                                delay: 5000
+                            }
+                        )
                     }).
                     catch(error =>{ console
                       $.notify(
