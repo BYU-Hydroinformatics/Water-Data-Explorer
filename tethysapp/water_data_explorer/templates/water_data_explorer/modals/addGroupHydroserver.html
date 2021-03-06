@@ -25,13 +25,15 @@
                         <button id= "btn-check_available_serv" type="button" class="btn btn-primary">Check Services</button>
 
                     </div>
+                    <img id="soapAddLoading-group" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
+
                 </div>
                 <br>
 
                 <div class="form-row">
                     <div class="col-md-12 mb-3 form-group hidden" id="available_services">
                       <p>Available Services</p>
-                      <table class="table table-sm">
+                      <table id="table-check-services" class="table table-sm">
                         <thead>
                           <tr>
                             <th scope="col">#</th>
@@ -46,7 +48,6 @@
                   </div>
                 </div>
                 <div class="loading_id">
-                  <img id="soapAddLoading-group" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
                 </div>
                 <div class="warning"> </div>
 

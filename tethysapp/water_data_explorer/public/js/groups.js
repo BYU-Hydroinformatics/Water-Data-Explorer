@@ -29,6 +29,7 @@ give_available_services = function(){
                 </tr>`
         i += 1;
       })
+      $("#available_services").show();
       $("#modalAddGroupServer").find("#rows_servs").html(row)
 
       $("#available_services").removeClass("hidden");
@@ -615,23 +616,6 @@ create_group_hydroservers = function(){
                 change_effect_groups(this,id_group_separator);
               });
 
-              // input_check.addEventListener("change", function(){
-              //   //console.log(this);
-              //   if(this.checked){
-              //     console.log("HERE CHECKE CAUSED");
-              //
-              //     //console.log(" it is checked");
-              //     load_individual_hydroservers_group(title);
-              //
-              //   }
-              //   else{
-              //     console.log("HERE NOT CHECKE CAUSED");
-              //     // delete the lsit of hydroservers being display // make a function to delete it
-              //     //console.log("it is not checked");
-              //     remove_individual_hydroservers_group(title);
-              //   }
-              //
-              // });
 
               let $title="#"+title;
               let $title_list="#"+title+"list";
@@ -677,9 +661,13 @@ create_group_hydroservers = function(){
                           delay: 5000
                       }
                   )
+                  $("#modalAddGroupServer").modal("hide");
+                  $("#rows_servs").empty();
+                  $("#available_services").hide();
+            }
 
-            } else {
-                $("#soapAddLoading").addClass("hidden")
+            else {
+                $("#soapAddLoading-group").addClass("hidden")
                 $("#btn-add-addHydro").show()
                 $.notify(
                     {
@@ -695,7 +683,7 @@ create_group_hydroservers = function(){
             }
         },
         error: function(error) {
-            $("#soapAddLoading").addClass("hidden")
+            $("soapAddLoading-group").addClass("hidden")
             $("#btn-add-addHydro").show()
             //console.log(error)
             $.notify(

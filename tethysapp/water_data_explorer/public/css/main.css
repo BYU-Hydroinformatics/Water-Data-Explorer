@@ -630,6 +630,9 @@ input[type=checkbox], input[type=radio]{
 #siteVariableTable .danger th {
   font-weight: bold;
 }
+#soapAddLoading-group{
+  position: absolute;
+}
 /* .buttonAppearance:hover{
   background-color: #5bc0de !important;
   border-color:#46b8da !important;
