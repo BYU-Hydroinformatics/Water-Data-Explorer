@@ -27,7 +27,7 @@ select_variable_change = function(){
   object_request_variable['timeFrame'] = arrayTime;
 
   // object_request_graphs['actual_method'] = object_request_graphs['methodsIDs'][object_request_graphs['variables_array'][selectedItem-1]];
-  object_request_variable['actual_method'] = object_request_graphs['methodsIDs'][object_request_graphs['variables_array'][selectedItem-1]];
+  // object_request_variable['actual_method'] = object_request_graphs['methodsIDs'][object_request_graphs['variables_array'][selectedItem-1]];
   // //console.log(object_request_graphs['actual_method']);
   // //console.log(object_request_graphs);
 

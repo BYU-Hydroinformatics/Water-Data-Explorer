@@ -99,7 +99,7 @@ activate_layer_values = function (){
           description_site.innerHTML =
             ` <p> <em> Station/Platform Name:</em> ${feature_single.values_['name']}<p>
               <p> <em> Territory of origin of data:</em> ${country_name}<p>
-              <p> <em> Supervising Organization:</em> ${result['description'][Object.keys(result['description'])[0]]['organization']} <p>
+              <p> <em> Supervising Organization:</em> ${result['organization'][Object.keys(result['organization'])[0]]} <p>
               <p> <em> Geospatial Location:</em> lat: ${new_lat} lon: ${new_lon} <p>`
 
           let table_begin =
@@ -137,53 +137,51 @@ activate_layer_values = function (){
 
 
           // create Dict //
-          for(let i=0; i< result['variables'].length; ++i){
-            // let x_axis= `${result['variables'][i]} (${result['codes'][i]})`;
-            let x_axis= `${result['variables'][i]}`;
-            active_map_feature_graphs['bar']['x_array'].push(x_axis);
-            active_map_feature_graphs['pie']['x_array'].push(x_axis);
-
-          }
-          // let title_info = `${object_request['site_name']} Variables Distribution`;
+          // for(let i=0; i< result['variables'].length; ++i){
+          //   // let x_axis= `${result['variables'][i]} (${result['codes'][i]})`;
+          //   let x_axis= `${result['variables'][i]}`;
+          //   active_map_feature_graphs['bar']['x_array'].push(x_axis);
+          //   active_map_feature_graphs['pie']['x_array'].push(x_axis);
+          //
+          // }
           let title_info = `${feature.values_['name']} Variables Distribution`;
 
-          // active_map_feature_graphs['bar']['x_array'] =result['variables'];
-          active_map_feature_graphs['bar']['y_array'] = result['counts'];
-          active_map_feature_graphs['bar']['type'] = 'bar';
-          active_map_feature_graphs['bar']['title_graph'] = title_info;
+          // active_map_feature_graphs['bar']['y_array'] = result['counts'];
+          // active_map_feature_graphs['bar']['type'] = 'bar';
+          // active_map_feature_graphs['bar']['title_graph'] = title_info;
 
-          active_map_feature_graphs['pie']['y_array'] = result['counts'];
-          active_map_feature_graphs['pie']['type'] = 'pie';
-          active_map_feature_graphs['pie']['title_graph'] = title_info;
-
+          // active_map_feature_graphs['pie']['y_array'] = result['counts'];
+          // active_map_feature_graphs['pie']['type'] = 'pie';
+          // active_map_feature_graphs['pie']['title_graph'] = title_info;
 
 
-          let check_empty_pieChart = true;
-          let check_array = [];
 
-          result['counts'].forEach(function(x){
-            if (x > 0){
-              check_empty_pieChart = true;
-              check_array.push(check_empty_pieChart);
-            }
-            else{
-              check_empty_pieChart = false;
-              check_array.push(check_empty_pieChart);
+          // let check_empty_pieChart = true;
+          // let check_array = [];
 
-            }
-
-          })
-          active_map_feature_graphs['pie']['check_none'] = check_array;
+          // result['counts'].forEach(function(x){
+          //   if (x > 0){
+          //     check_empty_pieChart = true;
+          //     check_array.push(check_empty_pieChart);
+          //   }
+          //   else{
+          //     check_empty_pieChart = false;
+          //     check_array.push(check_empty_pieChart);
+          //
+          //   }
+          //
+          // })
+          // active_map_feature_graphs['pie']['check_none'] = check_array;
           //console.log(active_map_feature_graphs['pie']['check_none']);
 
-          if (check_array.includes(true)) {
-            initialize_graphs(active_map_feature_graphs['pie']['x_array'],result['counts'],title_info, undefined, undefined, undefined,'pie');
-
-          }
-          else{
-            initialize_graphs(['no variable has data'],[1],title_info, undefined, undefined, undefined,'pie');
-
-          }
+          // if (check_array.includes(true)) {
+          //   initialize_graphs(active_map_feature_graphs['pie']['x_array'],result['counts'],title_info, undefined, undefined, undefined,'pie');
+          //
+          // }
+          // else{
+          //   initialize_graphs(['no variable has data'],[1],title_info, undefined, undefined, undefined,'pie');
+          //
+          // }
 
           evt.stopPropagation();
           let object_code_and_variable = {};
@@ -243,7 +241,7 @@ activate_layer_values = function (){
           object_request2['variable']=selectedItem;
           object_request2['code_variable']= code_variable[`${selectedItem}` -1];
           object_request2['times_series'] = result['times_series']
-          object_request2['methodsIDs'] = result['methodsIDs']
+          // object_request2['methodsIDs'] = result['methodsIDs']
           object_request2['variables_array']=result['variables']
           object_request_graphs = JSON.parse(JSON.stringify(object_request2));
           //console.log(object_request2);
