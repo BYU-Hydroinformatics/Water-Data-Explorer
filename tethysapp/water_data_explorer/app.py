@@ -101,6 +101,9 @@ class WaterDataExplorer(TethysAppBase):
             UrlMap(name='get-variables-for-country',
                    url='get-variables-for-country',
                    controller='water_data_explorer.groups.get_variables_for_country'),
+            UrlMap(name='get-download-hs',
+                   url='get-download-hs',
+                   controller='water_data_explorer.endpoints.get_download_hs'),
 
 
         )

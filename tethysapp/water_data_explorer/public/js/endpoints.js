@@ -8,42 +8,92 @@ get_vars_from_site = function (resultList){
   request_obj['code'] = resultList[indexs]['sitecode']
   let var_select = $("#variable_choose");
   $("#downloading_loading").removeClass("hidden");
-  $.ajax({
-    type:"GET",
-    url: `get-values-hs`,
-    dataType: "JSON",
-    data: request_obj,
-    success: function(result){
-      console.log(result)
-      let variables_ = result['variables'];
-      for(let i=0; i< variables_.length; ++i){
-        let option_begin = `<option value=${i}>${variables_[i]} </option>`;
-        var_select.append(option_begin);
+    $.ajax({
+      type:"GET",
+      url: `get-values-hs`,
+      dataType: "JSON",
+      data: request_obj,
+      success: function(result){
+        console.log(result)
+        let variables_ = result['variables'];
+        for(let i=0; i< variables_.length; ++i){
+          let option_begin = `<option value=${i}>${variables_[i]} </option>`;
+          var_select.append(option_begin);
+        }
+        var_select.selectpicker("refresh");
+        let reque_ob = {}
+        console.log($("#site_choose")['0'])
+        reque_ob['hs_name'] = $("#site_choose option:selected").html();
+        reque_ob['hs_url'] = request_obj['hs_url'];
+        reque_ob['site_hs'] = indexs
+        reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
+        console.log(reque_ob)
+        $("#btn-add-download").on("click", function(){
+          $("#downloading_loading").removeClass("hidden");
+          $.ajax({
+            type:"GET",
+            url: `get-download-hs`,
+            dataType: "JSON",
+            data: reque_ob,
+            success: function(result2){
+              console.log(result2);
+              // var name_together = reque_ob['hs_name'].replace(/[^\w\s]/gi, '_')
+              var name_together =reque_ob['hs_name'].replace(/(?!\w|\s)./g, '_').replace(/\s+/g, '_').replace(/^(\s*)([\W\w]*)(\b\s*$)/g, '$2');
+              var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(result2));
+              var downloadAnchorNode = document.createElement('a');
+              downloadAnchorNode.setAttribute("href",dataStr);
+              downloadAnchorNode.setAttribute("download", name_together + ".ipynb");
+              document.body.appendChild(downloadAnchorNode); // required for firefox
+              downloadAnchorNode.click();
+              downloadAnchorNode.remove();
+              $("#downloading_loading").addClass("hidden");
+            },
+            error:function(){
+              $("#downloading_loading").addClass("hidden");
+
+              $.notify(
+                  {
+                      message: `Something went wrong when downloading a python notebook for the site`
+                  },
+                  {
+                      type: "danger",
+                      allow_dismiss: true,
+                      z_index: 20000,
+                      delay: 5000
+                  }
+              )
+            }
+
+
+          })
+        });
+
+        $("#downloading_loading").addClass("hidden");
+
+      },
+      error:function(){
+        $("#downloading_loading").addClass("hidden");
+
+        $.notify(
+            {
+                message: `Something went wrong when loading the variables for the site`
+            },
+            {
+                type: "danger",
+                allow_dismiss: true,
+                z_index: 20000,
+                delay: 5000
+            }
+        )
       }
-      var_select.selectpicker("refresh");
-      $("#downloading_loading").addClass("hidden");
+  })
+}
+download_python_notebook = function(){
 
-    },
-    error:function(){
-      $("#downloading_loading").addClass("hidden");
 
-      $.notify(
-          {
-              message: `Something went wrong when loading the variables for the site`
-          },
-          {
-              type: "danger",
-              allow_dismiss: true,
-              z_index: 20000,
-              delay: 5000
-          }
-      )
-    }
-})
 }
 
-
-// $("#btn-download-colab").on("click", download_python_notebook);
+$("#btn-add-download").on("click", download_python_notebook);
 
 
 
@@ -1067,7 +1117,7 @@ hydroserver_information = function(){
       }
       else {
           for (var i = 0; i < result1['siteInfo'].length; i++) {
-            option_begin = `<option value=${i}>${result1['siteInfo'][i]['sitename']} </option>`;
+            option_begin = `<option value=${i}> ${result1['siteInfo'][i]['sitename']} </option>`;
             site_select.append(option_begin)
               HSTableHtml +=
              '<tr>'+

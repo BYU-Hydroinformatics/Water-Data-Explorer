@@ -45,6 +45,33 @@ logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
 # binding.envns=('SOAP-ENV', 'http://schemas.xmlsoap.org/soap/envelope')
 
+
+
+
+def get_download_hs(request):
+    hs_name = request.GET.get('hs_name')
+    hs_url = request.GET.get('hs_url')
+    variable_hs = request.GET.get('variable_hs')
+    site_hs = request.GET.get('site_hs')
+    url = ('https://gist.githubusercontent.com/romer8/f79eced595079930f7432abfadb51128/raw/3859b6c095e9ebcd81b8807f20d96c4ffd37a49e/pywaterml.ipynb')
+    contents = requests.get(url).text
+    print(len(contents))
+    nb = json.loads(contents)
+
+    nb['cells'][1]['source'][0] = f'# {hs_name} \n'
+    nb['cells'][5]['source'][0] = f'WOF_URL = "{hs_url}" \n'
+    nb['cells'][5]['source'][1] = f'VARIABLE = {variable_hs} \n'
+    nb['cells'][5]['source'][2] = f'SITE = {site_hs} \n'
+
+    #convert to notebbok again#
+    content_string = json.dumps(nb)
+
+    return JsonResponse(nb)
+
+    # We write the notebook to a file on disk.
+    # with open(f'{hs_name}.ipynb', 'w') as f:
+    #     f.write(content_string)
+
 def get_variables_hs(request):
     list_catalog={}
     print("get_variables_hs Function")
