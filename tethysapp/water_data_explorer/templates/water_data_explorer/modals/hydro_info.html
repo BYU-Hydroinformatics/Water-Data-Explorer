@@ -15,23 +15,35 @@
                 {# <br> #}
                 <p class="hsinfo">Description</p>
                 <p id="description_Hydroserver"></p>
-                <p class="hsinfo"> Endpoint Url</p>
+                <p class="hsinfo"> Endpoint Url  <button onclick="copyToClipboard('#urlHydroserver')" class="btn btn-light btn-sm"> <span class="glyphicon glyphicon-copy"></span></button></p>
                 <p id="urlHydroserver"></p>
+
                 <div class="image_button">
-                  <span class="hsinfo">Resources Availables</span>
-                  <br>
-                  <br>
+                  <h3>Analysis Tools</h3>
+                  <p>The Water Data Explorer application uses a python package called "Pywaterml". The Pywaterml allows to access WaterOneFlow (WOF) web services
+                   and retrieve information in different formats </p>
+
+                   <span class="hsinfo"> Learning Resources </span>
+                   <span>
+                     <a href="https://gist.github.com/romer8/f79eced595079930f7432abfadb51128" target="_blank">
+                       <img src="{% static 'water_data_explorer/images/colab_icon.png' %}" alt="google_colab" />
+                     </a>
+                   </span>
+                   <span>
+                        <a href="https://pywaterml.readthedocs.io/en/latest/" target="_blank">
+                          <button id="btn-download-colab" class="btn btn-light" > <span class="glyphicon glyphicon-book"></span>
+                          </button>
+                        </a>
+                   </span>
+                   <br>
+                   <br>
+                  <span class="hsinfo"> Analisys Resources </span>
                   <span>
                     <a href="https://gist.github.com/romer8/2ea44f0a9536e4cdad8ed7242ca27933" target="_blank">
                       <img src="{% static 'water_data_explorer/images/colab_icon.png' %}" alt="google_colab" />
                     </a>
                   </span>
-                  <span class="imitate_p">Google Colab</span>
-                  <br>
-                  <br>
-                  <button id="btn-download-colab" class="btn btn-success" > <span class="glyphicon glyphicon-download"></span></button>
-                  <span class="imitate_p">Download Python Notebook</span>
-
+                  <button id="btn-download-colab" class="btn btn-light"  data-toggle="modal" data-target="#modalPrompDownload" > <span class="glyphicon glyphicon-download"></span></button>
                 </div>
 
                 <br>

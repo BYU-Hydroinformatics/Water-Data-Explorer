@@ -1,3 +1,49 @@
+get_vars_from_site = function (resultList){
+  let indexs= $("#site_choose")['0'].value;
+
+  console.log(indexs)
+  request_obj = {}
+  request_obj['hs_url'] = $("#url_WOF").text()
+  request_obj['network'] = resultList[indexs]['network']
+  request_obj['code'] = resultList[indexs]['sitecode']
+  let var_select = $("#variable_choose");
+
+  console.log(request_obj)
+  $.ajax({
+    type:"GET",
+    url: `get-values-hs`,
+    dataType: "JSON",
+    data: request_obj,
+    success: function(result){
+      console.log(result)
+      let variables_ = result['variables'];
+      for(let i=0; i< variables.length; ++i){
+
+        option_begin = `<option value=${i}>${result1['siteInfo'][i]['sitename']} </option>`;
+        site_select.append(option_begin)
+      }
+    },
+    error:function(){
+      $.notify(
+          {
+              message: `Something went wrong when loading the variables for the site`
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
+          }
+      )
+    }
+})
+}
+
+
+// $("#btn-download-colab").on("click", download_python_notebook);
+
+
+
 map_layers = function(sites,title,url){
 
   sites = sites.map(site => {
@@ -1001,7 +1047,10 @@ hydroserver_information = function(){
       //
 
       //console.log(result1['url']);
+
       $("#urlHydroserver").html(result1['url']);
+      $("#url_WOF").html($("#urlHydroserver").html());
+      let site_select = $("#site_choose");
       $("#description_Hydroserver").html(result1['description']);
       //console.log(result1);
       var HSTableHtml =
@@ -1015,6 +1064,8 @@ hydroserver_information = function(){
       }
       else {
           for (var i = 0; i < result1['siteInfo'].length; i++) {
+            option_begin = `<option value=${i}>${result1['siteInfo'][i]['sitename']} </option>`;
+            site_select.append(option_begin)
               HSTableHtml +=
              '<tr>'+
                   `<td> <p id="titleSite">${i+1}.- ${result1['siteInfo'][i]['sitename']}
@@ -1028,6 +1079,15 @@ hydroserver_information = function(){
              '</tr>'
 
           }
+          console.log(result1['siteInfo'])
+          site_select.selectpicker("refresh");
+          $("#site_choose").change(function(){
+            console.log(result1['siteInfo'])
+
+            get_vars_from_site(result1['siteInfo'])
+          });
+
+
           HSTableHtml += "</tbody></table>"
           $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml);
           for (var i = 0; i < result1['siteInfo'].length; i++) {

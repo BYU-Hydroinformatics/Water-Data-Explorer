@@ -1,3 +1,13 @@
+copyToClipboard = function(element) {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).text()).select();
+  document.execCommand("copy");
+  $temp.remove();
+  console.log("jojfaaga")
+}
+
+
 /*
 ************ FUNCTION NAME: DISABLE MAP **********************
 ************ PURPOSE: DISABLES OR ENABLES THE ZOOM OUT AND DRAGGING OF THE MAP ***********

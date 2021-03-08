@@ -179,6 +179,8 @@ var filter_words,
     getIconLegend,
     addLegendMap,
     map_layers,
+    copyToClipboard,
+    get_vars_from_site,
     generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that
