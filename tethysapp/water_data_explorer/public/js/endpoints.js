@@ -7,8 +7,7 @@ get_vars_from_site = function (resultList){
   request_obj['network'] = resultList[indexs]['network']
   request_obj['code'] = resultList[indexs]['sitecode']
   let var_select = $("#variable_choose");
-
-  console.log(request_obj)
+  $("#downloading_loading").removeClass("hidden");
   $.ajax({
     type:"GET",
     url: `get-values-hs`,
@@ -17,13 +16,17 @@ get_vars_from_site = function (resultList){
     success: function(result){
       console.log(result)
       let variables_ = result['variables'];
-      for(let i=0; i< variables.length; ++i){
-
-        option_begin = `<option value=${i}>${result1['siteInfo'][i]['sitename']} </option>`;
-        site_select.append(option_begin)
+      for(let i=0; i< variables_.length; ++i){
+        let option_begin = `<option value=${i}>${variables_[i]} </option>`;
+        var_select.append(option_begin);
       }
+      var_select.selectpicker("refresh");
+      $("#downloading_loading").addClass("hidden");
+
     },
     error:function(){
+      $("#downloading_loading").addClass("hidden");
+
       $.notify(
           {
               message: `Something went wrong when loading the variables for the site`
@@ -1082,8 +1085,6 @@ hydroserver_information = function(){
           console.log(result1['siteInfo'])
           site_select.selectpicker("refresh");
           $("#site_choose").change(function(){
-            console.log(result1['siteInfo'])
-
             get_vars_from_site(result1['siteInfo'])
           });
 
