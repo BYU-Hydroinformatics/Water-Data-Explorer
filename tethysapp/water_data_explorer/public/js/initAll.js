@@ -344,7 +344,7 @@ var water_data_explorer_PACKAGE = (function() {
    *                  INITIALIZATION / CONSTRUCTOR
    *************************************************************************/
   $(function() {
-
+    let little_trick = true;
     init_jquery_var();
     addDefaultBehaviorToAjax();
     init_map();
@@ -357,7 +357,21 @@ var water_data_explorer_PACKAGE = (function() {
     activate_deactivate_graphs();
     give_name();
     addLegendMap(map);
+    $(".toggle-nav").on("click",function(){
+      if(little_trick){
+        $("#app-navigation").hide();
+        little_trick = false;
+        $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0", "position": "relative", "left": "0px"})
+        setTimeout(function(){ map.updateSize(); }, 500);
+      }
+      else{
+        $("#app-navigation").show();
+        little_trick = true;
+        $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0", "position": "relative","left": "150px"})
 
+        setTimeout(function(){ map.updateSize(); }, 500);
+      }
+    })
 
   })
 })() // End of package wrapper
