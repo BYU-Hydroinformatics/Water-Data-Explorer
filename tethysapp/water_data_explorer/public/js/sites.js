@@ -294,6 +294,21 @@ activate_layer_values = function (){
            $("#GeneralLoading").addClass("hidden")
 
 
+        },
+        error: function(xhr, status, error){
+          $("#GeneralLoading").addClass("hidden");
+
+          $.notify(
+              {
+                  message: `The following error: ${xhr.statusText} is not allowing to retrieve the values for the ${feature_single.values_['name']} site `
+              },
+              {
+                  type: "danger",
+                  allow_dismiss: true,
+                  z_index: 20000,
+                  delay: 5000
+              }
+          )
         }
 
       })

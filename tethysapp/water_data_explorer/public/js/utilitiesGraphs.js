@@ -259,7 +259,25 @@ select_variable_change = function(){
            )
 
          }
-        }
+       },
+       error: function(xhr, status, error){
+         let title_graph=  `${object_request_graphs['site_name']} - ${selectedItemText}
+         No Data Available`
+         initialize_graphs([],[],title_graph,"","","","scatter");
+         $("#graphAddLoading").addClass("hidden")
+         $.notify(
+             {
+                 message: `The following error: ${xhr.statusText} is not allowing to retrieve the values for the ${selectedItem} variable `
+             },
+             {
+                 type: "danger",
+                 allow_dismiss: true,
+                 z_index: 20000,
+                 delay: 5000
+             }
+         )
+       }
+
       })
 
     }
