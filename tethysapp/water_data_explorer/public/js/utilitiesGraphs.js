@@ -58,9 +58,10 @@ select_variable_change = function(){
         success: function(result1){
           //console.log(result1);
           if(result1.graphs !== undefined){
-            //console.log(result1);
+            console.log(result1);
             let time_series_array = result1['graphs'];
             let time_series_array_interpolation = result1['interpolation'];
+            console.log(time_series_array_interpolation)
             // let time_series_array = result1['graphs']['values2'];
             // let time_series_array_interpolation = result1['graphs']['interpolation'];
             //console.log(time_series_array);
@@ -152,29 +153,85 @@ select_variable_change = function(){
                     )
                   }
                   else if(selectedDownloadType == "WaterML1.0" ){
-                    var xmltext = result1['waterml'];
-                    var pom = document.createElement('a');
-                    var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
-                    var pom = document.createElement('a');
-                    var bb = new Blob([xmltext], {type: 'application/octet-stream'});
-                    pom.setAttribute('href', window.URL.createObjectURL(bb));
-                    pom.setAttribute('download', filename);
+                    // var xmltext = result1['waterml'];
+                    // var pom = document.createElement('a');
+                    // var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
+                    // var pom = document.createElement('a');
+                    // var bb = new Blob([xmltext], {type: 'application/octet-stream'});
+                    // pom.setAttribute('href', window.URL.createObjectURL(bb));
+                    // pom.setAttribute('download', filename);
+                    //
+                    // pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
+                    // pom.draggable = true;
+                    // pom.classList.add('dragout');
+                    // pom.click();
+                    // $.notify(
+                    //     {
+                    //         message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 1.0 format`
+                    //     },
+                    //     {
+                    //         type: "success",
+                    //         allow_dismiss: true,
+                    //         z_index: 20000,
+                    //         delay: 5000
+                    //     }
+                    // )
 
-                    pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
-                    pom.draggable = true;
-                    pom.classList.add('dragout');
-                    pom.click();
-                    $.notify(
-                        {
-                            message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 1.0 format`
-                        },
-                        {
-                            type: "success",
-                            allow_dismiss: true,
-                            z_index: 20000,
-                            delay: 5000
-                        }
-                    )
+                    $("#graphAddLoading").removeClass("hidden");
+                    let url_base = object_request_variable['hs_url'].split("?")[0];
+                    let SITE = object_request_variable['code'];
+                    let VARIABLE = object_request_variable['code_variable'];
+                    let BEGINDATE = x_array[0].replace(" ","T");
+                    let ENDDATE = x_array[x_array.length -1].replace(" ","T");
+                    let url_download = `${url_base}?request=GetValuesObject&site=${SITE}&variable=${VARIABLE}&beginDate=${BEGINDATE}&endDate=${ENDDATE}&format=WML1`;
+                    console.log(url_download)
+                    fetch(url_download).then(res => res.blob()) // Gets the response and returns it as a blob
+                      .then(blob => {
+                        var pom = document.createElement('a');
+                        var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
+                        var pom = document.createElement('a');
+                        // var bb = new Blob([xmltext], {type: 'application/octet-stream'});
+                        // pom.setAttribute('href', window.URL.createObjectURL(bb));
+                        pom.setAttribute('href', window.URL.createObjectURL(blob));
+                        pom.setAttribute('download', filename);
+
+                        pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
+                        pom.draggable = true;
+                        pom.classList.add('dragout');
+                        pom.click();
+                        $("#graphAddLoading").addClass("hidden");
+
+                        $.notify(
+                            {
+                                message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 1.0 format`
+                            },
+                            {
+                                type: "success",
+                                allow_dismiss: true,
+                                z_index: 20000,
+                                delay: 5000
+                            }
+                        )
+                    }).
+                    catch(error =>{ console
+                      $.notify(
+                          {
+                              message: `There Service ${object_request_variable['hs_url']} does not provide WaterML 2.0 downloads`
+                          },
+                          {
+                              type: "danger",
+                              allow_dismiss: true,
+                              z_index: 20000,
+                              delay: 5000
+                          }
+                      )
+                    });
+
+
+
+
+
+
                   }
                   else if(selectedDownloadType == "WaterML2.0" ){
                     $("#graphAddLoading").removeClass("hidden");
