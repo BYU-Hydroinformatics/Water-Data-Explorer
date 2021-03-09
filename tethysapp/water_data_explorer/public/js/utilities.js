@@ -469,7 +469,9 @@ function html_for_groups(isAdmin, title, id_group_separator){
       <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
       <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
         <div class="panel-body">
-            <div id= ${id_group_separator} class="divForServers"></div>
+            <div id= ${id_group_separator} class="divForServers">
+              <button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group does not have hydroservers</button>
+            </div>
         </div>
       </div>
     </div>

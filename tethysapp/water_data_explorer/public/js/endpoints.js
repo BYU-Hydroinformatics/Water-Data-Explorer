@@ -204,9 +204,14 @@ map_layers = function(sites,title,url){
                  let id_group_separator = `${group_name}_list_separator`;
 
                  if(servers.length <= 0){
-                   let no_servers = `<button class="btn btn-danger btn-block noGroups"> The group does not have hydroservers</button>`
-                   $(no_servers).appendTo(`#${id_group_separator}`) ;
+                   $(`#${group_name}-noGroups`).show();
+                   console.log("hola bye")
+                   // $(`#${group_name}_list_separator`).find(".noGroups").show();
                  }
+                 else{
+                    $(`#${group_name}-noGroups`).hide();
+                 }
+
                  servers.forEach(function(server){
                    // console.log(server)
                      let {
@@ -280,96 +285,8 @@ map_layers = function(sites,title,url){
                            }
                           });
 
-
-                         // if(this.checked){
-                         //
-                         //
-                         //   map.getLayers().forEach(function(layer) {
-                         //        if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                         //          //console.log(layer)
-                         //          layer.setStyle(featureStyle(layerColorDict[title]));
-                         //        }
-                         //    });
-                         // }
-                         // else{
-                         //   map.getLayers().forEach(function(layer) {
-                         //        if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                         //          //console.log(layer)
-                         //          layer.setStyle(new ol.style.Style({}));
-                         //        }
-                         //    });
-                         //
-                         // }
-
                        });
 
-
-
-
-                       // let sites = siteInfo
-                       // // //console.log(title)
-                       // // //console.log(typeof(sites))
-                       // // //console.log(sites);
-                       // if (typeof(sites) == "string"){
-                       //   // //console.log("inside strng");
-                       //   sites = JSON.parse(siteInfo);
-                       // }
-                       // sites = sites.map(site => {
-                       //     return {
-                       //         type: "Feature",
-                       //         geometry: {
-                       //             type: "Point",
-                       //             coordinates: ol.proj.transform(
-                       //                 [
-                       //                     parseFloat(site.longitude),
-                       //                     parseFloat(site.latitude)
-                       //                 ],
-                       //                 "EPSG:4326",
-                       //                 "EPSG:3857"
-                       //             )
-                       //         },
-                       //         properties: {
-                       //             name: site.sitename,
-                       //             code: site.sitecode,
-                       //             network: site.network,
-                       //             hs_url: url,
-                       //             hs_name: title,
-                       //             lon: parseFloat(site.longitude),
-                       //             lat: parseFloat(site.latitude)
-                       //         }
-                       //     }
-                       // })
-                       //
-                       // let sitesGeoJSON = {
-                       //     type: "FeatureCollection",
-                       //     crs: {
-                       //         type: "name",
-                       //         properties: {
-                       //             name: "EPSG:3857"
-                       //         }
-                       //     },
-                       //     features: sites
-                       // }
-                       //
-                       // const vectorSource = new ol.source.Vector({
-                       //     features: new ol.format.GeoJSON().readFeatures(
-                       //         sitesGeoJSON
-                       //     )
-                       // })
-                       // var clusterSource = new ol.source.Cluster({
-                       //    distance: parseInt(30, 10),
-                       //    source: vectorSource,
-                       //  });
-                       // layerColorDict[title] = get_new_color();
-                       // // const vectorLayer = new ol.layer.Vector({
-                       // //     source: vectorSource,
-                       // //     style: featureStyle(layerColorDict[title])
-                       // // })
-                       // let style_custom = featureStyle(layerColorDict[title])
-                       // var vectorLayer = new ol.layer.Vector({
-                       //   source: clusterSource,
-                       //   style: style_custom
-                       // });
                        let sites = siteInfo
                        if (typeof(sites) == "string"){
                          sites = JSON.parse(siteInfo);
@@ -428,9 +345,7 @@ map_layers = function(sites,title,url){
                        });
                    // }
                  })
-                 let no_servers = `<button class="btn btn-danger btn-block" id = "${group_name}-noGroups"> The group does not have hydroservers</button>`
-                 $(no_servers).appendTo(`#${id_group_separator}`);
-                 $(`#${group_name}-noGroups`).addClass("hidden");
+
 
 
              },
@@ -548,6 +463,9 @@ add_hydroserver = function(){
                   let group_name_obj={
                     group: group_name
                   };
+
+                  $(`#${group_name}-noGroups`).hide();
+
                   //console.log(group_name_obj);
                     let {title, siteInfo, url, group} = json_response
 
@@ -748,14 +666,15 @@ delete_hydroserver= function(){
               map.updateSize()
               //console.log(arrayActual_group);
 
-              let id_group_separator = `${arrayActual_group}_list_separator`;
+              let id_group_separator = `${actual_group.split('=')[1]}_list_separator`;
               let separator_element = document.getElementById(id_group_separator);
-              //console.log(separator_element);
+              console.log(separator_element);
               let children_element = Array.from(separator_element.children);
-              //console.log(children_element);
-              if(children_element.length < 1){
-                let no_servers = `<button class="btn btn-danger btn-block noGroups"> The group does not have hydroservers</button>`
-                    $(no_servers).appendTo(`#${id_group_separator}`) ;
+              console.log(children_element);
+              if(children_element.length < 2){
+                console.log("empty")
+                $(`#${actual_group.split('=')[1]}-noGroups`).show();
+
               }
               $(`#${title}deleteID`).remove();
 

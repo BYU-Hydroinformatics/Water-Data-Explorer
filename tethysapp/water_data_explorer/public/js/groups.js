@@ -596,6 +596,10 @@ create_group_hydroservers = function(){
 
               $(newHtml).appendTo("#current-Groupservers");
 
+              // let no_servers = `<button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group does not have hydroservers</button>`
+              // $(no_servers).appendTo(`#${id_group_separator}`);
+              $(`#${title}-noGroups`).show();
+
               let li_object = document.getElementById(`${title}`);
               let input_check = li_object.getElementsByClassName("chkbx-layers")[0];
 
@@ -607,6 +611,8 @@ create_group_hydroservers = function(){
               //   change_effect_groups(this,id_group_separator);
               // });
               console.log(input_check);
+
+
 
               if(!input_check.checked){
                 console.log("HERE NOT CHECKEC")
@@ -730,7 +736,16 @@ create_group_hydroservers = function(){
                  } = group
                  let id_group_separator = `${title}_list_separator`;
                  information_model[`${title}`] = []
+
+                 // let no_servers = `<button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group does not have hydroservers</button>`
+                 // $(no_servers).appendTo(`#${id_group_separator}`);
+                 console.log($(`#${title}-noGroups`))
+                 $(`#${title}-noGroups`).show();
+
                  let newHtml;
+
+
+
                  if(can_delete_hydrogroups){
                    newHtml = html_for_groups(can_delete_hydrogroups, title, id_group_separator);
                  }
