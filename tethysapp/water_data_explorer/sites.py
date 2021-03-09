@@ -206,9 +206,10 @@ def get_values_graph_hs(request):
     unit_name = df['unitName'].tolist()[0]
     time_unit_name = df['timeUnitName'].tolist()[0]
     time_series_vals = df['dataValue'].tolist()
-    time_series_timeUTC = df['dateTimeUTC'].tolist()
+    time_series_timeUTC = df['dateTime'].tolist()
     return_obj['graphs'] = list(zip(time_series_timeUTC,time_series_vals))
     return_obj['interpolation'] = water.GetInterpolation(values)
+
     return_obj['waterml'] = water.GetValues(site_desc, variable_desc, start_date, end_date, format='waterml')
     return_obj['unit_name'] = unit_name
     return_obj['variablename'] = variable_name
