@@ -1130,13 +1130,18 @@ catalog_filter = function(){
       data: datastring,
       success: function(result) {
         // let check_for_none = []
+        console.log(result)
         let hs_available = JSON.parse(result)['hs'];
+        let new_hs_available = []
+        hs_available.forEach(function(hs){
+          hs = hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+          new_hs_available.push(hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,''));
+        })
         let sitesObj =  JSON.parse(result)['stations'];
         for(let i = 0;  i< sitesObj.length; ++i){
           let title = sitesObj[i]['title']
           let url = sitesObj[i]['url']
           let sites = sitesObj[i]['sites'];
-          console.log(sites)
           var vectorLayer = map_layers(sites,title,url)[0]
           var vectorSource = map_layers(sites,title,url)[1]
           map.getLayers().forEach(function(layer) {
@@ -1167,9 +1172,12 @@ catalog_filter = function(){
               var $li=$(this)['0'];
               //console.log($li)
               let id_li = $li['id'];
-              //console.log(id_li)
 
-              if(hs_available.includes(id_li)){
+              if(new_hs_available.includes(id_li)){
+              // if(hs_available.includes(id_li)){
+                console.log(hs_available);
+                console.log(new_hs_available);
+                console.log(id_li);
                 // $(`#${id_li}`).removeClass("hidden");
                 // check_for_none.push(id_li);
                 $(`#${id_li}`).css({"opacity": "1",
@@ -1185,6 +1193,7 @@ catalog_filter = function(){
               }
               else{
                 let groups_divs = Object.keys(information_model);
+                console.log(groups_divs);
                 if (!groups_divs.includes(id_li)){
                   $(`#${id_li}`).css({"opacity": "0.5",
                                        "border-color": "#d3d3d3",
@@ -1199,16 +1208,26 @@ catalog_filter = function(){
            });
            let groups_divs = Object.keys(information_model);
            for(let i=0; i< groups_divs.length; ++i){
-             let check_all = true;
+             // let check_all = false;
+             let check_all = []
+             console.log(information_model[groups_divs[i]])
              for(let j=0; j< information_model[groups_divs[i]].length; ++j){
+
                let service_div = information_model[groups_divs[i]][j]
+               service_div = service_div.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
                $(`#${service_div} input[type=checkbox]`).each(function(){
-                 if(!this.checked){
-                   check_all = false;
+                 if(this.checked){
+                   // check_all = true;
+                   check_all.push(true);
+                 }
+                 else{
+                   check_all.push(false);
                  }
                });
              }
-             if(check_all){
+             console.log(check_all)
+             // if(check_all){
+             if(!check_all.includes(false)){
                $(`#${groups_divs[i]} input[type=checkbox]`).each(function() {
                  this.checked = true;
                });
