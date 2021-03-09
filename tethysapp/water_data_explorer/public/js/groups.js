@@ -1072,6 +1072,11 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
               $(`#${hydroserver}-row-complete`).remove()
 
           });
+          if(layersDict['selectedPoint']){
+            map.removeLayer(layersDict['selectedPoint'])
+            map.updateSize()
+          }
+
           map.updateSize();
           // get_notification("sucess",`Successfully Deleted Group of HydroServer!`);
 
