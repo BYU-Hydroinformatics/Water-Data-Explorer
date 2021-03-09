@@ -53,7 +53,7 @@ def get_download_hs(request):
     hs_url = request.GET.get('hs_url')
     variable_hs = request.GET.get('variable_hs')
     site_hs = request.GET.get('site_hs')
-    url = ('https://gist.githubusercontent.com/romer8/f79eced595079930f7432abfadb51128/raw/3859b6c095e9ebcd81b8807f20d96c4ffd37a49e/pywaterml.ipynb')
+    url = ('https://gist.githubusercontent.com/romer8/f79eced595079930f7432abfadb51128/raw/dea862028f9f2a006704469015e476641b547c6e/pywaterml.ipynb')
     contents = requests.get(url).text
     print(len(contents))
     nb = json.loads(contents)
