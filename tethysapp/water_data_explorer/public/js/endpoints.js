@@ -216,7 +216,10 @@ map_layers = function(sites,title,url){
                      } = server
                      information_model[`${group_name}`].push(title);
 
-                     title = title.replace(/ /g,"-");
+                     title = title.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+
+                     // title = title.replace(/ /g,"-");
+                     
                      // if(keywords_in_servers.includes(title) || key_words_to_search.length == 0){
                        // //console.log(keywords_in_servers.includes(title));
                        let newHtml = html_for_servers(title,group_name);
