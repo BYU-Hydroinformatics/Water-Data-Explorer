@@ -255,6 +255,10 @@ map_layers = function(sites,title,url){
                                }
                                else{
                                  layer.setStyle(new ol.style.Style({}));
+                                 if(layersDict['selectedPoint']){
+                                   map.removeLayer(layersDict['selectedPoint'])
+                                   map.updateSize()
+                                 }
                                }
                              }
                            }
@@ -267,6 +271,10 @@ map_layers = function(sites,title,url){
                                }
                                else{
                                  layer.setStyle(new ol.style.Style({}));
+                                 if(layersDict['selectedPoint']){
+                                   map.removeLayer(layersDict['selectedPoint'])
+                                   map.updateSize()
+                                 }
                                }
                              }
                            }
@@ -621,6 +629,10 @@ add_hydroserver = function(){
                                  if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
                                    //console.log(layer)
                                    layer.setStyle(new ol.style.Style({}));
+                                   if(layersDict['selectedPoint']){
+                                     map.removeLayer(layersDict['selectedPoint'])
+                                     map.updateSize()
+                                   }
                                  }
                              });
 
