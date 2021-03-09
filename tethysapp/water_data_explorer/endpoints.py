@@ -550,6 +550,8 @@ def soap_group(request):
         # Getting the current map extent
         true_extent = request.POST.get('extent')
 
+        if "?WSDL" not in url:
+            url = url + "?WSDL"
         water = pwml.WaterMLOperations(url = url)
         # imp = Import('http://schemas.xmlsoap.org/soap/envelope')
         # doctor = ImportDoctor(imp)
