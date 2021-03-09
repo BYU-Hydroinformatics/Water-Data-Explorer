@@ -226,9 +226,9 @@ map_layers = function(sites,title,url){
                        // $(newHtml).appendTo("#current-servers")
                        $(newHtml).appendTo(`#${id_group_separator}`);
                        //console.log($(newHtml));
-                       $(`#${group_name}_${title}_del_endpoint`).on("click", function(){
-                           delete_hydroserver_Individual(group_name, title)
-                       });
+                       // $(`#${group_name}_${title}_del_endpoint`).on("click", function(){
+                       //     delete_hydroserver_Individual(group_name, title)
+                       // });
 
                        $(`#${title}_variables`).on("click",showVariables2);
                        $(`#${title}_variables_info`).on("click",hydroserver_information);

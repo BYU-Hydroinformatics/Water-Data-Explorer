@@ -571,10 +571,6 @@ function html_for_servers(title,group_name,isNew){
   <button type="button" id="${title}_variables_info" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalHydroserInformation">
    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
   </button>
-
-  <button type="button" id="${group_name}_${title}_del_endpoint" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#DeleteWarning2">
-   <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-  </button>
   </li>
   `;
   return newHtml
