@@ -3,6 +3,9 @@
   padding-top: 5%;
   font-weight: bold;
 }
+#btn-r-reset{
+  display: none;
+}
 /* #content_map{
   width: 100%;
   display:flex;
@@ -67,7 +70,8 @@ tr:hover {
   height: 100%;
   flex-direction: column;
   padding: 0 0 0 0;
-  /* left: 150px; */
+  left: 10%;
+  right:15%;
   position: relative;
 }
 #map2{
@@ -300,14 +304,15 @@ tr:hover {
   color: #cc2418;
   align-items: center;
 }
+
 #app-content-wrapper #app-content #app-navigation{
   padding: 2% 0.2%;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   z-index:9000;
-  width: 450px;
 }
 #app-content-wrapper #app-content #app-navigation .nav{
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
+  width: 155%;
 }
 #app-content-wrapper{
   overflow-y: hidden;
@@ -609,8 +614,9 @@ input[type=checkbox], input[type=radio]{
 
 #tableLegend{
   position: absolute;
-  top: 5%;
-  right: 1%;
+  top: 3%;
+  left:3%;
+  /* right: 1%; */
   padding: 0.5em;
   background-color: rgba(255,255,255,0.5);
 }

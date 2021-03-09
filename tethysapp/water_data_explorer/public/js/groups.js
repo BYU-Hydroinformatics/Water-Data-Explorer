@@ -1164,7 +1164,9 @@ catalog_filter = function(){
         }
         // let hs_available = JSON.parse(result);
         //console.log(hs_available)
-        $("#panel-bodyh").append(`<button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>`)
+
+        // $("#panel-bodyh").append(`<button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>`)
+        $("#btn-r-reset").show()
         $("#btn-r-reset").on("click", reset_keywords);
 
         $("#current-Groupservers").find("li").each(function()
@@ -1344,7 +1346,8 @@ catalog_filter_server = function(){
 $("#btn-key-search-catalog").on("click", catalog_filter_server);
 
 reset_keywords = function(){
-  $('#btn-r-reset').last().remove();
+  // $('#btn-r-reset').last().remove();
+  $('#btn-r-reset').hide();
   Object.keys(information_model).forEach(function(key) {
         // $(`#${key}-noGroups`).addClass("hidden");
         //add the reset button ///
