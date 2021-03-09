@@ -1066,6 +1066,10 @@ hydroserver_information = function(){
     dataType: "JSON",
     data: filterSites,
     success: function(result1){
+      let hs_title = result1['title'].replace(/\s/g, "-");
+      console.log(result1['title'])
+      console.log(layersDict)
+      console.log(hs_title)
       setTimeout(function(){
         if(map2 ==undefined){
           //console.log("I am undefined");
@@ -1081,14 +1085,17 @@ hydroserver_information = function(){
                    zoom: 4
                  })
           });
-          actualLayerModal = layersDict[`${result1['title']}`]
+          // console.log(result1['title'])
+          // actualLayerModal = layersDict[`${result1['title']}`]
+          actualLayerModal = layersDict[`${hs_title}`]
           map2.addLayer(actualLayerModal);
           map2.getView().fit(actualLayerModal.getSource().getExtent());
           map2.updateSize();
         }
         else{
           map2.removeLayer(actualLayerModal);
-          actualLayerModal=layersDict[`${result1['title']}`];
+          // actualLayerModal=layersDict[`${result1['title']}`];
+          actualLayerModal=layersDict[`${hs_title}`];
           map2.addLayer(actualLayerModal);
 
           map2.getView().fit(actualLayerModal.getSource().getExtent());
