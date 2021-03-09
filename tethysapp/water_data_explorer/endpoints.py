@@ -77,7 +77,8 @@ def get_variables_hs(request):
     print("get_variables_hs Function")
     specific_group=request.GET.get('group')
     hs_actual = request.GET.get('hs')
-
+    hs_actual = hs_actual.replace('-', ' ')
+    print("HS", hs_actual)
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
 
     session = SessionMaker()  # Initiate a session
@@ -86,7 +87,6 @@ def get_variables_hs(request):
     for hydroservers in hydroservers_group:
         name = hydroservers.title
         if hs_actual == name:
-            # print(hydroservers.title)
             # print(hydroservers.url)
             # layer_obj = {}
             # layer_obj["title"] = hydroservers.title
@@ -99,9 +99,38 @@ def get_variables_hs(request):
             keywords_response = water.GetVariables()['variables']
             keywords = []
             keywords_name = []
+            keywords_abbr_unit = []
+            key_timeSupport = []
+            timeUnitName = []
             for kyword in keywords_response:
+                print(kyword)
                 keywords.append(kyword['variableCode'])
                 keywords_name.append(kyword['variableName'])
+                keywords_abbr_unit.append(kyword['unitAbbreviation'])
+                key_timeSupport.append(kyword['timeSupport'])
+                timeUnitName.append(kyword['timeUnitAbbreviation'])
+
+
+    # variableName: Name of the variable
+    #
+    # unitName: Name of the units of the values associated to the given variable and site
+    #
+    # unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
+    #
+    # noDataValue: value associated to lack of data.
+    #
+    # isRegular: Boolean to indicate whether the observation measurements and collections regular
+    #
+    # timeSupport: Boolean to indicate whether the values support time
+    #
+    # timeUnitName: Time Units associated to the observation
+    #
+    # timeUnitAbbreviation: Time units abbreviation
+    #
+    # sampleMedium: the sample medium, for example water, atmosphere, soil.
+    #
+    # speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
+
             # keywords_dict = xmltodict.parse(keywords)
             # keywords_dict_object = json.dumps(keywords_dict)
             #
@@ -130,7 +159,10 @@ def get_variables_hs(request):
 
     list_catalog["variables_code"] = variables_show
     list_catalog["variables_name"] = keywords_name
-    # print("------------------------------------------")
+    list_catalog["variables_unit_abr"] = keywords_abbr_unit
+    list_catalog["variables_timesupport"] = key_timeSupport
+    list_catalog["variables_time_abr"] = timeUnitName
+
     print("Finished get_variables_hs Function")
 
 
@@ -532,24 +564,7 @@ def soap_group(request):
             return_obj['zoom'] = 'true'
             return_obj['level'] = extent_value
             ext_list = extent_value.split(',')
-            # # Reprojecting the coordinates from 3857 to 4326 using pyproj
-            # inProj = Proj(init='epsg:3857')
-            # outProj = Proj(init='epsg:4326')
-            # minx, miny = ext_list[0], ext_list[1]
-            # maxx, maxy = ext_list[2], ext_list[3]
-            # x1, y1 = transform(inProj, outProj, minx, miny)
-            # x2, y2 = transform(inProj, outProj, maxx, maxy)
-            # bbox = client.service.GetSitesByBoxObject(
-            #     x1, y1, x2, y2, '1', '')
-            # # Get Sites by bounding box using suds
-            # # Creating a sites object from the endpoint. This site object will
-            # # be used to generate the geoserver layer. See utilities.py.
-            # wml_sites = parseWML(bbox)
-            # # wml_sites = xmltodict.parse(bbox)
-            # print(wml_sites)
-            # sites_parsed_json = json.dumps(wml_sites)
             sitesByBoundingBox = water.GetSitesByBoxObject(ext_list,'epsg:3857')
-            # sites_parsed_json = json.dumps(sitesByBoundingBox)
 
 
             return_obj['title'] = title
@@ -587,62 +602,6 @@ def soap_group(request):
             # try:
             sites = water.GetSites()
 
-            # raw_get = water.plugin.last_received_raw
-            # print("RRRRRRRRRRRRRRRRRRRRR")
-            # print (type(raw_get))
-            #
-            # version_soap = 'version="1.0"'
-            # new_raws = raw_get.split(">")
-            # print("**********************************")
-            # print(new_raws[1])
-            #
-            # soap_namespace =  new_raws[1].split("xmlns")[1].split("=")[1]
-            # soap_namespace = soap_namespace.strip('\"')
-            # version =  new_raws[0].split(" ")[1]
-            # print(soap_namespace)
-            # print(version)
-            # if version == "version=\'1.0\'":
-            #     binding.envns=('SOAP-ENV', soap_namespace)
-            #     sites = water.client.service.GetSites('[:]')
-            #     binding.envns=('SOAP-ENV', 'http://schemas.xmlsoap.org/soap/envelope/')
-
-            # except Exception as e:
-            #     print("HOLADSAFASF")
-            #     print(e)
-            # raw_get = water.plugin.last_received_raw
-            # # version_soap = 'version="1.0"'
-            # # if version_soap in raw_get:
-            # #
-            # #     print "Found!"
-            # raw_send = water.plugin.last_sent_raw
-            # print (raw_get)
-            # print (raw_send)
-
-            # # Get a list of all the sites and their respective lat lon.
-            # sites = client.service.GetSites('[:]')
-            # # sites = client.service.GetSites('')
-            # print("this are the sites")
-            # print(sites)
-            # print(type(sites))
-            # sites_json={}
-            # if isinstance(sites, str):
-            #     print("here")
-            #     sites_dict = xmltodict.parse(sites)
-            #     sites_json_object = json.dumps(sites_dict)
-            #     sites_json = json.loads(sites_json_object)
-            # else:
-            #     sites_json_object = suds_to_json(sites)
-            #     sites_json = json.loads(sites_json_object)
-            #
-            # # Parsing the sites and creating a sites object. See auxiliary.py
-            # print("-------------------------------------")
-            # # print(sites_json)
-            # sites_object = parseJSON(sites_json)
-            # # print(sites_object)
-            # # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
-            #
-            # # sites_parsed_json = json.dumps(converted_sites_object)
-            # sites_parsed_json = json.dumps(sites_object)
             sites_parsed_json = json.dumps(sites)
 
 

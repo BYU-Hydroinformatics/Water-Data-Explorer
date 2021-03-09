@@ -219,7 +219,7 @@ map_layers = function(sites,title,url){
                      title = title.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
 
                      // title = title.replace(/ /g,"-");
-                     
+
                      // if(keywords_in_servers.includes(title) || key_words_to_search.length == 0){
                        // //console.log(keywords_in_servers.includes(title));
                        let newHtml = html_for_servers(title,group_name);
@@ -230,7 +230,7 @@ map_layers = function(sites,title,url){
                            delete_hydroserver_Individual(group_name, title)
                        });
 
-                       $(`#${title}_variables`).on("click",showVariables);
+                       $(`#${title}_variables`).on("click",showVariables2);
                        $(`#${title}_variables_info`).on("click",hydroserver_information);
                        $(`#${title}_${group_name}_reload`).on("click",update_hydroserver);
 
@@ -590,7 +590,7 @@ add_hydroserver = function(){
                          // $(newHtml).appendTo("#current-servers")
                          $(newHtml).appendTo(`#${id_group_separator}`);
                          //console.log($(newHtml));
-                         $(`#${title}_variables`).on("click",showVariables);
+                         $(`#${title}_variables`).on("click",showVariables2);
                          $(`#${title}_variables_info`).on("click",hydroserver_information);
                          $(`#${title}_${group_name}_reload`).on("click",update_hydroserver);
 
@@ -883,15 +883,60 @@ showVariables = function(){
  filterSites['hs']=hsActual;
 
  let $modalVariables = $("#modalShowVariables")
+   $.ajax({
+      type: "GET",
+      url: `get-variables-hs`,
+      dataType: "JSON",
+      data: filterSites,
+      success: result => {
+          console.log(result);
+          var HSTableHtml =
+              `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+          if (result['variables_name'].length === 0) {
+              $modalVariables
+                  .find(".modal-body")
+                  .html(
+                      "<b>There are no variables in the Hydroserver.</b>"
+                  )
+          }
+          else {
+              for (var i = 0; i < result['variables_name'].length; i++) {
+                  HSTableHtml +=
+                 '<tr class="odd gradeX2">'+
+                      `<td><input type="checkbox" name="name1" value="${result['variables_code'][i]}" />${result['variables_name'][i]}</td>`
+                      +
+                 '</tr>'
+              }
+              HSTableHtml += "</tbody></table>"
+              $modalVariables.find("#hideScroll2").html(HSTableHtml)
+          }
+
+     }
+   })
+
+}
+
+showVariables2 = function(){
+
+ let groupActual = this.parentElement.parentNode.id.split("_")[0];
+ let hsActual = this.id.split("_")[0];
+ group_show_actual = groupActual;
+ hs_show_actual = hsActual;
+ filterSites['group']=groupActual;
+ filterSites['hs']=hsActual;
+
+ let $modalVariables = $("#modalShowVariablesTable")
  $.ajax({
      type: "GET",
      url: `get-variables-hs`,
      dataType: "JSON",
      data: filterSites,
      success: result => {
-         //console.log(result);
+         console.log(result);
          var HSTableHtml =
-             `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+             `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%">
+                <thead><th>Variable Name</th><th>Variable Code</th><th>Units</th></thead>
+             <tbody>`
          if (result['variables_name'].length === 0) {
              $modalVariables
                  .find(".modal-body")
@@ -903,17 +948,19 @@ showVariables = function(){
              for (var i = 0; i < result['variables_name'].length; i++) {
                  HSTableHtml +=
                 '<tr class="odd gradeX2">'+
-                     `<td><input type="checkbox" name="name1" value="${result['variables_code'][i]}" />${result['variables_name'][i]}</td>`
+                     `<td>${result['variables_name'][i]}</td>
+                     <td>${result['variables_code'][i]}</td>
+                     <td>${result['variables_unit_abr'][i]}</td>
+                     `
                      +
                 '</tr>'
              }
              HSTableHtml += "</tbody></table>"
-             $modalVariables.find("#hideScroll").html(HSTableHtml)
+             $modalVariables.find("#hideScroll2").html(HSTableHtml)
          }
 
     }
   })
-
 }
 /*
 ****** FU1NCTION NAME : showAvailableSites*********

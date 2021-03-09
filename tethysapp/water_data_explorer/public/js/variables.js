@@ -182,6 +182,7 @@ var filter_words,
     copyToClipboard,
     get_vars_from_site,
     download_python_notebook,
+    showVariables2,
     generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that

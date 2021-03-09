@@ -565,7 +565,7 @@ function html_for_servers(title,group_name,isNew){
   <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
    <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
   </button>
-  <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariables"> <span class="glyphicon glyphicon-filter"></span>
+  <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariablesTable"> <span class=" glyphicon glyphicon-list-alt"></span>
   </button>
 
   <button type="button" id="${title}_variables_info" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalHydroserInformation">
