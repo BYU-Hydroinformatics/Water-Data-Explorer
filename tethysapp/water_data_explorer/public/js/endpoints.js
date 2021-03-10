@@ -343,10 +343,25 @@ map_layers = function(sites,title,url){
                          map.getView().fit(vectorSource.getExtent());
                          map.updateSize();
                          map.getLayers().forEach(function(layer) {
-                              if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                //console.log(layer)
-                                layer.setStyle(featureStyle(layerColorDict[title]));
-                              }
+                           if (!(title in layer_object_filter)){
+                             if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                               //console.log(layer)
+                               layer.setStyle(featureStyle(layerColorDict[title]));
+                             }
+                           }
+                           else{
+                             if(layer instanceof ol.layer.Vector && layer == layer_object_filter[title]){
+                               //console.log(layer)
+                               layer.setStyle(featureStyle(layerColorDict[title]));
+                             }
+                           }
+
+
+
+                              // if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                              //   //console.log(layer)
+                              //   layer.setStyle(featureStyle(layerColorDict[title]));
+                              // }
                           });
                          input_check.checked = true;
                        });
@@ -568,10 +583,24 @@ add_hydroserver = function(){
                           map.getView().fit(vectorSource.getExtent());
                           map.updateSize();
                           map.getLayers().forEach(function(layer) {
-                               if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                 //console.log(layer)
-                                 layer.setStyle(featureStyle(layerColorDict[title]));
-                               }
+                            if (!(title in layer_object_filter)){
+                              if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                //console.log(layer)
+                                layer.setStyle(featureStyle(layerColorDict[title]));
+                              }
+                            }
+                            else{
+                              if(layer instanceof ol.layer.Vector && layer == layer_object_filter[title]){
+                                //console.log(layer)
+                                layer.setStyle(featureStyle(layerColorDict[title]));
+                              }
+                            }
+
+                               // if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                               //   //console.log(layer)
+                               //   layer.setStyle(featureStyle(layerColorDict[title]));
+                               //
+                               // }
                            });
                           input_check.checked = true;
 
