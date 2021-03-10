@@ -644,5 +644,6 @@ input[type=checkbox], input[type=radio]{
 
 #hideScroll2{
   overflow-y: scroll;
-  height:calc(100vh - 40px);
+  height: 500px;
+  /* height:calc(100vh - 40px); */
 }
