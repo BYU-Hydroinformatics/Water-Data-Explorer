@@ -878,6 +878,24 @@ showVariables2 = function(){
      dataType: "JSON",
      data: filterSites,
      success: result => {
+       //1) combine the arrays:
+      var list_e = [];
+      for (var j = 0; j <result['variables_name'].length; j++)
+          list_e.push({'variables_name': result['variables_name'][j], 'variables_unit_abr': result['variables_unit_abr'][j], 'variables_code':result['variables_code'][j]});
+
+      //2) sort:
+      list_e.sort(function(a, b) {
+          return ((a.variables_name < b.variables_name) ? -1 : ((a.variables_name == b.variables_name) ? 0 : 1));
+
+      });
+
+      //3) separate them back out:
+      for (var k = 0; k < list_e.length; k++) {
+          result['variables_name'][k] = list_e[k].variables_name;
+          result['variables_unit_abr'][k] = list_e[k].variables_unit_abr;
+          result['variables_code'][k] = list_e[k].variables_code;
+      }
+
          console.log(result);
          var HSTableHtml =
              `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%">
