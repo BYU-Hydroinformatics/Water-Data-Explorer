@@ -647,3 +647,6 @@ input[type=checkbox], input[type=radio]{
   height: 500px;
   /* height:calc(100vh - 40px); */
 }
+.spacer_fake{
+  width: 1.3em;
+}
