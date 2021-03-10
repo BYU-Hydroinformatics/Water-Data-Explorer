@@ -71,6 +71,7 @@ tr:hover {
   height: 100%;
   flex-direction: column;
   padding: 0 0 0 0;
+  padding-right: 100px;
   position: relative;
 }
 #app-content-wrapper #app-content #app-navigation{
