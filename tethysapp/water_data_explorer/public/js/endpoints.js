@@ -882,7 +882,7 @@ showVariables2 = function(){
                      `<td>${result['variables_name'][i]}</td>
                      <td>${result['variables_unit_abr'][i]}</td>
                      <td>${result['variables_code'][i]}</td>
-                     
+
                      `
                      +
                 '</tr>'
@@ -1093,6 +1093,8 @@ hydroserver_information = function(){
       $("#urlHydroserver").html(result1['url']);
       $("#url_WOF").html($("#urlHydroserver").html());
       let site_select = $("#site_choose");
+      site_select.empty();
+
       $("#description_Hydroserver").html(result1['description']);
       //console.log(result1);
       var HSTableHtml =
