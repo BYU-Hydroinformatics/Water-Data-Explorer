@@ -445,7 +445,7 @@ function html_for_groups(isAdmin, title, id_group_separator){
       <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
         <h4 class="panel-title">
           <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-          <span class="group-name"><strong>${ind})</strong> ${title}</span>
+          <span class="group-name"> ${title}</span>
 
           </a>
         </h4>
@@ -489,7 +489,7 @@ function html_for_groups(isAdmin, title, id_group_separator){
       <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
         <h4 class="panel-title">
           <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-          <span class="group-name"><strong>${ind})</strong> ${title}</span>
+          <span class="group-name">${title}</span>
           </a>
         </h4>
         <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
