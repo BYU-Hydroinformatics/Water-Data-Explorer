@@ -12,10 +12,10 @@ activate_layer_values = function (){
 
 
     let object_request={};
-    //console.log(object_request);
+    ////console.log(object_request);
 
     var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature2, layer) {
-        console.log(feature2)
+        //console.log(feature2)
         //you can add a condition on layer to restrict the listener
         if(feature2){
 
@@ -44,8 +44,8 @@ activate_layer_values = function (){
               })
           })
           layersDict['selectedPoint'] = vectorLayer;
-          //console.log("adding new feature");
-          //console.log(vectorLayer);
+          ////console.log("adding new feature");
+          ////console.log(vectorLayer);
           map.addLayer(vectorLayer);
         }
         return feature2;
@@ -61,10 +61,10 @@ activate_layer_values = function (){
         'pie':{},
         'whisker':{}
       }
-      // console.log(feature);
+      // //console.log(feature);
       let feature_single = feature.values_.features[0]
-      // console.log(feature_single)
-      //console.log(feature_single.values_['hs_name']);
+      // //console.log(feature_single)
+      ////console.log(feature_single.values_['hs_name']);
 
       // $("#siteName_title").html(feature.values_['name']);
       $("#siteName_title").html("Site Information");
@@ -77,7 +77,7 @@ activate_layer_values = function (){
       // $("#graphAddLoading").css({left:'50%',bottom:"15%", position:'absolute',"z-index": 9999});
       // $("#graphAddLoading").removeClass("hidden");
       $("#GeneralLoading").removeClass("hidden");
-      // console.log(object_request);
+      // //console.log(object_request);
 
       $.ajax({
         type:"GET",
@@ -85,7 +85,7 @@ activate_layer_values = function (){
         dataType: "JSON",
         data: object_request,
         success: function(result){
-          console.log(result);
+          //console.log(result);
           let description_site = document.getElementById('siteDes')
           let geolocations = result['geolo'];
           let country_name = result['country'];
@@ -93,8 +93,8 @@ activate_layer_values = function (){
           let lons = parseFloat(geolocations['longitude'])
           let new_lat = toDegreesMinutesAndSeconds(lats)
           let new_lon = toDegreesMinutesAndSeconds(lons)
-          //console.log(new_lat)
-          //console.log(new_lon)
+          ////console.log(new_lat)
+          ////console.log(new_lon)
 
           description_site.innerHTML =
             ` <p> <em> Station/Platform Name:</em> ${feature_single.values_['name']}<p>
@@ -117,7 +117,7 @@ activate_layer_values = function (){
             let time_serie_range = result['times_series'][variable_new]
             let begin_date = time_serie_range['beginDateTime'].split('T')[0];
             let end_date = time_serie_range['endDateTime'].split('T')[0];
-            //console.log(time_serie_range)
+            ////console.log(time_serie_range)
             let newRow =
             `
             <tr>
@@ -172,7 +172,7 @@ activate_layer_values = function (){
           //
           // })
           // active_map_feature_graphs['pie']['check_none'] = check_array;
-          //console.log(active_map_feature_graphs['pie']['check_none']);
+          ////console.log(active_map_feature_graphs['pie']['check_none']);
 
           // if (check_array.includes(true)) {
           //   initialize_graphs(active_map_feature_graphs['pie']['x_array'],result['counts'],title_info, undefined, undefined, undefined,'pie');
@@ -191,7 +191,7 @@ activate_layer_values = function (){
           for(let i=0; i< variables.length ; ++i){
             object_code_and_variable[`${variables[i]}`]=code_variable[i];
           }
-          // //console.log(object_code_and_variable);
+          // ////console.log(object_code_and_variable);
           let variable_select = $("#variables_graph");
           variable_select.empty();
           let i = 1;
@@ -206,7 +206,7 @@ activate_layer_values = function (){
             let option_begin;
               array_variables.push(variable);
               if(i === 1){
-                //console.log("initial");
+                ////console.log("initial");
                 // option = `<option selected = "selected>Variables Ready ..</option>`;
                 // option_begin = `<option value=${i}>${variable} (${result['counts'][i-1]}) Data Points Counted </option>`;
                 option_begin = `<option value=${i}>${variable} </option>`;
@@ -224,8 +224,8 @@ activate_layer_values = function (){
               variable_select.selectpicker("refresh");
               i = i+1;
           });
-          //console.log(object_request);
-          //console.log($('#variables_graph'));
+          ////console.log(object_request);
+          ////console.log($('#variables_graph'));
           let object_request2 = {};
           object_request2['hs_name']=feature_single.values_['hs_name'];
           object_request2['site_name']=feature_single.values_['name'];
@@ -233,10 +233,10 @@ activate_layer_values = function (){
           object_request2['code']=feature_single.values_['code'];
           object_request2['network']=feature_single.values_['network'];
           //CONTINUE HERE // AND TRY TO SEE HOW IT GOES //
-          // //console.log(object_request);
+          // ////console.log(object_request);
           var selectedItem = $('#variables_graph')['0'].value;
           var selectedItemText = $('#variables_graph')['0'].text;
-          //console.log(selectedItem);
+          ////console.log(selectedItem);
 
           object_request2['variable']=selectedItem;
           object_request2['code_variable']= code_variable[`${selectedItem}` -1];
@@ -244,13 +244,13 @@ activate_layer_values = function (){
           // object_request2['methodsIDs'] = result['methodsIDs']
           object_request2['variables_array']=result['variables']
           object_request_graphs = JSON.parse(JSON.stringify(object_request2));
-          //console.log(object_request2);
+          ////console.log(object_request2);
           let start_dateUTC = result['times_series'][Object.keys(result['times_series'])[0]]['beginDateTimeUTC']
-          //console.log(start_dateUTC);
+          ////console.log(start_dateUTC);
           let dateUTC_start = new Date(start_dateUTC)
-          //console.log(dateUTC_start);
+          ////console.log(dateUTC_start);
           let starts = start_dateUTC.split("T");
-          //console.log(starts[0]);
+          ////console.log(starts[0]);
           // let start_date_ = starts[0]+ ' '+ starts[1]
           let starts_no_seconds = starts[1].split(":");
           // object_request_graphs["startTime_hhmmss"] = starts_no_seconds[0] +":" +starts_no_seconds[1];
@@ -258,14 +258,14 @@ activate_layer_values = function (){
           let dateUTC_end = new Date(end_dateUTC)
 
           let ends = end_dateUTC.split("T");
-          //console.log(ends[0]);
+          ////console.log(ends[0]);
 
           let ends_no_seconds = ends[1].split(":");
-          //console.log(dateUTC_end);
+          ////console.log(dateUTC_end);
 
 
-          //console.log(new Date(starts[0]));
-          //console.log(new Date(ends[0]));
+          ////console.log(new Date(starts[0]));
+          ////console.log(new Date(ends[0]));
 
           // THIS IS NECESARRY TO RESET THE DATES OTHERWISE IT IS GOING TO HAVE EMPTY SPACES..
           $('#datetimepicker6').datepicker('setStartDate', null);
@@ -283,8 +283,8 @@ activate_layer_values = function (){
           $('#datetimepicker6').datepicker('update', dateUTC_start);
           $('#datetimepicker7').datepicker('update', dateUTC_end);
 
-          //console.log($('#datetimepicker6').datepicker('getDate'));
-          //console.log($('#datetimepicker7').datepicker('getDate'));
+          ////console.log($('#datetimepicker6').datepicker('getDate'));
+          ////console.log($('#datetimepicker7').datepicker('getDate'));
 
           $('#datetimepicker6').datepicker('setStartDate', dateUTC_start);
           $('#datetimepicker6').datepicker('setEndDate', dateUTC_end);

@@ -27,7 +27,7 @@
 	<a data-toggle="modal" data-target="#helpModal"><span class="glyphicon glyphicon-info-sign"></span></a>
 </div>
 {% if can_block_map %}
-<input id="blockPosition" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
+<input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
 {% endif %}
 <input id="sG" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="small" data-onstyle = "danger"></input>
 
@@ -74,6 +74,8 @@
   	var baseStatic = "{% static 'water_data_explorer/index.html' %}";
   	baseStatic = baseStatic.replace('\/index.html','');
     var can_block_map = {{can_block_map|yesno:"true,false"}};
+    console.log("noooo")
+    console.log(can_block_map)
     var can_delete_hydrogroups = {{can_delete_hydrogroups|yesno:"true,false"}};
     var endpointGeoServer = "{{ geoEndpoint|safe }}";
     var geoServerWorkspace = "{{ geoWorkspace|safe }}";

@@ -5,7 +5,7 @@ give_available_services = function(){
   let datastring= elementForm.serialize();
   let form_elements = datastring.split("&");
   let url_alone = form_elements[form_elements.length -1]
-  //console.log(url_alone)
+  ////console.log(url_alone)
   $("#soapAddLoading-group").removeClass("hidden");
 
   $.ajax({
@@ -15,7 +15,7 @@ give_available_services = function(){
     data: url_alone,
     success: function(data){
       $("#rows_servs").empty();
-      //console.log(data)
+      ////console.log(data)
       var json_response = JSON.parse(data)
       var services_ava = json_response['services']
       var i = 1;
@@ -38,7 +38,7 @@ give_available_services = function(){
     },
     error: function(error){
       $("#soapAddLoading-group").addClass("hidden")
-      //console.log(error)
+      ////console.log(error)
       $.notify(
           {
               message: `There was an error retrieving the different web services from the HIS catalog  `
@@ -53,7 +53,7 @@ give_available_services = function(){
     }
 
   })
-  // //console.log(url_catalog)
+  // ////console.log(url_catalog)
 }
 $("#btn-check_available_serv").on("click", give_available_services);
 
@@ -72,14 +72,14 @@ show_variables_groups = function(){
     success: function(data){
 
       // $("#rows_servs").empty();
-      //console.log(data)
+      ////console.log(data)
       variables_list = data['variables'];
       const chunk = (arr, size) =>
         Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
           arr.slice(i * size, i * size + size)
         );
       let arr=chunk(variables_list, 2);
-      //console.log(arr)
+      ////console.log(arr)
 
       var HSTableHtml =
           `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
@@ -104,7 +104,7 @@ show_variables_groups = function(){
         // HSTableHtml += '</tr>'
 
         HSTableHtml += "</tbody></table>"
-      //console.log(HSTableHtml)
+      ////console.log(HSTableHtml)
       $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
       $("#KeywordLoading").addClass("hidden");
 
@@ -129,7 +129,7 @@ show_variables_groups = function(){
     },
     error: function(error){
       $("#KeywordLoading").addClass("hidden")
-      //console.log(error)
+      ////console.log(error)
       $.notify(
           {
               message: `There was an error retrieving the different web services from the HIS catalog  `
@@ -151,7 +151,7 @@ show_variables_groups = function(){
 
 available_regions = function(){
   // countries_json['features']
-  //console.log("MNOE ME USES")
+  ////console.log("MNOE ME USES")
   $("#KeywordLoading").removeClass("hidden");
   $.ajax({
     type: "GET",
@@ -159,13 +159,13 @@ available_regions = function(){
     dataType: "JSON",
     success: function(data){
       countries_available = data['countries']
-      //console.log(data)
+      ////console.log(data)
       const chunk = (arr, size) =>
         Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
           arr.slice(i * size, i * size + size)
         );
       let arr=chunk(countries_available, 2);
-      //console.log(arr)
+      ////console.log(arr)
 
       var HSTableHtml =
           `<table id="data-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
@@ -184,11 +184,11 @@ available_regions = function(){
         // HSTableHtml += '</tr>'
 
         HSTableHtml += "</tbody></table>"
-      //console.log(HSTableHtml)
+      ////console.log(HSTableHtml)
       $("#modalKeyWordSearch").find("#groups_countries").html(HSTableHtml);
       $("#KeywordLoading").addClass("hidden");
       // let checkboxes = $('#data-table').find("input[type=checkbox][name=countries]")
-      //console.log(checkboxes)
+      ////console.log(checkboxes)
       // let countries_selected = [];
 
       // Attach a change event handler to the checkboxes of the countries to receive the countries.
@@ -201,7 +201,7 @@ available_regions = function(){
       //     })
       //     .get() // Get array.
       //   if (countries_selected.length > 0){
-      //     //console.log(countries_selected);
+      //     ////console.log(countries_selected);
       //     listener_checkbox(countries_selected)
       //   }
       //   else{
@@ -211,7 +211,7 @@ available_regions = function(){
     },
     error: function(error){
       $("#KeywordLoading").addClass("hidden")
-      //console.log(error)
+      ////console.log(error)
       $.notify(
           {
               message: `There was an error retrieving the different web services from the HIS catalog  `
@@ -232,7 +232,7 @@ listener_checkbox = function(list_countries){
   let le_object = {
     "countries": list_countries
   };
-  //console.log(le_object);
+  ////console.log(le_object);
   $("#KeywordLoading").removeClass("hidden")
 
   $.ajax({
@@ -249,7 +249,7 @@ listener_checkbox = function(list_countries){
           arr.slice(i * size, i * size + size)
         );
       let arr=chunk(variables_list, 2);
-      //console.log(arr)
+      ////console.log(arr)
 
       var HSTableHtml =
           `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
@@ -265,15 +265,15 @@ listener_checkbox = function(list_countries){
         })
 
         HSTableHtml += "</tbody></table>"
-      //console.log(HSTableHtml)
+      ////console.log(HSTableHtml)
       $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
       $("#KeywordLoading").addClass("hidden");
 
     },
     error: function(error){
-      //console.log(error)
+      ////console.log(error)
       $("#KeywordLoading").addClass("hidden")
-      //console.log(error)
+      ////console.log(error)
       $.notify(
           {
               message: `There was an error retrieving the different web services from the HIS catalog  `
@@ -317,13 +317,13 @@ available_regions_group = function(){
 
     success: function(data){
       countries_available = data['countries']
-      //console.log(data)
+      ////console.log(data)
       const chunk = (arr, size) =>
         Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
           arr.slice(i * size, i * size + size)
         );
       let arr=chunk(countries_available, 2);
-      // //console.log(arr)
+      // ////console.log(arr)
 
       var HSTableHtml =
           `<table id="data-table2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
@@ -340,7 +340,7 @@ available_regions_group = function(){
 
 
         HSTableHtml += "</tbody></table>"
-      // //console.log(HSTableHtml)
+      // ////console.log(HSTableHtml)
       $("#modalFilterGroup").find("#groups_countries2").html(HSTableHtml);
       $("#KeywordLoading2").addClass("hidden");
 
@@ -357,7 +357,7 @@ available_regions_group = function(){
       //     })
       //     .get() // Get array.
       //   if (countries_selected.length > 0){
-      //     //console.log(countries_selected);
+      //     ////console.log(countries_selected);
       //     listener_checkbox_group(countries_selected)
       //   }
       //   else{
@@ -367,7 +367,7 @@ available_regions_group = function(){
     },
     error: function(error){
       $("#KeywordLoading2").addClass("hidden")
-      //console.log(error)
+      ////console.log(error)
       $.notify(
           {
               message: `There was an error retrieving the different web services from the HIS catalog  `
@@ -391,7 +391,7 @@ listener_checkbox_group = function(list_countries){
     "countries": list_countries,
     "group":arrayActual_group
   };
-  //console.log(le_object);
+  ////console.log(le_object);
   $("#KeywordLoading2").removeClass("hidden")
 
   $.ajax({
@@ -408,7 +408,7 @@ listener_checkbox_group = function(list_countries){
           arr.slice(i * size, i * size + size)
         );
       let arr=chunk(variables_list, 2);
-      //console.log(arr)
+      ////console.log(arr)
 
       var HSTableHtml =
           `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
@@ -424,14 +424,14 @@ listener_checkbox_group = function(list_countries){
         })
 
         HSTableHtml += "</tbody></table>"
-      //console.log(HSTableHtml)
+      ////console.log(HSTableHtml)
       $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
       $("#KeywordLoading2").addClass("hidden");
 
     },
     error: function(error){
       $("#KeywordLoading2").addClass("hidden")
-      //console.log(error)
+      ////console.log(error)
       $.notify(
           {
               message: `There was an error trying to find the varaiables for the selected country`
@@ -461,14 +461,14 @@ show_variables_group = function(){
     dataType: "JSON",
     data: group_obj,
     success: function(data){
-      //console.log(data)
+      ////console.log(data)
       variables_list = data['variables'];
       const chunk = (arr, size) =>
         Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
           arr.slice(i * size, i * size + size)
         );
       let arr=chunk(variables_list, 2);
-      //console.log(arr)
+      ////console.log(arr)
 
       var HSTableHtml =
           `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
@@ -487,14 +487,14 @@ show_variables_group = function(){
         })
 
         HSTableHtml += "</tbody></table>"
-      //console.log(HSTableHtml)
+      ////console.log(HSTableHtml)
       $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
       $("#KeywordLoading2").addClass("hidden");
 
     },
     error: function(error){
       $("#KeywordLoading2").addClass("hidden")
-      //console.log(error)
+      ////console.log(error)
       $.notify(
           {
               message: `There was an error retrieving the different web services from the HIS catalog  `
@@ -567,8 +567,8 @@ create_group_hydroservers = function(){
     //MAKE THE AJAX REQUEST///
     let elementForm= $("#modalAddGroupServerForm");
     let datastring= elementForm.serialize();
-    //console.log(typeof(datastring));
-    //console.log(datastring);
+    ////console.log(typeof(datastring));
+    ////console.log(datastring);
     $("#soapAddLoading-group").removeClass("hidden");
 
     $.ajax({
@@ -606,16 +606,16 @@ create_group_hydroservers = function(){
 
               // load_individual_hydroservers_group(title);
               // let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
-              // //console.log(servers_checks);
+              // ////console.log(servers_checks);
               // input_check.addEventListener("change", function(){
               //   change_effect_groups(this,id_group_separator);
               // });
-              console.log(input_check);
+              // //console.log(input_check);
 
 
 
               if(!input_check.checked){
-                console.log("HERE NOT CHECKEC")
+                // //console.log("HERE NOT CHECKEC")
                 load_individual_hydroservers_group(title);
               }
               input_check.addEventListener("change", function(){
@@ -625,7 +625,7 @@ create_group_hydroservers = function(){
 
               let $title="#"+title;
               let $title_list="#"+title+"list";
-              //console.log($title_list);
+              ////console.log($title_list);
 
 
               $($title).click(function(){
@@ -645,7 +645,7 @@ create_group_hydroservers = function(){
               });
 
               $(".ui-state-default").click(function(){
-                //console.log("hola");
+                ////console.log("hola");
               });
                   $("#soapAddLoading-group").addClass("hidden")
                   $("#btn-add-addHydro").show()
@@ -691,7 +691,7 @@ create_group_hydroservers = function(){
         error: function(error) {
             $("soapAddLoading-group").addClass("hidden")
             $("#btn-add-addHydro").show()
-            //console.log(error)
+            ////console.log(error)
             $.notify(
                 {
                     message: `There was an error while adding a group of hydroserver`
@@ -715,19 +715,19 @@ create_group_hydroservers = function(){
 ****** FUNCTION PURPOSE: LOADS THE GROUPS OF HYDROSERVERS THAT ARE THERE *********
 */
  load_group_hydroservers = function(){
-     //console.log("hola");
+     ////console.log("hola");
 
      $.ajax({
          type: "GET",
          url: `load-groups`,
          dataType: "JSON",
          success: result => {
-           //console.log(result);
+           ////console.log(result);
              let groups =result["hydroservers"];
 
              $(".divForServers").empty() //Resetting the catalog
              let extent = ol.extent.createEmpty()
-             // //console.log(groups);
+             // ////console.log(groups);
              ind = 1;
              groups.forEach(group => {
                  let {
@@ -739,7 +739,7 @@ create_group_hydroservers = function(){
 
                  // let no_servers = `<button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group does not have hydroservers</button>`
                  // $(no_servers).appendTo(`#${id_group_separator}`);
-                 console.log($(`#${title}-noGroups`))
+                 //console.log($(`#${title}-noGroups`))
                  $(`#${title}-noGroups`).show();
 
                  let newHtml;
@@ -757,13 +757,13 @@ create_group_hydroservers = function(){
 
 
                  let li_object = document.getElementById(`${title}`);
-                 //console.log("hola");
+                 ////console.log("hola");
 
                  let input_check = li_object.getElementsByClassName("chkbx-layers")[0];
-                 //console.log(input_check);
+                 ////console.log(input_check);
                  load_individual_hydroservers_group(title);
                  let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
-                 //console.log(servers_checks);
+                 ////console.log(servers_checks);
                  input_check.addEventListener("change", function(){
                    change_effect_groups(this,id_group_separator);
                  });
@@ -771,7 +771,7 @@ create_group_hydroservers = function(){
 
                  let $title="#"+title;
                  let $title_list="#"+title+"list";
-                 //console.log($title_list);
+                 ////console.log($title_list);
 
 
                  $($title).click(function(){
@@ -789,8 +789,8 @@ create_group_hydroservers = function(){
 
                  });
                  ind = ind +1;
-                 //console.log(layersDictExt);
-                 //console.log(information_model);
+                 ////console.log(layersDictExt);
+                 ////console.log(information_model);
 
              })
 
@@ -798,7 +798,7 @@ create_group_hydroservers = function(){
      error: function(error) {
          $("#soapAddLoading").addClass("hidden")
          $("#btn-add-addHydro").show()
-         //console.log(error);
+         ////console.log(error);
          $.notify(
              {
                  message: `There was an error while adding a group of hydroserver`
@@ -824,26 +824,26 @@ create_group_hydroservers = function(){
        let group_name_obj={
          group: group_name
        };
-       //console.log(group_name_obj);
+       ////console.log(group_name_obj);
        $.ajax({
            type: "GET",
            url: `catalog-group`,
            dataType: "JSON",
            data: group_name_obj,
            success: result => {
-               //console.log(result);
+               ////console.log(result);
                let servers = result["hydroserver"]
-               //console.log("this are the servers");
-               //console.log(servers);
+               ////console.log("this are the servers");
+               ////console.log(servers);
 
                //USE A FUNCTION TO FIND THE LI ASSOCIATED WITH THAT GROUP  AND DELETE IT FROM THE MAP AND MAKE ALL
                // THE CHECKBOXES VISIBLE //
 
                let extent = ol.extent.createEmpty();
-               //console.log(servers);
+               ////console.log(servers);
                let id_group_separator = `${group_name}_list_separator`;
                // let tag_to_delete = document.getElementById(id_group_separator);
-               // //console.log(tag_to_delete);
+               // ////console.log(tag_to_delete);
                // tag_to_delete.parentNode.removeChild(tag_to_delete);
                // $("#current-servers").remove(id_group_separator);
 
@@ -852,7 +852,7 @@ create_group_hydroservers = function(){
                let lis = document.getElementById(`${id_group_separator}`).getElementsByTagName("li");
                // Object.values($("#current-Groupservers").find(".buttonAppearance > .chkbx-layer"))
                let li_arrays = Array.from(lis);
-               //console.log(li_arrays);
+               ////console.log(li_arrays);
                servers.forEach(server => {
                    let {
                        title,
@@ -883,7 +883,7 @@ create_group_hydroservers = function(){
 
            },
            error: function(error) {
-               //console.log(error)
+               ////console.log(error)
                // get_notification("danger",`Something went wrong loading the catalog. Please see the console for details.`);
                $.notify(
                    {
@@ -907,9 +907,9 @@ create_group_hydroservers = function(){
 */
 make_list_groups = function(){
   let groupsDiv = $("#current-Groupservers").find(".panel.panel-default");
-  //console.log(groupsDiv);
+  ////console.log(groupsDiv);
   let arrayGroups = Object.values(groupsDiv);
-  //console.log(arrayGroups);
+  ////console.log(arrayGroups);
   let finalGroupArray=[];
   arrayGroups.forEach(function(g){
     if(g.id){
@@ -952,7 +952,7 @@ make_list_groups = function(){
       HSTableHtml += "</tbody></table>"
       $("#modalDeleteGroups").find(".modal-body").html(HSTableHtml);
   }
-  //console.log(finalGroupArray);
+  ////console.log(finalGroupArray);
 }
 
 $("#btn-del-groups-f").on("click", make_list_groups);
@@ -963,12 +963,12 @@ $("#btn-del-groups-f").on("click", make_list_groups);
 ****** FUNCTION PURPOSE: GET THE LIST OF HYDROSERVERS THAT A GROUP OF HYDROSERVER CONTAINS *********
 */
 get_hs_list_from_hydroserver = function(){
-  //console.log("inside list");
+  ////console.log("inside list");
   if(actual_group == undefined){
     actual_group="";
   }
   let arrayActual_group=actual_group.split('=')[1];
-  //console.log(arrayActual_group);
+  ////console.log(arrayActual_group);
     let group_name_obj={
       group: arrayActual_group
     };
@@ -1010,7 +1010,7 @@ get_hs_list_from_hydroserver = function(){
             }
         },
         error: function(error) {
-            //console.log(error)
+            ////console.log(error)
         }
     })
 }
@@ -1022,7 +1022,7 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
   delete_group_of_hydroservers = function(){
     // let datastring = Object.values($("#current-Groupservers").find(".buttonAppearance > .chkbx-layer"));
     let datastring = Object.values($("#tbl-hydrogroups").find(".chkbx-group"));
-    //console.log(datastring);
+    ////console.log(datastring);
     let groups_to_delete=[];
     datastring.forEach(function(data){
       if(data.checked== true){
@@ -1030,8 +1030,8 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
         groups_to_delete.push(group_name);
       }
     });
-    //console.log("delete REQUEST");
-    //console.log(groups_to_delete);
+    ////console.log("delete REQUEST");
+    ////console.log(groups_to_delete);
     if(groups_to_delete.length > 0){
       let groups_to_delete_obj={
         groups:groups_to_delete
@@ -1042,14 +1042,14 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
         dataType: "JSON",
         data: groups_to_delete_obj,
         success: function(result){
-          //console.log("Result Delete");
-          //console.log(result);
+          ////console.log("Result Delete");
+          ////console.log(result);
           // var json_response = JSON.parse(result)
 
           let groups_to_erase = result.groups;
           let hydroservers_to_erase = result.hydroservers;
-          //console.log(groups_to_erase);
-          //console.log(hydroservers_to_erase);
+          ////console.log(groups_to_erase);
+          ////console.log(hydroservers_to_erase);
           $("#pop-up_description2").empty();
 
           groups_to_erase.forEach(function(group){
@@ -1123,9 +1123,9 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
   */
 catalog_filter = function(){
   let elementForm= $("#modalKeyWordSearch");
-  //console.log(elementForm)
+  ////console.log(elementForm)
   let datastring= elementForm.serialize();
-  //console.log(datastring);
+  ////console.log(datastring);
   $("#KeywordLoading").removeClass("hidden");
 
   $.ajax({
@@ -1135,7 +1135,7 @@ catalog_filter = function(){
       data: datastring,
       success: function(result) {
         // let check_for_none = []
-        console.log(result)
+        //console.log(result)
         let hs_available = JSON.parse(result)['hs'];
         let new_hs_available = []
         hs_available.forEach(function(hs){
@@ -1155,7 +1155,7 @@ catalog_filter = function(){
                  }
            });
 
-          //console.log("layer added to map");
+          ////console.log("layer added to map");
           map.addLayer(vectorLayer)
           // ol.extent.extend(extent, vectorSource.getExtent());
           vectorLayer.set("selectable", true)
@@ -1168,7 +1168,7 @@ catalog_filter = function(){
           }
         }
         // let hs_available = JSON.parse(result);
-        //console.log(hs_available)
+        ////console.log(hs_available)
 
         // $("#panel-bodyh").append(`<button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>`)
         $("#btn-r-reset").show()
@@ -1177,14 +1177,14 @@ catalog_filter = function(){
         $("#current-Groupservers").find("li").each(function()
            {
               var $li=$(this)['0'];
-              //console.log($li)
+              ////console.log($li)
               let id_li = $li['id'];
 
               if(new_hs_available.includes(id_li)){
               // if(hs_available.includes(id_li)){
-                console.log(hs_available);
-                console.log(new_hs_available);
-                console.log(id_li);
+                //console.log(hs_available);
+                //console.log(new_hs_available);
+                //console.log(id_li);
                 // $(`#${id_li}`).removeClass("hidden");
                 // check_for_none.push(id_li);
                 $(`#${id_li}`).css({"opacity": "1",
@@ -1200,7 +1200,7 @@ catalog_filter = function(){
               }
               else{
                 let groups_divs = Object.keys(information_model);
-                console.log(groups_divs);
+                //console.log(groups_divs);
                 if (!groups_divs.includes(id_li)){
                   $(`#${id_li}`).css({"opacity": "0.5",
                                        "border-color": "#d3d3d3",
@@ -1217,7 +1217,7 @@ catalog_filter = function(){
            for(let i=0; i< groups_divs.length; ++i){
              // let check_all = false;
              let check_all = []
-             console.log(information_model[groups_divs[i]])
+             //console.log(information_model[groups_divs[i]])
              for(let j=0; j< information_model[groups_divs[i]].length; ++j){
 
                let service_div = information_model[groups_divs[i]][j]
@@ -1232,7 +1232,7 @@ catalog_filter = function(){
                  }
                });
              }
-             console.log(check_all)
+             //console.log(check_all)
              // if(check_all){
              if(!check_all.includes(false)){
                $(`#${groups_divs[i]} input[type=checkbox]`).each(function() {
@@ -1248,7 +1248,7 @@ catalog_filter = function(){
       error: function(error) {
         $("#KeywordLoading").addClass("hidden");
 
-        //console.log(error);
+        ////console.log(error);
         // get_notification("danger",`Something were wrong when applying the filter with the keywords`);
         $.notify(
             {
@@ -1271,10 +1271,10 @@ $("#btn-key-search").on("click", catalog_filter);
 
 catalog_filter_server = function(){
   let elementForm= $("#modalFilterGroup");
-  //console.log(elementForm)
+  ////console.log(elementForm)
   let datastring= elementForm.serialize();
   datastring += actual_group;
-  //console.log(datastring);
+  ////console.log(datastring);
   $("#KeywordLoading2").removeClass("hidden");
 
   $.ajax({
@@ -1286,14 +1286,14 @@ catalog_filter_server = function(){
         let check_for_none = []
         let hs_available = JSON.parse(result)['hs'];
         // let hs_available = JSON.parse(result);
-        //console.log(hs_available)
+        ////console.log(hs_available)
         let arrayActual_group=actual_group.split('=')[1];
         $(`#${arrayActual_group}_list_separator`).find("li").each(function()
            {
               var $li=$(this)['0'];
-              //console.log($li)
+              ////console.log($li)
               let id_li = $li['id'];
-              //console.log(id_li)
+              ////console.log(id_li)
 
               if(hs_available.includes(id_li)){
                 // $(`#${id_li}`).removeClass("hidden");
@@ -1329,7 +1329,7 @@ catalog_filter_server = function(){
       error: function(error) {
         $("#KeywordLoading2").addClass("hidden");
 
-        //console.log(error);
+        ////console.log(error);
         // get_notification("danger",`Something were wrong when applying the filter with the keywords`);
         $.notify(
             {
@@ -1356,7 +1356,7 @@ reset_keywords = function(){
   Object.keys(information_model).forEach(function(key) {
         // $(`#${key}-noGroups`).addClass("hidden");
         //add the reset button ///
-        console.log(key)
+        //console.log(key)
         for(let i = 0; i< information_model[key].length; ++i){
           if (layer_object_filter.hasOwnProperty(information_model[key][i])){
             map.removeLayer(layer_object_filter[information_model[key][i]])
@@ -1399,19 +1399,19 @@ $("#btn-r-reset-catalog").on("click", reset_keywords);
     get_all_the_checked_keywords = function(){
       // ONLY THE KEY WORDS //
       let datastring = Array.from(document.getElementsByClassName("odd gradeX"));
-      // //console.log(datastring);
+      // ////console.log(datastring);
       let key_words_to_search=[];
       datastring.forEach(function(data){
-        // //console.log(Array.from(data.children));
+        // ////console.log(Array.from(data.children));
         Array.from(data.children).forEach(function(column){
           if(Array.from(column.children)[0].checked ==true){
-            // //console.log();
+            // ////console.log();
             key_words_to_search.push(Array.from(column.children)[0].nextSibling.nodeValue.trim())
           }
         })
       });
       // filter_words = key_words_to_search;
-      //console.log(key_words_to_search);
+      ////console.log(key_words_to_search);
       return key_words_to_search;
     }
     /*
@@ -1423,17 +1423,17 @@ $("#btn-r-reset-catalog").on("click", reset_keywords);
       let active_groups_hydroservers = document.getElementById("current-Groupservers").getElementsByTagName("LI");
       let array_active_groups_hydroservers = Array.from(active_groups_hydroservers);
       let input_check_array = [];
-      ////console.log(array_active_groups_hydroservers);
+      //////console.log(array_active_groups_hydroservers);
       array_active_groups_hydroservers = array_active_groups_hydroservers.filter(x => x.attributes['layer-name'].value == "none");
 
       array_active_groups_hydroservers.forEach(function(group){
         let input_type = Array.from(group.getElementsByTagName("INPUT"))[0];
-        //console.log(input_type);
+        ////console.log(input_type);
         if(input_type.checked){
           input_check_array.push(group.id);
         }
       })
-      //console.log(input_check_array);
+      ////console.log(input_check_array);
       return input_check_array
     }
     /*
@@ -1454,9 +1454,9 @@ $("#btn-r-reset-catalog").on("click", reset_keywords);
                 }
               })
           })
-          //console.log(key, value);
+          ////console.log(key, value);
       }
-      //console.log(keywords_in_servers);
+      ////console.log(keywords_in_servers);
       return keywords_in_servers;
     }
 
@@ -1494,7 +1494,7 @@ $("#btn-r-reset-catalog").on("click", reset_keywords);
   load_info_model = function(){
     var HSTableHtml = ''
       Object.keys(information_model).forEach(function(key) {
-      //console.log(key, information_model[key]);
+      ////console.log(key, information_model[key]);
       HSTableHtml +=
         `<h4 id="titleSite">${key}</h4>`
       information_model[key].forEach(function(serviceView){
@@ -1543,13 +1543,13 @@ general_search = function(id_search_input, id_table){
   input = document.getElementById(`${id_search_input}`);
 
   // input = document.getElementById("myInputKeyword");
-  //console.log(input)
+  ////console.log(input)
   filter = input.value.toUpperCase();
   table = document.getElementById(`${id_table}`);
 
   // table = document.getElementById(`data-table`);
   tr = table.getElementsByTagName("tr");
-  //console.log(tr)
+  ////console.log(tr)
   for (i = 0; i < tr.length; i++) {
     td = tr[i].getElementsByTagName("td")[0];
     if (td) {
@@ -1570,11 +1570,11 @@ general_search = function(id_search_input, id_table){
 
     // reset_k= function(){
     //   input = document.getElementById("myInputKeyword");
-    //   //console.log(input)
+    //   ////console.log(input)
     //   filter = input.value.toUpperCase();
     //   table = document.getElementById(`data-table`);
     //   tr = table.getElementsByTagName("tr");
-    //   //console.log(tr)
+    //   ////console.log(tr)
     //   for (i = 0; i < tr.length; i++) {
     //     td = tr[i].getElementsByTagName("td")[0];
     //     if (td) {

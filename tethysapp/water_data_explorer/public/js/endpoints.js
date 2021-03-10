@@ -1,7 +1,7 @@
 get_vars_from_site = function (resultList){
   let indexs= $("#site_choose")['0'].value;
 
-  console.log(indexs)
+  // console.log(indexs)
   request_obj = {}
   request_obj['hs_url'] = $("#url_WOF").text()
   request_obj['network'] = resultList[indexs]['network']
@@ -14,7 +14,7 @@ get_vars_from_site = function (resultList){
       dataType: "JSON",
       data: request_obj,
       success: function(result){
-        console.log(result)
+        // console.log(result)
         let variables_ = result['variables'];
         for(let i=0; i< variables_.length; ++i){
           let option_begin = `<option value=${i}>${variables_[i]} </option>`;
@@ -22,12 +22,12 @@ get_vars_from_site = function (resultList){
         }
         var_select.selectpicker("refresh");
         let reque_ob = {}
-        console.log($("#site_choose")['0'])
+        // console.log($("#site_choose")['0'])
         reque_ob['hs_name'] = $("#site_choose option:selected").html();
         reque_ob['hs_url'] = request_obj['hs_url'];
         reque_ob['site_hs'] = indexs
         reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
-        console.log(reque_ob)
+        // console.log(reque_ob)
         $("#btn-add-download").on("click", function(){
           $("#downloading_loading").removeClass("hidden");
           $.ajax({
@@ -36,7 +36,7 @@ get_vars_from_site = function (resultList){
             dataType: "JSON",
             data: reque_ob,
             success: function(result2){
-              console.log(result2);
+              // console.log(result2);
               // var name_together = reque_ob['hs_name'].replace(/[^\w\s]/gi, '_')
               var name_together =reque_ob['hs_name'].replace(/(?!\w|\s)./g, '_').replace(/\s+/g, '_').replace(/^(\s*)([\W\w]*)(\b\s*$)/g, '$2');
               var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(result2));
@@ -173,7 +173,7 @@ map_layers = function(sites,title,url){
      let group_name_obj={
        group: group_name
      };
-     //console.log(group_name_obj);
+     //// console.log(group_name_obj);
      $("#GeneralLoading").css({
         position:'fixed',
         "z-index": 9999,
@@ -188,10 +188,10 @@ map_layers = function(sites,title,url){
              dataType: "JSON",
              data: group_name_obj,
              success: result => {
-                 //console.log(result);
+                 //// console.log(result);
                  let servers = result["hydroserver"]
-                 // //console.log("this are the servers");
-                 // //console.log(servers);
+                 // //// console.log("this are the servers");
+                 // //// console.log(servers);
 
 
                  // $("#current-servers").empty() //Resetting the catalog
@@ -251,9 +251,9 @@ map_layers = function(sites,title,url){
                          let check_box = this;
                          map.getLayers().forEach(function(layer) {
                            if(layer_object_filter.hasOwnProperty(title) == false){
-                             console.log("false")
+                             // console.log("false")
                              if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                               console.log(this)
+                               // console.log(this)
                                if(check_box.checked){
 
                                  layer.setStyle(featureStyle(layerColorDict[title]));
@@ -268,7 +268,7 @@ map_layers = function(sites,title,url){
                              }
                            }
                            else{
-                             console.log("true")
+                             // console.log("true")
                              if(layer instanceof ol.layer.Vector && layer == layer_object_filter[title]){
                                if(check_box.checked){
 
@@ -291,7 +291,7 @@ map_layers = function(sites,title,url){
                        if (typeof(sites) == "string"){
                          sites = JSON.parse(siteInfo);
                        }
-                       console.log(sites.length)
+                       // console.log(sites.length)
                        var vectorLayer = map_layers(sites,title,url)[0]
                        var vectorSource = map_layers(sites,title,url)[1]
                        //console.log(style_custom)
@@ -896,7 +896,7 @@ showVariables2 = function(){
           result['variables_code'][k] = list_e[k].variables_code;
       }
 
-         console.log(result);
+         // console.log(result);
          var HSTableHtml =
              `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%">
                 <thead><th>variable name</th><th>units</th><th> WHOS variable code</th></thead>
@@ -941,11 +941,11 @@ showAvailableSites = function(){
  let group = this.baseURI.split("/");
  // ONLY THE KEY WORDS //
  let datastring = Array.from(document.getElementsByClassName("odd gradeX2"));
- console.log(datastring);
+ // console.log(datastring);
  let hs = datastring[0].offsetParent.id.split("-")[0];
 
- // console.log(group);
- console.log(hs);
+ // // console.log(group);
+ // console.log(hs);
  // //console.log(datastring);
  let key_words_to_search=[];
  datastring.forEach(function(data){
@@ -958,13 +958,13 @@ showAvailableSites = function(){
    })
  });
  // filter_words = key_words_to_search;
- console.log(key_words_to_search);
+ // console.log(key_words_to_search);
 
  let requestObject = {};
  requestObject['hs'] = filterSites['hs'];
  requestObject['group'] = filterSites['group'];
  requestObject['variables'] = key_words_to_search;
- console.log(requestObject);
+ // console.log(requestObject);
  $("#variablesLoading").removeClass("hidden");
 
  $.ajax({
@@ -973,14 +973,14 @@ showAvailableSites = function(){
      dataType: "JSON",
      data: requestObject,
      success: result => {
-         console.log(result);
+         // console.log(result);
          let sites = result['hydroserver'];
-         console.log(sites.length)
+         // console.log(sites.length)
 
          let title = filterSites['hs'];
          let url = layersDict[title].values_.source.features[0].values_.features[0].values_.hs_url
-         // console.log(layersDict[title])
-         // console.log(url)
+         // // console.log(layersDict[title])
+         // // console.log(url)
 
          const vectorLayer =  map_layers(sites,title,url)[0]
          const vectorSource =  map_layers(sites,title,url)[1]
@@ -994,7 +994,7 @@ showAvailableSites = function(){
                 }
           });
 
-         //console.log("layer added to map");
+         //// console.log("layer added to map");
          map.addLayer(vectorLayer)
          // ol.extent.extend(extent, vectorSource.getExtent());
          vectorLayer.set("selectable", true)
@@ -1073,7 +1073,7 @@ hydroserver_information = function(){
   // }
   filterSites['group']=groupActual;
   filterSites['hs']=hsActual;
-  //console.log(filterSites['hs']);
+  //// console.log(filterSites['hs']);
   $("#hydroserverTitle").html(filterSites['hs']);
   $.ajax({
     type:"GET",
@@ -1082,12 +1082,12 @@ hydroserver_information = function(){
     data: filterSites,
     success: function(result1){
       let hs_title = result1['title'].replace(/\s/g, "-");
-      console.log(result1['title'])
-      console.log(layersDict)
-      console.log(hs_title)
+      // console.log(result1['title'])
+      // console.log(layersDict)
+      // console.log(hs_title)
       setTimeout(function(){
         if(map2 ==undefined){
-          //console.log("I am undefined");
+          //// console.log("I am undefined");
           map2 = new ol.Map({
                  target: 'map2',
                  layers: [
@@ -1100,7 +1100,7 @@ hydroserver_information = function(){
                    zoom: 4
                  })
           });
-          // console.log(result1['title'])
+          // // console.log(result1['title'])
           // actualLayerModal = layersDict[`${result1['title']}`]
           actualLayerModal = layersDict[`${hs_title}`]
           map2.addLayer(actualLayerModal);
@@ -1121,7 +1121,7 @@ hydroserver_information = function(){
       },400)
       //
 
-      //console.log(result1['url']);
+      //// console.log(result1['url']);
 
       $("#urlHydroserver").html(result1['url']);
       $("#url_WOF").html($("#urlHydroserver").html());
@@ -1129,7 +1129,7 @@ hydroserver_information = function(){
       site_select.empty();
 
       $("#description_Hydroserver").html(result1['description']);
-      //console.log(result1);
+      //// console.log(result1);
       var HSTableHtml =
           `<table id="${filterSites['hs']}-info-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
       if (result1['siteInfo'].length === 0) {
@@ -1156,7 +1156,7 @@ hydroserver_information = function(){
              '</tr>'
 
           }
-          console.log(result1['siteInfo'])
+          // console.log(result1['siteInfo'])
           site_select.selectpicker("refresh");
           $("#site_choose").change(function(){
             get_vars_from_site(result1['siteInfo'])
@@ -1166,8 +1166,8 @@ hydroserver_information = function(){
           HSTableHtml += "</tbody></table>"
           $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml);
           for (var i = 0; i < result1['siteInfo'].length; i++) {
-            //console.log(i);
-            //console.log(result1['siteInfo'][i]);
+            //// console.log(i);
+            //// console.log(result1['siteInfo'][i]);
             let lat_modal=result1['siteInfo'][i]['latitude'];
             let lng_modal=result1['siteInfo'][i]['longitude'];
             let coordinate_modal = [lat_modal,lng_modal];
@@ -1259,24 +1259,24 @@ update_hydroserver = function(){
         dataType: "JSON",
         data: requestObject,
         success: function(result) {
-            //console.log(result)
+            //// console.log(result)
             if(layersDict.hasOwnProperty(hsActual)){
               map.removeLayer(layersDict[hsActual])
             }
             //Returning the geoserver layer metadata from the controller
             // var json_response = JSON.parse(result[siteInfo])
-            // //console.log(json_response);
+            // //// console.log(json_response);
             let {siteInfo,sitesAdded,url} = result
 
-            //console.log(siteInfo)
+            //// console.log(siteInfo)
             // if (json_response.status === "true") {
 
                     let sites = siteInfo
                     const vectorLayer = map_layers(sites,hsActual,url)[0]
                     const vectorSource = map_layers(sites,hsActual,url)[1]
 
-                    // //console.log(extents);
-                    //console.log(sites);
+                    // //// console.log(extents);
+                    //// console.log(sites);
                     // sites = sites.map(site => {
                     //     return {
                     //         type: "Feature",

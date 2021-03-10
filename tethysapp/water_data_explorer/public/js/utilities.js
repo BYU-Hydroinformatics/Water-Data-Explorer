@@ -4,7 +4,7 @@ copyToClipboard = function(element) {
   $temp.val($(element).text()).select();
   document.execCommand("copy");
   $temp.remove();
-  console.log("jojfaaga")
+  //console.log("jojfaaga")
 }
 
 
@@ -19,7 +19,7 @@ disable_map =  function (){
     let vectorSource = layerBoundary.getSource();
     if(map_block.checked){
       var extent = vectorSource.getExtent();
-      //console.log(extent);
+      ////console.log(extent);
       map.getView().fit(extent, map.getSize());
       var properties = map.getView().getProperties();
       properties["minZoom"] = map.getView().getZoom();
@@ -150,7 +150,7 @@ get_random_color = function() {
 ************ PURPOSE: THE FUNCTIONS SHOWS THE GRAPHS IN THE LOWER PORTION OF THE MAP ***********
 */
 activate_deactivate_graphs = function(){
-  //console.log("we ACTIVATEEAAGAG");
+  ////console.log("we ACTIVATEEAAGAG");
   let actual_state=$(this).prop('checked');
   let element_graphs=document.getElementById("graph");
 
@@ -162,7 +162,7 @@ activate_deactivate_graphs = function(){
   }
   else{
 
-    //console.log("off");
+    ////console.log("off");
     $("#graph").hide();
     if(map !==undefined){
       map.updateSize();
@@ -199,7 +199,7 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
   $("#graphs").empty();
   let element_map =document.getElementById("map");
     //make the down part visible and also give the design of the model//
-    //console.log("on");
+    ////console.log("on");
 
     element_graphs.style.cssText=  "display: flex; flex-direction: row;";
     map.updateSize();
@@ -388,7 +388,7 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
   // };
 }
 function featureStyle(myColor) {
-    //console.log("ahuringa")
+    ////console.log("ahuringa")
     var styleCache = {};
     var style2 =
     function (feature) {
@@ -426,7 +426,7 @@ function get_new_color(){
   var color_new = colors_unique[Math.floor(Math.random() * colors_unique.length)];
   if (!colors_used.includes(color_new)) {
     colors_used.push(color_new)
-    //console.log(color_new)
+    ////console.log(color_new)
     return color_new
   }
   // var new_color = colors_unique[0]
@@ -519,14 +519,14 @@ function change_effect_groups(element_to_check,id_group_separator){
      let checkbox = Array.from(servers_checks[i].children)
      for (var j = 0; j < checkbox.length; j++) {
          if (checkbox[j].className == "chkbx-layer") {
-           //console.log(checkbox[j])
+           ////console.log(checkbox[j])
            checkbox[j].checked = element_to_check.checked;
          }
      }
-     //console.log(checkbox);
+     ////console.log(checkbox);
      map.getLayers().forEach(function(layer) {
        if(layer_object_filter.hasOwnProperty(server_name) == false){
-         console.log("false")
+         //console.log("false")
          if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
            if(element_to_check.checked){
 
@@ -538,7 +538,7 @@ function change_effect_groups(element_to_check,id_group_separator){
          }
        }
        else{
-         console.log("true")
+         //console.log("true")
          if(layer instanceof ol.layer.Vector && layer == layer_object_filter[server_name]){
            if(element_to_check.checked){
 
