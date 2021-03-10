@@ -1065,11 +1065,18 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
           });
 
           hydroservers_to_erase.forEach(function(hydroserver){
+              let hydroserver2  = hydroserver.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+              map.removeLayer(layersDict[hydroserver2]);
+              if (layersDict.hasOwnProperty(hydroserver2)){
+                delete layersDict[hydroserver2]
+                $(`#${hydroserver2}-row-complete`).remove()
+              }
+              // map.removeLayer(layersDict[hydroserver]);
+              // if (layersDict.hasOwnProperty(hydroserver)){
+              //   delete layersDict[hydroserver]
+              //   $(`#${hydroserver}-row-complete`).remove()
+              // }
 
-              map.removeLayer(layersDict[hydroserver]);
-              if (layersDict.hasOwnProperty(hydroserver))
-              delete layersDict[hydroserver]
-              $(`#${hydroserver}-row-complete`).remove()
 
           });
           if(layersDict['selectedPoint']){

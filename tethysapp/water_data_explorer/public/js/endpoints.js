@@ -699,6 +699,8 @@ delete_hydroserver= function(){
 
               let i_string=i.toString();
               let title=json_response[i_string];
+              title  = title.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+              console.log(title)
               $(`#${title}-row-complete`).remove()
 
               let element = document.getElementById(title);
@@ -777,6 +779,8 @@ delete_hydroserver_Individual= function(group,server){
 
               let i_string=i.toString();
               let title=json_response[i_string];
+              title  = title.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+              console.log(title)
               let element = document.getElementById(title);
               element.parentNode.removeChild(element);
               //Removing layer from the frontend
@@ -787,6 +791,9 @@ delete_hydroserver_Individual= function(group,server){
               //console.log(group);
               // load_individual_hydroservers_group(arrayActual_group) //Reloading the new catalog
               // get_notification("sucess",`Successfully Deleted the HydroServer!`);
+
+
+
               $(`#${title}-row-complete`).remove();
 
               let id_group_separator = `${group}_list_separator`;
