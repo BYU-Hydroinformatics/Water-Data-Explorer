@@ -47,7 +47,7 @@ def home(request):
     Controller for the app home page.
     """
     can_define_boundary = has_permission(request, 'block_map')
-    print("entering the home function")
+    # print("entering the home function")
     # if can_define_boundary:
     boundaryEndpoint = app.get_custom_setting('Boundary Geoserver Endpoint')
     boundaryWorkspace = app.get_custom_setting('Boundary Workspace Name')
@@ -56,9 +56,9 @@ def home(request):
     boundaryColor = app.get_custom_setting('Boundary Color')
     boundaryWidth = app.get_custom_setting('Boundary Width')
     nameViews = app.get_custom_setting('Views Names')
-    print(nameViews)
-    print(boundaryEndpoint)
-    print(type(boundaryEndpoint))
+    # print(nameViews)
+    # print(boundaryEndpoint)
+    # print(type(boundaryEndpoint))
     context = {
      "geoEndpoint": boundaryEndpoint,
      "geoWorkspace": boundaryWorkspace,

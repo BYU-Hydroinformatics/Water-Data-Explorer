@@ -57,7 +57,7 @@ def get_values_hs(request):
     client = Client(hs_url)
     response_info = GetSiteInfo(client,site_desc)['siteInfo']
     df = pd.DataFrame.from_dict(response_info)
-    print(df)
+    # print(df)
     return_obj['country'] = df['country'].tolist()[0]
     return_obj['variables'] = df['variableName'].tolist()
     return_obj['units'] = df['unitAbbreviation'].tolist()
@@ -168,34 +168,34 @@ def get_values_hs(request):
     # ## SAFE GUARD TO SEE THE RESPONSE OF THE SITE INFO##
     # return_obj['siteInfo']= site_info_Mc_json
 
-    print("finished with the get_values_hs")
+    # print("finished with the get_values_hs")
     return JsonResponse(return_obj)
 
 def get_values_graph_hs(request):
-    print("inside the get_values_graph_hs")
+    # print("inside the get_values_graph_hs")
     list_catalog={}
     return_obj={}
-    print("Inside the get_values_graphs function")
-    print(request)
+    # print("Inside the get_values_graphs function")
+    # print(request)
 
     hs_url = request.GET.get('hs_url')
-    print(hs_url)
+    # print(hs_url)
 
     site_code =  request.GET.get('code')
-    print(site_code)
+    # print(site_code)
     network = request.GET.get('network')
     # variable_text = request.GET.get('variable')
     code_variable =request.GET.get ('code_variable')
     dates_request = request.GET.getlist('timeFrame[]')
-    print(dates_request)
+    # print(dates_request)
     start_date = dates_request[0]
     end_date = dates_request[1];
     # actual_methodsID = request.GET.get('actual_method')
 
     variable_desc = network + ':' + code_variable
-    print(variable_desc)
+    # print(variable_desc)
     site_desc = network + ':' + site_code
-    print(site_desc)
+    # print(site_desc)
     # print("printing methodsIDS")
     # print(actual_methodsID)
     # print(request.GET)
@@ -214,7 +214,7 @@ def get_values_graph_hs(request):
     return_obj['unit_name'] = unit_name
     return_obj['variablename'] = variable_name
     return_obj['timeUnitName'] = time_unit_name
-    print("done with get_values_graph_hs")
+    # print("done with get_values_graph_hs")
 
     return JsonResponse(return_obj)
 
@@ -286,7 +286,7 @@ def GetSiteInfo(client,site_full_code, format ="json"):
 
     try:
         object_methods = site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
-        print(object_methods)
+        # print(object_methods)
         object_siteInfo = site_info_Mc_json['sitesResponse']['site']['siteInfo']
         return_array = []
         if(isinstance(object_methods,(dict))):

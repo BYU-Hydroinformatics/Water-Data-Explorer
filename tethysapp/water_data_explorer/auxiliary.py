@@ -232,9 +232,9 @@ def parseWML(bbox):
 
 def parseJSON(json):
     hs_sites = []
-    print("I am inside the parseJSON")
-    print(json)
-    print(json.keys())
+    #print("I am inside the parseJSON")
+    #print(json)
+    #print(json.keys())
     sites_object = None
     # This is to handle the WMO la Plata endpoints ##
     try:

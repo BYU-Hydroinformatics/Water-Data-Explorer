@@ -103,20 +103,20 @@ def available_regions(request, app_workspace):
         #     print(key, geom)
         # print("STOPS")
         gdf = gdf.assign(**{str(key): gdf.within(geom) for key, geom in countries_series.items()})
-        print(gdf)
+        #print(gdf)
         trues_onlys = gdf.copy()
         trues_onlys = trues_onlys.drop(['geometry'],axis=1)
-        print(trues_onlys)
+        #print(trues_onlys)
         # trues_onlys = gdf.loc[:,gdf.any()]
         trues_onlys = trues_onlys.loc[:,trues_onlys.any()]
-        print(trues_onlys)
+        #print(trues_onlys)
 
 
         countries_index = list(trues_onlys.columns)
         # print(countries_index)
         trues_onlys_copy = trues_onlys.copy()
 
-        print(trues_onlys_copy.index)
+        #print(trues_onlys_copy.index)
 
 
         # print(trues_onlys_copy)
@@ -181,10 +181,10 @@ def available_variables(request):
     hydroserver_variable_list = []
 
     for server in hydroservers_groups:
-        print("URL", server.url.strip())
+        #print("URL", server.url.strip())
         water = pwml.WaterMLOperations(url = server.url.strip())
         hs_variables = water.GetVariables()['variables']
-        print(hs_variables)
+        #print(hs_variables)
         for hs_variable in hs_variables:
             if hs_variable['variableName'] not in hydroserver_variable_list:
                 hydroserver_variable_list.append(hs_variable['variableName'])
@@ -233,7 +233,7 @@ def create_group(request):
 # http://gs-service-production.geodab.eu/gs-service/services/essi/view/whos-plata/hiscentral.asmx
     # print(request.POST)
     if request.is_ajax() and request.method == 'POST':
-        print("inside first if statement of create group")
+        #print("inside first if statement of create group")
         description = request.POST.get('textarea')
 
         # print(description)
@@ -242,13 +242,13 @@ def create_group(request):
 
         selected_services = []
         for key, value in request.POST.items():
-            print(key)
+            #print(key)
             if value not in (title, description,url_catalog):
                 selected_services.append(value.replace("_"," "))
                 # selected_services.append(value)
 
         # selected_services = request.POST.get('server')
-        print(selected_services)
+        #print(selected_services)
 
         group_obj['title']= title.translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
         group_obj['description']= description
@@ -264,11 +264,11 @@ def create_group(request):
                 url_catalog2 = url_catalog + "?WSDL"
                 water = pwml.WaterMLOperations(url = url_catalog2)
                 services = water.GetWaterOneFlowServicesInfo()
-                print(services)
+                #print(services)
                 views = water.aux._giveServices(services,selected_services)['working']
                 group_obj['views'] = addMultipleViews(views,title)
             except Exception as e:
-                print(e)
+                #print(e)
                 group_obj['views'] = []
 
     else:
@@ -343,9 +343,9 @@ def addMultipleViews(hs_list,group):
         print(hs)
         try:
             sites_object = water.GetSites()
-            print(sites_object)
+            #print(sites_object)
             sites_parsed_json = json.dumps(sites_object)
-            print(sites_parsed_json)
+            #print(sites_parsed_json)
  # http://gs-service-production.geodab.eu/gs-service/services/essi/view/whos-country/hiscentral.asmx
             return_obj['title'] = hs['title'].translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
             return_obj['url'] = hs['url']
@@ -362,8 +362,8 @@ def addMultipleViews(hs_list,group):
 
             hydroservers_group = session.query(Groups).filter(Groups.title == group)[0]
             # hydroservers_g = session.query(Groups).filter(Groups.title == group)
-            print(hydroservers_group.title)
-            print(hydroservers_group.description)
+            #print(hydroservers_group.title)
+            #print(hydroservers_group.description)
 
             hs_one = HydroServer_Individual(title=hs['title'],
                              url=hs['url'],
@@ -371,7 +371,7 @@ def addMultipleViews(hs_list,group):
                              siteinfo=sites_parsed_json)
 
             hydroservers_group.hydroserver.append(hs_one)
-            print(hydroservers_group.hydroserver)
+            #print(hydroservers_group.hydroserver)
             session.add(hydroservers_group)
             session.commit()
             session.close()
@@ -381,7 +381,7 @@ def addMultipleViews(hs_list,group):
             # place = hs['url'].split("gs-view-source(")
             # place = place[1].split(")")[0]
             # new_url = "http://gs-service-production.geodab.eu/gs-service/services/essi/view/" + place + "/cuahsi_1_1.asmx"
-            print("Invalid WSDL service",detail)
+            #print("Invalid WSDL service",detail)
             continue
 
 
@@ -393,11 +393,11 @@ def addMultipleViews(hs_list,group):
 
 def get_groups_list(request):
     list_catalog = {}
-    print("get_groups_list controllers.py FUNCTION inside")
+    #print("get_groups_list controllers.py FUNCTION inside")
 
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
 
-    print(SessionMaker)
+    #print(SessionMaker)
     session = SessionMaker()  # Initiate a session
 
 
@@ -414,13 +414,13 @@ def get_groups_list(request):
     # A json list object with the HydroServer metadata. This object will be
     # used to add layers to the catalog table on the homepage.
     list_catalog["hydroservers"] = hydroserver_groups_list
-    print("----------------------------------------------")
-    print("----------------------------------------------")
-    print("----------------------------------------------")
-    print(list_catalog)
-    print("----------------------------------------------")
-    print("----------------------------------------------")
-    print("----------------------------------------------")
+    #print("----------------------------------------------")
+    #print("----------------------------------------------")
+    #print("----------------------------------------------")
+    #print(list_catalog)
+    #print("----------------------------------------------")
+    #print("----------------------------------------------")
+    #print("----------------------------------------------")
     list2={}
     array_example=[]
     for server in session.query(HydroServer_Individual).all():
@@ -430,7 +430,7 @@ def get_groups_list(request):
         array_example.append(layer_obj)
 
     list2["servers"] =array_example
-    print(list2)
+    #print(list2)
 
     return JsonResponse(list_catalog)
 
@@ -438,7 +438,7 @@ def get_groups_list(request):
 ##############################LOAD THE HYDROSERVERS OF AN SPECIFIC GROUP#######################################
 ######*****************************************************************************************################
 def catalog_group(request):
-    # print("Catalog_group function in controllers.py")
+    # #print("Catalog_group function in controllers.py")
     # print("--------------------------------------------------------------------")
     specific_group=request.GET.get('group')
     # print(specific_group)
@@ -464,7 +464,7 @@ def catalog_group(request):
         hs_list.append(layer_obj)
 
     list_catalog["hydroserver"] = hs_list
-    print("------------------------------------------")
+    # print("------------------------------------------")
     # print("printing the lsit of hydroservers of the group")
     # print(list)
 
@@ -475,34 +475,34 @@ def catalog_group(request):
 ######*****************************************************************************************################
 @permission_required('delete_hydrogroups')
 def delete_group(request):
-    print("delete_group function controllers.py")
-    print("--------------------------------------------")
+    #print("delete_group function controllers.py")
+    #print("--------------------------------------------")
     list_catalog = {}
     list_groups ={}
     list_response = {}
     SessionMaker = app.get_persistent_store_database(
         Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
-    print(request.POST)
+    #print(request.POST)
     if request.is_ajax() and request.method == 'POST':
         groups=request.POST.getlist('groups[]')
         list_groups['groups']=groups
         list_response['groups']=groups
-        print(groups)
+        #print(groups)
         i=0
         arrayTitles = []
-        for group in session.query(Groups).all():
-            print(group.title)
+        # for group in session.query(Groups).all():
+        #     print(group.title)
 
         for group in groups:
-            print("print the group",session.query(Groups).filter(Groups.title == group).first())
+            #print("print the group",session.query(Groups).filter(Groups.title == group).first())
             hydroservers_group = session.query(Groups).filter(Groups.title == group)[0].hydroserver
-            print("printing hydroserver_groups")
-            print(hydroservers_group)
+            # print("printing hydroserver_groups")
+            # print(hydroservers_group)
             for server in hydroservers_group:
                 title=server.title
                 arrayTitles.append(title)
-                print(server.title)
+                # print(server.title)
                 i_string=str(i);
                 # list["title"] = title
                 list_catalog[i_string] = title
@@ -511,7 +511,7 @@ def delete_group(request):
                 # session.commit()
                 # session.close()
                 i=i+1
-            print(session.query(Groups).filter(Groups.title == group).first().id)
+            # print(session.query(Groups).filter(Groups.title == group).first().id)
             hydroservers_group = session.query(Groups).filter(Groups.title == group).first()
             session.delete(hydroservers_group)
             session.commit()
@@ -525,24 +525,24 @@ def delete_group(request):
 def catalog_filter(request,app_workspace):
     ret_obj = {}
     actual_group = None
-    print(request.GET)
+    # print(request.GET)
     if request.method == 'GET' and 'actual-group' in request.GET:
-        print("YEAH")
+        # print("YEAH")
         actual_group = request.GET.getlist('actual-group')[0]
-    print(actual_group)
-    print("inside first if statement of create group")
+    # print(actual_group)
+    # print("inside first if statement of create group")
     countries = request.GET.getlist('countries')
     count_new = []
     var_new = []
     for count in countries:
         count_new.append(count.replace("_"," "))
     countries = count_new
-    print(countries)
+    # print(countries)
     variables = request.GET.getlist('variables')
     for varia in variables:
         var_new.append(varia.replace("_"," "))
     variables = var_new
-    print(variables)
+    # print(variables)
 
 
     # shapely.speedups.enable()
@@ -574,15 +574,15 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
     ret_object = {}
     if len(list_countries) > 0:
         shapely.speedups.enable()
-        print(list_countries)
+        # print(list_countries)
         # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
         countries_gdf = gpd.read_file(countries_geojson_file_path)
-        # print(countries_gdf['name'].tolist())
-        if list_countries[0] in countries_gdf['name'].tolist():
-            print("YEAHH")
+        # # print(countries_gdf['name'].tolist())
+        # if list_countries[0] in countries_gdf['name'].tolist():
+            # print("YEAHH")
         countries_gdf2 = countries_gdf[countries_gdf['name'].isin(list_countries)]
         countries_series = countries_gdf2.loc[:,'geometry']
-        # print(countries_gdf2)
+        # # print(countries_gdf2)
         SessionMaker = app.get_persistent_store_database(
             Persistent_Store_Name, as_sessionmaker=True)
         session = SessionMaker()
@@ -597,7 +597,7 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
             hydroservers_selected = session.query(HydroServer_Individual).all()
         else:
             specific_group = actual_group
-            print(specific_group)
+            # print(specific_group)
             hydroservers_selected = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
 
         for server in hydroservers_selected:
@@ -630,7 +630,7 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
             hydroserver_long_list.append(ls_longs)
             hydroserver_name_list.append(site_names)
         list_filtered = []
-        print(hydroservers_selected)
+        # print(hydroservers_selected)
         for indx in range(0,len(hydroserver_name_list)):
             list_countries_stations = {}
             list_countries_stations['title'] = hydroservers_selected[indx].title
@@ -681,7 +681,7 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
                 list_filtered.append(list_countries_stations)
     ret_object['stations'] = list_filtered
     ret_object['hs'] = region_list
-    print(ret_object)
+    # print(ret_object)
     return ret_object
     # return list_filtered
 def filter_variable(variables_list, actual_group = None):
@@ -694,7 +694,7 @@ def filter_variable(variables_list, actual_group = None):
             hydroservers_selected = session.query(HydroServer_Individual).all()
         else:
             specific_group = actual_group
-            print(specific_group)
+            # print(specific_group)
             hydroservers_selected = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
         hs_list = []
         for hydroservers in hydroservers_selected:
@@ -703,10 +703,10 @@ def filter_variable(variables_list, actual_group = None):
             variables_sever = water.GetVariables()['variables']
             df_variables = pd.DataFrame.from_dict(variables_sever)
             variables_array = df_variables['variableName'].tolist()
-            print("**************************88")
-            print(variables_array)
-            print(variables_list)
-            print("**************************88")
+            # print("**************************88")
+            # print(variables_array)
+            # print(variables_list)
+            # print("**************************88")
 
             check = any(item in variables_array for item in variables_list)
             if check is True:
@@ -720,7 +720,7 @@ def get_variables_for_country(request,app_workspace):
 
     response_obj = {}
     countries = request.GET.getlist('countries[]')
-    print(countries)
+    # print(countries)
     variables_hs = []
     countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
     if request.method == 'GET' and 'group' in request.GET:
@@ -728,7 +728,7 @@ def get_variables_for_country(request,app_workspace):
         hs_filtered_region = filter_region(countries_geojson_file_path,countries,actual_group = specific_group )
     else:
         hs_filtered_region = filter_region(countries_geojson_file_path,countries)
-    print("FILTERD REGIONS",hs_filtered_region)
+    # print("FILTERD REGIONS",hs_filtered_region)
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
 
@@ -751,7 +751,7 @@ def get_variables_for_country(request,app_workspace):
 
 
 
-        # print(hs_url)
+        # # print(hs_url)
         # water = pwml.WaterMLOperations(url = hs_url)
         # variables_sever = water.GetVariables()['variables']
         # df_variables = pd.DataFrame.from_dict(variables_sever)
@@ -767,8 +767,8 @@ def get_variables_for_country(request,app_workspace):
 ######*****************************************************************************************################
 def keyWordsForGroup(request):
     list_catalog={}
-    print("keyWordsForGroup")
-    print("inside the keywordsgroup function")
+    # print("keyWordsForGroup")
+    # print("inside the keywordsgroup function")
     specific_group=request.GET.get('group')
 
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
@@ -787,7 +787,7 @@ def keyWordsForGroup(request):
         layer_obj = {}
         layer_obj["title"] = hydroservers.title
         layer_obj["url"] = hydroservers.url.strip()
-        print(layer_obj["url"])
+        # print(layer_obj["url"])
         layer_obj["siteInfo"] = hydroservers.siteinfo
         client = Client(url = hydroservers.url.strip(), timeout= 500)
         # client = Client(url = hydroservers.url.strip(), plugins =[schema_doctor], autoblend=True)
@@ -799,14 +799,14 @@ def keyWordsForGroup(request):
 
         keywords_json = json.loads(keywords_dict_object)
         # Parsing the sites and creating a sites object. See utilities.py
-        print("-------------------------------------")
-        # print(sites_json)
-        print(type(keywords_json))
-        print(keywords_dict.keys())
+        # print("-------------------------------------")
+        # # print(sites_json)
+        # print(type(keywords_json))
+        # print(keywords_dict.keys())
         # print(keywords_json['variablesResponse']['variables']['variable'])
         array_variables=keywords_json['variablesResponse']['variables']['variable']
         array_keywords_hydroserver=[]
-        print(type(array_variables))
+        # print(type(array_variables))
         # print(array_variables)
 
         if isinstance(array_variables,type([])):
@@ -817,7 +817,7 @@ def keyWordsForGroup(request):
             array_keywords_hydroserver.append(array_variables['variableName'])
 
         words_to_search[name] = array_keywords_hydroserver
-        print(words_to_search)
+        # print(words_to_search)
         # print(type(keywords_json['variablesResponse']['variables']['variable']))
         # layer_obj['keywords']=keywords_json
         # print(keywords_json)
@@ -826,7 +826,7 @@ def keyWordsForGroup(request):
 
     list_catalog["hydroserver"] = hs_list
     list_catalog["keysSearch"] = words_to_search
-    print("------------------------------------------")
+    # print("------------------------------------------")
     # print(len(hs_list))
     # print(list)
     return JsonResponse(list_catalog)
