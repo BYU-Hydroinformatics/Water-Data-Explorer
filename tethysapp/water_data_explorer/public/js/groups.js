@@ -1173,7 +1173,15 @@ catalog_filter = function(){
         // $("#panel-bodyh").append(`<button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>`)
         $("#btn-r-reset").show()
         $("#btn-r-reset").on("click", reset_keywords);
-
+        $("#current-Groupservers").find("li").each(function()
+           {
+             var $li=$(this)['0'];
+             ////console.log($li)
+             let id_li = $li['id'];
+             $(`#${id_li} input[type=checkbox]`).each(function() {
+               this.checked = false;
+             });
+           });
         $("#current-Groupservers").find("li").each(function()
            {
               var $li=$(this)['0'];
@@ -1234,7 +1242,7 @@ catalog_filter = function(){
              }
              //console.log(check_all)
              // if(check_all){
-             if(!check_all.includes(false)){
+             if(!check_all.includes(false) && check_all.length > 0){
                $(`#${groups_divs[i]} input[type=checkbox]`).each(function() {
                  this.checked = true;
                });
