@@ -35,6 +35,7 @@ give_available_services = function(){
       $("#available_services").removeClass("hidden");
       $("#soapAddLoading-group").addClass("hidden")
 
+      $("#btn-check_all").removeClass("hidden");
     },
     error: function(error){
       $("#soapAddLoading-group").addClass("hidden")
@@ -56,6 +57,11 @@ give_available_services = function(){
   // ////console.log(url_catalog)
 }
 $("#btn-check_available_serv").on("click", give_available_services);
+$("#btn-check_all").on("click", function(){
+  $("#modalAddGroupServer :checkbox").each(function(){
+    this.checked = true;
+  })
+});
 
 show_variables_groups = function(){
   // Logger.useDefaults({
@@ -687,6 +693,7 @@ create_group_hydroservers = function(){
                     }
                 )
             }
+            $("#btn-check_all").addClass("hidden");
         },
         error: function(error) {
             $("soapAddLoading-group").addClass("hidden")
