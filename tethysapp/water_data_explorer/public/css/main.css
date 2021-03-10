@@ -67,17 +67,21 @@ tr:hover {
 #inner-app-content{
   width: 100%;
   display:flex;
-  left: 8%;
+  left: 100px;
   height: 100%;
   flex-direction: column;
   padding: 0 0 0 0;
   position: relative;
 }
 #app-content-wrapper #app-content #app-navigation{
-  overflow-x: hidden;
-  position:fixed;
-  z-index:9000;
-  width:25%;
+  position: absolute;
+  top: 0;
+  left: -300px;
+  width: 400px;
+  height: 100%;
+  background: #efefef;
+  padding: 0 0px;
+  padding-top: 1%;
 }
 #map2{
   width: 100%;
