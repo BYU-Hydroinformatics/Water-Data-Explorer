@@ -866,7 +866,7 @@ showVariables2 = function(){
          console.log(result);
          var HSTableHtml =
              `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%">
-                <thead><th>Variable Name</th><th>Variable Code</th><th>Units</th></thead>
+                <thead><th>variable name</th><th>units</th><th> WHOS variable code</th></thead>
              <tbody>`
          if (result['variables_name'].length === 0) {
              $modalVariables
@@ -880,8 +880,9 @@ showVariables2 = function(){
                  HSTableHtml +=
                 '<tr class="odd gradeX2">'+
                      `<td>${result['variables_name'][i]}</td>
-                     <td>${result['variables_code'][i]}</td>
                      <td>${result['variables_unit_abr'][i]}</td>
+                     <td>${result['variables_code'][i]}</td>
+                     
                      `
                      +
                 '</tr>'
