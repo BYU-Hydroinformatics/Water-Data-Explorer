@@ -342,6 +342,13 @@ map_layers = function(sites,title,url){
                        $(`#${title}_zoom`).on("click",function(){
                          map.getView().fit(vectorSource.getExtent());
                          map.updateSize();
+                         map.getLayers().forEach(function(layer) {
+                              if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                //console.log(layer)
+                                layer.setStyle(featureStyle(layerColorDict[title]));
+                              }
+                          });
+                         input_check.checked = true;
                        });
                    // }
                  })
@@ -549,7 +556,7 @@ add_hydroserver = function(){
                                    layer.setStyle(new ol.style.Style({}));
                                    if(layersDict['selectedPoint']){
                                      map.removeLayer(layersDict['selectedPoint'])
-                                     map.updateSize()
+                                     map.updateSize();
                                    }
                                  }
                              });
@@ -560,6 +567,14 @@ add_hydroserver = function(){
                         $(`#${title}_zoom`).on("click",function(){
                           map.getView().fit(vectorSource.getExtent());
                           map.updateSize();
+                          map.getLayers().forEach(function(layer) {
+                               if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                 //console.log(layer)
+                                 layer.setStyle(featureStyle(layerColorDict[title]));
+                               }
+                           });
+                          input_check.checked = true;
+
                         });
 
                         $.notify(

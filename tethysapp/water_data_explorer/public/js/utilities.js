@@ -494,9 +494,6 @@ function html_for_groups(isAdmin, title, id_group_separator){
         </h4>
         <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
           <input class="chkbx-layers" type="checkbox">
-
-
-
           <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
             <span class=" glyphicon glyphicon-info-sign "></span>
           </button>
@@ -565,7 +562,8 @@ function html_for_servers(title,group_name,isNew){
    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
   </button>
   <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
-   <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+   <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+
   </button>
   <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariablesTable"> <span class=" glyphicon glyphicon-list-alt"></span>
   </button>
