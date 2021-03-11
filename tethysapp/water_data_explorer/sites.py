@@ -218,7 +218,7 @@ def get_values_graph_hs(request):
         return_obj['variablename'] = []
         return_obj['timeUnitName'] = []
         return JsonResponse(return_obj)
-    
+
     variable_name = df['variableName'].tolist()[0]
     unit_name = df['unitName'].tolist()[0]
     time_unit_name = df['timeUnitName'].tolist()[0]
@@ -235,6 +235,31 @@ def get_values_graph_hs(request):
 
     return JsonResponse(return_obj)
 
+def get_xml(request):
+    # print("inside the get_values_graph_hs")
+    list_catalog={}
+    return_obj={}
+
+
+    hs_url = request.GET.get('hs_url')
+
+    site_code =  request.GET.get('code')
+    network = request.GET.get('network')
+    code_variable =request.GET.get ('code_variable')
+    dates_request = request.GET.getlist('timeFrame[]')
+    start_date = dates_request[0]
+    end_date = dates_request[1];
+
+    variable_desc = network + ':' + code_variable
+    # print(variable_desc)
+    site_desc = network + ':' + site_code
+
+    water = pwml.WaterMLOperations(url = hs_url)
+
+    return_obj['waterml'] = water.GetValues(site_desc, variable_desc, start_date, end_date, format='waterml')
+
+
+    return JsonResponse(return_obj)
 
 """
 Extracted from the WaterML.py source code in the pywaterML package, but customized to meet the requirements of the WDE

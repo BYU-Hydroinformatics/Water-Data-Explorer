@@ -104,8 +104,10 @@ class WaterDataExplorer(TethysAppBase):
             UrlMap(name='get-download-hs',
                    url='get-download-hs',
                    controller='water_data_explorer.endpoints.get_download_hs'),
-
-
+            ## Get the variables of a hydroserver
+            UrlMap(name='get-xml',
+                   url='get-xml',
+                   controller='water_data_explorer.sites.get_xml'),
         )
 
         return url_maps

@@ -153,30 +153,6 @@ select_variable_change = function(){
                     )
                   }
                   else if(selectedDownloadType == "WaterML1.0" ){
-                    // var xmltext = result1['waterml'];
-                    // var pom = document.createElement('a');
-                    // var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
-                    // var pom = document.createElement('a');
-                    // var bb = new Blob([xmltext], {type: 'application/octet-stream'});
-                    // pom.setAttribute('href', window.URL.createObjectURL(bb));
-                    // pom.setAttribute('download', filename);
-                    //
-                    // pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
-                    // pom.draggable = true;
-                    // pom.classList.add('dragout');
-                    // pom.click();
-                    // $.notify(
-                    //     {
-                    //         message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 1.0 format`
-                    //     },
-                    //     {
-                    //         type: "success",
-                    //         allow_dismiss: true,
-                    //         z_index: 20000,
-                    //         delay: 5000
-                    //     }
-                    // )
-
                     $("#graphAddLoading").removeClass("hidden");
                     let url_base = object_request_variable['hs_url'].split("?")[0];
                     let SITE = object_request_variable['code'];
@@ -213,18 +189,57 @@ select_variable_change = function(){
                             }
                         )
                     }).
-                    catch(error =>{ console
-                      $.notify(
-                          {
-                              message: `There Service ${object_request_variable['hs_url']} does not provide WaterML 2.0 downloads`
-                          },
-                          {
-                              type: "danger",
-                              allow_dismiss: true,
-                              z_index: 20000,
-                              delay: 5000
-                          }
-                      )
+                    catch(error =>{
+
+                       console
+                       $.ajax({
+                         type:"GET",
+                         url: `get-values-graph-hs`,
+                         dataType: "JSON",
+                         data: object_request_variable,
+                         success: function(result1){
+
+                           var xmltext = result1['waterml'];
+                           var pom = document.createElement('a');
+                           var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
+                           var pom = document.createElement('a');
+                           var bb = new Blob([xmltext], {type: 'application/octet-stream'});
+                           pom.setAttribute('href', window.URL.createObjectURL(bb));
+                           pom.setAttribute('download', filename);
+
+                           pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
+                           pom.draggable = true;
+                           pom.classList.add('dragout');
+                           pom.click();
+                           $("#graphAddLoading").addClass("hidden");
+
+                           $.notify(
+                               {
+                                   message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 1.0 format`
+                               },
+                               {
+                                   type: "success",
+                                   allow_dismiss: true,
+                                   z_index: 20000,
+                                   delay: 5000
+                               }
+                           )
+
+                         }
+
+
+                       })
+                      // $.notify(
+                      //     {
+                      //         message: `There Service ${object_request_variable['hs_url']} does not provide WaterML 1.0 downloads`
+                      //     },
+                      //     {
+                      //         type: "danger",
+                      //         allow_dismiss: true,
+                      //         z_index: 20000,
+                      //         delay: 5000
+                      //     }
+                      // )
                     });
 
 
@@ -271,6 +286,8 @@ select_variable_change = function(){
                         )
                     }).
                     catch(error =>{ console
+                      $("#graphAddLoading").addClass("hidden");
+
                       $.notify(
                           {
                               message: `There Service ${object_request_variable['hs_url']} does not provide WaterML 2.0 downloads`
