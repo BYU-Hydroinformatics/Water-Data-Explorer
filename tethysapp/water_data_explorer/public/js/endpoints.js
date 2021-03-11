@@ -1011,7 +1011,6 @@ hydroserver_information = function(){
       },400)
 
 
-
       $("#urlHydroserver").html(result1['url']);
       $("#url_WOF").html($("#urlHydroserver").html());
       let site_select = $("#site_choose");
