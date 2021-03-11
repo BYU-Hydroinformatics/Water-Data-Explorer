@@ -3,6 +3,9 @@
   padding-top: 5%;
   font-weight: bold;
 }
+#btn-r-reset{
+  display: none;
+}
 /* #content_map{
   width: 100%;
   display:flex;
@@ -39,15 +42,13 @@
     color: #666;
 }
 table #tbl-hydroservers{
-  border-collapse: collapse;
   width: 100%;
+
 }
 
-th #tbl-hydroservers, td #tbl-hydroservers, tr #tbl-hydroservers {
-
-  padding: 2%;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
+#tbl-hydroservers th, #tbl-hydroservers td, #tbl-hydroservers tr {
+  text-align: center !important;
+  border-bottom: 1px solid #ddd !important;
 }
 
 tr:hover {
@@ -64,14 +65,24 @@ tr:hover {
   background-color: transparent !important;
 }
 #inner-app-content{
-  width: 90%;
+  width: 100%;
   display:flex;
+  left: 100px;
   height: 100%;
   flex-direction: column;
   padding: 0 0 0 0;
-  /* position: fixed; */
-  left: 150px;
+  padding-right: 100px;
   position: relative;
+}
+#app-content-wrapper #app-content #app-navigation{
+  position: absolute;
+  top: 0;
+  left: -300px;
+  width: 400px;
+  height: 100%;
+  background: #efefef;
+  padding: 0 0px;
+  padding-top: 1%;
 }
 #map2{
   width: 100%;
@@ -303,15 +314,9 @@ tr:hover {
   color: #cc2418;
   align-items: center;
 }
-#app-content-wrapper #app-content #app-navigation{
-  padding: 2% 0.2%;
-  overflow-x: hidden;
-  z-index:9000;
-  width: 450px;
-}
-#app-content-wrapper #app-content #app-navigation .nav{
-  overflow-x: hidden;
-}
+
+
+
 #app-content-wrapper{
   overflow-y: hidden;
 }
@@ -464,66 +469,85 @@ tr:hover {
 }
 
 .chkbx-layers{
-  -webkit-appearance:none;
-  width:2.5em;
-  height:2em;
-  background: url("https://img.icons8.com/dotty/24/FFFFFF/sheets.png") 50% 0 no-repeat fixed;
+  /* width:2.5em;
+  height:2em; */
+  position:relative;
+  right: 1em;
   background-color: #337ab7;
   border-color: #007bff;
-  padding: 0;
+  transform: scale(1.7);
+  border-width: 1px;
+
+}
+input[type=checkbox], input[type=radio]{
+  margin: 0px 0 0 !important;
+  /* Double-sized Checkboxes */
+
 }
 .chkbx-layers:hover{
-  -webkit-appearance:none;
-  width:2.5em;
-  height:2em;
-  background: url("https://img.icons8.com/dotty/24/FFFFFF/sheets.png") 50% 0 no-repeat fixed;
+  /* width:2.5em;
+  height:1.8em; */
+  position:relative;
+  right: 1em;
   background-color:  #286090;
   border-color: #204d74;
-  padding: 0;
+  transform: scale(1.7);
 }
 .chkbx-layers:checked {
-    background: url("https://img.icons8.com/ios/24/FFFFFF/sheets.png") 50% 0 no-repeat fixed;
-    background-color:  #286090;
-    border-color: #204d74;
+  position:relative;
+  right: 1em;
+    background-color: #337ab7;
+    border-color: #007bff;
     padding: 0;
 }
 .chkbx-layer{
-  -webkit-appearance:none;
-  width:2.5em;
-  height:2.2em;
+  position:relative;
+  right: 1em;
+  /* width:2.2em;
+  height:1.5em; */
   border-radius:5px;
   border:2px solid #555;
-  background: url("https://img.icons8.com/dotty/24/555555/sheets.png") 50% 50% no-repeat fixed;
   background-color: #e6e6e6;
   border-color: #e6e6e6;
-  top:1px;
+  /* top:1px; */
   padding: 0;
+  transform: scale(1.3);
+
 }
 .chkbx-layer:checked {
-    background: url("https://img.icons8.com/ios/24/555555/sheets.png") 50% 50% no-repeat fixed;
     background-color: #e6e6e6;
     border-color:  #e6e6e6;
     top:1px;
     padding: 0;
+    position:relative;
+    right: 1em;
+    transform: scale(1.3);
+
 }
 .chkbx-layer:hover{
-  -webkit-appearance:none;
-  width:2.5em;
-  height:2.2em;
+  position:relative;
+  right: 1em;
+  /* width:2.2em;
+  height:1.3em; */
   border-radius:5px;
   border:2px solid #555;
-  background: url("https://img.icons8.com/dotty/24/333333/sheets.png") 50% 50% no-repeat fixed;
   background-color: #e6e6e6;
   border-color:  #e6e6e6;
-  top:1px;
+  /* top:1px; */
   padding: 0;
+  transform: scale(1.3);
+
 }
 .chkbx-layer:checked:hover {
-    background: url("https://img.icons8.com/ios/24/333333/sheets.png") 50% 50% no-repeat fixed;
     background-color: #e6e6e6;
     border-color:  #e6e6e6;
     top:1px;
     padding: 0;
+    position:relative;
+    right: 1em;
+    transform: scale(1.3);
+
+
 }
 
 .toggle.btn-xs{
@@ -537,7 +561,7 @@ tr:hover {
   /* justify-content: center; */
 }
 
-#variablesLoading{
+#variablesLoading,#KeywordLoading{
   position:absolute;
   top:0;
   left:0;
@@ -582,39 +606,43 @@ tr:hover {
   flex-direction: column;
 }
 
-#keyword-modal-body{
-  display: flex;
-}
-#left-content, #right-content {
+#left-content {
   justify-content:center;
   width: 100%;
   padding: 0.5em;
 }
-/* .buttonAppearance:hover{
-  background-color: #5bc0de !important;
-  border-color:#46b8da !important;
-  color: white;
-} */
-
-/* #siteVariableTable {
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
+#groups_countries, #groups_variables{
   width: 100%;
 }
 
-#siteVariableTable td, #siteVariableTable th {
-  border: 1px solid #ddd;
-  padding: 8px;
+#tableLegend{
+  position: absolute;
+  top: 3%;
+  /* left:3%; */
+  right: 1%;
+  padding: 0.5em;
+  background-color: rgba(255,255,255,0.5);
 }
 
-#siteVariableTable tr:nth-child(even){background-color: #f2f2f2;}
-
-#siteVariableTable tr:hover {background-color: #ddd;}
+#btn-download-waterml, #btn-download-csv{
+  margin: 0.1em;
+}
 
 #siteVariableTable th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #4CAF50;
-  color: white;
-} */
+  font-weight: normal;
+}
+#siteVariableTable .danger th {
+  font-weight: bold;
+}
+#soapAddLoading-group{
+  position: absolute;
+}
+
+#hideScroll2{
+  overflow-y: scroll;
+  height: 500px;
+  /* height:calc(100vh - 40px); */
+}
+.spacer_fake{
+  width: 1.3em;
+}

@@ -15,7 +15,6 @@
 {# <img id="GeneralLoading" class="view-file hidden" src="https://media.giphy.com/media/xTk9ZvMnbIiIew7IpW/giphy.gif" /> #}
 <img id="GeneralLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
 {# <img id="graphAddLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" /> #}
-
 <div class="accordion" id="groups_hydroservers">
 
   <div id= "panHydroGroups" class="panel panel-default">
@@ -33,11 +32,11 @@
           {% if can_delete_hydrogroups %}
           <button id="btn-del-groups-f" class="btn btn-danger"  data-toggle="modal" data-target="#modalDeleteGroups"> <span class="glyphicon glyphicon-trash"></span></button>
           {% endif %}
-          <button id="btn-filter-groups-f" class="btn btn-success" data-toggle="modal" data-target="#modalKeyWordSearch"> <span class="glyphicon glyphicon-filter"></span></button>
-          <!-- {% if can_block_map %}
-          <input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
-          {% endif %} -->
-          <!-- <input id="sG" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="small" data-onstyle = "danger"></input> -->
+          <button id="btn-filter-groups-f" class="btn btn-success" data-toggle="modal" data-target="#modalKeyWordSearch">
+            <img src="{% static 'water_data_explorer/images/countries_filter.png' %}" alt="Icon"/>
+          </button>
+
+          <button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>
       </div>
     </div>
   </div>
@@ -55,9 +54,9 @@
 <!-- <div id="content_map"> -->
 <!-- <div id="container_map"> -->
 
-  <div id="map" class="map">
+  <div id="map" class="map"></div>
+  <table id="tableLegend"></table>
 
-  </div>
 <!-- </div> -->
 
   <div id="graph">
@@ -112,9 +111,17 @@
             </div>
         </div>
         <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
-
+        <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit">
+            <option value="Download">Download</option>
+            <option value="CSV" >CSV</option>
+            <option value = "WaterML1.0">WaterML 1.0</option>
+            <option value = "WaterML2.0">WaterML 2.0</option>
+        </select>
       </div>
+
       <div id="plots"></div>
+
+
 
     </div>
 
@@ -136,21 +143,18 @@
 
 {{ block.super }}
 {% include "water_data_explorer/modals/manageServers.html" %}
-{% include "water_data_explorer/modals/manageCentral.html" %}
-{% include "water_data_explorer/modals/addCentral.html" %}
 {% include "water_data_explorer/modals/delCentral.html" %}
 {% include "water_data_explorer/modals/addHydroserver.html" %}
 {% include "water_data_explorer/modals/delServer.html" %}
 {% include "water_data_explorer/modals/addGroupHydroserver.html" %}
 {% include "water_data_explorer/modals/keywordSearch.html" %}
+{% include "water_data_explorer/modals/groupSearch.html" %}
 {% include "water_data_explorer/modals/DeleteHydroWarning.html" %}
 {% include "water_data_explorer/modals/DeleteTableGroup.html" %}
 {% include "water_data_explorer/modals/showVariables.html" %}
+{% include "water_data_explorer/modals/showVariables2.html" %}
 {% include "water_data_explorer/modals/hydro_info.html" %}
-
-
-
-
+{% include "water_data_explorer/modals/promp_down.html" %}
 
 {% endblock %}
 

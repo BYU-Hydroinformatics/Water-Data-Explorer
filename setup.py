@@ -16,14 +16,14 @@ resource_files += find_resource_files('tethysapp/' + app_package + '/workspaces'
 
 setup(
     name=release_package,
-    version='0.0.1',
+    version='1.1.0',
     description='A tethys app that lets the user to visualize and query WSDL enpoints',
     long_description='',
     keywords='',
     author='Giovanni Romero Bustamante',
-    author_email='gio.busrom@gmail.com',
-    url='',
-    license='MIT',
+    author_email='gio.rombus@gmail.com',
+    url='https://github.com/BYU-Hydroinformatics/Water-Data-Explorer',
+    license='BSD 3-Clause License',
     packages=find_namespace_packages(),
     package_data={'': resource_files},
     include_package_data=True,

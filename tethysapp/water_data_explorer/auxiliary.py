@@ -33,7 +33,7 @@ from datetime import *
 from json import dumps
 
 from .app import WaterDataExplorer as app
-from .model import Catalog
+# from .model import Catalog
 
 try:
     from io import StringIO
@@ -53,7 +53,7 @@ def checkCentral(centralUrl):
 
 def parseService(centralUrl):
     url = centralUrl + "/GetWaterOneFlowServiceInfo"
-    print(url)
+    # print(url)
     response = urllib.request.urlopen(url)
     # response = request.get(url)
     data = response.read()
@@ -70,6 +70,8 @@ def parseService(centralUrl):
                 newService['Title'] = child.text
             if child.tag == '{http://hiscentral.cuahsi.org/20100205/}organization':
                 newService['organization'] = child.text
+            if child.tag == '{http://hiscentral.cuahsi.org/20100205/}aabstract':
+                newService['aabstract'] = child.text
 
         services.append(newService)
 
@@ -230,9 +232,9 @@ def parseWML(bbox):
 
 def parseJSON(json):
     hs_sites = []
-    print("I am inside the parseJSON")
-    print(json)
-    print(json.keys())
+    #print("I am inside the parseJSON")
+    #print(json)
+    #print(json.keys())
     sites_object = None
     # This is to handle the WMO la Plata endpoints ##
     try:

@@ -13,10 +13,11 @@
 {# The name you provided in your app.py is accessible through the tethys_app.name context variable #}
 {% block app_title %}{{ tethys_app.name }}{% endblock %}
 {% block header_buttons %}
-<input id="sG" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="mini" data-onstyle = "default"></input>
 
+<input id="sG" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="small" data-onstyle = "danger"></input>
+<p class= "spacer_fake"></p>
 {% if can_block_map %}
-<input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="mini" data-onstyle = "default"></input>
+<input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
 {% endif %}
 
 <div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Manage HydroServers">
@@ -26,8 +27,6 @@
 <div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Help/Information">
 	<a data-toggle="modal" data-target="#helpModal"><span class="glyphicon glyphicon-info-sign"></span></a>
 </div>
-
-
 {% endblock %}
 
 
@@ -71,6 +70,8 @@
   	var baseStatic = "{% static 'water_data_explorer/index.html' %}";
   	baseStatic = baseStatic.replace('\/index.html','');
     var can_block_map = {{can_block_map|yesno:"true,false"}};
+    console.log("noooo")
+    console.log(can_block_map)
     var can_delete_hydrogroups = {{can_delete_hydrogroups|yesno:"true,false"}};
     var endpointGeoServer = "{{ geoEndpoint|safe }}";
     var geoServerWorkspace = "{{ geoWorkspace|safe }}";
@@ -110,7 +111,6 @@
   <script src="{% static 'water_data_explorer/js/groups.js' %}" type="text/javascript"></script>
   <script src="{% static 'water_data_explorer/js/endpoints.js' %}" type="text/javascript"></script>
   <script src="{% static 'water_data_explorer/js/sites.js' %}" type="text/javascript"></script>
-  <!-- <script src="{% static 'water_data_explorer/js/main.js' %}" type="text/javascript"></script> -->
 
   <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> -->

@@ -12,7 +12,6 @@
  *****************************************************************************/
  var staticPath = baseStatic;
  var apiServer = "";
- console.log(apiServer);
  window.onbeforeunload = null
  var $myGroup = $("#helpGroup")
  $myGroup.on("show.bs.collapse", ".collapse", function() {
@@ -62,7 +61,7 @@ var water_data_explorer_PACKAGE = (function() {
       }
       if(endpointGeoServer ==="None"){
         endpointGeoServer = "Whole_world";
-        console.log(endpointGeoServer);
+        ////console.log(endpointGeoServer);
       }
       if(geoServerWorkspace ==="None"){
         geoServerWorkspace= "Whole_world";
@@ -100,7 +99,7 @@ var water_data_explorer_PACKAGE = (function() {
         vectorSource.once('change',function(e){
           if(vectorSource.getState() === 'ready') {
             var extent = vectorSource.getExtent();
-            console.log(extent);
+            ////console.log(extent);
             map.getView().fit(extent, map.getSize());
 
             //disable zoom out //
@@ -306,10 +305,15 @@ var water_data_explorer_PACKAGE = (function() {
             .change()
     }
     give_name = function(){
-      $(".titleh").html(`${views_names} Views`)
-      $(".app-title").html(`${views_names} Data Explorer`)
-      console.log("GIVE_NAME");
-      console.log(views_names);
+      if(views_names != "None"){
+        $(".titleh").html(`${views_names} Views`)
+        $(".app-title").html(`${views_names} Data Explorer`)
+      }
+      else{
+        $(".titleh").html(`Views`)
+        $(".app-title").html(`Water Data Explorer`)
+      }
+
     }
 
 
@@ -324,12 +328,19 @@ var water_data_explorer_PACKAGE = (function() {
       $modalInterface = $("#modalInterface");
       $hs_list = $("#current-servers-list");
     }
+    addLegendMap = function(map){
+      let element = document.getElementById("tableLegend");
+      var controlPanel = new ol.control.Control({
+        element: element
+      });
+      map.addControl(controlPanel);
 
+    }
   /************************************************************************
    *                  INITIALIZATION / CONSTRUCTOR
    *************************************************************************/
   $(function() {
-
+    let little_trick = true;
     init_jquery_var();
     addDefaultBehaviorToAjax();
     init_map();
@@ -341,6 +352,23 @@ var water_data_explorer_PACKAGE = (function() {
     add_boundary_map(geoServerColor, geoServerWidth, map);
     activate_deactivate_graphs();
     give_name();
+    addLegendMap(map);
+    $(".toggle-nav").on("click",function(){
+      if(little_trick){
+        $("#app-navigation").hide();
+        little_trick = false;
+        $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+
+        setTimeout(function(){ map.updateSize(); }, 500);
+      }
+      else{
+        $("#app-navigation").show();
+        little_trick = true;
+        $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
+
+        setTimeout(function(){ map.updateSize(); }, 500);
+      }
+    })
 
   })
 })() // End of package wrapper

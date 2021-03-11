@@ -1,52 +1,60 @@
-function featureStyle() {
-    var style = new ol.style.Style({
-        image: new ol.style.Circle({
-            radius: 6,
-            stroke: new ol.style.Stroke({
-                color: "white",
-                width: 1
-            }),
-            fill: new ol.style.Fill({
-                // color: `#${(((1 << 24) * Math.random()) | 0).toString(16)}`
-                color: "#00FF00"
-            })
-        })
-    })
-    return style
+copyToClipboard = function(element) {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).text()).select();
+  document.execCommand("copy");
+  $temp.remove();
+  //console.log("jojfaaga")
 }
+
 
 /*
 ************ FUNCTION NAME: DISABLE MAP **********************
 ************ PURPOSE: DISABLES OR ENABLES THE ZOOM OUT AND DRAGGING OF THE MAP ***********
 */
 disable_map =  function (){
+  try{
+    let map_block=document.getElementById("blockPosition");
+    let layerBoundary = layersDict['boundaryLayer'];
+    let vectorSource = layerBoundary.getSource();
+    if(map_block.checked){
+      var extent = vectorSource.getExtent();
+      ////console.log(extent);
+      map.getView().fit(extent, map.getSize());
+      var properties = map.getView().getProperties();
+      properties["minZoom"] = map.getView().getZoom();
+      if(geoServerMovement){
+        properties["extent"]= extent
 
-  let map_block=document.getElementById("blockPosition");
-  let layerBoundary = layersDict['boundaryLayer'];
-  let vectorSource = layerBoundary.getSource();
-  if(map_block.checked){
-    var extent = vectorSource.getExtent();
-    console.log(extent);
-    map.getView().fit(extent, map.getSize());
-    var properties = map.getView().getProperties();
-    properties["minZoom"] = map.getView().getZoom();
-    if(geoServerMovement){
-      properties["extent"]= extent
-
+      }
+      map.setView(new ol.View(properties));
+      map.addLayer(layersDict['boundaryLayer']);
     }
-    map.setView(new ol.View(properties));
-    map.addLayer(layersDict['boundaryLayer']);
-  }
-  else{
-    var properties = map.getView().getProperties();
-    properties["minZoom"] = 1;
-    if(geoServerMovement){
-      properties["extent"]= extent
+    else{
+      var properties = map.getView().getProperties();
+      properties["minZoom"] = 1;
+      if(geoServerMovement){
+        properties["extent"]= extent
 
+      }
+      map.setView(new ol.View(properties));
+      map.removeLayer(layersDict['boundaryLayer']);
     }
-    map.setView(new ol.View(properties));
-    map.removeLayer(layersDict['boundaryLayer']);
   }
+  catch(err){
+    $.notify(
+        {
+            message: `Boundary layer was not setup, please go to settings and set up the boundary layer`
+        },
+        {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000
+        }
+    )
+  }
+
 }
 
 $('#blockPosition').change(disable_map)
@@ -142,7 +150,7 @@ get_random_color = function() {
 ************ PURPOSE: THE FUNCTIONS SHOWS THE GRAPHS IN THE LOWER PORTION OF THE MAP ***********
 */
 activate_deactivate_graphs = function(){
-  console.log("we ACTIVATEEAAGAG");
+  ////console.log("we ACTIVATEEAAGAG");
   let actual_state=$(this).prop('checked');
   let element_graphs=document.getElementById("graph");
 
@@ -154,7 +162,7 @@ activate_deactivate_graphs = function(){
   }
   else{
 
-    console.log("off");
+    ////console.log("off");
     $("#graph").hide();
     if(map !==undefined){
       map.updateSize();
@@ -191,7 +199,6 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
   $("#graphs").empty();
   let element_map =document.getElementById("map");
     //make the down part visible and also give the design of the model//
-    console.log("on");
 
     element_graphs.style.cssText=  "display: flex; flex-direction: row;";
     map.updateSize();
@@ -372,43 +379,50 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
 
   }
 
-  // window.onresize = function() {
-  //     Plotly.relayout('plots', {
-  //         'xaxis.autorange': true,
-  //         'yaxis.autorange': true
-  //     });
-  // };
 }
 function featureStyle(myColor) {
-    var style = new ol.style.Style({
-        image: new ol.style.Circle({
-            radius: 6,
+    ////console.log("ahuringa")
+    var styleCache = {};
+    var style2 =
+    function (feature) {
+      var size = feature.get('features').length;
+      var style = styleCache[size];
+      if (!style) {
+        style = new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 10,
             stroke: new ol.style.Stroke({
-                color: "white",
-                width: 1
+              color: "white",
             }),
             fill: new ol.style.Fill({
-                // color: `#${(((1 << 24) * Math.random()) | 0).toString(16)}`
-                // color: get_new_color()
-                color: myColor
-            })
-        })
-    })
-    return style
+              color: myColor,
+            }),
+          }),
+          text: new ol.style.Text({
+            text: size.toString(),
+            fill: new ol.style.Fill({
+              color: '#fff',
+            }),
+          }),
+        });
+        styleCache[size] = style;
+      }
+      return style;
+    }
+
+    return style2
 }
+
+
 
 function get_new_color(){
   var color_new = colors_unique[Math.floor(Math.random() * colors_unique.length)];
   if (!colors_used.includes(color_new)) {
     colors_used.push(color_new)
-    console.log(color_new)
+    ////console.log(color_new)
     return color_new
   }
-  // var new_color = colors_unique[0]
-  // colors_used.push(new_color)
-  // colors_unique.shift()
-  // var color_new = colors_unique[Math.floor(Math.random() * colors_unique.length)];
-  // return color_new
+
 }
 
 function html_for_groups(isAdmin, title, id_group_separator){
@@ -420,7 +434,7 @@ function html_for_groups(isAdmin, title, id_group_separator){
       <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
         <h4 class="panel-title">
           <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-          <span class="group-name"><strong>${ind})</strong> ${title}</span>
+          <span class="group-name"> ${title}</span>
 
           </a>
         </h4>
@@ -430,6 +444,7 @@ function html_for_groups(isAdmin, title, id_group_separator){
             <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
               <span class=" glyphicon glyphicon-info-sign "></span>
             </button>
+
             <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
@@ -441,13 +456,19 @@ function html_for_groups(isAdmin, title, id_group_separator){
       </div>
 
       <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-      <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>Broker Endpoints</div>
+      <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
         <div class="panel-body">
-            <div id= ${id_group_separator} class="divForServers"></div>
+            <div id= ${id_group_separator} class="divForServers">
+              <button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group does not have hydroservers</button>
+            </div>
         </div>
       </div>
     </div>
     `
+
+    // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
+    //   <span class=" glyphicon glyphicon-filter"></span>
+    // </button>
     return newHtml
   }
   else{
@@ -457,7 +478,7 @@ function html_for_groups(isAdmin, title, id_group_separator){
       <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
         <h4 class="panel-title">
           <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-          <span class="group-name"><strong>${ind})</strong> ${title}</span>
+          <span class="group-name">${title}</span>
           </a>
         </h4>
         <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
@@ -474,6 +495,9 @@ function html_for_groups(isAdmin, title, id_group_separator){
       </div>
     </div>
     `
+    // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
+    //   <span class=" glyphicon glyphicon-filter"></span>
+    // </button>
     return newHtml
   }
 }
@@ -484,25 +508,61 @@ function change_effect_groups(element_to_check,id_group_separator){
      let checkbox = Array.from(servers_checks[i].children)
      for (var j = 0; j < checkbox.length; j++) {
          if (checkbox[j].className == "chkbx-layer") {
-           console.log(checkbox[j])
+           ////console.log(checkbox[j])
            checkbox[j].checked = element_to_check.checked;
          }
      }
-     console.log(checkbox);
+     ////console.log(checkbox);
      map.getLayers().forEach(function(layer) {
-          if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
-            if(element_to_check.checked){
-              layer.setStyle(featureStyle(layerColorDict[server_name]));
-            }
-            else{
-              layer.setStyle(new ol.style.Style({}));
-            }
-          }
+       if(layer_object_filter.hasOwnProperty(server_name) == false){
+         //console.log("false")
+         if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
+           if(element_to_check.checked){
+
+             layer.setStyle(featureStyle(layerColorDict[server_name]));
+           }
+           else{
+             layer.setStyle(new ol.style.Style({}));
+           }
+         }
+       }
+       else{
+         //console.log("true")
+         if(layer instanceof ol.layer.Vector && layer == layer_object_filter[server_name]){
+           if(element_to_check.checked){
+
+             layer.setStyle(featureStyle(layerColorDict[server_name]));
+           }
+           else{
+             layer.setStyle(new ol.style.Style({}));
+           }
+         }
+       }
       });
    }
 }
-function html_for_servers(){
+function html_for_servers(title,group_name,isNew){
+  let check_var = (( isNew == true ) ? 'checked' : '');
+  let newHtml = `
+  <li class="ui-state-default" layer-name="${title}" id="${title}" >
+  <span class="server-name">${title}</span>
+  <input class="chkbx-layer" type="checkbox" ${check_var}>
+  <button type="button" id="${title}_${group_name}_reload" class="btn btn-dark btn-sm">
+   <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+  </button>
+  <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
+   <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
 
+  </button>
+  <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariablesTable"> <span class=" glyphicon glyphicon-list-alt"></span>
+  </button>
+
+  <button type="button" id="${title}_variables_info" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalHydroserInformation">
+   <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+  </button>
+  </li>
+  `;
+  return newHtml
 
 }
 function toDegreesMinutesAndSeconds(coordinate) {
@@ -513,4 +573,31 @@ function toDegreesMinutesAndSeconds(coordinate) {
     var seconds = Math.floor((minutesNotTruncated - minutes) * 60);
 
     return degrees + "°" + minutes + "'" + seconds + "''";
+}
+getIconLegend = function(style,server) {
+  style = style.getImage();
+  var radius = style.getRadius();
+  var strokeWidth = style.getStroke().getWidth();
+  var dx = radius + strokeWidth;
+
+  var svgElem = $('<svg/>')
+  .attr({
+    class: 'svgs_legend',
+    width: 11,
+    height: 11
+  });
+  $('<circle />')
+  .attr({
+    cx: 5,
+    cy: 5,
+    r: 5,
+    stroke: style.getStroke().getColor(),
+    'stroke-width': strokeWidth,
+    fill: style.getFill().getColor()
+  })
+  .appendTo(svgElem);
+
+
+  // Convert DOM object to string to overcome from some SVG manipulation related oddities
+  return $('<div>').append(svgElem).html();
 }

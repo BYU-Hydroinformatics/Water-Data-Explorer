@@ -67,7 +67,7 @@ class WaterDataExplorer(TethysAppBase):
                    url='get-values-hs',
                    controller='water_data_explorer.sites.get_values_hs'),
             ## Get the variables of a hydroserver
-            UrlMap(name='get-values-hs',
+            UrlMap(name='get-values-graph-hs',
                    url='get-values-graph-hs',
                    controller='water_data_explorer.sites.get_values_graph_hs'),
             ## Get the values of a hydroserver
@@ -85,13 +85,29 @@ class WaterDataExplorer(TethysAppBase):
             UrlMap(name='available-services',
                    url='available-services',
                    controller='water_data_explorer.groups.available_services'),
+
             UrlMap(name='available-variables',
                    url='available-variables',
                    controller='water_data_explorer.groups.available_variables'),
+
             UrlMap(name='available-regions',
                    url='available-regions',
                    controller='water_data_explorer.groups.available_regions'),
 
+            UrlMap(name='catalog-filter',
+                   url='catalog-filter',
+                   controller='water_data_explorer.groups.catalog_filter'),
+
+            UrlMap(name='get-variables-for-country',
+                   url='get-variables-for-country',
+                   controller='water_data_explorer.groups.get_variables_for_country'),
+            UrlMap(name='get-download-hs',
+                   url='get-download-hs',
+                   controller='water_data_explorer.endpoints.get_download_hs'),
+            ## Get the variables of a hydroserver
+            UrlMap(name='get-xml',
+                   url='get-xml',
+                   controller='water_data_explorer.sites.get_xml'),
         )
 
         return url_maps
@@ -123,54 +139,6 @@ class WaterDataExplorer(TethysAppBase):
 
     def custom_settings(self):
         custom_settings = (
-            # CustomSetting(
-            #     name='Hydroserver Group',
-            #     type = CustomSetting.TYPE_STRING,
-            #     description='name of the group that will contain the hydroservers',
-            #     required = True
-            # ),
-            # CustomSetting(
-            #     name='Hydroserver Group Description',
-            #     type = CustomSetting.TYPE_STRING,
-            #     description='Description of the group that will contain the hydroserver',
-            #     required = True
-            # ),
-            # CustomSetting(
-            #     name='Hydroserver Name # 1',
-            #     type = CustomSetting.TYPE_STRING,
-            #     description='Hydroserver # 1 Name',
-            #     required = True
-            # ),
-            # CustomSetting(
-            #     name='Hydroserver Endpoint # 1',
-            #     type = CustomSetting.TYPE_STRING,
-            #     description='Hydroserver WSDL Endpoint (e.g. http://hydroportal.cuahsi.org/cedarriver/cuahsi_1_1.asmx?WSDL)',
-            #     required = True
-            # ),
-            # CustomSetting(
-            #     name='Hydroserver Name # 2',
-            #     type = CustomSetting.TYPE_STRING,
-            #     description='Hydroserver # 2 Name',
-            #     required = True
-            # ),
-            # CustomSetting(
-            #     name='Hydroserver Endpoint # 2',
-            #     type = CustomSetting.TYPE_STRING,
-            #     description='Hydroserver WSDL Endpoint (e.g. http://hydroportal.cuahsi.org/cedarriver/cuahsi_1_1.asmx?WSDL)',
-            #     required = True
-            # ),
-            # CustomSetting(
-            #     name='Hydroserver Name # 3',
-            #     type = CustomSetting.TYPE_STRING,
-            #     description='Hydroserver # 3 Name',
-            #     required = True
-            # ),
-            # CustomSetting(
-            #     name='Hydroserver Endpoint # 3',
-            #     type = CustomSetting.TYPE_STRING,
-            #     description='Hydroserver WSDL Endpoint (e.g. http://hydroportal.cuahsi.org/cedarriver/cuahsi_1_1.asmx?WSDL)',
-            #     required = True
-            # ),
 
             CustomSetting(
                 name='Views Names',

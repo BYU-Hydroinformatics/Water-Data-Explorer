@@ -14,13 +14,12 @@ from django.conf import settings
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData
 from sqlalchemy.orm import mapper
-from .model import Base, Catalog, HISCatalog, Groups, HydroServer_Individual
+from .model import Base, Groups, HydroServer_Individual
 
 
 from tethys_sdk.gizmos import TimeSeries, SelectInput, DatePicker, TextInput, GoogleMapView
 from tethys_sdk.permissions import permission_required, has_permission
 
-from .model import Catalog, HISCatalog
 from .auxiliary import *
 
 import xml.etree.ElementTree as ET
@@ -47,8 +46,7 @@ def home(request):
     Controller for the app home page.
     """
     can_define_boundary = has_permission(request, 'block_map')
-    print("entering the home function")
-    # if can_define_boundary:
+
     boundaryEndpoint = app.get_custom_setting('Boundary Geoserver Endpoint')
     boundaryWorkspace = app.get_custom_setting('Boundary Workspace Name')
     boundaryLayer = app.get_custom_setting('Boundary Layer Name')
@@ -56,9 +54,7 @@ def home(request):
     boundaryColor = app.get_custom_setting('Boundary Color')
     boundaryWidth = app.get_custom_setting('Boundary Width')
     nameViews = app.get_custom_setting('Views Names')
-    print(nameViews)
-    print(boundaryEndpoint)
-    print(type(boundaryEndpoint))
+
     context = {
      "geoEndpoint": boundaryEndpoint,
      "geoWorkspace": boundaryWorkspace,
@@ -70,10 +66,5 @@ def home(request):
      'can_block_map': has_permission(request, 'block_map'),
      'views_names': nameViews
     }
-    # else:
-    #     context = {
-    #      'can_delete_hydrogroups': has_permission(request, 'delete_hydrogroups'),
-    #      'can_block_map': has_permission(request, 'block_map')
-    #     }
-    # context = {}
+
     return render(request, 'water_data_explorer/home.html', context)
