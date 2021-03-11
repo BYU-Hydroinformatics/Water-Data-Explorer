@@ -623,11 +623,7 @@ input[type=checkbox], input[type=radio]{
   padding: 0.5em;
   background-color: rgba(255,255,255,0.5);
 }
-#downloads_buttons{
-  display:flex;
-  justify-content: end;
-  width: 100%;
-}
+
 #btn-download-waterml, #btn-download-csv{
   margin: 0.1em;
 }
