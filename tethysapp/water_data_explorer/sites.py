@@ -16,13 +16,12 @@ from django.conf import settings
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData
 from sqlalchemy.orm import mapper
-from .model import Base, Catalog, HISCatalog, Groups, HydroServer_Individual
+from .model import Base, Groups, HydroServer_Individual
 
 
 from tethys_sdk.gizmos import TimeSeries, SelectInput, DatePicker, TextInput, GoogleMapView
 from tethys_sdk.permissions import permission_required, has_permission
 
-from .model import Catalog, HISCatalog
 from .auxiliary import *
 
 import xml.etree.ElementTree as ET
@@ -184,30 +183,15 @@ def get_values_graph_hs(request):
     # print("inside the get_values_graph_hs")
     list_catalog={}
     return_obj={}
-    # print("Inside the get_values_graphs function")
-    # print(request)
-
     hs_url = request.GET.get('hs_url')
-    # print(hs_url)
-
     site_code =  request.GET.get('code')
-    # print(site_code)
     network = request.GET.get('network')
-    # variable_text = request.GET.get('variable')
     code_variable =request.GET.get ('code_variable')
     dates_request = request.GET.getlist('timeFrame[]')
-    # print(dates_request)
     start_date = dates_request[0]
     end_date = dates_request[1];
-    # actual_methodsID = request.GET.get('actual_method')
-
     variable_desc = network + ':' + code_variable
-    # print(variable_desc)
     site_desc = network + ':' + site_code
-    # print(site_desc)
-    # print("printing methodsIDS")
-    # print(actual_methodsID)
-    # print(request.GET)
     water = pwml.WaterMLOperations(url = hs_url)
     values = water.GetValues(site_desc, variable_desc, start_date, end_date)
     df = pd.DataFrame.from_dict(values['values'])
@@ -226,17 +210,13 @@ def get_values_graph_hs(request):
     time_series_timeUTC = df['dateTime'].tolist()
     return_obj['graphs'] = list(zip(time_series_timeUTC,time_series_vals))
     return_obj['interpolation'] = water.GetInterpolation(values)
-
-    # return_obj['waterml'] = water.GetValues(site_desc, variable_desc, start_date, end_date, format='waterml')
     return_obj['unit_name'] = unit_name
     return_obj['variablename'] = variable_name
     return_obj['timeUnitName'] = time_unit_name
-    # print("done with get_values_graph_hs")
 
     return JsonResponse(return_obj)
 
 def get_xml(request):
-    # print("inside the get_values_graph_hs")
     list_catalog={}
     return_obj={}
 
@@ -251,7 +231,6 @@ def get_xml(request):
     end_date = dates_request[1];
 
     variable_desc = network + ':' + code_variable
-    # print(variable_desc)
     site_desc = network + ':' + site_code
 
     water = pwml.WaterMLOperations(url = hs_url)

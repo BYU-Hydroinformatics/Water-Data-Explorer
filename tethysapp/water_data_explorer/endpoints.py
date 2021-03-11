@@ -16,13 +16,12 @@ from django.conf import settings
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData,update
 from sqlalchemy.orm import mapper
-from .model import Base, Catalog, HISCatalog, Groups, HydroServer_Individual
+from .model import Base, Groups, HydroServer_Individual
 
 
 from tethys_sdk.gizmos import TimeSeries, SelectInput, DatePicker, TextInput, GoogleMapView
 from tethys_sdk.permissions import permission_required, has_permission
 
-from .model import Catalog, HISCatalog
 from .auxiliary import *
 
 import xml.etree.ElementTree as ET
@@ -109,52 +108,6 @@ def get_variables_hs(request):
                 keywords_abbr_unit.append(kyword['unitAbbreviation'])
                 key_timeSupport.append(kyword['timeSupport'])
                 timeUnitName.append(kyword['timeUnitAbbreviation'])
-
-
-    # variableName: Name of the variable
-    #
-    # unitName: Name of the units of the values associated to the given variable and site
-    #
-    # unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
-    #
-    # noDataValue: value associated to lack of data.
-    #
-    # isRegular: Boolean to indicate whether the observation measurements and collections regular
-    #
-    # timeSupport: Boolean to indicate whether the values support time
-    #
-    # timeUnitName: Time Units associated to the observation
-    #
-    # timeUnitAbbreviation: Time units abbreviation
-    #
-    # sampleMedium: the sample medium, for example water, atmosphere, soil.
-    #
-    # speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
-
-            # keywords_dict = xmltodict.parse(keywords)
-            # keywords_dict_object = json.dumps(keywords_dict)
-            #
-            # keywords_json = json.loads(keywords_dict_object)
-            # # Parsing the sites and creating a sites object. See utilities.py
-            # print("-------------------------------------")
-            # # print(sites_json)
-            # print(type(keywords_json))
-            # print(keywords_dict.keys())
-            # # print(keywords_json['variablesResponse']['variables']['variable'])
-            # array_variables=keywords_json['variablesResponse']['variables']['variable']
-            # array_keywords_hydroserver=[]
-            # print(type(array_variables))
-            #
-            # if isinstance(array_variables,type([])):
-            #     # print("inside the list iption")
-            #     for words in array_variables:
-            #         array_keywords_hydroserver.append(words['variableName'])
-            #
-            # if isinstance(array_variables,dict):
-            #     array_keywords_hydroserver.append(array_variables['variableName'])
-
-
-            # variables_show = array_keywords_hydroserver
             variables_show = keywords
 
     list_catalog["variables_code"] = variables_show
@@ -169,41 +122,25 @@ def get_variables_hs(request):
     return JsonResponse(list_catalog)
 
 def get_available_sites(request):
-    # print("Catalog_group function in controllers.py")
-    # print("--------------------------------------------------------------------")
-    #print("get_available_sites Function")
-
     if request.method=='GET':
         specific_group=request.GET.get('group')
         specific_hydroserver = request.GET.get('hs')
         specific_variables = request.GET.getlist('variables[]')
         safety_check_limit = len(specific_variables)
         safety_check_intial = 0
-        # print("this is the specific varibales in the beginnign")
-        # print(specific_variables)
-        # print(request.GET)
-        # print(specific_group)
-        # print(request.GET)
         list_catalog = {}
         return_obj={}
-
-        # print("catalogs_groups controllers.py FUNCTION inside")
-
         SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
 
-        # print(SessionMaker)
         session = SessionMaker()  # Initiate a session
         hydroservers_group = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
         h1=session.query(Groups).join("hydroserver")
         hs_list = []
-        # for hydroservers in hydroservers_group:
 
         for hydroservers in hydroservers_group:
             if hydroservers.title ==specific_hydroserver:
-                # print("PRESENTE GROUP")
                 water = pwml.WaterMLOperations(url = hydroservers.url.strip())
                 sites = json.loads(hydroservers.siteinfo)
-                # print(type(sites))
                 sitesFiltered = water.GetSitesByVariable(specific_variables)['sites']
                 hs_list = sitesFiltered
                 # print(hs_list)
@@ -443,15 +380,11 @@ def get_available_sites(request):
             # list_catalog["hydroserver"] = hs_list
     list_catalog["hydroserver"] = hs_list
 
-    # else:
-        # list_catalog["hydrosever"] = []
-    #print("Finished the get_available_sites")
     return JsonResponse(list_catalog)
 
 def get_hydroserver_info(request):
     specific_group = request.GET.get('group')
     specific_hs = request.GET.get('hs')
-    #(specific_group, specific_hs)
     response_obj = {}
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()  # Initiate a session
@@ -531,19 +464,14 @@ def upload_hs(request):
 ######**ADD A HYDROSERVER TO THE SELECTED GROUP OF HYDROSERVERS THAT WERE CREATED BY THE USER *################
 ######*****************************************************************************************################
 def soap_group(request):
-    logging.basicConfig(level=logging.INFO)
-    logging.getLogger('suds.client').setLevel(logging.DEBUG)
-    # logging.getLogger('zeep.client').setLevel(logging.DEBUG)
-    #print("inside SOAP function")
+    # logging.basicConfig(level=logging.INFO)
+    # logging.getLogger('suds.client').setLevel(logging.DEBUG)
     return_obj = {}
     if request.is_ajax() and request.method == 'POST':
-        #print("inside first if statement of SOAP function")
         url = request.POST.get('soap-url')
-        #print(url)
         title = request.POST.get('soap-title')
         title = title.replace(" ", "")
         title = title.translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
-        #print(title)
         group = request.POST.get('actual-group')
         #print(group)
         description = request.POST.get('textarea')
@@ -562,7 +490,6 @@ def soap_group(request):
         # some of the bigger HydroServers.
         if true_extent == 'on':
             extent_value = request.POST['extent_val']
-            #print("Extent",extent_value)
             return_obj['zoom'] = 'true'
             return_obj['level'] = extent_value
             ext_list = extent_value.split(',')
@@ -573,7 +500,6 @@ def soap_group(request):
             return_obj['url'] = url
             return_obj['description'] = description
 
-            # return_obj['siteInfo'] = sites_parsed_json
             return_obj['siteInfo'] = sitesByBoundingBox
             return_obj['group']= group
             return_obj['status'] = "true"
@@ -583,9 +509,6 @@ def soap_group(request):
             session = SessionMaker()
             hydroservers_group = session.query(Groups).filter(Groups.title == group)[0]
             # hydroservers_g = session.query(Groups).filter(Groups.title == group)
-            #print(hydroservers_group.title)
-            #print(hydroservers_group.description)
-
             hs_one = HydroServer_Individual(title=title,
                              url=url,
                              description = description,
@@ -593,7 +516,6 @@ def soap_group(request):
                              # siteinfo=sitesByBoundingBoxs)
 
             hydroservers_group.hydroserver.append(hs_one)
-            #print(hydroservers_group.hydroserver)
             session.add(hydroservers_group)
             session.commit()
             session.close()
@@ -601,7 +523,6 @@ def soap_group(request):
         else:
 
             return_obj['zoom'] = 'false'
-            # try:
             sites = water.GetSites()
 
             sites_parsed_json = json.dumps(sites)
@@ -611,23 +532,13 @@ def soap_group(request):
             return_obj['url'] = url
             return_obj['description'] = description
             return_obj['siteInfo'] = sites
-            # return_obj['siteInfo'] = sites_parsed_json
             return_obj['group'] = group
             return_obj['status'] = "true"
-            # print("this is the return on=bject")
-            # print(return_obj)
             SessionMaker = app.get_persistent_store_database(
                 Persistent_Store_Name, as_sessionmaker=True)
             session = SessionMaker()
-            # hydroservers_groups = session.query(Groups).all()
-            # for hydro_group in hydroservers_groups:
-            #     if hydro_group.title ==group:
-            #         print(hydro_group)
-            # print(hydroservers_group)
             hydroservers_group = session.query(Groups).filter(Groups.title == group)[0]
-            # hydroservers_g = session.query(Groups).filter(Groups.title == group)
-            # print(hydroservers_group.title)
-            # print(hydroservers_group.description)
+
 
             hs_one = HydroServer_Individual(title=title,
                              url=url,
@@ -635,7 +546,6 @@ def soap_group(request):
                              siteinfo=sites_parsed_json)
 
             hydroservers_group.hydroserver.append(hs_one)
-            # print(hydroservers_group.hydroserver)
             session.add(hydroservers_group)
             session.commit()
             session.close()
@@ -645,42 +555,25 @@ def soap_group(request):
             'message'] = 'This request can only be made through a "POST" AJAX call.'
 
     return JsonResponse(return_obj)
+
 ######*****************************************************************************************################
 ############################## DELETE THE HYDROSERVER OF AN SPECIFIC GROUP ####################################
 ######*****************************************************************************************################
 def delete_group_hydroserver(request):
-    #print("delete_group_hydroserver_function in controllers.py")
     list_catalog = {}
-    #print("--------------------------------------------")
     SessionMaker = app.get_persistent_store_database(
         Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
 
     # Query DB for hydroservers
-    #print(request.POST)
     if request.is_ajax() and request.method == 'POST':
-        #print(type(request.POST))
-        #print(request.POST.getlist('server'))
         titles=request.POST.getlist('server')
         group = request.POST.get('actual-group')
 
-        #print(type(titles))
         # title = request.POST['server']
         i=0;
         hydroservers_group = session.query(Groups).filter(Groups.title == group)[0].hydroserver
 
-        # for title in titles:
-        #     hydroservers = session.query(Catalog).filter(Catalog.title == title).delete(
-        #         synchronize_session='evaluate')  # Deleting the record from the local catalog
-        #     session.commit()
-        #     session.close()
-        #
-        #     # Returning the deleted title. To let the user know that the particular
-        #     # title is deleted.
-        #     i_string=str(i);
-        #     # list["title"] = title
-        #     list[i_string] = title
-        #     i=i+1
         for title in titles:
             hydroservers_group = session.query(HydroServer_Individual).filter(HydroServer_Individual.title == title).delete(
                 synchronize_session='evaluate')  # Deleting the record from the local catalog

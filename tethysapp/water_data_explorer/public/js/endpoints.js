@@ -1,7 +1,6 @@
 get_vars_from_site = function (resultList){
   let indexs= $("#site_choose")['0'].value;
 
-  // console.log(indexs)
   request_obj = {}
   request_obj['hs_url'] = $("#url_WOF").text()
   request_obj['network'] = resultList[indexs]['network']
@@ -14,7 +13,6 @@ get_vars_from_site = function (resultList){
       dataType: "JSON",
       data: request_obj,
       success: function(result){
-        // console.log(result)
         if (result['variables'].length > 0){
           let variables_ = result['variables'];
           for(let i=0; i< variables_.length; ++i){
@@ -23,12 +21,10 @@ get_vars_from_site = function (resultList){
           }
           var_select.selectpicker("refresh");
           let reque_ob = {}
-          // console.log($("#site_choose")['0'])
           reque_ob['hs_name'] = $("#site_choose option:selected").html();
           reque_ob['hs_url'] = request_obj['hs_url'];
           reque_ob['site_hs'] = indexs
           reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
-          // console.log(reque_ob)
           $("#btn-add-download").on("click", function(){
             $("#downloading_loading").removeClass("hidden");
             $.ajax({
@@ -37,8 +33,6 @@ get_vars_from_site = function (resultList){
               dataType: "JSON",
               data: reque_ob,
               success: function(result2){
-                // console.log(result2);
-                // var name_together = reque_ob['hs_name'].replace(/[^\w\s]/gi, '_')
                 var name_together =reque_ob['hs_name'].replace(/(?!\w|\s)./g, '_').replace(/\s+/g, '_').replace(/^(\s*)([\W\w]*)(\b\s*$)/g, '$2');
                 var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(result2));
                 var downloadAnchorNode = document.createElement('a');
@@ -177,17 +171,11 @@ map_layers = function(sites,title,url){
 
 }
 
-
-
-
-
 /*
 ****** FU1NCTION NAME : load_individual_hydroservers_group*********
 ****** FUNCTION PURPOSE: LOADS THE SERVERS OF A HYDROSERVER WHEN THE HYDROSERVER GROUPS IS CLICKED*********
 */
   load_individual_hydroservers_group = function(group_name){
-     // let servers_with_keywords = [];
-     // let key_words_to_search = get_all_the_checked_keywords();
      let group_name_obj={
        group: group_name
      };
@@ -206,13 +194,7 @@ map_layers = function(sites,title,url){
              dataType: "JSON",
              data: group_name_obj,
              success: result => {
-                 //// console.log(result);
                  let servers = result["hydroserver"]
-                 // //// console.log("this are the servers");
-                 // //// console.log(servers);
-
-
-                 // $("#current-servers").empty() //Resetting the catalog
 
                  //USE A FUNCTION TO FIND THE LI ASSOCIATED WITH THAT GROUP  AND DELETE IT FROM THE MAP AND MAKE ALL
                  // THE CHECKBOXES VISIBLE //
@@ -231,7 +213,6 @@ map_layers = function(sites,title,url){
                  }
 
                  servers.forEach(function(server){
-                   // console.log(server)
                      let {
                          title,
                          url,
@@ -241,17 +222,8 @@ map_layers = function(sites,title,url){
 
                      title = title.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
 
-                     // title = title.replace(/ /g,"-");
-
-                     // if(keywords_in_servers.includes(title) || key_words_to_search.length == 0){
-                       // //console.log(keywords_in_servers.includes(title));
                        let newHtml = html_for_servers(title,group_name);
-                       // $(newHtml).appendTo("#current-servers")
                        $(newHtml).appendTo(`#${id_group_separator}`);
-                       //console.log($(newHtml));
-                       // $(`#${group_name}_${title}_del_endpoint`).on("click", function(){
-                       //     delete_hydroserver_Individual(group_name, title)
-                       // });
 
                        $(`#${title}_variables`).on("click",showVariables2);
                        $(`#${title}_variables_info`).on("click",hydroserver_information);
@@ -269,9 +241,7 @@ map_layers = function(sites,title,url){
                          let check_box = this;
                          map.getLayers().forEach(function(layer) {
                            if(layer_object_filter.hasOwnProperty(title) == false){
-                             // console.log("false")
                              if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                               // console.log(this)
                                if(check_box.checked){
 
                                  layer.setStyle(featureStyle(layerColorDict[title]));
@@ -286,7 +256,6 @@ map_layers = function(sites,title,url){
                              }
                            }
                            else{
-                             // console.log("true")
                              if(layer instanceof ol.layer.Vector && layer == layer_object_filter[title]){
                                if(check_box.checked){
 
@@ -309,10 +278,8 @@ map_layers = function(sites,title,url){
                        if (typeof(sites) == "string"){
                          sites = JSON.parse(siteInfo);
                        }
-                       // console.log(sites.length)
                        var vectorLayer = map_layers(sites,title,url)[0]
                        var vectorSource = map_layers(sites,title,url)[1]
-                       //console.log(style_custom)
 
                        let test_style = new ol.style.Style({
                          image: new ol.style.Circle({
@@ -325,7 +292,6 @@ map_layers = function(sites,title,url){
                            }),
                          })
                        });
-                       // getIconLegend(test_style,title);
                        let rowHTML= `<tr id= ${title}-row-complete>
                                       <th id="${title}-row-legend"></th>
                                       <th>${title}</th>
@@ -334,25 +300,11 @@ map_layers = function(sites,title,url){
                         $(rowHTML).appendTo('#tableLegend');
                       }
                       $(`#${title}-row-legend`).prepend($(getIconLegend(test_style,title)));
-                      // $('#legendSymbol').prepend($(getIconLegend(test_style,title)));
 
-
-                       // $('#legendText').prepend(`<p>${title}</p>`);
-
-                       // const vectorLayer = new ol.layer.Vector({
-                       //     source: vectorSource,
-                       //     style: featureStyle()
-                       // })
 
                        map.addLayer(vectorLayer);
-                       // map.addLayer(vectorLayer2);
                        vectorLayer.setStyle(new ol.style.Style({}));
-                       // ext = ol.proj.transformExtent(vectorSource.getExtent(), ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));
-                       // layersDictExt[title] = ext;
 
-                       // //console.log(ext)
-
-                       // ol.extent.extend(extent, vectorSource.getExtent())
 
                        vectorLayer.set("selectable", true)
 
@@ -363,30 +315,19 @@ map_layers = function(sites,title,url){
                          map.getLayers().forEach(function(layer) {
                            if (!(title in layer_object_filter)){
                              if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                               //console.log(layer)
                                layer.setStyle(featureStyle(layerColorDict[title]));
                              }
                            }
                            else{
                              if(layer instanceof ol.layer.Vector && layer == layer_object_filter[title]){
-                               //console.log(layer)
                                layer.setStyle(featureStyle(layerColorDict[title]));
                              }
                            }
 
-
-
-                              // if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                              //   //console.log(layer)
-                              //   layer.setStyle(featureStyle(layerColorDict[title]));
-                              // }
                           });
                          input_check.checked = true;
                        });
-                   // }
                  })
-
-
 
              },
              error: function(error) {
@@ -404,12 +345,6 @@ map_layers = function(sites,title,url){
              }
          })
          $("#GeneralLoading").addClass("hidden");
-
-       // },
-
-
-     // })
-
    };
 
 
@@ -430,7 +365,6 @@ add_hydroserver = function(){
     }
     $('#chk_val').empty()
     var level=map.getView().calculateExtent(map.getSize())
-    //console.log("LEVELMAP"+ level)
     $(
           '<input type="text" name="extent_val" id="extent_val" value=' +
               '"' +
@@ -458,8 +392,6 @@ add_hydroserver = function(){
         $modalAddSOAP.find(".warning").html("")
     }
     if ($("#soap-title").val() != "") {
-      // var regex = new RegExp("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
-      // var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9_]+$")
       var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9]+$")
 
       var title = $("#soap-title").val()
@@ -475,10 +407,6 @@ add_hydroserver = function(){
     var datastring = $modalAddSOAP.serialize();
     datastring += actual_group;
 
-
-    //console.log("This is the serialize string of datastring");
-    //console.log(datastring);
-    //Submitting the data to the controller
     $("#soapAddLoading").removeClass("hidden");
 
 
@@ -491,7 +419,6 @@ add_hydroserver = function(){
 
             //Returning the geoserver layer metadata from the controller
             var json_response = JSON.parse(result)
-            //console.log(json_response);
             let group_name = actual_group.split('=')[1];
             let id_group_separator = `${group_name}_list_separator`;
 
@@ -506,7 +433,6 @@ add_hydroserver = function(){
 
                   $(`#${group_name}-noGroups`).hide();
 
-                  //console.log(group_name_obj);
                     let {title, siteInfo, url, group} = json_response
 
 
@@ -517,7 +443,6 @@ add_hydroserver = function(){
                       }
                       var vectorLayer = map_layers(sites,title,url)[0]
                       var vectorSource = map_layers(sites,title,url)[1]
-                      //console.log(style_custom)
 
                       let test_style = new ol.style.Style({
                         image: new ol.style.Circle({
@@ -530,7 +455,6 @@ add_hydroserver = function(){
                           }),
                         })
                       });
-                      // getIconLegend(test_style,title);
                       let rowHTML= `<tr id= ${title}-row-complete>
                                      <th id="${title}-row-legend"></th>
                                      <th>${title}</th>
@@ -542,7 +466,6 @@ add_hydroserver = function(){
 
 
                       map.addLayer(vectorLayer);
-                      // vectorLayer.setStyle(new ol.style.Style({}));
 
                       vectorLayer.set("selectable", true)
                       map.getView().fit(vectorSource.getExtent());
@@ -551,33 +474,22 @@ add_hydroserver = function(){
 
 
                         let no_servers_tag = Array.from(document.getElementById(`${id_group_separator}`).getElementsByTagName("P"))[0];
-                        //console.log(no_servers_tag);
                         let newHtml = html_for_servers(title,group_name)
-                         // $(newHtml).appendTo("#current-servers")
                          $(newHtml).appendTo(`#${id_group_separator}`);
-                         //console.log($(newHtml));
                          $(`#${title}_variables`).on("click",showVariables2);
                          $(`#${title}_variables_info`).on("click",hydroserver_information);
                          $(`#${title}_${group_name}_reload`).on("click",update_hydroserver);
 
-                        // document.getElementById(`${title}`).style.visibility = "hidden";
-
-
                         // MAKES THE LAYER INVISIBLE
 
                         let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
-                        //console.log(lis);
                         let li_arrays = Array.from(lis);
-                        //console.log(li_arrays);
-                        // let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0];
                         let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
 
-                        //console.log(input_check);
                         input_check.addEventListener("change", function(){
                           if(this.checked){
                             map.getLayers().forEach(function(layer) {
                                  if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                   //console.log(layer)
                                    layer.setStyle(featureStyle(layerColorDict[title]));
                                  }
                              });
@@ -585,7 +497,6 @@ add_hydroserver = function(){
                           else{
                             map.getLayers().forEach(function(layer) {
                                  if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                   //console.log(layer)
                                    layer.setStyle(new ol.style.Style({}));
                                    if(layersDict['selectedPoint']){
                                      map.removeLayer(layersDict['selectedPoint'])
@@ -603,22 +514,15 @@ add_hydroserver = function(){
                           map.getLayers().forEach(function(layer) {
                             if (!(title in layer_object_filter)){
                               if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                //console.log(layer)
                                 layer.setStyle(featureStyle(layerColorDict[title]));
                               }
                             }
                             else{
                               if(layer instanceof ol.layer.Vector && layer == layer_object_filter[title]){
-                                //console.log(layer)
                                 layer.setStyle(featureStyle(layerColorDict[title]));
                               }
                             }
 
-                               // if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                               //   //console.log(layer)
-                               //   layer.setStyle(featureStyle(layerColorDict[title]));
-                               //
-                               // }
                            });
                           input_check.checked = true;
 
@@ -660,11 +564,6 @@ add_hydroserver = function(){
                           }
                       )
                     }
-
-
-              // }
-
-
         },
         error: function(error) {
             $("#soapAddLoading").addClass("hidden")
@@ -706,9 +605,7 @@ delete_hydroserver= function(){
         data: datastring,
         dataType: "HTML",
         success: function(result) {
-            //console.log(result);
             var json_response = JSON.parse(result)
-            //console.log(json_response);
             $("#modalDelete").modal("hide")
             $("#modalDelete").each(function() {
                 this.reset()
@@ -723,12 +620,10 @@ delete_hydroserver= function(){
 
               let element = document.getElementById(title);
               element.parentNode.removeChild(element);
-              //Removing layer from the frontend
-              //console.log(title);
+
               map.removeLayer(layersDict[title])
               delete layersDict[title]
               map.updateSize()
-              //console.log(arrayActual_group);
 
               let id_group_separator = `${actual_group.split('=')[1]}_list_separator`;
               let separator_element = document.getElementById(id_group_separator);
@@ -758,7 +653,6 @@ delete_hydroserver= function(){
 
         },
         error: error => {
-            //console.log(error);
             $.notify(
                 {
                     message: `Something were wrong while deleting a hydroserver or group of hydroservers!`
@@ -782,16 +676,13 @@ $("#btn-del-server").on("click", delete_hydroserver)
 delete_hydroserver_Individual= function(group,server){
 
     var datastring = `server=${server}&actual-group=${group}`
-    //console.log(datastring);
     $.ajax({
         type: "POST",
         url: `delete-group-hydroserver/`,
         data: datastring,
         dataType: "HTML",
         success: function(result) {
-            //console.log(result);
             var json_response = JSON.parse(result)
-            //console.log(json_response);
 
             for(let i=0; i<Object.keys(json_response).length; ++i){
 
@@ -801,24 +692,14 @@ delete_hydroserver_Individual= function(group,server){
               console.log(title)
               let element = document.getElementById(title);
               element.parentNode.removeChild(element);
-              //Removing layer from the frontend
-              //console.log(title);
               map.removeLayer(layersDict[title])
               delete layersDict[title]
               map.updateSize()
-              //console.log(group);
-              // load_individual_hydroservers_group(arrayActual_group) //Reloading the new catalog
-              // get_notification("sucess",`Successfully Deleted the HydroServer!`);
-
-
-
               $(`#${title}-row-complete`).remove();
 
               let id_group_separator = `${group}_list_separator`;
               let separator_element = document.getElementById(id_group_separator);
-              //console.log(separator_element);
               let children_element = Array.from(separator_element.children);
-              //console.log(children_element);
               if(children_element.length < 1){
                 let no_servers = `<button class="btn btn-danger btn-block noGroups"> The group does not have hydroservers</button>`
                     $(no_servers).appendTo(`#${id_group_separator}`) ;
@@ -842,8 +723,6 @@ delete_hydroserver_Individual= function(group,server){
 
         },
         error: error => {
-            //console.log(error);
-            // get_notification("danger",`Something were wrong while deleting a hydroserver or group of hydroservers!`);
             $.notify(
                 {
                     message: `Something were wrong while deleting a hydroserver or group of hydroservers!`
@@ -865,20 +744,12 @@ delete_hydroserver_Individual= function(group,server){
 */
 
 showVariables = function(){
-  // Logger.useDefaults({
-  //   defaultLevel: Logger.WARN,
-  //   formatter: function (messages, context) {
-  //     messages.unshift(new Date().toUTCString());
-  //   },
-  // });
- //console.log("ShowVariables");
+
  let groupActual = this.parentElement.parentNode.id.split("_")[0];
  let hsActual = this.id.split("_")[0];
  group_show_actual = groupActual;
  hs_show_actual = hsActual;
- // let requestObject= {};
- // requestObject['group']=groupActual;
- // requestObject['hs']=hsActual;
+
  filterSites['group']=groupActual;
  filterSites['hs']=hsActual;
 
@@ -926,6 +797,7 @@ showVariables2 = function(){
  filterSites['hs']=hsActual;
 
  let $modalVariables = $("#modalShowVariablesTable")
+ $("#variablesLoading2").removeClass("hidden");
  $.ajax({
      type: "GET",
      url: `get-variables-hs`,
@@ -977,8 +849,25 @@ showVariables2 = function(){
              HSTableHtml += "</tbody></table>"
              $modalVariables.find("#hideScroll2").html(HSTableHtml)
          }
+         $("#variablesLoading2").addClass("hidden");
 
+    },
+    error: function(error) {
+      $("#variablesLoading2").addClass("hidden");
+        $.notify(
+            {
+                message: `There is no variables in the ${hsActual} Web Service`
+            },
+            {
+                type: "warning",
+                allow_dismiss: true,
+                z_index: 20000,
+                delay: 5000
+            }
+        )
     }
+
+
   })
 }
 /*
@@ -986,39 +875,25 @@ showVariables2 = function(){
 ****** FUNCTION PURPOSE: SHOW THE SITES THAT HAVE BEEN FILTERED REQURING SPECIFIC VARIABLES*********
 */
 showAvailableSites = function(){
-  // Logger.useDefaults({
-  //   defaultLevel: Logger.WARN,
-  //   formatter: function (messages, context) {
-  //     messages.unshift(new Date().toUTCString());
-  //   },
-  // });
+
  let group = this.baseURI.split("/");
  // ONLY THE KEY WORDS //
  let datastring = Array.from(document.getElementsByClassName("odd gradeX2"));
- // console.log(datastring);
  let hs = datastring[0].offsetParent.id.split("-")[0];
 
- // // console.log(group);
- // console.log(hs);
- // //console.log(datastring);
  let key_words_to_search=[];
  datastring.forEach(function(data){
-   // //console.log(Array.from(data.children));
    Array.from(data.children).forEach(function(column){
      if(Array.from(column.children)[0].checked ==true){
-       // //console.log();
        key_words_to_search.push(Array.from(column.children)[0].value.trim())
      }
    })
  });
- // filter_words = key_words_to_search;
- // console.log(key_words_to_search);
 
  let requestObject = {};
  requestObject['hs'] = filterSites['hs'];
  requestObject['group'] = filterSites['group'];
  requestObject['variables'] = key_words_to_search;
- // console.log(requestObject);
  $("#variablesLoading").removeClass("hidden");
 
  $.ajax({
@@ -1027,39 +902,25 @@ showAvailableSites = function(){
      dataType: "JSON",
      data: requestObject,
      success: result => {
-         // console.log(result);
          let sites = result['hydroserver'];
-         // console.log(sites.length)
-
          let title = filterSites['hs'];
          let url = layersDict[title].values_.source.features[0].values_.features[0].values_.hs_url
-         // // console.log(layersDict[title])
-         // // console.log(url)
-
          const vectorLayer =  map_layers(sites,title,url)[0]
          const vectorSource =  map_layers(sites,title,url)[1]
-         // if(layersDict.hasOwnProperty(requestObject['hs'])){
-         //    map.removeLayer(layersDict[requestObject['hs']])
-         // }
-
          map.getLayers().forEach(function(layer) {
               if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
                   layer.setStyle(new ol.style.Style({}));
                 }
           });
 
-         //// console.log("layer added to map");
          map.addLayer(vectorLayer)
-         // ol.extent.extend(extent, vectorSource.getExtent());
          vectorLayer.set("selectable", true)
          layer_object_filter[title] = vectorLayer;
 
-         //add the reset button ///
          $("#btn-var-reset-server").on("click", function(){
            map.removeLayer(layer_object_filter[title])
            layer_object_filter={};
            if(layersDict.hasOwnProperty(title)){
-             // map.addLayer(layersDict[title]);
              map.getLayers().forEach(function(layer) {
                   if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
                     layer.setStyle(featureStyle(layerColorDict[title]));
@@ -1075,13 +936,9 @@ showAvailableSites = function(){
                                 "border-style":"solid",
                                 "color":"#555555",
                                 "font-weight": "normal"});
-
-           // $(`#${hs}`).css({'color': '#555555','font-weight':'normal'});
-
          })
          $("#variablesLoading").addClass("hidden");
          $("#modalShowVariables").modal("hide")
-         // $(`#${hs}`).css({'color': 'red','font-weight':'bold'});
          $(`#${hs}`).css({"opacity": "1",
                              "border-color": "#ac2925",
                              "border-width": "2px",
@@ -1103,31 +960,12 @@ $(`#btn-var-search-server`).on("click",showAvailableSites);
 
 hydroserver_information = function(){
   let groupActual = this.parentElement.parentNode.id.split("_")[0];
-  // let stringGroups = this.parentElement.parentNode.id.split("_");
-  // let groupActual = ""
-  // for(var i = 0; i < stringGroups.length - 1 ; i++){
-  //   if (i >0){
-  //     groupActual = groupActual +"_"+stringGroups[i]
-  //   }
-  //   else{
-  //     groupActual = groupActual + stringGroups[i]
-  //   }
-  // }
+
   let hsActual = this.id.split("_")[0];
   hsActual = hsActual.replace(/-/g, ' ');
-  // let string_hs = this.id.split("_");
-  // let hsActual = ""
-  // for(var i = 0; i < string_hs.length - 1 ; i++){
-  //   if (i >0){
-  //     hsActual = hsActual +"_"+string_hs[i]
-  //   }
-  //   else{
-  //     hsActual = hsActual + string_hs[i]
-  //   }
-  // }
+
   filterSites['group']=groupActual;
   filterSites['hs']=hsActual;
-  //// console.log(filterSites['hs']);
   $("#hydroserverTitle").html(filterSites['hs']);
   $.ajax({
     type:"GET",
@@ -1136,12 +974,9 @@ hydroserver_information = function(){
     data: filterSites,
     success: function(result1){
       let hs_title = result1['title'].replace(/\s/g, "-");
-      // console.log(result1['title'])
-      // console.log(layersDict)
-      // console.log(hs_title)
+
       setTimeout(function(){
         if(map2 ==undefined){
-          //// console.log("I am undefined");
           map2 = new ol.Map({
                  target: 'map2',
                  layers: [
@@ -1154,13 +989,8 @@ hydroserver_information = function(){
                    zoom: 4
                  })
           });
-          // // console.log(result1['title'])
-          // actualLayerModal = layersDict[`${result1['title']}`]
 
-          // actualLayerModal = layersDict[`${hs_title}`]
           actualLayerModal = layersDict[`${hs_title}`]
-
-          // actualLayerModal.setStyle(featureStyle(layerColorDict[hs_title]));
 
           map2.addLayer(actualLayerModal);
           map2.getView().fit(actualLayerModal.getSource().getExtent());
@@ -1168,10 +998,8 @@ hydroserver_information = function(){
         }
         else{
           map2.removeLayer(actualLayerModal);
-          // actualLayerModal=layersDict[`${result1['title']}`];
 
           actualLayerModal=layersDict[`${hs_title}`];
-          // actualLayerModal.setStyle(featureStyle(layerColorDict[hs_title]));
 
           map2.addLayer(actualLayerModal);
 
@@ -1181,9 +1009,8 @@ hydroserver_information = function(){
 
 
       },400)
-      //
 
-      //// console.log(result1['url']);
+
 
       $("#urlHydroserver").html(result1['url']);
       $("#url_WOF").html($("#urlHydroserver").html());
@@ -1191,7 +1018,6 @@ hydroserver_information = function(){
       site_select.empty();
 
       $("#description_Hydroserver").html(result1['description']);
-      //// console.log(result1);
       var HSTableHtml =
           `<table id="${filterSites['hs']}-info-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
       if (result1['siteInfo'].length === 0) {
@@ -1218,7 +1044,6 @@ hydroserver_information = function(){
              '</tr>'
 
           }
-          // console.log(result1['siteInfo'])
           site_select.selectpicker("refresh");
           $("#site_choose").change(function(){
             get_vars_from_site(result1['siteInfo'])
@@ -1228,8 +1053,6 @@ hydroserver_information = function(){
           HSTableHtml += "</tbody></table>"
           $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml);
           for (var i = 0; i < result1['siteInfo'].length; i++) {
-            //// console.log(i);
-            //// console.log(result1['siteInfo'][i]);
             let lat_modal=result1['siteInfo'][i]['latitude'];
             let lng_modal=result1['siteInfo'][i]['longitude'];
             let coordinate_modal = [lat_modal,lng_modal];
@@ -1301,7 +1124,6 @@ update_hydroserver = function(){
     let hsActual = this.id.split("_")[0];
     let group_name = this.id.split("_")[1]
     let requestObject = {
-      // hs: hsActual
       hs: hsActual,
       group: group_name
     }
@@ -1321,71 +1143,17 @@ update_hydroserver = function(){
         dataType: "JSON",
         data: requestObject,
         success: function(result) {
-            //// console.log(result)
             if(layersDict.hasOwnProperty(hsActual)){
               map.removeLayer(layersDict[hsActual])
             }
-            //Returning the geoserver layer metadata from the controller
-            // var json_response = JSON.parse(result[siteInfo])
-            // //// console.log(json_response);
+
             let {siteInfo,sitesAdded,url} = result
 
-            //// console.log(siteInfo)
-            // if (json_response.status === "true") {
 
                     let sites = siteInfo
                     const vectorLayer = map_layers(sites,hsActual,url)[0]
                     const vectorSource = map_layers(sites,hsActual,url)[1]
 
-                    // //// console.log(extents);
-                    //// console.log(sites);
-                    // sites = sites.map(site => {
-                    //     return {
-                    //         type: "Feature",
-                    //         geometry: {
-                    //             type: "Point",
-                    //             coordinates: ol.proj.transform(
-                    //                 [
-                    //                     parseFloat(site.longitude),
-                    //                     parseFloat(site.latitude)
-                    //                 ],
-                    //                 "EPSG:4326",
-                    //                 "EPSG:3857"
-                    //             )
-                    //         },
-                    //         properties: {
-                    //             name: site.sitename,
-                    //             code: site.sitecode,
-                    //             network: site.network,
-                    //             hs_url: url,
-                    //             hs_name: hsActual,
-                    //             lon: parseFloat(site.longitude),
-                    //             lat: parseFloat(site.latitude)
-                    //         }
-                    //     }
-                    // })
-                    //
-                    // let sitesGeoJSON = {
-                    //     type: "FeatureCollection",
-                    //     crs: {
-                    //         type: "name",
-                    //         properties: {
-                    //             name: "EPSG:3857"
-                    //         }
-                    //     },
-                    //     features: sites
-                    // }
-                    //
-                    // const vectorSource = new ol.source.Vector({
-                    //     features: new ol.format.GeoJSON().readFeatures(
-                    //         sitesGeoJSON
-                    //     )
-                    // })
-                    //
-                    // const vectorLayer = new ol.layer.Vector({
-                    //     source: vectorSource,
-                    //     style: featureStyle()
-                    // })
 
                     map.addLayer(vectorLayer)
                     ol.extent.extend(extent, vectorSource.getExtent())
@@ -1409,14 +1177,10 @@ update_hydroserver = function(){
                           }
                       )
                     $("#GeneralLoading").addClass("hidden");
-
-
-            // }
           },
         error: function(error) {
-            // $("#soapAddLoading").addClass("hidden")
-            // $("#btn-add-soap").show();
-            //console.log(error);
+          $("#GeneralLoading").addClass("hidden");
+
             $.notify(
                 {
                     message: `There was an error realoading the hydroserver.`

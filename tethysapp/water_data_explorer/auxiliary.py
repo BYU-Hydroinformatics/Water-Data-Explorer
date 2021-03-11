@@ -33,7 +33,7 @@ from datetime import *
 from json import dumps
 
 from .app import WaterDataExplorer as app
-from .model import Catalog
+# from .model import Catalog
 
 try:
     from io import StringIO

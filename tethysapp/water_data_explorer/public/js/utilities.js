@@ -199,7 +199,6 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
   $("#graphs").empty();
   let element_map =document.getElementById("map");
     //make the down part visible and also give the design of the model//
-    ////console.log("on");
 
     element_graphs.style.cssText=  "display: flex; flex-direction: row;";
     map.updateSize();
@@ -380,12 +379,6 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
 
   }
 
-  // window.onresize = function() {
-  //     Plotly.relayout('plots', {
-  //         'xaxis.autorange': true,
-  //         'yaxis.autorange': true
-  //     });
-  // };
 }
 function featureStyle(myColor) {
     ////console.log("ahuringa")
@@ -429,11 +422,7 @@ function get_new_color(){
     ////console.log(color_new)
     return color_new
   }
-  // var new_color = colors_unique[0]
-  // colors_used.push(new_color)
-  // colors_unique.shift()
-  // var color_new = colors_unique[Math.floor(Math.random() * colors_unique.length)];
-  // return color_new
+
 }
 
 function html_for_groups(isAdmin, title, id_group_separator){
@@ -590,11 +579,6 @@ getIconLegend = function(style,server) {
   var radius = style.getRadius();
   var strokeWidth = style.getStroke().getWidth();
   var dx = radius + strokeWidth;
-  // var newHtml = `<svg class='svgs_legend' width =11 height=11>
-  //                   <p> ${server}</p>
-  //                   <circle cx=5, cy=5 r=5 stroke=${style.getStroke().getColor()} stroke-width= ${strokeWidth} fill =${style.getFill().getColor()} ></circle>
-  //               </svg>`
-  // $(newHtml).appendTo('#legendText');
 
   var svgElem = $('<svg/>')
   .attr({

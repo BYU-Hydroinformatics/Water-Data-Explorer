@@ -12,7 +12,6 @@
  *****************************************************************************/
  var staticPath = baseStatic;
  var apiServer = "";
- //////console.log(apiServer);
  window.onbeforeunload = null
  var $myGroup = $("#helpGroup")
  $myGroup.on("show.bs.collapse", ".collapse", function() {
@@ -315,9 +314,6 @@ var water_data_explorer_PACKAGE = (function() {
         $(".app-title").html(`Water Data Explorer`)
       }
 
-
-      ////console.log("GIVE_NAME");
-      ////console.log(views_names);
     }
 
 
