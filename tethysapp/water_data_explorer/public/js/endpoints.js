@@ -1138,7 +1138,12 @@ hydroserver_information = function(){
           });
           // // console.log(result1['title'])
           // actualLayerModal = layersDict[`${result1['title']}`]
+
+          // actualLayerModal = layersDict[`${hs_title}`]
           actualLayerModal = layersDict[`${hs_title}`]
+
+          // actualLayerModal.setStyle(featureStyle(layerColorDict[hs_title]));
+
           map2.addLayer(actualLayerModal);
           map2.getView().fit(actualLayerModal.getSource().getExtent());
           map2.updateSize();
@@ -1146,7 +1151,10 @@ hydroserver_information = function(){
         else{
           map2.removeLayer(actualLayerModal);
           // actualLayerModal=layersDict[`${result1['title']}`];
+
           actualLayerModal=layersDict[`${hs_title}`];
+          // actualLayerModal.setStyle(featureStyle(layerColorDict[hs_title]));
+
           map2.addLayer(actualLayerModal);
 
           map2.getView().fit(actualLayerModal.getSource().getExtent());
