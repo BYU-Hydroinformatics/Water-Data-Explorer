@@ -57,7 +57,16 @@ def get_values_hs(request):
     client = Client(hs_url)
     response_info = GetSiteInfo(client,site_desc)['siteInfo']
     df = pd.DataFrame.from_dict(response_info)
-    # print(df)
+    if df.empty:
+        return_obj['country'] = []
+        return_obj['variables'] =[]
+        return_obj['units'] = []
+        return_obj['codes'] = []
+        return_obj['organization'] = []
+        return_obj['times_series'] = []
+        return_obj['geolo'] = []
+        return JsonResponse(return_obj)
+    print(df)
     return_obj['country'] = df['country'].tolist()[0]
     return_obj['variables'] = df['variableName'].tolist()
     return_obj['units'] = df['unitAbbreviation'].tolist()
@@ -381,6 +390,7 @@ def _getSiteInfoHelper(object_siteInfo,object_methods):
 
         try:
             sitePorperty_Info = object_siteInfo['siteProperty']
+            return_obj['country'] = "No Data was Provided"
             if type(sitePorperty_Info) is list:
                 for props in sitePorperty_Info:
                     if props['@name'] == 'Country':
