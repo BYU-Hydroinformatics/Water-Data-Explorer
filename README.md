@@ -1,4 +1,5 @@
-# ![wde_logo](https://drive.google.com/uc?export=view&id=1ACAkrm6PsfdWzXnpMOL4uwfKwbTqqkQZ) Water Data Explorer (WDE)
+# ![image](https://drive.google.com/uc?export=view&id=1ACAkrm6PsfdWzXnpMOL4uwfKwbTqqkQZ) Water Data Explorer (WDE)
+
 [![License (3-Clause BSD)](https://img.shields.io/badge/license-BSD%203--Clause-yellow.svg)](https://github.com/BYU-Hydroinformatics/Water-Data-Explorer/blob/master/LICENSE)
 ## Why Adopting the WDE
 
