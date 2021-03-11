@@ -57,7 +57,7 @@ select_variable_change = function(){
         data: object_request_variable,
         success: function(result1){
           ////console.log(result1);
-          if(result1.graphs !== undefined){
+          if(result1.graphs.length > 0){
             //console.log(result1);
             let time_series_array = result1['graphs'];
             let time_series_array_interpolation = result1['interpolation'];

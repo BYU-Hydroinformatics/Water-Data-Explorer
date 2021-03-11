@@ -211,6 +211,14 @@ def get_values_graph_hs(request):
     water = pwml.WaterMLOperations(url = hs_url)
     values = water.GetValues(site_desc, variable_desc, start_date, end_date)
     df = pd.DataFrame.from_dict(values['values'])
+    if df.empty:
+        return_obj['graphs'] = []
+        return_obj['interpolation'] = []
+        return_obj['unit_name'] = []
+        return_obj['variablename'] = []
+        return_obj['timeUnitName'] = []
+        return JsonResponse(return_obj)
+    
     variable_name = df['variableName'].tolist()[0]
     unit_name = df['unitName'].tolist()[0]
     time_unit_name = df['timeUnitName'].tolist()[0]
