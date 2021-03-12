@@ -293,58 +293,60 @@ def GetSiteInfo(client,site_full_code, format ="json"):
         firstSiteFullSiteCode = sites[0]['fullSiteCode']
         siteInfo = water.GetSiteInfo(firstSiteFullSiteCode)
     """
+    return_array = []
     try:
         site_info_Mc = client.service.GetSiteInfo(site_full_code)
+        print(site_info_Mc)
+        if format is 'waterml':
+            return site_info_Mc
+        site_info_Mc_dict = xmltodict.parse(site_info_Mc)
+        site_info_Mc_json_object = json.dumps(site_info_Mc_dict)
+        site_info_Mc_json = json.loads(site_info_Mc_json_object)
+
+
+        try:
+            object_methods = site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
+            # print(object_methods)
+            object_siteInfo = site_info_Mc_json['sitesResponse']['site']['siteInfo']
+            return_array = []
+            if(isinstance(object_methods,(dict))):
+                return_obj = _getSiteInfoHelper(object_siteInfo,object_methods)
+                return_array.append(return_obj)
+
+            else:
+                for object_method in object_methods:
+                    return_obj = _getSiteInfoHelper(object_siteInfo,object_method)
+                    return_array.append(return_obj)
+            if format is "json":
+                json_response = {
+                    'siteInfo':return_array
+                }
+                return json_response
+            elif format is "csv":
+                df = pd.DataFrame.from_dict(return_array)
+                csv_siteInfo = df.to_csv(index=False)
+                return csv_siteInfo
+            else:
+                return print("the only supported formats are json, csv, and waterml")
+        except KeyError as ke:
+            # print(ke)
+            # print("No series for the site")
+            return_array = []
+            if format is "json":
+                json_response = {
+                    'siteInfo':return_array
+                }
+                return json_response
+            elif format is "csv":
+                df = pd.DataFrame.from_dict(return_array)
+                csv_siteInfo = df.to_csv(index=False)
+                return csv_siteInfo
+            else:
+                return print("the only supported formats are json, csv, and waterml")
     except Exception as error:
+        return return_array
         print(error)
 
-    if format is 'waterml':
-        return site_info_Mc
-    site_info_Mc_dict = xmltodict.parse(site_info_Mc)
-    site_info_Mc_json_object = json.dumps(site_info_Mc_dict)
-    site_info_Mc_json = json.loads(site_info_Mc_json_object)
-
-
-    try:
-        object_methods = site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
-        # print(object_methods)
-        object_siteInfo = site_info_Mc_json['sitesResponse']['site']['siteInfo']
-        return_array = []
-        if(isinstance(object_methods,(dict))):
-            return_obj = _getSiteInfoHelper(object_siteInfo,object_methods)
-            return_array.append(return_obj)
-
-        else:
-            for object_method in object_methods:
-                return_obj = _getSiteInfoHelper(object_siteInfo,object_method)
-                return_array.append(return_obj)
-        if format is "json":
-            json_response = {
-                'siteInfo':return_array
-            }
-            return json_response
-        elif format is "csv":
-            df = pd.DataFrame.from_dict(return_array)
-            csv_siteInfo = df.to_csv(index=False)
-            return csv_siteInfo
-        else:
-            return print("the only supported formats are json, csv, and waterml")
-    except KeyError as ke:
-        # print(ke)
-        # print("No series for the site")
-        return_array = []
-        if format is "json":
-            json_response = {
-                'siteInfo':return_array
-            }
-            return json_response
-        elif format is "csv":
-            df = pd.DataFrame.from_dict(return_array)
-            csv_siteInfo = df.to_csv(index=False)
-            return csv_siteInfo
-        else:
-            return print("the only supported formats are json, csv, and waterml")
-        # return return_array
     return return_array
 
 
