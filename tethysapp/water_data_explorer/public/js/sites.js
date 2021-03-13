@@ -17,6 +17,10 @@ activate_layer_values = function (){
         //you can add a condition on layer to restrict the listener
         if(feature2){
 
+          if(layersDict['selectedPointModal']){
+            map.removeLayer(layersDict['selectedPointModal'])
+            map.updateSize()
+          }
 
           if(layersDict['selectedPoint']){
             map.removeLayer(layersDict['selectedPoint'])
@@ -75,8 +79,8 @@ activate_layer_values = function (){
         data: object_request,
         success: function(result){
           console.log(result);
-          if (result['codes'].length > 0){
-            let description_site = document.getElementById('siteDes')
+          let description_site = document.getElementById('siteDes')
+          if (result.hasOwnProperty('codes')){
             let geolocations = result['geolo'];
             let country_name = result['country'];
             let lats = parseFloat(geolocations['latitude'])
@@ -214,8 +218,11 @@ activate_layer_values = function (){
              $("#GeneralLoading").addClass("hidden")
           }
           else{
-            $("#GeneralLoading").addClass("hidden");
+            console.log(feature_single.values_)
+            description_site.innerHTML =
+              ` <p> <em> Station/Platform Name:</em> ${feature_single.values_['name']}<p>`
 
+            $("#GeneralLoading").addClass("hidden");
             $.notify(
                 {
                     message: `The ${feature_single.values_['name']} site does not contain any variable`

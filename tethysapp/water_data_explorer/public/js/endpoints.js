@@ -17,7 +17,7 @@ get_vars_from_site = function (resultList){
       dataType: "JSON",
       data: request_obj,
       success: function(result){
-        if (result['variables'].length > 0){
+        if (result.hasOwnProperty("variables")){
           let variables_ = result['variables'];
           for(let i=0; i< variables_.length; ++i){
             let option_begin = `<option value=${i}>${variables_[i]} </option>`;
@@ -206,6 +206,10 @@ map_layers = function(sites,title,url){
                                }
                                else{
                                  layer.setStyle(new ol.style.Style({}));
+                                 if(layersDict['selectedPointModal']){
+                                   map.removeLayer(layersDict['selectedPointModal'])
+                                   map.updateSize()
+                                 }
                                  if(layersDict['selectedPoint']){
                                    map.removeLayer(layersDict['selectedPoint'])
                                    map.updateSize()
@@ -221,6 +225,10 @@ map_layers = function(sites,title,url){
                                }
                                else{
                                  layer.setStyle(new ol.style.Style({}));
+                                 if(layersDict['selectedPointModal']){
+                                   map.removeLayer(layersDict['selectedPointModal'])
+                                   map.updateSize()
+                                 }
                                  if(layersDict['selectedPoint']){
                                    map.removeLayer(layersDict['selectedPoint'])
                                    map.updateSize()
@@ -456,6 +464,10 @@ add_hydroserver = function(){
                             map.getLayers().forEach(function(layer) {
                                  if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
                                    layer.setStyle(new ol.style.Style({}));
+                                   if(layersDict['selectedPointModal']){
+                                     map.removeLayer(layersDict['selectedPointModal'])
+                                     map.updateSize();
+                                   }
                                    if(layersDict['selectedPoint']){
                                      map.removeLayer(layersDict['selectedPoint'])
                                      map.updateSize();
@@ -917,11 +929,22 @@ $(`#btn-var-search-server`).on("click",showAvailableSites);
 */
 
 hydroserver_information = function(){
+  if(layersDict['selectedPointModal']){
+    map2.removeLayer(layersDict['selectedPointModal']);
+    map.removeLayer(layersDict['selectedPointModal']);
+    map2.updateSize()
+    map.updateSize()
+  }
   let var_select = $("#variable_choose");
   var_select.empty();
   var_select.selectpicker("refresh");
   let site_select = $("#site_choose");
   site_select.empty();
+  // $("#site_choose").unbind('change');
+  $("#site_choose").off("change.something").on("change", function(){
+    console.log("change unbind");
+  });
+
   site_select.selectpicker("refresh");
   let groupActual = this.parentElement.parentNode.id.split("_")[0];
 
@@ -977,9 +1000,7 @@ hydroserver_information = function(){
 
       $("#urlHydroserver").html(result1['url']);
       $("#url_WOF").html($("#urlHydroserver").html());
-      site_select = $("#site_choose");
-      site_select.empty();
-      site_select.selectpicker("refresh");
+
 
       $("#description_Hydroserver").html(result1['description']);
       var HSTableHtml =
@@ -1010,17 +1031,17 @@ hydroserver_information = function(){
           }
           site_select.selectpicker("refresh");
 
-          $("#site_choose").unbind('change');
 
-          $("#site_choose").change(function(){
 
-            var_select = $("#variable_choose");
-            var_select.empty();
-            var_select.selectpicker("refresh");
-            if(var_select[0].childNodes.length < 1){
+          $("#site_choose").on("change.something", function(){
+
+            // var_select = $("#variable_choose");
+            // var_select.empty();
+            // var_select.selectpicker("refresh");
+            // if(var_select[0].childNodes.length < 1){
               get_vars_from_site(result1['siteInfo']);
 
-            }
+            // }
 
           });
 
@@ -1094,7 +1115,9 @@ hydroserver_information = function(){
             $(`#${result1['siteInfo'][i]['sitecode']}_modal`).click(function(){
                     if(layersDict['selectedPointModal']){
                       map2.removeLayer(layersDict['selectedPointModal']);
+                      map.removeLayer(layersDict['selectedPointModal']);
                       map2.updateSize()
+                      map.updateSize()
                     }
 
                     let actual_Source = new ol.source.Vector({});
@@ -1107,19 +1130,20 @@ hydroserver_information = function(){
                         source: actual_Source,
                         style:  new ol.style.Style({
                             image: new ol.style.Circle({
-                                radius: 6,
+                                radius: 15,
                                 stroke: new ol.style.Stroke({
-                                    color: "black",
-                                    width: 4
+                                    color: `#FF0000`,
+                                    width: 8
                                 }),
                                 fill: new ol.style.Fill({
-                                    color: `#FF0000`
+                                    color: 'rgba(255, 255, 0, 0.63)',
                                 })
                             })
                         })
                     })
                     layersDict['selectedPointModal'] = vectorLayer;
                     map2.addLayer(layersDict['selectedPointModal']);
+                    map.getLayers().insertAt(1, layersDict['selectedPointModal']);
             });
 
           }

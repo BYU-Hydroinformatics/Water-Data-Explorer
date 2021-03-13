@@ -972,6 +972,12 @@ $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
 
 
           });
+          if(layersDict['selectedPointModal']){
+            map.removeLayer(layersDict['selectedPointModal'])
+            map.updateSize()
+
+          }
+
           if(layersDict['selectedPoint']){
             map.removeLayer(layersDict['selectedPoint'])
             map.updateSize()
@@ -1055,10 +1061,15 @@ catalog_filter = function(){
           vectorLayer.set("selectable", true)
           layer_object_filter[title] = vectorLayer;
 
+          if(layersDict['selectedPointModal']){
+            map.removeLayer(layersDict['selectedPointModal'])
+            map.updateSize()
+          }
           if(layersDict['selectedPoint']){
             map.removeLayer(layersDict['selectedPoint'])
             map.updateSize()
           }
+
         }
         $("#btn-r-reset").show()
         $("#btn-r-reset").on("click", reset_keywords);
