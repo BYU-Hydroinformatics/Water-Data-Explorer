@@ -197,6 +197,14 @@ map_layers = function(sites,title,url){
 
                        input_check.addEventListener("change", function(){
                          let check_box = this;
+                         if(layersDict['selectedPointModal']){
+                           map.removeLayer(layersDict['selectedPointModal'])
+                           map.updateSize()
+                         }
+                         if(layersDict['selectedPoint']){
+                           map.removeLayer(layersDict['selectedPoint'])
+                           map.updateSize()
+                         }
                          map.getLayers().forEach(function(layer) {
                            if(layer_object_filter.hasOwnProperty(title) == false){
                              if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
@@ -206,14 +214,7 @@ map_layers = function(sites,title,url){
                                }
                                else{
                                  layer.setStyle(new ol.style.Style({}));
-                                 if(layersDict['selectedPointModal']){
-                                   map.removeLayer(layersDict['selectedPointModal'])
-                                   map.updateSize()
-                                 }
-                                 if(layersDict['selectedPoint']){
-                                   map.removeLayer(layersDict['selectedPoint'])
-                                   map.updateSize()
-                                 }
+
                                }
                              }
                            }
@@ -225,14 +226,6 @@ map_layers = function(sites,title,url){
                                }
                                else{
                                  layer.setStyle(new ol.style.Style({}));
-                                 if(layersDict['selectedPointModal']){
-                                   map.removeLayer(layersDict['selectedPointModal'])
-                                   map.updateSize()
-                                 }
-                                 if(layersDict['selectedPoint']){
-                                   map.removeLayer(layersDict['selectedPoint'])
-                                   map.updateSize()
-                                 }
                                }
                              }
                            }
@@ -276,6 +269,14 @@ map_layers = function(sites,title,url){
 
                        layersDict[title] = vectorLayer;
                        $(`#${title}_zoom`).on("click",function(){
+                         if(layersDict['selectedPointModal']){
+                           map.removeLayer(layersDict['selectedPointModal'])
+                           map.updateSize();
+                         }
+                         if(layersDict['selectedPoint']){
+                           map.removeLayer(layersDict['selectedPoint'])
+                           map.updateSize();
+                         }
                          map.getView().fit(vectorSource.getExtent());
                          map.updateSize();
                          map.getLayers().forEach(function(layer) {
@@ -453,6 +454,14 @@ add_hydroserver = function(){
                         let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
 
                         input_check.addEventListener("change", function(){
+                          if(layersDict['selectedPointModal']){
+                            map.removeLayer(layersDict['selectedPointModal'])
+                            map.updateSize();
+                          }
+                          if(layersDict['selectedPoint']){
+                            map.removeLayer(layersDict['selectedPoint'])
+                            map.updateSize();
+                          }
                           if(this.checked){
                             map.getLayers().forEach(function(layer) {
                                  if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
@@ -464,14 +473,7 @@ add_hydroserver = function(){
                             map.getLayers().forEach(function(layer) {
                                  if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
                                    layer.setStyle(new ol.style.Style({}));
-                                   if(layersDict['selectedPointModal']){
-                                     map.removeLayer(layersDict['selectedPointModal'])
-                                     map.updateSize();
-                                   }
-                                   if(layersDict['selectedPoint']){
-                                     map.removeLayer(layersDict['selectedPoint'])
-                                     map.updateSize();
-                                   }
+
                                  }
                              });
 
@@ -479,6 +481,14 @@ add_hydroserver = function(){
 
                         });
                         $(`#${title}_zoom`).on("click",function(){
+                          if(layersDict['selectedPointModal']){
+                            map.removeLayer(layersDict['selectedPointModal'])
+                            map.updateSize();
+                          }
+                          if(layersDict['selectedPoint']){
+                            map.removeLayer(layersDict['selectedPoint'])
+                            map.updateSize();
+                          }
                           map.getView().fit(vectorSource.getExtent());
                           map.updateSize();
                           map.getLayers().forEach(function(layer) {

@@ -502,6 +502,14 @@ function html_for_groups(isAdmin, title, id_group_separator){
   }
 }
 function change_effect_groups(element_to_check,id_group_separator){
+  if(layersDict['selectedPointModal']){
+    map.removeLayer(layersDict['selectedPointModal'])
+    map.updateSize()
+  }
+  if(layersDict['selectedPoint']){
+    map.removeLayer(layersDict['selectedPoint'])
+    map.updateSize()
+  }
   let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
   for(i = 0; i < servers_checks.length; i++) {
     let server_name = servers_checks[i].id;
