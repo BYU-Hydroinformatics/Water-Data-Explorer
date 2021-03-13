@@ -95,7 +95,7 @@ select_variable_change = function(){
             if(chart_type ==="Scatter"){
               initialize_graphs(x_array,y_array,title_graph,units_y, units_x,variable_name_legend,type,x_array_interpolation,y_array_interpolation);
 
-
+              $("#download_dropdown").unbind('change');
               $("#download_dropdown").change(function(){
                 let selectedDownloadType = $('#download_dropdown')['0'].value;
                 let selectedDownloadTypeText = $('#download_dropdown')['0'];
