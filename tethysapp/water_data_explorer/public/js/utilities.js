@@ -128,22 +128,6 @@ clear_coords = function() {
 }
 
 
-/*
-************ FUNCTION NAME: get_random_color**********************
-************ PURPOSE:LIST OF COLOTS FOR GENERATIING TEH STYLING OF THE POINTS ON THE MAP  ***********
-*/
-
-//
-get_random_color = function() {
-    var letters = "012345".split("")
-    var color = "#"
-    color += letters[Math.round(Math.random() * 5)]
-    letters = "0123456789ABCDEF".split("")
-    for (var i = 0; i < 5; i++) {
-        color += letters[Math.round(Math.random() * 15)]
-    }
-    return color
-}
 
 /*
 ************ FUNCTION NAME: ACTIVATE_DEACTIVATE_GRAPHS **********************
@@ -195,188 +179,125 @@ cleanGraphs = function(){
 ************ PURPOSE: INITIALIZES ANY GRAH IN THE TIME SERIE OR BEGINNING ***********
 */
 initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,type,xArrayIn,yArrayIn){
-  let element_graphs=document.getElementById("graph");
-  $("#graphs").empty();
-  let element_map =document.getElementById("map");
-    //make the down part visible and also give the design of the model//
+  try{
+    let element_graphs=document.getElementById("graph");
+    $("#graphs").empty();
+    let element_map =document.getElementById("map");
+      //make the down part visible and also give the design of the model//
 
     element_graphs.style.cssText=  "display: flex; flex-direction: row;";
     map.updateSize();
     var config = {
-      modeBarButtonsToAdd: [{ name: 'downloadCsv', title: 'Download data as csv', icon: Plotly.Icons.disk, click: function(){
-        var csvData = [];
-        var header = [xTitle,yTitle] //main header.
-        csvData.push(header);
-        for (var i = 0; i < xArray.length; i++){ //data
-          var line = [xArray[i],yArray[i]];
-          csvData.push(line);
-        }
-        var csvFile = csvData.map(e=>e.map(a=>'"'+((a||"").toString().replace(/"/gi,'""'))+'"').join(",")).join("\r\n"); //quote all fields, escape quotes by doubling them.
-        var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
-        var link = document.createElement("a");
-        var url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", title_graph.replace(/[^a-z0-9_.-]/gi,'_') + ".csv");
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        } }],
-        responsive: true
-    }
-  if(type === "scatter"){
-    var trace1 = {
-      x: xArray,
-      y: yArray,
-      mode: 'lines',
-      type: type,
-      name: legend1,
-      text: [],
-      marker: { size: 5 },
-      line: {color: '#17BECF'}
-    };
-    var interpolation_trace;
-    var data = [];
-    data.push(trace1)
-    if(xArrayIn != undefined && yArrayIn != undefined){
-      interpolation_trace = {
-        x: xArrayIn,
-        y: yArrayIn,
+        modeBarButtonsToAdd: [{ name: 'downloadCsv', title: 'Download data as csv', icon: Plotly.Icons.disk, click: function(){
+          var csvData = [];
+          var header = [xTitle,yTitle] //main header.
+          csvData.push(header);
+          for (var i = 0; i < xArray.length; i++){ //data
+            var line = [xArray[i],yArray[i]];
+            csvData.push(line);
+          }
+          var csvFile = csvData.map(e=>e.map(a=>'"'+((a||"").toString().replace(/"/gi,'""'))+'"').join(",")).join("\r\n"); //quote all fields, escape quotes by doubling them.
+          var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+          var link = document.createElement("a");
+          var url = URL.createObjectURL(blob);
+          link.setAttribute("href", url);
+          link.setAttribute("download", title_graph.replace(/[^a-z0-9_.-]/gi,'_') + ".csv");
+          link.style.visibility = 'hidden';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          } }],
+          responsive: true
+      }
+    if(type === "scatter"){
+      var trace1 = {
+        x: xArray,
+        y: yArray,
         mode: 'lines',
         type: type,
-        name: `Mean Interpolation`,
+        name: legend1,
         text: [],
         marker: { size: 5 },
-        line: {color: '#FF6347'}
+        line: {color: '#17BECF'}
       };
-      data.push(interpolation_trace);
+      var interpolation_trace;
+      var data = [];
+      data.push(trace1)
+      if(xArrayIn != undefined && yArrayIn != undefined){
+        interpolation_trace = {
+          x: xArrayIn,
+          y: yArrayIn,
+          mode: 'lines',
+          type: type,
+          name: `Mean Interpolation`,
+          text: [],
+          marker: { size: 5 },
+          line: {color: '#FF6347'}
+        };
+        data.push(interpolation_trace);
+      }
+
+      var layout = {
+        xaxis: {
+          title: {
+           text: xTitle,
+           font: {
+             size: 15,
+             color: '#7f7f7f'
+           }
+         }
+        },
+        yaxis: {
+          title: {
+           text: yTitle,
+           font: {
+             size: 15,
+             color: '#7f7f7f'
+           }
+         }
+        },
+        title: title_graph,
+        autosize: true,
+        showlegend:true,
+      };
+
+      Plotly.newPlot('plots', data, layout,config);
+
     }
 
-    var layout = {
-      xaxis: {
-        title: {
-         text: xTitle,
-         font: {
-           size: 15,
-           color: '#7f7f7f'
-         }
-       }
-      },
-      yaxis: {
-        title: {
-         text: yTitle,
-         font: {
-           size: 15,
-           color: '#7f7f7f'
-         }
-       }
-      },
-      title: title_graph,
-      autosize: true,
-      showlegend:true,
-    };
+    if(type === "whisker"){
+      let trace1 = {
+        y: yArray,
+        type: 'box',
+        name: 'All Points',
+        marker: {color: '#3D9970'},
+        boxpoints: 'outliers',
+        boxmean: 'sd'
 
-    Plotly.newPlot('plots', data, layout,config);
+      };
 
+      let data = [trace1];
+
+      let layout = {
+        title: title_graph,
+        autosize: true,
+
+      };
+      Plotly.newPlot('plots', data, layout,config);
+    }
   }
-  if(type ==="bar"){
-
-    var trace1 = {
-      x: xArray,
-      y: yArray,
-      type: 'bar',
-      text: yArray.map(String),
-      textposition: 'auto',
-      hoverinfo: 'none',
-      marker: {
-        color: 'rgb(158,202,225)',
-        opacity: 0.6,
-        line: {
-          color: 'rgb(8,48,107)',
-          width: 1.5
+  catch(e){
+    $.notify(
+        {
+            message: `Unable to initialize the graphs`
+        },
+        {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000
         }
-      }
-    };
-
-    var data = [trace1];
-
-    var layout = {
-      title: 'Variables',
-      barmode: 'stack',
-      xaxis: {
-        title: {
-         text: xTitle,
-         font: {
-           size: 15,
-           color: '#7f7f7f'
-         }
-       },
-       rangemode: 'tozero'
-      },
-      yaxis: {
-        title: {
-         text: yTitle,
-         font: {
-           size: 15,
-           color: '#7f7f7f'
-         }
-       },
-       rangemode: 'tozero'
-      },
-      autosize: true,
-
-    };
-    // Plotly.newPlot('plotsDis', data, layout,config);
-
-  }
-  if(type === "pie"){
-    var data = [{
-      values:yArray,
-      labels:xArray,
-      type: type,
-      hoverinfo: 'label + percent',
-       textposition: 'inside'
-    }];
-
-    var layout = {
-      title: title_graph,
-      // height: 400,
-      // width: 900,
-      showlegend: true,
-      legend: {
-        xanchor:"center",
-        yanchor:"top",
-        y:-0.3, // play with it
-        x:0.5   // play with it
-      },
-      autosize: true,
-
-
-    };
-
-    // Plotly.newPlot('plotsDis', data, layout,config);
-
-  }
-  if(type === "whisker"){
-    let trace1 = {
-      y: yArray,
-      type: 'box',
-      name: 'All Points',
-      marker: {color: '#3D9970'},
-      boxpoints: 'outliers',
-      boxmean: 'sd'
-
-    };
-
-    let data = [trace1];
-
-    let layout = {
-      title: title_graph,
-      autosize: true,
-
-    };
-    Plotly.newPlot('plots', data, layout,config);
-
+    )
   }
 
 }
@@ -426,186 +347,217 @@ function get_new_color(){
 }
 
 function html_for_groups(isAdmin, title, id_group_separator){
-   let newHtml;
-  if (isAdmin){
-    newHtml =
-    `
-    <div class="panel panel-default" id="${title}_panel">
-      <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-        <h4 class="panel-title">
-          <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-          <span class="group-name"> ${title}</span>
+  try{
+    let newHtml;
+    if (isAdmin){
+      newHtml =
+      `
+      <div class="panel panel-default" id="${title}_panel">
+        <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
+          <h4 class="panel-title">
+            <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
+            <span class="group-name"> ${title}</span>
 
-          </a>
-        </h4>
-        <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+            </a>
+          </h4>
+          <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
 
+              <input class="chkbx-layers" type="checkbox">
+              <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
+                <span class=" glyphicon glyphicon-info-sign "></span>
+              </button>
+
+              <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+              <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
+                <span class="glyphicon glyphicon-trash"></span>
+              </button>
+          </li>
+
+        </div>
+
+        <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
+        <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
+          <div class="panel-body">
+              <div id= ${id_group_separator} class="divForServers">
+                <button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group does not have hydroservers</button>
+              </div>
+          </div>
+        </div>
+      </div>
+      `
+
+      // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
+      //   <span class=" glyphicon glyphicon-filter"></span>
+      // </button>
+      return newHtml
+    }
+    else{
+      newHtml =
+      `
+      <div class="panel panel-default" id="${title}_panel">
+        <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
+          <h4 class="panel-title">
+            <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
+            <span class="group-name">${title}</span>
+            </a>
+          </h4>
+          <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
             <input class="chkbx-layers" type="checkbox">
             <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
               <span class=" glyphicon glyphicon-info-sign "></span>
             </button>
-
-            <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
-              <span class="glyphicon glyphicon-plus"></span>
-            </button>
-            <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
-              <span class="glyphicon glyphicon-trash"></span>
-            </button>
-        </li>
-
-      </div>
-
-      <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-      <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
-        <div class="panel-body">
-            <div id= ${id_group_separator} class="divForServers">
-              <button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group does not have hydroservers</button>
-            </div>
+          </li>
+        </div>
+        <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
+          <div class="panel-body">
+              <div id= ${id_group_separator} class="divForServers"></div>
+          </div>
         </div>
       </div>
-    </div>
-    `
-
-    // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
-    //   <span class=" glyphicon glyphicon-filter"></span>
-    // </button>
-    return newHtml
+      `
+      // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
+      //   <span class=" glyphicon glyphicon-filter"></span>
+      // </button>
+      return newHtml
+    }
   }
-  else{
-    newHtml =
-    `
-    <div class="panel panel-default" id="${title}_panel">
-      <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-        <h4 class="panel-title">
-          <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-          <span class="group-name">${title}</span>
-          </a>
-        </h4>
-        <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-          <input class="chkbx-layers" type="checkbox">
-          <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
-            <span class=" glyphicon glyphicon-info-sign "></span>
-          </button>
-        </li>
-      </div>
-      <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-        <div class="panel-body">
-            <div id= ${id_group_separator} class="divForServers"></div>
-        </div>
-      </div>
-    </div>
-    `
-    // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
-    //   <span class=" glyphicon glyphicon-filter"></span>
-    // </button>
-    return newHtml
+  catch(e){
+    console.log(e);
   }
 }
+
 function change_effect_groups(element_to_check,id_group_separator){
-  if(layersDict['selectedPointModal']){
-    map.removeLayer(layersDict['selectedPointModal'])
-    map.updateSize()
-  }
-  if(layersDict['selectedPoint']){
-    map.removeLayer(layersDict['selectedPoint'])
-    map.updateSize()
-  }
-  let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
-  for(i = 0; i < servers_checks.length; i++) {
-    let server_name = servers_checks[i].id;
-     let checkbox = Array.from(servers_checks[i].children)
-     for (var j = 0; j < checkbox.length; j++) {
-         if (checkbox[j].className == "chkbx-layer") {
-           ////console.log(checkbox[j])
-           checkbox[j].checked = element_to_check.checked;
+  try{
+    if(layersDict['selectedPointModal']){
+      map.removeLayer(layersDict['selectedPointModal'])
+      map.updateSize()
+    }
+    if(layersDict['selectedPoint']){
+      map.removeLayer(layersDict['selectedPoint'])
+      map.updateSize()
+    }
+    let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
+    for(i = 0; i < servers_checks.length; i++) {
+      let server_name = servers_checks[i].id;
+       let checkbox = Array.from(servers_checks[i].children)
+       for (var j = 0; j < checkbox.length; j++) {
+           if (checkbox[j].className == "chkbx-layer") {
+             ////console.log(checkbox[j])
+             checkbox[j].checked = element_to_check.checked;
+           }
+       }
+       ////console.log(checkbox);
+       map.getLayers().forEach(function(layer) {
+         if(layer_object_filter.hasOwnProperty(server_name) == false){
+           //console.log("false")
+           if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
+             if(element_to_check.checked){
+
+               layer.setStyle(featureStyle(layerColorDict[server_name]));
+             }
+             else{
+               layer.setStyle(new ol.style.Style({}));
+             }
+           }
          }
+         else{
+           //console.log("true")
+           if(layer instanceof ol.layer.Vector && layer == layer_object_filter[server_name]){
+             if(element_to_check.checked){
+
+               layer.setStyle(featureStyle(layerColorDict[server_name]));
+             }
+             else{
+               layer.setStyle(new ol.style.Style({}));
+             }
+           }
+         }
+        });
      }
-     ////console.log(checkbox);
-     map.getLayers().forEach(function(layer) {
-       if(layer_object_filter.hasOwnProperty(server_name) == false){
-         //console.log("false")
-         if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
-           if(element_to_check.checked){
 
-             layer.setStyle(featureStyle(layerColorDict[server_name]));
-           }
-           else{
-             layer.setStyle(new ol.style.Style({}));
-           }
-         }
-       }
-       else{
-         //console.log("true")
-         if(layer instanceof ol.layer.Vector && layer == layer_object_filter[server_name]){
-           if(element_to_check.checked){
-
-             layer.setStyle(featureStyle(layerColorDict[server_name]));
-           }
-           else{
-             layer.setStyle(new ol.style.Style({}));
-           }
-         }
-       }
-      });
-   }
+  }
+  catch(e){
+    console.log(e);
+  }
 }
+
 function html_for_servers(title,group_name,isNew){
-  let check_var = (( isNew == true ) ? 'checked' : '');
-  let newHtml = `
-  <li class="ui-state-default" layer-name="${title}" id="${title}" >
-  <span class="server-name">${title}</span>
-  <input class="chkbx-layer" type="checkbox" ${check_var}>
-  <button type="button" id="${title}_${group_name}_reload" class="btn btn-dark btn-sm">
-   <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-  </button>
-  <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
-   <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+  try{
+    let check_var = (( isNew == true ) ? 'checked' : '');
+    let newHtml = `
+    <li class="ui-state-default" layer-name="${title}" id="${title}" >
+    <span class="server-name">${title}</span>
+    <input class="chkbx-layer" type="checkbox" ${check_var}>
+    <button type="button" id="${title}_${group_name}_reload" class="btn btn-dark btn-sm">
+     <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+    </button>
+    <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
+     <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
 
-  </button>
-  <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariablesTable"> <span class=" glyphicon glyphicon-list-alt"></span>
-  </button>
+    </button>
+    <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariablesTable"> <span class=" glyphicon glyphicon-list-alt"></span>
+    </button>
 
-  <button type="button" id="${title}_variables_info" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalHydroserInformation">
-   <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-  </button>
-  </li>
-  `;
-  return newHtml
+    <button type="button" id="${title}_variables_info" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalHydroserInformation">
+     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+    </button>
+    </li>
+    `;
+    return newHtml
+  }
+  catch (e){
+    console.log(e);
+  }
 
 }
-function toDegreesMinutesAndSeconds(coordinate) {
-    var absolute = Math.abs(coordinate);
-    var degrees = Math.floor(absolute);
-    var minutesNotTruncated = (absolute - degrees) * 60;
-    var minutes = Math.floor(minutesNotTruncated);
-    var seconds = Math.floor((minutesNotTruncated - minutes) * 60);
 
-    return degrees + "°" + minutes + "'" + seconds + "''";
+function toDegreesMinutesAndSeconds(coordinate) {
+    try{
+      var absolute = Math.abs(coordinate);
+      var degrees = Math.floor(absolute);
+      var minutesNotTruncated = (absolute - degrees) * 60;
+      var minutes = Math.floor(minutesNotTruncated);
+      var seconds = Math.floor((minutesNotTruncated - minutes) * 60);
+
+      return degrees + "°" + minutes + "'" + seconds + "''";
+    }
+    catch(e){
+      console.log(e);
+    }
+
 }
 getIconLegend = function(style,server) {
-  style = style.getImage();
-  var radius = style.getRadius();
-  var strokeWidth = style.getStroke().getWidth();
-  var dx = radius + strokeWidth;
+  try{
+    style = style.getImage();
+    var radius = style.getRadius();
+    var strokeWidth = style.getStroke().getWidth();
+    var dx = radius + strokeWidth;
 
-  var svgElem = $('<svg/>')
-  .attr({
-    class: 'svgs_legend',
-    width: 11,
-    height: 11
-  });
-  $('<circle />')
-  .attr({
-    cx: 5,
-    cy: 5,
-    r: 5,
-    stroke: style.getStroke().getColor(),
-    'stroke-width': strokeWidth,
-    fill: style.getFill().getColor()
-  })
-  .appendTo(svgElem);
+    var svgElem = $('<svg/>')
+    .attr({
+      class: 'svgs_legend',
+      width: 11,
+      height: 11
+    });
+    $('<circle />')
+    .attr({
+      cx: 5,
+      cy: 5,
+      r: 5,
+      stroke: style.getStroke().getColor(),
+      'stroke-width': strokeWidth,
+      fill: style.getFill().getColor()
+    })
+    .appendTo(svgElem);
 
 
-  // Convert DOM object to string to overcome from some SVG manipulation related oddities
-  return $('<div>').append(svgElem).html();
+    // Convert DOM object to string to overcome from some SVG manipulation related oddities
+    return $('<div>').append(svgElem).html();
+  }
+  catch(e){
+    console.log(e);
+  }
+
 }
