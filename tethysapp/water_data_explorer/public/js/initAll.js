@@ -52,70 +52,82 @@ var water_data_explorer_PACKAGE = (function() {
     ************ PURPOSE: ADD THE BOUNDARY LAYER TO THE MAP TAKING INTO ACCCOUNT THE CUSTOM SETTINGS***********
     */
     add_boundary_map = function(color, width, map){
+      try{
+        if(color === "None"){
+          color = "#000000";
+        }
+        if(width === "None"){
+          width = 3;
+        }
+        if(endpointGeoServer ==="None"){
+          endpointGeoServer = "Whole_world";
+          ////console.log(endpointGeoServer);
+        }
+        if(geoServerWorkspace ==="None"){
+          geoServerWorkspace= "Whole_world";
+        }
+        if(geoServerLayer ==="None"){
+          geoServerLayer= "Whole_world";
+        }
+        if(endpointGeoServer !== "Whole_world"){
+          var owsrootUrl = endpointGeoServer;
+          var workspaceURL = geoServerWorkspace;
+          var layerURL = geoServerLayer;
+          var typeRoot = "ows";
+          var serviceURL = "WFS";
+          var versionURL = "1.1.0";
+          var request = "GetFeature";
+          var typename = `${workspaceURL}:${layerURL}`;
+          var outputFormat = "application/json";
+          var finalURL = `${owsrootUrl}/${typeRoot}?service=${serviceURL}&version=${versionURL}&request=${request}&typename=${typename}&outputFormat=${outputFormat} `;
+          var vectorSource = new ol.source.Vector({
+              url:finalURL,
+              format: new ol.format.GeoJSON()
+          })
+          var vector_layer = new ol.layer.Vector({
+              source: vectorSource,
+              style: new ol.style.Style({
+                  stroke: new ol.style.Stroke({
+                      color: color,
+                      width: width
+                  }),
+              })
+          });
 
-      if(color === "None"){
-        color = "#000000";
-      }
-      if(width === "None"){
-        width = 3;
-      }
-      if(endpointGeoServer ==="None"){
-        endpointGeoServer = "Whole_world";
-        ////console.log(endpointGeoServer);
-      }
-      if(geoServerWorkspace ==="None"){
-        geoServerWorkspace= "Whole_world";
-      }
-      if(geoServerLayer ==="None"){
-        geoServerLayer= "Whole_world";
-      }
-      if(endpointGeoServer !== "Whole_world"){
-        var owsrootUrl = endpointGeoServer;
-        var workspaceURL = geoServerWorkspace;
-        var layerURL = geoServerLayer;
-        var typeRoot = "ows";
-        var serviceURL = "WFS";
-        var versionURL = "1.1.0";
-        var request = "GetFeature";
-        var typename = `${workspaceURL}:${layerURL}`;
-        var outputFormat = "application/json";
-        var finalURL = `${owsrootUrl}/${typeRoot}?service=${serviceURL}&version=${versionURL}&request=${request}&typename=${typename}&outputFormat=${outputFormat} `;
-        var vectorSource = new ol.source.Vector({
-            url:finalURL,
-            format: new ol.format.GeoJSON()
-        })
-        var vector_layer = new ol.layer.Vector({
-            source: vectorSource,
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: color,
-                    width: width
-                }),
-            })
-        });
+          layersDict['boundaryLayer'] = vector_layer;
+          map.addLayer(vector_layer);
+          vectorSource.once('change',function(e){
+            if(vectorSource.getState() === 'ready') {
+              var extent = vectorSource.getExtent();
+              ////console.log(extent);
+              map.getView().fit(extent, map.getSize());
 
-        layersDict['boundaryLayer'] = vector_layer;
-        map.addLayer(vector_layer);
-        vectorSource.once('change',function(e){
-          if(vectorSource.getState() === 'ready') {
-            var extent = vectorSource.getExtent();
-            ////console.log(extent);
-            map.getView().fit(extent, map.getSize());
+              //disable zoom out //
+              var properties = map.getView().getProperties();
+              properties["minZoom"] = map.getView().getZoom();
+              if(geoServerMovement){
+                properties["extent"]= extent
 
-            //disable zoom out //
-            var properties = map.getView().getProperties();
-            properties["minZoom"] = map.getView().getZoom();
-            if(geoServerMovement){
-              properties["extent"]= extent
+              }
+              map.setView(new ol.View(properties));
 
             }
-            map.setView(new ol.View(properties));
-
-          }
-        });
+          });
+        }
       }
-
-
+      catch(e) {
+        $.notify(
+            {
+                message: `Unable to retrieve the boundary of the Data Explorer`
+            },
+            {
+                type: "info",
+                allow_dismiss: true,
+                z_index: 20000,
+                delay: 5000
+            }
+        )
+      }
     }
 
     /*
@@ -124,6 +136,7 @@ var water_data_explorer_PACKAGE = (function() {
     */
 
     init_map = function() {
+      try{
         var projection = ol.proj.get("EPSG:3857")
         var baseLayer = new ol.layer.Tile({
             source: new ol.source.BingMaps({
@@ -303,91 +316,169 @@ var water_data_explorer_PACKAGE = (function() {
                 }
             })
             .change()
+      }
+      catch(e){
+        $.notify(
+            {
+                message: `Unable to initialize the map of the Data Explorer`
+            },
+            {
+                type: "danger",
+                allow_dismiss: true,
+                z_index: 20000,
+                delay: 5000
+            }
+        )
+      }
+
     }
+
+
     give_name = function(){
-      if(views_names != "None"){
-        $(".titleh").html(`${views_names} Views`)
-        $(".app-title").html(`${views_names} Data Explorer`)
+      try{
+        if(views_names != "None"){
+          $(".titleh").html(`${views_names} Views`)
+          $(".app-title").html(`${views_names} Data Explorer`)
+        }
+        else{
+          $(".titleh").html(`Views`)
+          $(".app-title").html(`Water Data Explorer`)
+          $.notify(
+              {
+                  message: `Tip: You can give name to the Data Explorer by going into the settings`
+              },
+              {
+                  type: "info",
+                  allow_dismiss: true,
+                  z_index: 20000,
+                  delay: 5000
+              }
+          )
+        }
       }
-      else{
-        $(".titleh").html(`Views`)
-        $(".app-title").html(`Water Data Explorer`)
+      catch(e){
+        $.notify(
+            {
+                message: `Unable to retrieve name of the Data Explorer`
+            },
+            {
+                type: "danger",
+                allow_dismiss: true,
+                z_index: 20000,
+                delay: 5000
+            }
+        )
       }
+
 
     }
-
-
 
     /*
     ************ FUNCTION NAME: INIT_JEQUERY_VAR**********************
     ************ PURPOSE: INITIALIZE ALL THE JQUERY VARIABLES USED***********
     */
     init_jquery_var = function(){
-      $modalAddGroupHydro= $("#modalAddGroupServer");
-      $modalAddSOAP = $("#modalAddSoap");
-      $modalDelete = $("#modalDelete");
-      $modalInterface = $("#modalInterface");
-      $hs_list = $("#current-servers-list");
+      try{
+        $modalAddGroupHydro= $("#modalAddGroupServer");
+        $modalAddSOAP = $("#modalAddSoap");
+        $modalDelete = $("#modalDelete");
+        $modalInterface = $("#modalInterface");
+        $hs_list = $("#current-servers-list");
+      }
+      catch(error){
+        console.log(error)
+      }
+
     }
     addLegendMap = function(map){
-      let element = document.getElementById("tableLegend");
-      var controlPanel = new ol.control.Control({
-        element: element
-      });
-      map.addControl(controlPanel);
+      try{
+        let element = document.getElementById("tableLegend");
+        var controlPanel = new ol.control.Control({
+          element: element
+        });
+        map.addControl(controlPanel);
+      }
+      catch(error){
+        console.log(error);
+      }
+
 
     }
   /************************************************************************
    *                  INITIALIZATION / CONSTRUCTOR
    *************************************************************************/
   $(function() {
-    let little_trick = true;
-    init_jquery_var();
-    addDefaultBehaviorToAjax();
-    init_map();
-    load_group_hydroservers();
-    activate_layer_values();
-    let empty_array=[];
-    initialize_graphs([],[],"No data Available","","","","scatter");
-    initialize_graphs([],[],"No data Available","","","","pie");
-    add_boundary_map(geoServerColor, geoServerWidth, map);
-    activate_deactivate_graphs();
-    give_name();
-    addLegendMap(map);
-    $(".toggle-nav").on("click",function(){
-      if(little_trick){
-        $("#app-navigation").hide();
-        little_trick = false;
-        $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
-
-        setTimeout(function(){ map.updateSize(); }, 500);
-      }
-      else{
-        $("#app-navigation").show();
-        little_trick = true;
-        $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
-
-        setTimeout(function(){ map.updateSize(); }, 500);
-      }
-    });
-
-    map.getView().on('change:resolution', function(evt){
-      var view = evt.target;
-
-      map.getLayers().getArray().map(function(layer) {
-        var source = layer.getSource();
-        if (source instanceof ol.source.Cluster) {
-          var distance = source.getDistance();
-          if (view.getZoom() >= 9 && distance > 0) {
-            source.setDistance(0);
+    try{
+      let little_trick = true;
+      init_jquery_var();
+      addDefaultBehaviorToAjax();
+      init_map();
+      load_group_hydroservers();
+      activate_layer_values();
+      let empty_array=[];
+      initialize_graphs([],[],"No data Available","","","","scatter");
+      initialize_graphs([],[],"No data Available","","","","pie");
+      add_boundary_map(geoServerColor, geoServerWidth, map);
+      activate_deactivate_graphs();
+      give_name();
+      addLegendMap(map);
+    }
+    catch(error){
+      console.log(error);
+      $.notify(
+          {
+              message: `Unable to start the Data Explorer`
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000
           }
-          else if (view.getZoom() < 9 && distance == 0) {
-            source.setDistance(50);
+      )
 
-          }
+    }
+    try{
+      $(".toggle-nav").on("click",function(){
+        if(little_trick){
+          $("#app-navigation").hide();
+          little_trick = false;
+          $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+
+          setTimeout(function(){ map.updateSize(); }, 500);
+        }
+        else{
+          $("#app-navigation").show();
+          little_trick = true;
+          $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
+
+          setTimeout(function(){ map.updateSize(); }, 500);
         }
       });
-    }, map);
+
+      //Event for the clusters of the map
+      map.getView().on('change:resolution', function(evt){
+        var view = evt.target;
+
+        map.getLayers().getArray().map(function(layer) {
+          var source = layer.getSource();
+          if (source instanceof ol.source.Cluster) {
+            var distance = source.getDistance();
+            if (view.getZoom() >= 9 && distance > 0) {
+              source.setDistance(0);
+            }
+            else if (view.getZoom() < 9 && distance == 0) {
+              source.setDistance(50);
+
+            }
+          }
+        });
+      }, map);
+    }
+    catch(error){
+      console.log(error);
+    }
+
 
   })
 })() // End of package wrapper
