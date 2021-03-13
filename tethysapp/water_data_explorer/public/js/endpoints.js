@@ -6,9 +6,10 @@ get_vars_from_site = function (resultList){
   request_obj['network'] = resultList[indexs]['network']
   request_obj['code'] = resultList[indexs]['sitecode']
   let var_select = $("#variable_choose");
-  // var_select.empty();
-  // var_select.selectpicker("refresh");
-
+  console.log(var_select)
+  var_select.empty();
+  var_select.selectpicker("refresh");
+  console.log("holasdasfa")
   $("#downloading_loading").removeClass("hidden");
     $.ajax({
       type:"GET",
@@ -61,6 +62,7 @@ get_vars_from_site = function (resultList){
       }
   })
 }
+
 
 
 
@@ -915,6 +917,12 @@ $(`#btn-var-search-server`).on("click",showAvailableSites);
 */
 
 hydroserver_information = function(){
+  let var_select = $("#variable_choose");
+  var_select.empty();
+  var_select.selectpicker("refresh");
+  let site_select = $("#site_choose");
+  site_select.empty();
+  site_select.selectpicker("refresh");
   let groupActual = this.parentElement.parentNode.id.split("_")[0];
 
   let hsActual = this.id.split("_")[0];
@@ -964,12 +972,12 @@ hydroserver_information = function(){
         }
 
 
-      },400)
+      },600)
 
 
       $("#urlHydroserver").html(result1['url']);
       $("#url_WOF").html($("#urlHydroserver").html());
-      let site_select = $("#site_choose");
+      site_select = $("#site_choose");
       site_select.empty();
       site_select.selectpicker("refresh");
 
@@ -1002,11 +1010,17 @@ hydroserver_information = function(){
           }
           site_select.selectpicker("refresh");
 
+          $("#site_choose").unbind('change');
+
           $("#site_choose").change(function(){
-            let var_select = $("#variable_choose");
+
+            var_select = $("#variable_choose");
             var_select.empty();
             var_select.selectpicker("refresh");
-            get_vars_from_site(result1['siteInfo']);
+            if(var_select[0].childNodes.length < 1){
+              get_vars_from_site(result1['siteInfo']);
+
+            }
 
           });
 
@@ -1015,6 +1029,8 @@ hydroserver_information = function(){
           reque_ob['hs_url'] = $("#url_WOF").text();
           reque_ob['site_hs'] = $("#site_choose")['0'].value;
           reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
+
+          $("#btn-add-download").unbind();
 
           $("#btn-add-download").on("click", function(){
             console.log("holaa")
