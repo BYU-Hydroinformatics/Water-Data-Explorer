@@ -54,31 +54,36 @@ def get_values_hs(request):
 
     session = SessionMaker()  # Initiate a session
     client = Client(hs_url)
-    response_info = GetSiteInfo(client,site_desc)['siteInfo']
-    df = pd.DataFrame.from_dict(response_info)
-    if df.empty:
-        return_obj['country'] = []
-        return_obj['variables'] =[]
-        return_obj['units'] = []
-        return_obj['codes'] = []
-        return_obj['organization'] = []
-        return_obj['times_series'] = []
-        return_obj['geolo'] = []
+    try:
+        response_info = GetSiteInfo(client,site_desc)['siteInfo']
+        df = pd.DataFrame.from_dict(response_info)
+        if df.empty:
+            return_obj['country'] = []
+            return_obj['variables'] =[]
+            return_obj['units'] = []
+            return_obj['codes'] = []
+            return_obj['organization'] = []
+            return_obj['times_series'] = []
+            return_obj['geolo'] = []
+            return JsonResponse(return_obj)
+        print(df)
+        return_obj['country'] = df['country'].tolist()[0]
+        return_obj['variables'] = df['variableName'].tolist()
+        return_obj['units'] = df['unitAbbreviation'].tolist()
+        return_obj['codes'] = df['variableCode'].tolist()
+        obj_var_desc = {}
+        obj_var_times_s = {}
+        # print(df['description'].tolist())
+        for vari, desc, times_s in zip(df['variableName'].tolist(),df['organization'].tolist(),df['variableTimeInterval'].tolist()):
+            obj_var_desc[vari] = desc
+            obj_var_times_s[vari]  = times_s
+        return_obj['organization'] = obj_var_desc
+        return_obj['times_series'] = obj_var_times_s
+        return_obj['geolo'] = df['geolocation'].tolist()[0]
         return JsonResponse(return_obj)
-    print(df)
-    return_obj['country'] = df['country'].tolist()[0]
-    return_obj['variables'] = df['variableName'].tolist()
-    return_obj['units'] = df['unitAbbreviation'].tolist()
-    return_obj['codes'] = df['variableCode'].tolist()
-    obj_var_desc = {}
-    obj_var_times_s = {}
-    # print(df['description'].tolist())
-    for vari, desc, times_s in zip(df['variableName'].tolist(),df['organization'].tolist(),df['variableTimeInterval'].tolist()):
-        obj_var_desc[vari] = desc
-        obj_var_times_s[vari]  = times_s
-    return_obj['organization'] = obj_var_desc
-    return_obj['times_series'] = obj_var_times_s
-    return_obj['geolo'] = df['geolocation'].tolist()[0]
+    except Exception as e:
+        # return_obj = {}
+        return JsonResponse(return_obj)
 
     # keywords = client.service.GetVariables('[:]')
     # keywords_dict = xmltodict.parse(keywords)
@@ -177,7 +182,6 @@ def get_values_hs(request):
     # return_obj['siteInfo']= site_info_Mc_json
 
     # print("finished with the get_values_hs")
-    return JsonResponse(return_obj)
 
 def get_values_graph_hs(request):
     # print("inside the get_values_graph_hs")
