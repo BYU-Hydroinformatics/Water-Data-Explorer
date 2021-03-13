@@ -646,3 +646,7 @@ input[type=checkbox], input[type=radio]{
 .spacer_fake{
   width: 1.3em;
 }
+
+.modal-backdrop {
+    display:none;
+}
