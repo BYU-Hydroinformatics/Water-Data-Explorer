@@ -317,6 +317,7 @@ var water_data_explorer_PACKAGE = (function() {
     }
 
 
+
     /*
     ************ FUNCTION NAME: INIT_JEQUERY_VAR**********************
     ************ PURPOSE: INITIALIZE ALL THE JQUERY VARIABLES USED***********
@@ -368,7 +369,25 @@ var water_data_explorer_PACKAGE = (function() {
 
         setTimeout(function(){ map.updateSize(); }, 500);
       }
-    })
+    });
+
+    map.getView().on('change:resolution', function(evt){
+      var view = evt.target;
+
+      map.getLayers().getArray().map(function(layer) {
+        var source = layer.getSource();
+        if (source instanceof ol.source.Cluster) {
+          var distance = source.getDistance();
+          if (view.getZoom() >= 9 && distance > 0) {
+            source.setDistance(0);
+          }
+          else if (view.getZoom() < 9 && distance == 0) {
+            source.setDistance(50);
+
+          }
+        }
+      });
+    }, map);
 
   })
 })() // End of package wrapper
