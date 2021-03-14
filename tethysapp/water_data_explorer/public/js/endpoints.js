@@ -23,6 +23,66 @@ get_vars_from_site = function (resultList){
             }
             var_select.selectpicker("refresh");
 
+            let reque_ob = {}
+            reque_ob['hs_name'] = $("#site_choose option:selected").html();
+            reque_ob['hs_url'] = $("#url_WOF").text();
+            reque_ob['site_hs'] = $("#site_choose")['0'].value;
+            reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
+            $("#btn-add-download").unbind();
+            $("#btn-add-download").on("click", function(){
+              $("#downloading_loading").removeClass("hidden");
+              $.ajax({
+                type:"GET",
+                url: `get-download-hs`,
+                dataType: "JSON",
+                data: reque_ob,
+                success: function(result2){
+                  var name_together =reque_ob['hs_name'].replace(/(?!\w|\s)./g, '_').replace(/\s+/g, '_').replace(/^(\s*)([\W\w]*)(\b\s*$)/g, '$2');
+                  // var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(result2));
+                  // var downloadAnchorNode = document.createElement('a');
+                  // downloadAnchorNode.setAttribute("href",dataStr);
+                  // downloadAnchorNode.setAttribute("download", name_together + ".ipynb");
+                  // document.body.appendChild(downloadAnchorNode); // required for firefox
+                  // downloadAnchorNode.click();
+                  // downloadAnchorNode.remove();
+
+
+                  var blob = new Blob([JSON.stringify(result2)], { type: 'application/json' });
+                  var link = document.createElement("a");
+                  var url = URL.createObjectURL(blob);
+                  link.setAttribute("href", url);
+                  link.setAttribute("download", name_together.replace(/[^a-z0-9_.-]/gi,'_') + ".ipynb");
+                  link.style.visibility = 'hidden';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+
+
+
+
+                  $("#downloading_loading").addClass("hidden");
+                },
+                error:function(){
+                  $("#downloading_loading").addClass("hidden");
+
+                  $.notify(
+                      {
+                          message: `Something went wrong when downloading a python notebook for the site`
+                      },
+                      {
+                          type: "danger",
+                          allow_dismiss: true,
+                          z_index: 20000,
+                          delay: 5000
+                      }
+                  )
+                }
+              })
+            });
+
+
+
+
             $("#downloading_loading").addClass("hidden");
           }
           else{
@@ -1138,65 +1198,7 @@ hydroserver_information = function(){
 
             });
 
-            let reque_ob = {}
-            reque_ob['hs_name'] = $("#site_choose option:selected").html();
-            reque_ob['hs_url'] = $("#url_WOF").text();
-            reque_ob['site_hs'] = $("#site_choose")['0'].value;
-            reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
 
-            $("#btn-add-download").unbind();
-
-            $("#btn-add-download").on("click", function(){
-              console.log("holaa")
-              $("#downloading_loading").removeClass("hidden");
-              $.ajax({
-                type:"GET",
-                url: `get-download-hs`,
-                dataType: "JSON",
-                data: reque_ob,
-                success: function(result2){
-                  var name_together =reque_ob['hs_name'].replace(/(?!\w|\s)./g, '_').replace(/\s+/g, '_').replace(/^(\s*)([\W\w]*)(\b\s*$)/g, '$2');
-                  // var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(result2));
-                  // var downloadAnchorNode = document.createElement('a');
-                  // downloadAnchorNode.setAttribute("href",dataStr);
-                  // downloadAnchorNode.setAttribute("download", name_together + ".ipynb");
-                  // document.body.appendChild(downloadAnchorNode); // required for firefox
-                  // downloadAnchorNode.click();
-                  // downloadAnchorNode.remove();
-
-
-                  var blob = new Blob([JSON.stringify(result2)], { type: 'application/json' });
-                  var link = document.createElement("a");
-                  var url = URL.createObjectURL(blob);
-                  link.setAttribute("href", url);
-                  link.setAttribute("download", name_together.replace(/[^a-z0-9_.-]/gi,'_') + ".ipynb");
-                  link.style.visibility = 'hidden';
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-
-
-
-
-                  $("#downloading_loading").addClass("hidden");
-                },
-                error:function(){
-                  $("#downloading_loading").addClass("hidden");
-
-                  $.notify(
-                      {
-                          message: `Something went wrong when downloading a python notebook for the site`
-                      },
-                      {
-                          type: "danger",
-                          allow_dismiss: true,
-                          z_index: 20000,
-                          delay: 5000
-                      }
-                  )
-                }
-              })
-            });
 
             HSTableHtml += "</tbody></table>"
             $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml);

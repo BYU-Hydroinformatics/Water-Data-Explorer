@@ -70,7 +70,6 @@ activate_layer_values = function (){
           dataType: "JSON",
           data: object_request,
           success: function(result){
-            console.log(result);
             let description_site = document.getElementById('siteDes')
             if (result.hasOwnProperty('codes')){
               let geolocations = result['geolo'];
