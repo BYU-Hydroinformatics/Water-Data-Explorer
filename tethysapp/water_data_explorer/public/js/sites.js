@@ -71,7 +71,8 @@ activate_layer_values = function (){
           data: object_request,
           success: function(result){
             let description_site = document.getElementById('siteDes')
-            if (result.hasOwnProperty('codes')){
+            console.log(result['codes'])
+            if (result.hasOwnProperty('codes') && result['codes'].length > 0){
               let geolocations = result['geolo'];
               let country_name = result['country'];
               let lats = parseFloat(geolocations['latitude'])
