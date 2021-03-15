@@ -197,7 +197,7 @@ def get_values_graph_hs(request):
     variable_desc = network + ':' + code_variable
     site_desc = network + ':' + site_code
     water = pwml.WaterMLOperations(url = hs_url)
-    values = water.GetValues(site_desc, variable_desc, start_date, end_date)
+    values = water.GetValues(site_desc, variable_desc, start_date =start_date, end_date=end_date)
     df = pd.DataFrame.from_dict(values['values'])
     if df.empty:
         return_obj['graphs'] = []
