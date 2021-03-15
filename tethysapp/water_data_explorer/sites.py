@@ -197,7 +197,7 @@ def get_values_graph_hs(request):
     variable_desc = network + ':' + code_variable
     site_desc = network + ':' + site_code
     water = pwml.WaterMLOperations(url = hs_url)
-    values = water.GetValues(site_full_code=site_desc, variable_full_code=variable_desc, start_date =start_date, end_date=end_date,methodCode = None, qualityControlLevelCode = None, format = 'json')
+    values = water.GetValues(site_desc, variable_desc, start_date, end_date, format = 'json')
     df = pd.DataFrame.from_dict(values['values'])
     if df.empty:
         return_obj['graphs'] = []
@@ -239,7 +239,7 @@ def get_xml(request):
 
     water = pwml.WaterMLOperations(url = hs_url)
 
-    return_obj['waterml'] = water.GetValues(site_full_code=site_desc, variable_full_code=variable_desc, start_date =start_date, end_date=end_date,methodCode = None, qualityControlLevelCode = None, format = 'waterml')
+    return_obj['waterml'] = water.GetValues(site_desc, variable_desc,  start_date, end_date,format = 'waterml')
 
 
     return JsonResponse(return_obj)
