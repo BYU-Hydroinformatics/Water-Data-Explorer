@@ -1,5 +1,5 @@
 from sqlalchemy.orm import sessionmaker
-from .model import Base, Catalog, HISCatalog, HydroServer_Individual, Groups
+from .model import Base, HydroServer_Individual, Groups
 from .auxiliary2 import *
 from .app import WaterDataExplorer as app
 

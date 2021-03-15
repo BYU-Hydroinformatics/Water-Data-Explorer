@@ -422,23 +422,6 @@ var water_data_explorer_PACKAGE = (function() {
       activate_deactivate_graphs();
       give_name();
       addLegendMap(map);
-    }
-    catch(error){
-      console.log(error);
-      $.notify(
-          {
-              message: `Unable to start the Data Explorer`
-          },
-          {
-              type: "danger",
-              allow_dismiss: true,
-              z_index: 20000,
-              delay: 5000
-          }
-      )
-
-    }
-    try{
       $(".toggle-nav").on("click",function(){
         if(little_trick){
           $("#app-navigation").hide();
@@ -475,9 +458,20 @@ var water_data_explorer_PACKAGE = (function() {
         });
       }, map);
     }
-    catch(error){
-      console.log(error);
-    }
+      catch(error){
+        console.log(error);
+        $.notify(
+            {
+                message: `Unable to start the Data Explorer`
+            },
+            {
+                type: "danger",
+                allow_dismiss: true,
+                z_index: 20000,
+                delay: 5000
+            }
+        )
+      }
 
 
   })
