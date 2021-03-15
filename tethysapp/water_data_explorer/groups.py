@@ -167,6 +167,7 @@ def available_services(request):
             hs_services['services'] = water.AvailableServices()['available']
 
         except Exception as e:
+            print(e)
             # print("I AM HERE OR NOT")
             # services = parseService(url_catalog)
             # views = giveServices(services)
