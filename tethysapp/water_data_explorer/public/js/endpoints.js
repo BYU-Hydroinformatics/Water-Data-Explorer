@@ -27,7 +27,16 @@ get_vars_from_site = function (resultList){
             reque_ob['hs_name'] = $("#site_choose option:selected").html();
             reque_ob['hs_url'] = $("#url_WOF").text();
             reque_ob['site_hs'] = $("#site_choose")['0'].value;
+
             reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
+            $("#variable_choose").off("change.something2").on("change", function(){
+              console.log("change unbind variable");
+            });
+            $("#variable_choose").on("change.something2").on("change", function(){
+              reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
+            });
+            console.log($("#variable_choose")['0'].value);
+
             $("#btn-add-download").unbind();
             $("#btn-add-download").on("click", function(){
               $("#downloading_loading").removeClass("hidden");
