@@ -22,7 +22,7 @@ requirements:
       - xmltodict
       - pyshp
       - geopandas
-      -pywaterml==1.2.13
+      - pywaterml==1.2.13
 
   pip:
 
