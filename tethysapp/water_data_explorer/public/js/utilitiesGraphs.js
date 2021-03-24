@@ -44,6 +44,7 @@ select_variable_change = function(){
           data: object_request_variable,
           success: function(result1){
             if(result1.graphs.length > 0){
+              console.log(result1)
               let time_series_array = result1['graphs'];
               let time_series_array_interpolation = result1['interpolation'];
 
@@ -71,7 +72,14 @@ select_variable_change = function(){
               })
               let title_graph = `${result1['variablename']} vs ${result1['timeUnitName']}`;
               let units_x = `${result1['unit_name']}` ;
+              if (result1['unit_name'] == "No Data was provided"){
+                units_x = " ";
+              }
+
               let units_y = `${result1['timeUnitName']}`;
+              if (result1['timeUnitName'] == "No Data was provided"){
+                units_y = "Time";
+              }
               let variable_name_legend = `${result1['variablename']}`;
               let type= "scatter";
               active_map_feature_graphs['scatter']['x_array'] = x_array;
