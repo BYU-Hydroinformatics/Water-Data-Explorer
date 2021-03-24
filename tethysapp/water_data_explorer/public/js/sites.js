@@ -63,7 +63,8 @@ activate_layer_values = function (){
         object_request['network']=feature_single.values_['network'];
 
         $("#GeneralLoading").removeClass("hidden");
-
+        $('#sG').bootstrapToggle('on')
+        console.log($('#sG'))
         $.ajax({
           type:"GET",
           url: `get-values-hs`,
