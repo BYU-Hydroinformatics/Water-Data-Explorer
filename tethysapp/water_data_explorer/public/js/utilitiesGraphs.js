@@ -177,11 +177,11 @@ select_variable_change = function(){
                          console
                          $.ajax({
                            type:"GET",
-                           url: `get-values-graph-hs`,
+                           url: `get-xml`,
                            dataType: "JSON",
                            data: object_request_variable,
                            success: function(result1){
-
+                             console.log(result1)
                              var xmltext = result1['waterml'];
                              var pom = document.createElement('a');
                              var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
