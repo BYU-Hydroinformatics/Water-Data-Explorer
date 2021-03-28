@@ -338,7 +338,7 @@ var water_data_explorer_PACKAGE = (function() {
       try{
         if(views_names != "None"){
           $(".titleh").html(`${views_names} Views`)
-          $(".app-title").html(`${views_names} Data Explorer`)
+          // $(".app-title").html(`${views_names} Data Explorer`)
         }
         else{
           $(".titleh").html(`Views`)
