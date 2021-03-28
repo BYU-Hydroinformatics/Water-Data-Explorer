@@ -164,7 +164,7 @@ cleanGraphs = function(){
   //RESET THE GRAPHS PORTION //
   $( "#table_div" ).empty();
   initialize_graphs([],[],"No data Available","","","","scatter");
-  $("#siteName_title").html("Site Variables Info");
+  $("#siteName_title").html("Select a Station");
   $("#siteDes").html("No Site Selected, when a site is 'clicked' metadata of the site will display in this part such as a name and a description.");
   $('#variables_graph option').remove();
   $('#variables_graph').selectpicker('refresh');
@@ -188,27 +188,11 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
     element_graphs.style.cssText=  "display: flex; flex-direction: row;";
     map.updateSize();
     var config = {
-        modeBarButtonsToAdd: [{ name: 'downloadCsv', title: 'Download data as csv', icon: Plotly.Icons.disk, click: function(){
-          var csvData = [];
-          var header = [xTitle,yTitle] //main header.
-          csvData.push(header);
-          for (var i = 0; i < xArray.length; i++){ //data
-            var line = [xArray[i],yArray[i]];
-            csvData.push(line);
-          }
-          var csvFile = csvData.map(e=>e.map(a=>'"'+((a||"").toString().replace(/"/gi,'""'))+'"').join(",")).join("\r\n"); //quote all fields, escape quotes by doubling them.
-          var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
-          var link = document.createElement("a");
-          var url = URL.createObjectURL(blob);
-          link.setAttribute("href", url);
-          link.setAttribute("download", title_graph.replace(/[^a-z0-9_.-]/gi,'_') + ".csv");
-          link.style.visibility = 'hidden';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          } }],
-          responsive: true
-      }
+       modeBarButtonsToRemove: ['hoverClosestCartesian', 'hoverCompareCartesian','resetScale2d','toggleSpikelines'],
+       displaylogo: false,
+       responsive:true
+    };
+
     if(type === "scatter"){
       var trace1 = {
         x: xArray,
@@ -238,15 +222,6 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
       }
 
       var layout = {
-        xaxis: {
-          title: {
-           text: xTitle,
-           font: {
-             size: 15,
-             color: '#7f7f7f'
-           }
-         }
-        },
         yaxis: {
           title: {
            text: yTitle,
@@ -254,14 +229,27 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
              size: 15,
              color: '#7f7f7f'
            }
-         }
+         },
+         automargin: true,
         },
-        title: title_graph,
+        // title: title_graph,
         autosize: true,
         showlegend:true,
+        legend: {
+          "orientation": "h",
+          x: 0.3,
+          y: -0.1
+        },
+        margin: {
+          l: 40,
+          r: 40,
+          b: 40,
+          t: 40,
+          pad: 10
+        },
       };
 
-      Plotly.newPlot('plots', data, layout,config);
+      Plotly.newPlot('plots', data, layout, config);
 
     }
 
@@ -283,7 +271,7 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
         autosize: true,
 
       };
-      Plotly.newPlot('plots', data, layout,config);
+      Plotly.newPlot('plots', data, layout, config);
     }
   }
   catch(e){

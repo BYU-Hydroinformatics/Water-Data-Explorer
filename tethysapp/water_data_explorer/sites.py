@@ -57,6 +57,7 @@ def get_values_hs(request):
     try:
         response_info = GetSiteInfo(client,site_desc)['siteInfo']
         df = pd.DataFrame.from_dict(response_info)
+
         if df.empty:
             return_obj['country'] = []
             return_obj['variables'] =[]
@@ -65,12 +66,16 @@ def get_values_hs(request):
             return_obj['organization'] = []
             return_obj['times_series'] = []
             return_obj['geolo'] = []
+            return_obj['timeUnitName'] = []
             return JsonResponse(return_obj)
+        pd.set_option('display.max_columns', None)
         print(df)
         return_obj['country'] = df['country'].tolist()[0]
         return_obj['variables'] = df['variableName'].tolist()
         return_obj['units'] = df['unitAbbreviation'].tolist()
         return_obj['codes'] = df['variableCode'].tolist()
+        return_obj['timeUnitName'] = df['timeUnitName'].tolist()
+
         obj_var_desc = {}
         obj_var_times_s = {}
         # print(df['description'].tolist())
@@ -208,7 +213,7 @@ def get_values_graph_hs(request):
         return JsonResponse(return_obj)
 
     variable_name = df['variableName'].tolist()[0]
-    unit_name = df['unitName'].tolist()[0]
+    unit_name = df['unitAbbreviation'].tolist()[0]
     time_unit_name = df['timeUnitName'].tolist()[0]
     time_series_vals = df['dataValue'].tolist()
     time_series_timeUTC = df['dateTime'].tolist()

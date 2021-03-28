@@ -46,9 +46,31 @@ table #tbl-hydroservers{
 
 }
 
-#tbl-hydroservers th, #tbl-hydroservers td, #tbl-hydroservers tr {
+#tbl-hydroservers th{
   text-align: center !important;
   border-bottom: 1px solid #ddd !important;
+}
+#tbl-hydrogroups th{
+  text-align: center !important;
+  border-bottom: 1px solid #ddd !important;
+}
+#tbl-hydroservers td{
+  border-bottom: 1px solid #ddd !important;
+}
+#tbl-hydrogroups td{
+  border-bottom: 1px solid #ddd !important;
+}
+
+
+.hs_title, .hs_url{
+  word-break: break-all;
+  padding-left: 4%;
+}
+.hs_url{
+  padding-left: 4%;
+}
+.hs_title{
+  padding-left: 1%;
 }
 
 tr:hover {
@@ -78,7 +100,7 @@ tr:hover {
   position: absolute;
   top: 0;
   left: -300px;
-  width: 400px;
+  width: 400px !important;
   height: 100%;
   background: #efefef;
   padding: 0 0px;
@@ -92,7 +114,7 @@ tr:hover {
   width: 100%;
   height: 100%;
   /* position: fixed; */
-  flex:1 1 50%;
+  flex:1 1 40%;
   order: 1;
   overflow-y: hidden;
 }
@@ -109,7 +131,7 @@ tr:hover {
 
 #options{
   padding-left: 2%;
-  flex: 1 1 40%;
+  flex: 1 1 30%;
   order: 1;
   width: 100%;
   height: 100%;
@@ -126,7 +148,7 @@ tr:hover {
 } */
 #plots2{
   display: flex;
-  flex: 1 1 50%;
+  flex: 1 1 70%;
   order: 3;
   width: 100%;
   height: 100%;
@@ -327,10 +349,10 @@ tr:hover {
   margin: 0 0 0 0;
   /* padding: 0 0 0 0; */
 }
-#options p {
-  /* font-weight: bold; */
-}
-#options em {
+/* #options p {
+  font-weight: bold;
+} */
+#options span, i, em {
   font-weight: bold;
 }
 #variables_id em {
@@ -633,6 +655,8 @@ input[type=checkbox], input[type=radio]{
 
 #siteVariableTable th {
   font-weight: normal;
+  word-break: break-all;
+  font-size: 0.9em;
 }
 #siteVariableTable .danger th {
   font-weight: bold;
