@@ -288,8 +288,9 @@ tr:hover {
     -webkit-flex: 1 1 auto;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
-    max-width: 218px;
     word-break: break-all;
+    margin-right: 10%;
+    margin-left: 2%;
 }
 .group-name {
     -webkit-box-flex: 1;
@@ -298,7 +299,6 @@ tr:hover {
     flex: 1 1 auto;
     max-width: 218px;
     word-break: break-all;
-    margin-left: 5%;
 }
 #buttonsBar{
   margin-left: 10%;
@@ -370,6 +370,7 @@ tr:hover {
 .panel-heading.buttonAppearance h4{
     width: 100%;
     align-items: center;
+    margin-left: 2%;
 }
 .ui-state-default.buttonAppearance{
     /* margin: 40px; */
@@ -622,6 +623,8 @@ input[type=checkbox], input[type=radio]{
   right: 1%;
   padding: 0.5em;
   background-color: rgba(255,255,255,0.5);
+  width: 20%;
+  word-break: break-all;
 }
 
 #btn-download-waterml, #btn-download-csv{
@@ -649,4 +652,7 @@ input[type=checkbox], input[type=radio]{
 
 .modal-backdrop {
     display:none;
+}
+#groups_hydroservers{
+  margin:0.5%;
 }
