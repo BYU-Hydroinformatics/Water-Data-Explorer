@@ -932,7 +932,7 @@ showVariables2 = function(){
            // console.log(result);
            var HSTableHtml =
                `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%">
-                  <thead><th>variable name</th><th>units</th><th> WHOS variable code</th></thead>
+                  <thead><th>Observed Variable</th><th>Unit</th><th> WHOS Variable Code</th></thead>
                <tbody>`
            if (result['variables_name'].length === 0) {
                $modalVariables
