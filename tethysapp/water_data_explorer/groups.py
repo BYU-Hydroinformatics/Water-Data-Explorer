@@ -201,7 +201,8 @@ def create_group(request):
                 # selected_services.append(value)
 
 
-        group_obj['title']= title.translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
+        # group_obj['title']= title.translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
+        group_obj['title']= title
         group_obj['description']= description
         # url_catalog = request.POST.get('url')
         group_hydroservers=Groups(title=title, description=description)
@@ -240,7 +241,8 @@ def addMultipleViews(hs_list,group):
         try:
             sites_object = water.GetSites()
             sites_parsed_json = json.dumps(sites_object)
-            return_obj['title'] = hs['title'].translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
+            # return_obj['title'] = hs['title'].translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
+            return_obj['title'] = hs['title']
             return_obj['url'] = hs['url']
             return_obj['description'] = hs['description']
             return_obj['siteInfo'] = sites_parsed_json

@@ -1,3 +1,13 @@
+uuidv4 = function () {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+
+
+
 copyToClipboard = function(element) {
   var $temp = $("<input>");
   $("body").append($temp);
@@ -344,7 +354,7 @@ function html_for_groups(isAdmin, title, id_group_separator){
         <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
           <h4 class="panel-title">
             <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-            <span class="group-name"> ${title}</span>
+            <span class="group-name"> ${id_dictionary[title]}</span>
 
             </a>
           </h4>
@@ -388,7 +398,7 @@ function html_for_groups(isAdmin, title, id_group_separator){
         <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
           <h4 class="panel-title">
             <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-            <span class="group-name">${title}</span>
+            <span class="group-name">${id_dictionary[title]}</span>
             </a>
           </h4>
           <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
@@ -427,6 +437,7 @@ function change_effect_groups(element_to_check,id_group_separator){
       map.updateSize()
     }
     let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
+    console.log(servers_checks);
     for(i = 0; i < servers_checks.length; i++) {
       let server_name = servers_checks[i].id;
        let checkbox = Array.from(servers_checks[i].children)
@@ -436,14 +447,15 @@ function change_effect_groups(element_to_check,id_group_separator){
              checkbox[j].checked = element_to_check.checked;
            }
        }
+       let server_new_name = id_dictionary[server_name];
        ////console.log(checkbox);
        map.getLayers().forEach(function(layer) {
-         if(layer_object_filter.hasOwnProperty(server_name) == false){
+         if(layer_object_filter.hasOwnProperty(server_new_name) == false){
            //console.log("false")
-           if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
+           if(layer instanceof ol.layer.Vector && layer == layersDict[server_new_name]){
              if(element_to_check.checked){
 
-               layer.setStyle(featureStyle(layerColorDict[server_name]));
+               layer.setStyle(featureStyle(layerColorDict[server_new_name]));
              }
              else{
                layer.setStyle(new ol.style.Style({}));
@@ -452,10 +464,10 @@ function change_effect_groups(element_to_check,id_group_separator){
          }
          else{
            //console.log("true")
-           if(layer instanceof ol.layer.Vector && layer == layer_object_filter[server_name]){
+           if(layer instanceof ol.layer.Vector && layer == layer_object_filter[server_new_name]){
              if(element_to_check.checked){
 
-               layer.setStyle(featureStyle(layerColorDict[server_name]));
+               layer.setStyle(featureStyle(layerColorDict[server_new_name]));
              }
              else{
                layer.setStyle(new ol.style.Style({}));
@@ -476,7 +488,7 @@ function html_for_servers(title,group_name,isNew){
     let check_var = (( isNew == true ) ? 'checked' : '');
     let newHtml = `
     <li class="ui-state-default" layer-name="${title}" id="${title}" >
-    <span class="server-name">${title}</span>
+    <span class="server-name">${id_dictionary[title]}</span>
     <input class="chkbx-layer" type="checkbox" ${check_var}>
     <button type="button" id="${title}_${group_name}_reload" class="btn btn-dark btn-sm">
      <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
@@ -516,6 +528,7 @@ function toDegreesMinutesAndSeconds(coordinate) {
     }
 
 }
+
 getIconLegend = function(style,server) {
   try{
     style = style.getImage();

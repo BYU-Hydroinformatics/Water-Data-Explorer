@@ -470,8 +470,8 @@ def soap_group(request):
     if request.is_ajax() and request.method == 'POST':
         url = request.POST.get('soap-url')
         title = request.POST.get('soap-title')
-        title = title.replace(" ", "")
-        title = title.translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
+        # title = title.replace(" ", "")
+        # title = title.translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
         group = request.POST.get('actual-group')
         #print(group)
         description = request.POST.get('textarea')

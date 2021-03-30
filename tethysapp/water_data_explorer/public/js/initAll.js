@@ -410,6 +410,7 @@ var water_data_explorer_PACKAGE = (function() {
   $(function() {
     try{
       let little_trick = true;
+      // console.log(uuidv4());
       init_jquery_var();
       addDefaultBehaviorToAjax();
       init_map();
@@ -457,6 +458,7 @@ var water_data_explorer_PACKAGE = (function() {
           }
         });
       }, map);
+      console.log(id_dictionary)
     }
       catch(error){
         console.log(error);

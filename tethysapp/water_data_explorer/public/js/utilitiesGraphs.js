@@ -71,7 +71,7 @@ select_variable_change = function(){
                 y_array_interpolation.push(y[1]);
               })
               let title_graph = `${result1['variablename']} vs ${result1['timeUnitName']}`;
-              let units_x = `${result1['unit_name']}` ;
+              let units_x = `${result1['variablename']} (${result1['unit_name']})` ;
               if (result1['unit_name'] == "No Data was provided"){
                 units_x = " ";
               }
@@ -101,7 +101,7 @@ select_variable_change = function(){
                 initialize_graphs(x_array,y_array,title_graph,units_y, units_x,variable_name_legend,type,x_array_interpolation,y_array_interpolation);
 
                 $("#download_dropdown").unbind('change');
-                $("#download_dropdown").change(function(){
+                let funcDown = function(){
                   let selectedDownloadType = $('#download_dropdown')['0'].value;
                   let selectedDownloadTypeText = $('#download_dropdown')['0'];
                   if(selectedDownloadType != "Download"){
@@ -267,8 +267,12 @@ select_variable_change = function(){
                       });
                     }
                   }
-                });
+                }
 
+
+                $("#download_dropdown").change(funcDown);
+                // $( document ).on( 'change', "#download_dropdown", funcDown );
+                // $( document ).on( 'click', "#download_dropdown", funcDown );
               }
 
 
@@ -336,7 +340,11 @@ select_variable_change = function(){
     )
   }
 }
-$("#variables_graph").change(select_variable_change);
+// let temp_var = $("#variables_graph")
+// $("#variables_graph").change(select_variable_change);
+$( document ).on( 'change', "#variables_graph", select_variable_change );
+$( document ).on( 'click', "#variables_graph", select_variable_change );
+
 $("#update_graphs").on("click",select_variable_change);
 /*
 ************ FUNCTION NAME: CHANGE_TYPE_GRAPHS_GROUP **********************

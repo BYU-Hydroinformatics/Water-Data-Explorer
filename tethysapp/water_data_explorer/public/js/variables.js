@@ -180,6 +180,8 @@ var filter_words,
     get_vars_from_site,
     download_python_notebook,
     showVariables2,
+    uuidv4,
+    id_dictionary = {},
     generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that

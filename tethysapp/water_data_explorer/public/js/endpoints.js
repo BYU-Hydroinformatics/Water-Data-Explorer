@@ -247,15 +247,21 @@ load_individual_hydroservers_group = function(group_name){
 
                //USE A FUNCTION TO FIND THE LI ASSOCIATED WITH THAT GROUP  AND DELETE IT FROM THE MAP AND MAKE ALL
                // THE CHECKBOXES VISIBLE //
-
+               let group_name_e3;
+               Object.keys(id_dictionary).forEach(function(key) {
+                 if(id_dictionary[key] == group_name ){
+                   group_name_e3 = key;
+                 }
+               });
                let extent = ol.extent.createEmpty()
-               let id_group_separator = `${group_name}_list_separator`;
+               // let id_group_separator = `${group_name}_list_separator`;
+               let id_group_separator = `${group_name_e3}_list_separator`;
 
                if(servers.length <= 0){
-                 $(`#${group_name}-noGroups`).show();
+                 $(`#${group_name_e3}-noGroups`).show();
                }
                else{
-                  $(`#${group_name}-noGroups`).hide();
+                  $(`#${group_name_e3}-noGroups`).hide();
                }
 
                servers.forEach(function(server){
@@ -264,23 +270,28 @@ load_individual_hydroservers_group = function(group_name){
                        url,
                        siteInfo
                    } = server
+                   let unique_id_group = uuidv4()
+                   id_dictionary[unique_id_group] = title
                    information_model[`${group_name}`].push(title);
 
-                   title = title.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+                   let new_title = unique_id_group;
 
-                     let newHtml = html_for_servers(title,group_name);
+
+                    // title = title.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+
+                     let newHtml = html_for_servers(new_title,group_name_e3);
                      $(newHtml).appendTo(`#${id_group_separator}`);
 
-                     $(`#${title}_variables`).on("click",showVariables2);
-                     $(`#${title}_variables_info`).on("click",hydroserver_information);
-                     $(`#${title}_${group_name}_reload`).on("click",update_hydroserver);
+                     $(`#${new_title}_variables`).on("click",showVariables2);
+                     $(`#${new_title}_variables_info`).on("click",hydroserver_information);
+                     $(`#${new_title}_${group_name_e3}_reload`).on("click",update_hydroserver);
 
 
                      let lis = document.getElementById(`${id_group_separator}`).getElementsByTagName("li");
                      let li_arrays = Array.from(lis);
                      let li_arrays2 = Array.from(lis);
 
-                     let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
+                     let input_check = li_arrays.filter(x => new_title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
 
 
                      input_check.addEventListener("change", function(){
@@ -339,14 +350,14 @@ load_individual_hydroservers_group = function(group_name){
                          }),
                        })
                      });
-                     let rowHTML= `<tr id= ${title}-row-complete>
-                                    <th id="${title}-row-legend"></th>
+                     let rowHTML= `<tr id= ${new_title}-row-complete>
+                                    <th id="${new_title}-row-legend"></th>
                                     <th>${title}</th>
                                   </tr>`
-                    if(!document.getElementById(`${title}-row-complete`)){
+                    if(!document.getElementById(`${new_title}-row-complete`)){
                       $(rowHTML).appendTo('#tableLegend');
                     }
-                    $(`#${title}-row-legend`).prepend($(getIconLegend(test_style,title)));
+                    $(`#${new_title}-row-legend`).prepend($(getIconLegend(test_style,title)));
 
 
                      map.addLayer(vectorLayer);
@@ -356,7 +367,7 @@ load_individual_hydroservers_group = function(group_name){
                      vectorLayer.set("selectable", true)
 
                      layersDict[title] = vectorLayer;
-                     $(`#${title}_zoom`).on("click",function(){
+                     $(`#${new_title}_zoom`).on("click",function(){
                        if(layersDict['selectedPointModal']){
                          map.removeLayer(layersDict['selectedPointModal'])
                          map.updateSize();
@@ -448,12 +459,17 @@ add_hydroserver = function(){
     }
     if ($("#soap-title").val() != "") {
       var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9]+$")
+      var specials=/[*|\":<>[\]{}`\\()';@&$]/;
 
       var title = $("#soap-title").val()
-      if (!regex.test(title)) {
+      // if (!regex.test(title)) {
+      if (specials.test(title)){
+
           $modalAddSOAP
               .find(".warning")
-              .html("<b>Please enter Letters only for the title.</b>");
+              // .html("<b>Please enter Letters only for the title.</b>");
+              .html("<b>The following characters are not permitted in the title [ * | \" : < > [ \ ] { } ` \ \ ( ) ' ; @ & $ ]</b>");
+
           return false
       }
     } else {
@@ -463,7 +479,8 @@ add_hydroserver = function(){
     datastring += actual_group;
 
     $("#soapAddLoading").removeClass("hidden");
-
+    let unique_id_group = uuidv4()
+    id_dictionary[unique_id_group] = title
 
     $.ajax({
         type: "POST",
@@ -475,18 +492,27 @@ add_hydroserver = function(){
             //Returning the geoserver layer metadata from the controller
             var json_response = JSON.parse(result)
             let group_name = actual_group.split('=')[1];
-            let id_group_separator = `${group_name}_list_separator`;
+            // let id_group_separator = `${group_name}_list_separator`;
+
+
+            let group_name_e3;
+            Object.keys(id_dictionary).forEach(function(key) {
+              if(id_dictionary[key] == group_name ){
+                group_name_e3 = key;
+              }
+            });
+
+            let id_group_separator = `${group_name_e3}_list_separator`;
+
+            let new_title = unique_id_group;
 
             try{
               if (json_response.status === "true") {
                   // put the ajax call and also the filter //
                   let servers_with_keywords = [];
                   let key_words_to_search = get_all_the_checked_keywords();
-                  let group_name_obj={
-                    group: group_name
-                  };
 
-                  $(`#${group_name}-noGroups`).hide();
+                  $(`#${group_name_e3}-noGroups`).hide();
 
                     let {title, siteInfo, url, group} = json_response
 
@@ -510,14 +536,14 @@ add_hydroserver = function(){
                           }),
                         })
                       });
-                      let rowHTML= `<tr id= ${title}-row-complete>
-                                     <th id="${title}-row-legend"></th>
+                      let rowHTML= `<tr id= ${new_title}-row-complete>
+                                     <th id="${new_title}-row-legend"></th>
                                      <th>${title}</th>
                                    </tr>`
-                     if(!document.getElementById(`${title}-row-complete`)){
+                     if(!document.getElementById(`${new_title}-row-complete`)){
                        $(rowHTML).appendTo('#tableLegend');
                      }
-                     $(`#${title}-row-legend`).prepend($(getIconLegend(test_style,title)));
+                     $(`#${new_title}-row-legend`).prepend($(getIconLegend(test_style,title)));
 
 
                       map.addLayer(vectorLayer);
@@ -529,17 +555,17 @@ add_hydroserver = function(){
 
 
                         let no_servers_tag = Array.from(document.getElementById(`${id_group_separator}`).getElementsByTagName("P"))[0];
-                        let newHtml = html_for_servers(title,group_name)
+                        let newHtml = html_for_servers(new_title,group_name_e3)
                          $(newHtml).appendTo(`#${id_group_separator}`);
-                         $(`#${title}_variables`).on("click",showVariables2);
-                         $(`#${title}_variables_info`).on("click",hydroserver_information);
-                         $(`#${title}_${group_name}_reload`).on("click",update_hydroserver);
+                         $(`#${new_title}_variables`).on("click",showVariables2);
+                         $(`#${new_title}_variables_info`).on("click",hydroserver_information);
+                         $(`#${new_title}_${group_name_e3}_reload`).on("click",update_hydroserver);
 
                         // MAKES THE LAYER INVISIBLE
 
                         let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
                         let li_arrays = Array.from(lis);
-                        let input_check = li_arrays.filter(x => title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
+                        let input_check = li_arrays.filter(x => new_title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
 
                         input_check.addEventListener("change", function(){
                           if(layersDict['selectedPointModal']){
@@ -568,7 +594,7 @@ add_hydroserver = function(){
                           }
 
                         });
-                        $(`#${title}_zoom`).on("click",function(){
+                        $(`#${new_title}_zoom`).on("click",function(){
                           if(layersDict['selectedPointModal']){
                             map.removeLayer(layersDict['selectedPointModal'])
                             map.updateSize();
@@ -665,6 +691,12 @@ delete_hydroserver= function(){
   try{
     $modalInterface.find(".success").html("")
     let arrayActual_group=actual_group.split('=')[1];
+    let group_name_e3;
+    Object.keys(id_dictionary).forEach(function(key) {
+      if(id_dictionary[key] == actual_group.split('=')[1] ){
+        group_name_e3 = key;
+      }
+    });
     var datastring = $modalDelete.serialize() //Delete the record in the database
     datastring += actual_group;
     console.log(datastring);
@@ -683,28 +715,34 @@ delete_hydroserver= function(){
 
               let i_string=i.toString();
               let title=json_response[i_string];
-              title  = title.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+              // title  = title.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+              let new_title;
+              Object.keys(id_dictionary).forEach(function(key) {
+                if(id_dictionary[key] == title ){
+                  new_title = key;
+                }
+              });
               console.log(title)
-              $(`#${title}-row-complete`).remove()
+              $(`#${new_title}-row-complete`).remove()
 
-              let element = document.getElementById(title);
+              let element = document.getElementById(new_title);
               element.parentNode.removeChild(element);
 
               map.removeLayer(layersDict[title])
               delete layersDict[title]
               map.updateSize()
 
-              let id_group_separator = `${actual_group.split('=')[1]}_list_separator`;
+              let id_group_separator = `${group_name_e3}_list_separator`;
               let separator_element = document.getElementById(id_group_separator);
               console.log(separator_element);
               let children_element = Array.from(separator_element.children);
               console.log(children_element);
               if(children_element.length < 2){
                 console.log("empty")
-                $(`#${actual_group.split('=')[1]}-noGroups`).show();
+                $(`#${group_name_e3}-noGroups`).show();
 
               }
-              $(`#${title}deleteID`).remove();
+              $(`#${new_title}deleteID`).remove();
 
               $.notify(
                   {
@@ -840,10 +878,9 @@ delete_hydroserver_Individual= function(group,server){
 showVariables = function(){
    try{
      let groupActual = this.parentElement.parentNode.id.split("_")[0];
+     groupActual = id_dictionary[groupActual];
      let hsActual = this.id.split("_")[0];
-     group_show_actual = groupActual;
-     hs_show_actual = hsActual;
-
+     hsActual = id_dictionary[hsActual];
      filterSites['group']=groupActual;
      filterSites['hs']=hsActual;
 
@@ -897,13 +934,14 @@ showVariables = function(){
 showVariables2 = function(){
  try{
    let groupActual = this.parentElement.parentNode.id.split("_")[0];
+   groupActual = id_dictionary[groupActual];
    let hsActual = this.id.split("_")[0];
-   group_show_actual = groupActual;
-   hs_show_actual = hsActual;
+   hsActual = id_dictionary[hsActual];
    filterSites['group']=groupActual;
    filterSites['hs']=hsActual;
 
-   let $modalVariables = $("#modalShowVariablesTable")
+   let $modalVariables = $("#modalShowVariablesTable");
+   $(`#hideScroll2`).empty();
    $("#variablesLoading2").removeClass("hidden");
    $.ajax({
        type: "GET",
@@ -1109,10 +1147,10 @@ hydroserver_information = function(){
 
     site_select.selectpicker("refresh");
     let groupActual = this.parentElement.parentNode.id.split("_")[0];
-
+    groupActual = id_dictionary[groupActual]
     let hsActual = this.id.split("_")[0];
-    hsActual = hsActual.replace(/-/g, ' ');
-
+    // hsActual = hsActual.replace(/-/g, ' ');
+    hsActual = id_dictionary[hsActual]
     filterSites['group']=groupActual;
     filterSites['hs']=hsActual;
     $("#hydroserverTitle").html(filterSites['hs']);
@@ -1122,7 +1160,8 @@ hydroserver_information = function(){
       dataType: "JSON",
       data: filterSites,
       success: function(result1){
-        let hs_title = result1['title'].replace(/\s/g, "-");
+        // let hs_title = result1['title'].replace(/\s/g, "-");
+        let hs_title = result1['title'];
 
         setTimeout(function(){
           if(map2 ==undefined){

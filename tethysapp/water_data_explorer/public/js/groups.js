@@ -525,12 +525,14 @@ create_group_hydroservers = function(){
     }
     if ($("#addGroup-title").val() != "") {
       var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9]+$")
+      var specials=/[*|\":<>[\]{}`\\()';@&$]/;
       var title = $("#addGroup-title").val()
-      if (!regex.test(title)) {
+      if (specials.test(title)){
+      // if (!regex.test(title)) {
           $modalAddGroupHydro
               .find(".warning")
               // .html("<b>Please note that only numbers and other characters besides the underscore ( _ ) are not allowed</b>");
-              .html("<b>Please enter Letters only for the title.</b>");
+              .html("<b>The following characters are not permitted in the title [ * | \" : < > [ \ ] { } ` \ \ ( ) ' ; @ & $ ]</b>");
           return false
       }
     }
@@ -550,7 +552,8 @@ create_group_hydroservers = function(){
     let elementForm= $("#modalAddGroupServerForm");
     let datastring= elementForm.serialize();
     $("#soapAddLoading-group").removeClass("hidden");
-
+    let unique_id_group = uuidv4()
+    id_dictionary[unique_id_group] = title
     $.ajax({
         type: "POST",
         url: `create-group/`,
@@ -562,23 +565,29 @@ create_group_hydroservers = function(){
 
             let group=json_response
             if(group.message !== "There was an error while adding th group.") {
+              // let title=group.title;
               let title=group.title;
               let description=group.description;
               information_model[`${title}`] = [];
-              let id_group_separator = `${title}_list_separator`;
+              let new_title = unique_id_group;
+
+              let id_group_separator = `${new_title}_list_separator`;
+
+
+              // let id_group_separator = `${title}_list_separator`;
               let newHtml;
               if(can_delete_hydrogroups){
-                newHtml = html_for_groups(can_delete_hydrogroups, title, id_group_separator);
+                newHtml = html_for_groups(can_delete_hydrogroups, new_title, id_group_separator);
               }
               else{
-                newHtml = html_for_groups(false, title, id_group_separator);
+                newHtml = html_for_groups(false, new_title, id_group_separator);
               }
 
               $(newHtml).appendTo("#current-Groupservers");
 
               $(`#${title}-noGroups`).show();
 
-              let li_object = document.getElementById(`${title}`);
+              let li_object = document.getElementById(`${new_title}`);
               let input_check = li_object.getElementsByClassName("chkbx-layers")[0];
 
               if(!input_check.checked){
@@ -590,8 +599,8 @@ create_group_hydroservers = function(){
               });
 
 
-              let $title="#"+title;
-              let $title_list="#"+title+"list";
+              let $title="#"+new_title;
+              let $title_list="#"+new_title+"list";
               ////console.log($title_list);
 
 
@@ -699,65 +708,92 @@ load_group_hydroservers = function(){
        url: `load-groups`,
        dataType: "JSON",
        success: result => {
-           let groups =result["hydroservers"];
+          try{
+            let groups =result["hydroservers"];
+            console.log(groups)
 
-           $(".divForServers").empty() //Resetting the catalog
-           let extent = ol.extent.createEmpty()
-           ind = 1;
-           groups.forEach(group => {
-               let {
-                   title,
-                   description
-               } = group
-               let id_group_separator = `${title}_list_separator`;
-               information_model[`${title}`] = []
-               $(`#${title}-noGroups`).show();
+            $(".divForServers").empty() //Resetting the catalog
+            let extent = ol.extent.createEmpty()
+            ind = 1;
+            groups.forEach(group => {
+                let {
+                    title,
+                    description
+                } = group
+                let unique_id_group = uuidv4()
+                id_dictionary[unique_id_group] = title;
 
-               let newHtml;
-               if(can_delete_hydrogroups){
-                 newHtml = html_for_groups(can_delete_hydrogroups, title, id_group_separator);
-               }
-               else{
-                 newHtml = html_for_groups(false, title, id_group_separator);
-               }
-               $(newHtml).appendTo("#current-Groupservers");
+                // let id_group_separator = `${title}_list_separator`;
+                information_model[`${title}`] = []
+
+                let new_title = unique_id_group;
+                let id_group_separator = `${new_title}_list_separator`;
 
 
+                $(`#${new_title}-noGroups`).show();
 
-               let li_object = document.getElementById(`${title}`);
-               let input_check = li_object.getElementsByClassName("chkbx-layers")[0];
-               load_individual_hydroservers_group(title);
-               let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
-               input_check.addEventListener("change", function(){
-                 change_effect_groups(this,id_group_separator);
-               });
+                let newHtml;
+
+                if(can_delete_hydrogroups){
+                  newHtml = html_for_groups(can_delete_hydrogroups, new_title, id_group_separator);
+                }
+                else{
+                  newHtml = html_for_groups(false, new_title, id_group_separator);
+                }
+                $(newHtml).appendTo("#current-Groupservers");
 
 
-               let $title="#"+title;
-               let $title_list="#"+title+"list";
+                let li_object = document.getElementById(`${new_title}`);
+                let input_check = li_object.getElementsByClassName("chkbx-layers")[0];
+                load_individual_hydroservers_group(title);
+                let servers_checks = document.getElementById(`${id_group_separator}`).getElementsByClassName("chkbx-layers");
+                input_check.addEventListener("change", function(){
+                  change_effect_groups(this,id_group_separator);
+                });
 
-               $($title).click(function(){
-                 $("#pop-up_description2").html("");
 
-                 actual_group = `&actual-group=${title}`;
+                let $title="#"+new_title;
+                let $title_list="#"+new_title+"list";
 
-                 let description_html=`
-                 <h1>Group Metadata<h1>
-                 <h3>Group Title</h3>
-                 <p>${title}</p>
-                 <h3>Group Description</h3>
-                 <p>${description}</p>`;
-                 $("#pop-up_description2").html(description_html);
+                $($title).click(function(){
+                  $("#pop-up_description2").html("");
 
-               });
-               ind = ind +1;
+                  actual_group = `&actual-group=${title}`;
 
-           })
+                  let description_html=`
+                  <h1>Group Metadata<h1>
+                  <h3>Group Title</h3>
+                  <p>${title}</p>
+                  <h3>Group Description</h3>
+                  <p>${description}</p>`;
+                  $("#pop-up_description2").html(description_html);
+
+                });
+                ind = ind +1;
+
+            })
+          }
+          catch(e){
+            console.log("noasfasf")
+            $("#GeneralLoading").addClass("hidden")
+            $.notify(
+                {
+                    message: `There was an error while loading the different WaterOneFlow Web Services`
+                },
+                {
+                    type: "danger",
+                    allow_dismiss: true,
+                    z_index: 20000,
+                    delay: 5000
+                }
+            )
+          }
+
 
    },
    error: function(error) {
-       $("#soapAddLoading").addClass("hidden")
-       $("#btn-add-addHydro").show()
+       $("#GeneralLoading").addClass("hidden")
+
        $.notify(
            {
                message: `There was an error while loading the different WaterOneFlow Web Services`
@@ -795,6 +831,7 @@ remove_individual_hydroservers_group = function(group_name){
             // THE CHECKBOXES VISIBLE //
 
             let extent = ol.extent.createEmpty();
+
             let id_group_separator = `${group_name}_list_separator`;
 
             let lis = document.getElementById(`${id_group_separator}`).getElementsByTagName("li");
@@ -858,24 +895,27 @@ make_list_groups = function(){
     let groupsDiv = $("#current-Groupservers").find(".panel.panel-default");
     let arrayGroups = Object.values(groupsDiv);
     let finalGroupArray=[];
+    console.log(arrayGroups)
     arrayGroups.forEach(function(g){
       if(g.id){
-        let stringGroups = g.id.split("_");
-        let stringGroup = ""
-        for(var i = 0; i < stringGroups.length - 1 ; i++){
-          if (i >0){
-            stringGroup = stringGroup +"_"+stringGroups[i]
-          }
-          else{
-            stringGroup = stringGroup + stringGroups[i]
-          }
-        }
-        // let stringGroup = g.id.split("_")[0];
-        finalGroupArray.push(stringGroup);
+        let stringGroups = g.id.split("_")[0];
+
+        // let stringGroup = ""
+        // for(var i = 0; i < stringGroups.length - 1 ; i++){
+        //   if (i >0){
+        //     stringGroup = stringGroup +"_"+stringGroups[i]
+        //   }
+        //   else{
+        //     stringGroup = stringGroup + stringGroups[i]
+        //   }
+        // }
+        // finalGroupArray.push(stringGroup);
+        finalGroupArray.push(stringGroups);
 
 
       }
     });
+    console.log(finalGroupArray)
     var HSTableHtml =
         '<table id="tbl-hydrogroups"><thead><th>Select</th><th>Title</th></thead><tbody>'
     if (finalGroupArray.length < 0) {
@@ -892,7 +932,7 @@ make_list_groups = function(){
                 title +
                 '"></td>' +
                 '<td class="hs_title">' +
-                title +
+                id_dictionary[title] +
                 "</td>" +
                 "</tr>"
         }
@@ -931,6 +971,8 @@ get_hs_list_from_hydroserver = function(){
       let group_name_obj={
         group: arrayActual_group
       };
+      console.log(id_dictionary)
+
       $.ajax({
           type: "GET",
           url: `catalog-group`,
@@ -950,9 +992,15 @@ get_hs_list_from_hydroserver = function(){
               } else {
                   for (var i = 0; i < server.length; i++) {
                       var title = server[i].title
+                      let new_title;
+                      Object.keys(id_dictionary).forEach(function(key) {
+                        if(id_dictionary[key] == title ){
+                          new_title = key;
+                        }
+                      });
                       var url = server[i].url
                       HSTableHtml +=
-                          `<tr id="${title}deleteID">` +
+                          `<tr id="${new_title}deleteID">` +
                           '<td><input type="checkbox" name="server" id="server" value="' +
                           title +
                           '"></td>' +
@@ -1012,7 +1060,7 @@ delete_group_of_hydroservers = function(){
     datastring.forEach(function(data){
       if(data.checked== true){
         let group_name = data.value;
-        groups_to_delete.push(group_name);
+        groups_to_delete.push(id_dictionary[group_name]);
       }
     });
 
@@ -1034,23 +1082,35 @@ delete_group_of_hydroservers = function(){
           $("#pop-up_description2").empty();
 
           groups_to_erase.forEach(function(group){
-            let element=document.getElementById(group);
+            let group_name_e3;
+            Object.keys(id_dictionary).forEach(function(key) {
+              if(id_dictionary[key] == group ){
+                group_name_e3 = key;
+              }
+            });
+            let element=document.getElementById(group_name_e3);
             element.parentNode.removeChild(element);
-            let id_group_separator = `${group}_list_separator`;
+            let id_group_separator = `${group_name_e3}_list_separator`;
             let separator = document.getElementById(id_group_separator);
             separator.parentNode.removeChild(separator);
-            let group_panel_id = `${group}_panel`;
+            let group_panel_id = `${group_name_e3}_panel`;
             let group_panel = document.getElementById(group_panel_id);
             group_panel.parentNode.removeChild(group_panel);
-            $(`#${group}deleteID`).remove();
+            $(`#${group_name_e3}deleteID`).remove();
           });
 
           hydroservers_to_erase.forEach(function(hydroserver){
-              let hydroserver2  = hydroserver.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
-              map.removeLayer(layersDict[hydroserver2]);
-              if (layersDict.hasOwnProperty(hydroserver2)){
-                delete layersDict[hydroserver2]
-                $(`#${hydroserver2}-row-complete`).remove()
+              // let hydroserver2  = hydroserver.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+              let new_title;
+              Object.keys(id_dictionary).forEach(function(key) {
+                if(id_dictionary[key] == hydroserver ){
+                  new_title = key;
+                }
+              });
+              map.removeLayer(layersDict[hydroserver]);
+              if (layersDict.hasOwnProperty(hydroserver)){
+                delete layersDict[hydroserver]
+                $(`#${new_title}-row-complete`).remove()
               }
           });
           if(layersDict['selectedPointModal']){
@@ -1135,10 +1195,22 @@ catalog_filter = function(){
           let hs_available = JSON.parse(result)['hs'];
           let new_hs_available = []
           hs_available.forEach(function(hs){
-            hs = hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
-            new_hs_available.push(hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,''));
+            // hs = hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+            // new_hs_available.push(hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,''));
+            let hs_new2;
+            Object.keys(id_dictionary).forEach(function(key) {
+              if(id_dictionary[key] == hs ){
+                hs_new2 = key;
+              }
+            });
+            new_hs_available.push(hs_new2);
           })
           let sitesObj =  JSON.parse(result)['stations'];
+          map.getLayers().forEach(function(layer) {
+            if(layer instanceof ol.layer.Vector){
+              layer.setStyle(new ol.style.Style({}));
+            }
+          });
           for(let i = 0;  i< sitesObj.length; ++i){
             let title = sitesObj[i]['title']
             let url = sitesObj[i]['url']
@@ -1146,6 +1218,10 @@ catalog_filter = function(){
             var vectorLayer = map_layers(sites,title,url)[0]
             var vectorSource = map_layers(sites,title,url)[1]
             map.getLayers().forEach(function(layer) {
+              // if(layer instanceof ol.layer.Vector){
+              //   layer.setStyle(new ol.style.Style({}));
+              // }
+              //
                  if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
                      layer.setStyle(new ol.style.Style({}));
                    }
@@ -1195,6 +1271,17 @@ catalog_filter = function(){
                 }
                 else{
                   let groups_divs = Object.keys(information_model);
+                  let groups_divs_3e = []
+                  groups_divs.forEach(function(g3){
+                    let g_new2;
+                    Object.keys(id_dictionary).forEach(function(key) {
+                      if(id_dictionary[key] == g3 ){
+                        g_new2 = key;
+                      }
+                    });
+                    groups_divs_3e.push(g_new2);
+                  })
+                  groups_divs = groups_divs_3e
                   if (!groups_divs.includes(id_li)){
                     $(`#${id_li}`).css({"opacity": "0.5",
                                          "border-color": "#d3d3d3",
@@ -1206,13 +1293,20 @@ catalog_filter = function(){
                 }
              });
              let groups_divs = Object.keys(information_model);
+
              for(let i=0; i< groups_divs.length; ++i){
                let check_all = []
                for(let j=0; j< information_model[groups_divs[i]].length; ++j){
 
-                 let service_div = information_model[groups_divs[i]][j]
-                 service_div = service_div.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
-                 $(`#${service_div} input[type=checkbox]`).each(function(){
+                 let service_div = information_model[groups_divs[i]][j];
+                 let new_service_div;
+                 Object.keys(id_dictionary).forEach(function(key) {
+                   if(id_dictionary[key] == service_div ){
+                     new_service_div = key;
+                   }
+                 });
+                 // service_div = service_div.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+                 $(`#${new_service_div} input[type=checkbox]`).each(function(){
                    if(this.checked){
                      check_all.push(true);
                    }
@@ -1222,7 +1316,18 @@ catalog_filter = function(){
                  });
                }
                if(!check_all.includes(false) && check_all.length > 0){
-                 $(`#${groups_divs[i]} input[type=checkbox]`).each(function() {
+                 let groups_divs_3e = []
+                 groups_divs.forEach(function(g3){
+                   let g_new2;
+                   Object.keys(id_dictionary).forEach(function(key) {
+                     if(id_dictionary[key] == g3 ){
+                       g_new2 = key;
+                     }
+                   });
+                   groups_divs_3e.push(g_new2);
+                 })
+
+                 $(`#${groups_divs_3e[i]} input[type=checkbox]`).each(function() {
                    this.checked = true;
                  });
                }
