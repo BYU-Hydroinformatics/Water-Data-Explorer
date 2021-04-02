@@ -301,6 +301,14 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
       };
       Plotly.newPlot('plots', data, layout, config);
     }
+    // update the layout to expand to the available size
+    // when the window is resized
+    window.onresize = function() {
+        Plotly.relayout('plots', {
+            'xaxis.autorange': true,
+            'yaxis.autorange': true
+        });
+    };
   }
   catch(e){
     $.notify(
