@@ -150,8 +150,15 @@ activate_deactivate_graphs = function(){
 
   let element_map =document.getElementById("map");
   if(actual_state){
-    element_graphs.style.cssText=  "display: flex !important; flex-direction: row;";
-    map.updateSize();
+    if($( window ).width() > 320 && $( window ).width() <= 480){
+      element_graphs.style.cssText=  "display: flex !important; flex-direction: column;";
+      map.updateSize();
+    }
+    else{
+      element_graphs.style.cssText=  "display: flex !important; flex-direction: row;";
+      map.updateSize();
+    }
+
 
   }
   else{
@@ -195,7 +202,18 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
     let element_map =document.getElementById("map");
       //make the down part visible and also give the design of the model//
 
-    element_graphs.style.cssText=  "display: flex; flex-direction: row;";
+
+
+    if($( window ).width() > 320 && $( window ).width() <= 480){
+      element_graphs.style.cssText=  "display: flex; flex-direction: column;";
+    }
+    else{
+      element_graphs.style.cssText=  "display: flex !important; flex-direction: row;";
+    }
+
+
+
+
     map.updateSize();
     var config = {
        modeBarButtonsToRemove: ['hoverClosestCartesian', 'hoverCompareCartesian','resetScale2d','toggleSpikelines'],

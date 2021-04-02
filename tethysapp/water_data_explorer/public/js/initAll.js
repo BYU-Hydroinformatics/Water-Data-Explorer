@@ -137,6 +137,11 @@ var water_data_explorer_PACKAGE = (function() {
 
     init_map = function() {
       try{
+        var myZoom;
+        if($( window ).width() > 320 && $( window ).width() <= 480){
+          myZoom = 2
+          console.log(myZoom);
+        }
         var projection = ol.proj.get("EPSG:3857")
         var baseLayer = new ol.layer.Tile({
             source: new ol.source.BingMaps({
@@ -186,7 +191,7 @@ var water_data_explorer_PACKAGE = (function() {
                 // -25.30066, -57.63591
                   center: [17.670578, -49.082926],
                   projection: projection,
-                  zoom: 3
+                  zoom: myZoom
               }),
               controls: ol.control
                   .defaults()
@@ -424,7 +429,8 @@ var water_data_explorer_PACKAGE = (function() {
       give_name();
       addLegendMap(map);
       $(".toggle-nav").on("click",function(){
-        if(little_trick){
+        if($('#app-navigation').is(':visible')){
+        // if(little_trick){
           $("#app-navigation").hide();
           little_trick = false;
           $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
