@@ -138,7 +138,7 @@ var water_data_explorer_PACKAGE = (function() {
     init_map = function() {
       try{
         var myZoom;
-        if($( window ).width() > 320 && $( window ).width() <= 480){
+        if($( window ).width() <= 768){
           myZoom = 2
           console.log(myZoom);
         }
@@ -464,7 +464,10 @@ var water_data_explorer_PACKAGE = (function() {
           }
         });
       }, map);
-      console.log(id_dictionary)
+      console.log(id_dictionary);
+
+
+
     }
       catch(error){
         console.log(error);

@@ -173,36 +173,7 @@ tr:hover {
 #update_graphs{
   height: 70%;
 }
-@media only screen and (min-width: 768px) {
-    /* tablets and desktop */
-}
 
-@media screen and (max-width: 767px) {
-  #graph{
-    flex: 1 1 60%;
-    order: 2;
-    width: 100%;
-    height: 100%;
-    /* display: none !important; */
-    display: none;
-    /* visibility: hidden; */
-    overflow-y: scroll;
-    flex-direction: column;
-  }
-  #options{
-    padding-left: 2%;
-    flex: 1 1 40%;
-    order: 1;
-    width: 100%;
-    height: 100%;
-    /* overflow-y: scroll; */
-  }
-    /* phones */
-}
-
-@media only screen and (max-width: 767px) and (orientation: portrait) {
-    /* portrait phones */
-}
 /* #map {
     width: 100%;
     height: 100%;
@@ -733,10 +704,13 @@ input[type=checkbox], input[type=radio]{
       display: none;
     }
 } */
-
+#app-content-wrapper #app-content{
+  padding-bottom: 0px;
+}
 /* Smartphones (portrait and landscape) ----------- */
 @media screen and (min-device-width : 320px) and (max-device-width : 480px) {
 /* Styles */
+
 #app-navigation{
   display: none;
   max-width: 100%;
@@ -764,7 +738,7 @@ input[type=checkbox], input[type=radio]{
   #map{
     width: 100%;
     height: 100%;
-    flex:1 1 40%;
+    flex:1 1 0%;
     order: 1;
     max-width: 100%;
     overflow-y: hidden;
@@ -784,16 +758,23 @@ input[type=checkbox], input[type=radio]{
     height: 100%;
   }
   #firstContainer{
-    order: 2;
+    order: 1;
     flex: 1 1 10%;
   }
   #secondContainer{
-    order: 3;
+    order: 2;
     flex: 1 1 10%;
   }
   #plots{
-    order: 1;
+    order: 3;
     flex: 1 1 80%;
+  }
+  #graph{
+    flex: 1 1 100%;
+    order: 2;
+    width: 100%;
+    height: 100%;
+    display: none;
   }
 
 }
@@ -818,7 +799,6 @@ input[type=checkbox], input[type=radio]{
   #tableLegend{
     position: absolute;
     top: 3%;
-    /* left:3%; */
     right: 1%;
     padding: 0.5em;
     background-color: rgba(255,255,255,0.5);
@@ -828,10 +808,16 @@ input[type=checkbox], input[type=radio]{
   #map{
     width: 100%;
     height: 100%;
-    flex:1 1 40%;
+    flex:1 1 0%;
     order: 1;
     max-width: 100%;
     overflow-y: hidden;
+  }
+  #modalHydroserInformation .modal{
+  }
+  #modalHydroserInformation .modal-dialog{
+  }
+  #modalHydroserInformation .modal-body #infoTable{
   }
   #options {
     padding-left: 2%;
@@ -853,13 +839,20 @@ input[type=checkbox], input[type=radio]{
     order: 3;
     flex: 1 1 80%;
   }
+  #graph{
+    flex: 1 1 100%;
+    order: 2;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
 
 }
 
 /* Smartphones (portrait) ----------- */
-@media screen
-and (max-width : 320px) {
+@media screen and (max-width : 320px) {
 /* Styles */
+
 }
 
 /* iPads (portrait and landscape) ----------- */
