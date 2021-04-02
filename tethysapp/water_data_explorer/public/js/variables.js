@@ -182,6 +182,7 @@ var filter_words,
     showVariables2,
     uuidv4,
     id_dictionary = {},
+    legend_change,
     generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that

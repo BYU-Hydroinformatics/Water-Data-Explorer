@@ -712,6 +712,7 @@ input[type=checkbox], input[type=radio]{
 }
 .carousel-indicators{
   top:1%;
+  height: fit-content;
 }
 .carousel-indicators .active{
   background-color: #d9534f;
@@ -841,15 +842,15 @@ input[type=checkbox], input[type=radio]{
     height: 100%;
   }
   #firstContainer{
-    order: 2;
+    order: 1;
     flex: 1 1 10%;
   }
   #secondContainer{
-    order: 3;
+    order: 2;
     flex: 1 1 10%;
   }
   #plots{
-    order: 1;
+    order: 3;
     flex: 1 1 80%;
   }
 
