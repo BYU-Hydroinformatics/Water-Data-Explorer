@@ -2,7 +2,7 @@ responsive_graphs =  function(){
   console.log("asghafasfa")
   let newHtml;
   console.log($( window ).width())
-  if($( window ).width() > 768){
+  if($( window ).width() > 1024){
     $("#graph").empty()
     newHtml = `<div id="options">
       <h3 id= "siteName_title"> Select a Station</h3>
@@ -10,14 +10,11 @@ responsive_graphs =  function(){
           in this part such as a name and a description.
         </p>
       <div id="table_div"></div>
-
     </div>
-    <img id="graphAddLoading" class="view-file hidden" alt="loading gif" src="{% static 'water_data_explorer/images/loading.gif' %}">
-
     <div id="plots2">
       <h3></h3>
       <div id="controlGraphs">
-        <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info"width: '100%'>
+        <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" width: '100%'>
           <option > No Variables Available . . .</option>
         </select>
         <select id="type_graph_select2" class="selectpicker" data-width="fit">

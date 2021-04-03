@@ -438,6 +438,7 @@ var water_data_explorer_PACKAGE = (function() {
           $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
 
           setTimeout(function(){ map.updateSize(); }, 500);
+
         }
         else{
           $("#app-navigation").show();
@@ -445,6 +446,11 @@ var water_data_explorer_PACKAGE = (function() {
 
           setTimeout(function(){ map.updateSize(); }, 500);
         }
+        Plotly.Plots.resize($("#plots")[0]);
+        Plotly.relayout($("#plots")[0], {
+         'xaxis.autorange': true,
+         'yaxis.autorange': true
+       });
       });
 
       //Event for the clusters of the map
