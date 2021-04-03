@@ -60,6 +60,8 @@
 
 <!-- </div> -->
 <div id ="graph">
+  <img id="graphAddLoading" class="view-file hidden" alt="loading gif" src="{% static 'water_data_explorer/images/loading.gif' %}">
+
   <div id="carouselExampleIndicators" class="carousel slide" >
     <ol class="carousel-indicators">
       <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
@@ -75,24 +77,24 @@
               </p>
             <div id="table_div"></div>
           </div>
-          <img id="graphAddLoading" class="view-file hidden" alt="loading gif" src="{% static 'water_data_explorer/images/loading.gif' %}">
       </div>
-
       <div class="item">
         <div id="plots2">
           <h3></h3>
           <div id= "firstContainer" class="controlGraphs2">
-            <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="fit" >
-              <option > Variables</option>
-            </select>
-            <select id="type_graph_select2" class="selectpicker" data-width="fit">
+            <div id= "select-graphs">
+              <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="100%" >
+                <option > Variables</option>
+              </select>
+              <select id="type_graph_select2" class="selectpicker" data-width="100%">
 
-              <optgroup label="Individual Variable Plots">
-                <option> Scatter </option>
-                <option> Whisker and Box </option>
-            </optgroup>
-            </select>
-            <div class="containerTime">
+                <optgroup label="Individual Variable Plots">
+                  <option> Scatter </option>
+                  <option> Whisker and Box </option>
+              </optgroup>
+              </select>
+            </div>
+            <div id= "timeControllers" class="containerTime">
                 <div class='col-md-5'>
                     <div class="form-group">
                         <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
@@ -141,7 +143,6 @@
     </a>
 
   </div>
-
 </div>
 
 <!-- <div id="graph">

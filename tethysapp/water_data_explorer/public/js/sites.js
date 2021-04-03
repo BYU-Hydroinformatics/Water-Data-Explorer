@@ -49,6 +49,7 @@ activate_layer_values = function (){
           return feature2;
           });
       if (feature) {
+
         initialize_graphs([],[],"No Variable was Selected","","","","scatter");
         active_map_feature_graphs={
           'scatter':{},

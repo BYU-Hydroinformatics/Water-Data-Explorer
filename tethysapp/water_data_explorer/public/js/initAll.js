@@ -139,8 +139,11 @@ var water_data_explorer_PACKAGE = (function() {
       try{
         var myZoom;
         if($( window ).width() <= 768){
-          myZoom = 2
+          myZoom = 2;
           console.log(myZoom);
+        }
+        else{
+          myZoom = 3;
         }
         var projection = ol.proj.get("EPSG:3857")
         var baseLayer = new ol.layer.Tile({
@@ -414,7 +417,8 @@ var water_data_explorer_PACKAGE = (function() {
    *************************************************************************/
   $(function() {
     try{
-      let little_trick = true;
+      responsive_graphs();
+
       // console.log(uuidv4());
       init_jquery_var();
       addDefaultBehaviorToAjax();
@@ -430,16 +434,13 @@ var water_data_explorer_PACKAGE = (function() {
       addLegendMap(map);
       $(".toggle-nav").on("click",function(){
         if($('#app-navigation').is(':visible')){
-        // if(little_trick){
           $("#app-navigation").hide();
-          little_trick = false;
           $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
 
           setTimeout(function(){ map.updateSize(); }, 500);
         }
         else{
           $("#app-navigation").show();
-          little_trick = true;
           $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
 
           setTimeout(function(){ map.updateSize(); }, 500);

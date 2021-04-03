@@ -183,6 +183,7 @@ var filter_words,
     uuidv4,
     id_dictionary = {},
     legend_change,
+    responsive_graphs,
     generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that

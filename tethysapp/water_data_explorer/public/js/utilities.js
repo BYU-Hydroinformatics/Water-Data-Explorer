@@ -1,3 +1,73 @@
+responsive_graphs =  function(){
+  console.log("asghafasfa")
+  let newHtml;
+  console.log($( window ).width())
+  if($( window ).width() > 768){
+    $("#graph").empty()
+    newHtml = `<div id="options">
+      <h3 id= "siteName_title"> Select a Station</h3>
+        <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
+          in this part such as a name and a description.
+        </p>
+      <div id="table_div"></div>
+
+    </div>
+    <img id="graphAddLoading" class="view-file hidden" alt="loading gif" src="{% static 'water_data_explorer/images/loading.gif' %}">
+
+    <div id="plots2">
+      <h3></h3>
+      <div id="controlGraphs">
+        <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info"width: '100%'>
+          <option > No Variables Available . . .</option>
+        </select>
+        <select id="type_graph_select2" class="selectpicker" data-width="fit">
+
+          <optgroup label="Individual Variable Plots">
+            <option> Scatter </option>
+            <option> Whisker and Box </option>
+        </optgroup>
+        </select>
+        <div class="containerTime">
+            <div class='col-md-5'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
+                        <input type='text' class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-5'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
+                        <input type='text' class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
+        <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit">
+            <option value="Download">Download</option>
+            <option value="CSV" >CSV</option>
+            <option value = "WaterML1.0">WaterML 1.0</option>
+            <option value = "WaterML2.0">WaterML 2.0</option>
+        </select>
+      </div>
+
+      <div id="plots"></div>
+    </div>
+    `
+  }
+  $(newHtml).appendTo("#graph");
+}
+
+
+
+
 uuidv4 = function () {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -277,8 +347,10 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
         showlegend:true,
         legend: {
           "orientation": "h",
-          x: 0.3,
-          y: -0.1
+          yanchor: 'top',
+          xanchor:'center',
+          y:-0.15,
+          x:0.5
         },
         margin: {
           l: 40,
