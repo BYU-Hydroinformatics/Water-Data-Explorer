@@ -427,7 +427,6 @@ var water_data_explorer_PACKAGE = (function() {
       activate_layer_values();
       let empty_array=[];
       initialize_graphs([],[],"No data Available","","","","scatter");
-      initialize_graphs([],[],"No data Available","","","","pie");
       add_boundary_map(geoServerColor, geoServerWidth, map);
       activate_deactivate_graphs();
       give_name();
@@ -435,22 +434,36 @@ var water_data_explorer_PACKAGE = (function() {
       $(".toggle-nav").on("click",function(){
         if($('#app-navigation').is(':visible')){
           $("#app-navigation").hide();
+
           $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+
 
           setTimeout(function(){ map.updateSize(); }, 500);
 
         }
         else{
           $("#app-navigation").show();
-          $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
+          if($( window ).width() >= 768 && $( window ).width() <= 1024){
+            $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+            console.log("opp")
+          }
+          else{
+            $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
+
+          }
+          // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
 
           setTimeout(function(){ map.updateSize(); }, 500);
         }
-        Plotly.Plots.resize($("#plots")[0]);
-        Plotly.relayout($("#plots")[0], {
-         'xaxis.autorange': true,
-         'yaxis.autorange': true
-       });
+        setTimeout(function(){
+          if($('#plots').is(':visible')){
+            Plotly.Plots.resize("plots");
+              Plotly.relayout($("plots"), {
+                'xaxis.autorange': true,
+                'yaxis.autorange': true
+              });
+          }
+        },500)
       });
 
       //Event for the clusters of the map
