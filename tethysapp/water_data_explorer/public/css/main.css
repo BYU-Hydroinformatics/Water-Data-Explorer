@@ -804,22 +804,26 @@ input[type=checkbox], input[type=radio]{
 }
 
 /* Smartphones (landscape) ----------- */
-@media screen and (min-width : 321px) {
-/* Styles */
-#app-navigation{
-  display: none;
-  max-width: 100%;
-}
+@media screen and (min-width : 361px) {
+  /* Styles */
+  #app-navigation{
+    display: none;
+    max-width: 100%;
+  }
 
-#inner-app-content{
-  width: 100%;
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  padding: 0 0 0 0;
-  padding-right: 0px;
-  position: relative;
-  left: 0px;
+  #app-content-wrapper #app-content #app-navigation{
+    width: min-content !important;
+
+  }
+  #inner-app-content{
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+    left: 0px !important;
   }
   #tableLegend{
     position: absolute;
@@ -838,12 +842,6 @@ input[type=checkbox], input[type=radio]{
     order: 1;
     max-width: 100%;
     overflow-y: hidden;
-  }
-  #modalHydroserInformation .modal{
-  }
-  #modalHydroserInformation .modal-dialog{
-  }
-  #modalHydroserInformation .modal-body #infoTable{
   }
   #options {
     padding-left: 2%;
@@ -909,36 +907,55 @@ input[type=checkbox], input[type=radio]{
 }
 
 /* Smartphones (portrait) ----------- */
-@media screen and (max-width : 320px) {
+@media screen and (max-width : 360px) {
 /* Styles */
+  #app-navigation{
+    display: none;
+    max-width: 100%;
+  }
 
+  #inner-app-content{
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+    left: 0px;
+  }
 }
 
 /* iPads (portrait and landscape) ----------- */
 @media screen and (min-device-width : 768px) and (max-device-width : 1024px) {
-/* Styles */
+  /* Styles */
+  #app-navigation{
+    display: none;
+    max-width: 100%;
+  }
 
-#app-content-wrapper #app-content #app-navigation{
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: min-content !important;
-  background: #efefef;
-  padding: 0 0px;
-  padding-top: 1%;
-  max-width: 100%;
-  display: none;
-}
+  #app-content-wrapper #app-content #app-navigation{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: min-content !important;
+    background: #efefef;
+    padding: 0 0px;
+    padding-top: 1%;
+    max-width: 100%;
+    display: none;
+    left: -300px;
+  }
 
-#inner-app-content{
-  width: 100%;
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  padding: 0 0 0 0;
-  padding-right: 0px;
-  position: relative;
-  left: 0px;
+  #inner-app-content{
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+    left: 0px;
   }
   #tableLegend{
     position: absolute;
@@ -972,21 +989,32 @@ input[type=checkbox], input[type=radio]{
     width: 100%;
     height: 100%;
   }
-  #firstContainer{
+  #ipad_lay_contr{
     order: 1;
-    flex: 1 1 10%;
     display: flex;
+    width: 100%;
+    max-width: 100%;
+    flex: 1 1 30%;
   }
+
+  #secondContainer{
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 30%;
+  }
+  #firstContainer{
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 70%;
+  }
+
   #select-graphs{
     flex: 1 1 50%;
   }
   #timeControllers{
     flex: 1 1 50%;
   }
-  #secondContainer{
-    order: 2;
-    flex: 1 1 10%;
-  }
+
   #thirdContainer{
     order: 3;
     flex: 1 1 10%;
@@ -1025,16 +1053,51 @@ input[type=checkbox], input[type=radio]{
     margin:auto;
 
   }
-
-
 }
 
 /* iPads (landscape) ----------- */
-@media screen
-and (min-device-width : 768px)
-and (max-device-width : 1024px)
-and (orientation : landscape) {
+@media screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
 /* Styles */
+  #app-navigation{
+    max-width: 100%;
+  }
+  #ipad_lay_contr{
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #secondContainer{
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 30%;
+  }
+  #firstContainer{
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 70%;
+  }
+  #app-content-wrapper #app-content #app-navigation{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: min-content !important;
+    background: #efefef;
+    padding: 0 0px;
+    padding-top: 1%;
+    max-width: 100%;
+  }
+
+  #inner-app-content{
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+    left: 0px;
+    }
 }
 
 /* iPads (portrait) ----------- */
@@ -1043,6 +1106,8 @@ and (orientation : landscape) {
   #app-content-wrapper.show-nav #app-content {
     padding-right: 39vw;
   }
+
+
 }
 
 /* Desktops and laptops ----------- */
