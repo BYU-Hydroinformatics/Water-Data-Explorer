@@ -810,6 +810,7 @@ input[type=checkbox], input[type=radio]{
   display: none;
   max-width: 100%;
 }
+
 #inner-app-content{
   width: 100%;
   display: flex;
@@ -916,10 +917,19 @@ input[type=checkbox], input[type=radio]{
 /* iPads (portrait and landscape) ----------- */
 @media screen and (min-device-width : 768px) and (max-device-width : 1024px) {
 /* Styles */
-#app-navigation{
-  display: none;
+
+#app-content-wrapper #app-content #app-navigation{
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: min-content !important;
+  background: #efefef;
+  padding: 0 0px;
+  padding-top: 1%;
   max-width: 100%;
+  display: none;
 }
+
 #inner-app-content{
   width: 100%;
   display: flex;
@@ -1028,11 +1038,11 @@ and (orientation : landscape) {
 }
 
 /* iPads (portrait) ----------- */
-@media screen
-and (min-device-width : 768px)
-and (max-device-width : 1024px)
-and (orientation : portrait) {
+@media screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
 /* Styles */
+  #app-content-wrapper.show-nav #app-content {
+    padding-right: 39vw;
+  }
 }
 
 /* Desktops and laptops ----------- */
