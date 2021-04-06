@@ -436,24 +436,43 @@ var water_data_explorer_PACKAGE = (function() {
           console.log("no me molestes")
           $("#app-navigation").hide();
           $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
-          setTimeout(function(){ map.updateSize(); }, 500);
+          setTimeout(function(){ map.updateSize(); }, 200);
 
         }
+
         else{
-          console.log("porfga")
+          console.log("not visible")
           $("#app-navigation").show();
           if($( window ).width() >= 768 && $( window ).width() <= 1023){
+            console.log("tablet");
+            if(window.innerHeight > window.innerWidth){
+                //portrait
+            }
+            if(window.innerWidth > window.innerHeight){
+                //landscape
+            }
             $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
             console.log("opp")
           }
-          else{
-            console.log("hjolasfgasg")
-            $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
+          if($( window ).width() < 768){
+            console.log("phone");
+
+            if(window.innerHeight > window.innerWidth){
+                //portrait
+                console.log("portrait");
+                $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
+
+            }
+            if(window.innerWidth > window.innerHeight){
+                //landscape
+                console.log("landscape");
+                // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+            }
 
           }
           // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
 
-          setTimeout(function(){ map.updateSize(); }, 500);
+          setTimeout(function(){ map.updateSize(); }, 200);
         }
         setTimeout(function(){
           if($('#plots').is(':visible')){
@@ -485,9 +504,6 @@ var water_data_explorer_PACKAGE = (function() {
         });
       }, map);
       console.log(id_dictionary);
-
-
-
     }
       catch(error){
         console.log(error);

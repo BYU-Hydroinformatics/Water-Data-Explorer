@@ -147,7 +147,36 @@
   <script src="{% static 'water_data_explorer/js/groups.js' %}" type="text/javascript"></script>
   <script src="{% static 'water_data_explorer/js/endpoints.js' %}" type="text/javascript"></script>
   <script src="{% static 'water_data_explorer/js/sites.js' %}" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(window).resize(function(e) {
+      console.log($( window ).width());
+      if($( window ).width() < 824){
+        console.log("phone");
 
+        if(window.innerHeight > window.innerWidth){
+            //portrait
+            console.log("portrait event");
+            if($('#app-navigation').is(':visible')){
+              $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
+
+            }
+            else{
+              // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "0px"})
+            }
+
+
+        }
+        if(window.innerWidth > window.innerHeight){
+            //landscape
+            console.log("landscape event");
+            $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+        }
+
+      }
+
+      setTimeout(function(){ map.updateSize(); }, 200);
+    });
+  </script>
   <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> -->
   <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
