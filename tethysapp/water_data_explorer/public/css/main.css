@@ -64,8 +64,6 @@ tr:hover {
   background-color:#f5f5f5;
 }
 
-
-
 #app-content-wrapper #app-content{
   height: 100%;
   /* when the graph is on */
@@ -110,9 +108,7 @@ tr:hover {
   order: 2;
   width: 100%;
   height: 100%;
-  /* display: none !important; */
   display: none;
-  /* visibility: hidden; */
   overflow-y: scroll;
 }
 
@@ -122,17 +118,8 @@ tr:hover {
   order: 1;
   width: 100%;
   height: 100%;
-  /* overflow-y: scroll; */
 }
-/* #variables_id{
-  padding-left: 2%;
-  flex: 1 1 30%;
-  order: 1;
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-  overflow-x: scroll;
-} */
+
 #plots2{
   display: flex;
   flex: 1 1 70%;
@@ -691,17 +678,13 @@ input[type=checkbox], input[type=radio]{
 .carousel-control .glyphicon-chevron-left, .carousel-control .icon-next {
   color: blue;
 }
-/* @media screen and (max-width: 500px) {
-    #app-content-wrapper {
-      display: none;
-    }
-} */
+
 #app-content-wrapper #app-content{
   padding-bottom: 0px;
 }
 /* Smartphones (portrait and landscape) ----------- */
 @media screen and (min-device-width : 320px) and (max-device-width : 480px) {
-/* Styles */
+  /* Styles */
   #app-navigation{
     display: none;
     max-width: 100%;
@@ -812,8 +795,7 @@ input[type=checkbox], input[type=radio]{
   }
 
   #app-content-wrapper #app-content #app-navigation{
-    width: min-content !important;
-
+    width: min-content;
   }
   #inner-app-content{
     width: 100%;
@@ -823,7 +805,8 @@ input[type=checkbox], input[type=radio]{
     padding: 0 0 0 0;
     padding-right: 0px;
     position: relative;
-    left: 0px !important;
+    /* left: 0px !important; */
+    left: 0px;
   }
   #tableLegend{
     position: absolute;
@@ -908,12 +891,23 @@ input[type=checkbox], input[type=radio]{
 
 /* Smartphones (portrait) ----------- */
 @media screen and (max-width : 360px) {
-/* Styles */
+  /* Styles */
   #app-navigation{
     display: none;
     max-width: 100%;
+    width: 400px !important;
   }
 
+  #app-content-wrapper #app-content #app-navigation {
+    position: absolute;
+    top: 0;
+    left: -300px;
+    width: 400px !important;
+    height: 100%;
+    background: #efefef;
+    padding: 0 0px;
+    padding-top: 1%;
+  }
   #inner-app-content{
     width: 100%;
     display: flex;
@@ -922,7 +916,7 @@ input[type=checkbox], input[type=radio]{
     padding: 0 0 0 0;
     padding-right: 0px;
     position: relative;
-    left: 0px;
+    left: 100px;
   }
 }
 
@@ -1057,7 +1051,7 @@ input[type=checkbox], input[type=radio]{
 
 /* iPads (landscape) ----------- */
 @media screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
-/* Styles */
+  /* Styles */
   #app-navigation{
     max-width: 100%;
   }
@@ -1102,18 +1096,64 @@ input[type=checkbox], input[type=radio]{
 
 /* iPads (portrait) ----------- */
 @media screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
-/* Styles */
-  #app-content-wrapper.show-nav #app-content {
+  /* Styles */
+  /* #app-content-wrapper.show-nav #app-content {
     padding-right: 39vw;
-  }
-
-
+  } */
 }
 
 /* Desktops and laptops ----------- */
-@media screen
-and (min-width : 1224px) {
+@media screen and (min-width : 1024px) {
 /* Styles */
+  #app-navigation{
+    display: none;
+    width: 100%;
+    /* width: 400px !important; */
+  }
+  #inner-app-content{
+    width: 100%;
+    display:flex;
+    left: 100px;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+  }
+  #app-content-wrapper #app-content #app-navigation{
+    position: absolute;
+    top: 0;
+    left: -300px;
+    width: 400px !important;
+    height: 100%;
+    background: #efefef;
+    padding: 0 0px;
+    padding-top: 1%;
+  }
+  #graph{
+    flex: 1 1 60%;
+    order: 2;
+    width: 100%;
+    height: 100%;
+    display: none;
+    overflow-y: scroll;
+  }
+
+  #options{
+    padding-left: 2%;
+    flex: 1 1 30%;
+    order: 1;
+    width: 100%;
+    height: 100%;
+  }
+  #plots2{
+    display: flex;
+    flex: 1 1 70%;
+    order: 3;
+    width: 100%;
+    height: 100%;
+    flex-direction: column
+  }
 }
 
 /* Large screens ----------- */

@@ -433,21 +433,21 @@ var water_data_explorer_PACKAGE = (function() {
       addLegendMap(map);
       $(".toggle-nav").on("click",function(){
         if($('#app-navigation').is(':visible')){
+          console.log("no me molestes")
           $("#app-navigation").hide();
-
           $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
-
-
           setTimeout(function(){ map.updateSize(); }, 500);
 
         }
         else{
+          console.log("porfga")
           $("#app-navigation").show();
-          if($( window ).width() >= 768 && $( window ).width() <= 1024){
+          if($( window ).width() >= 768 && $( window ).width() <= 1023){
             $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
             console.log("opp")
           }
           else{
+            console.log("hjolasfgasg")
             $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
 
           }
