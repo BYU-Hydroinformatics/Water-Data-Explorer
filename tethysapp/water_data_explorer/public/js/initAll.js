@@ -460,7 +460,7 @@ var water_data_explorer_PACKAGE = (function() {
             if(window.innerHeight > window.innerWidth){
                 //portrait
                 console.log("portrait");
-                $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
+                $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
 
             }
             if(window.innerWidth > window.innerHeight){
