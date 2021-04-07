@@ -154,7 +154,7 @@
       console.log("width")
 
       console.log($( window ).width());
-      if($( window ).width() < 824 && $( window ).height() < 768){
+      if($( window ).width() > 320 && $( window ).width() < 768){
         console.log("phone event resize");
 
         if(window.innerHeight > window.innerWidth){
@@ -175,13 +175,13 @@
         }
 
       }
-      if($( window ).width() >=768 && $( window ).height() <= 1366){
+      if($( window ).width() >= 768 && $( window ).width() <= 1366){
         console.log("tablet event resize")
         if(window.innerHeight > window.innerWidth){
             //portrait
             console.log("tablet portrait event base");
             if($('#app-navigation').is(':visible')){
-              // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "300px"})
+              $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "300px"})
             }
             else{
               // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "0px"})
@@ -194,7 +194,7 @@
             //landscape
             console.log("tablet landscape event base");
             if($('#app-navigation').is(':visible')){
-              // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "300px"})
+              $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "300px"})
             }
             else{
               // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "0px"})
