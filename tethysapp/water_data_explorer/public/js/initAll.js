@@ -433,9 +433,8 @@ var water_data_explorer_PACKAGE = (function() {
       addLegendMap(map);
 
       //make the picker to always appear//
-      $(".selectpicker").selectpicker({
-        "title": "Select Options"
-      }).selectpicker("render");
+      $(".selectpicker").selectpicker("refresh");
+
 
       $(".toggle-nav").on("click",function(){
         if($('#app-navigation').is(':visible')){
@@ -445,7 +444,7 @@ var water_data_explorer_PACKAGE = (function() {
           // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
           if($( window ).width() >= 768 && $( window ).width() <= 1366){
             console.log("tablet");
-            
+
             if(window.innerHeight > window.innerWidth){
                 //portrait
                 // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
@@ -464,10 +463,10 @@ var water_data_explorer_PACKAGE = (function() {
             }
           }
           if($( window ).width() > 1366){
-            console.log("laptop");
+            console.log("laptop visible");
             // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
             // $('#inner-app-content').css({"width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
-            $('#inner-app-content').css({ "width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "300px"});
+            $('#inner-app-content').css({ "width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
 
 
           }
@@ -511,13 +510,21 @@ var water_data_explorer_PACKAGE = (function() {
             // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
 
           }
+          if($( window ).width() > 1366){
+            console.log("laptop visible");
+            // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
+            // $('#inner-app-content').css({"width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
+            $('#inner-app-content').css({ "width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "300px"});
+
+
+          }
           if($( window ).width() < 768){
             console.log("phone");
 
             if(window.innerHeight > window.innerWidth){
                 //portrait
                 console.log("phone portrait");
-                $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
+                $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative","left": "200px"})
 
             }
             if(window.innerWidth > window.innerHeight){

@@ -1262,6 +1262,23 @@ input[type=checkbox], input[type=radio]{
     left: 0px;
     position: absolute;
   }
+  #map{
+    width: 100%;
+    height: 100%;
+    flex:1 1 40%;
+    order: 1;
+    max-width: 100%;
+    overflow-y: hidden;
+  }
+
+  #graph{
+    flex: 1 1 60%;
+    order: 2;
+    width: 100%;
+    height: 100%;
+    display: none;
+    overflow-y: scroll;
+  }
   /* #app-navigation{
     display: block;
     max-width: 100%;
@@ -1428,6 +1445,24 @@ input[type=checkbox], input[type=radio]{
     order: 3;
     flex: 1 1 10%;
   }
+  #map{
+    width: 100%;
+    height: 100%;
+    flex:1 1 40%;
+    order: 1;
+    max-width: 100%;
+    overflow-y: hidden;
+  }
+
+  #graph{
+    flex: 1 1 60%;
+    order: 2;
+    width: 100%;
+    height: 100%;
+    display: none;
+    overflow-y: scroll;
+  }
+
 }
 
 /* Desktops and laptops ----------- */
@@ -1464,6 +1499,40 @@ input[type=checkbox], input[type=radio]{
     width: min-content;
     left: 0px;
     position: absolute;
+  }
+  #map{
+    width: 100%;
+    height: 100%;
+    flex:1 1 40%;
+    order: 1;
+    max-width: 100%;
+    overflow-y: hidden;
+  }
+
+  #graph{
+    flex: 1 1 60%;
+    order: 2;
+    width: 100%;
+    height: 100%;
+    display: none;
+    overflow-y: scroll;
+  }
+
+  #options{
+    padding-left: 2%;
+    flex: 1 1 30%;
+    order: 1;
+    width: 100%;
+    height: 100%;
+  }
+
+  #plots2{
+    display: flex;
+    flex: 1 1 70%;
+    order: 3;
+    width: 100%;
+    height: 100%;
+    flex-direction: column
   }
   /* #app-content-wrapper.show-nav #app-content {
     padding-right: 300px;
