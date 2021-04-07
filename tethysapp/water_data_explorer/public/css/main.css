@@ -682,6 +682,7 @@ input[type=checkbox], input[type=radio]{
 #app-content-wrapper #app-content{
   padding-bottom: 0px;
 }
+
 /* Smartphones (portrait and landscape) ----------- */
 @media screen and (min-device-width : 320px) and (max-device-width : 480px) {
   /* Styles */
@@ -784,10 +785,7 @@ input[type=checkbox], input[type=radio]{
 /* Smartphones (landscape) ----------- */
 @media screen and (min-width : 361px) {
   /* Styles */
-  #app-navigation{
-    display: none;
-    max-width: 100%;
-  }
+
 
   #app-content-wrapper #app-content #app-navigation{
     width: min-content;
@@ -1435,6 +1433,69 @@ input[type=checkbox], input[type=radio]{
 /* Desktops and laptops ----------- */
 @media screen and (min-width : 1366px) {
   /* Styles */
+  #app-content-wrapper.show-nav #app-content {
+    padding-right: 300px;
+    -webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    transform: translateX(0px);
+    -webkit-transform: translate3d(0px, 0, 0);
+    -moz-transform: translate3d(0px, 0, 0);
+    -ms-transform: translate3d(0px, 0, 0);
+    -o-transform: translate3d(0px, 0, 0);
+    transform: translate3d(0px, 0, 0);
+  }
+  #app-navigation{
+    display: block;
+    max-width: 100%;
+  }
+  #inner-app-content {
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+    left: 300px;
+  }
+  #app-content-wrapper #app-content #app-navigation {
+    width: min-content;
+    left: 0px;
+    position: absolute;
+  }
+  /* #app-content-wrapper.show-nav #app-content {
+    padding-right: 300px;
+    -webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    transform: translateX(0px);
+    -webkit-transform: translate3d(0px, 0, 0);
+    -moz-transform: translate3d(0px, 0, 0);
+    -ms-transform: translate3d(0px, 0, 0);
+    -o-transform: translate3d(0px, 0, 0);
+    transform: translate3d(0px, 0, 0);
+  } */
+
+  /* #app-content-wrapper #app-content #app-navigation {
+    display: block;
+    max-width: 100%;
+    width: min-content;
+    left: 0px;
+    position: absolute;
+  }
+  #inner-app-content {
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+    left: 300px;
+  }
   #map{
     width: 100%;
     height: 100%;
@@ -1449,7 +1510,7 @@ input[type=checkbox], input[type=radio]{
     width: 100%;
     height: 100%;
     display: none;
-  }
+  } */
 
   /* #app-navigation{
     display: none;
@@ -1502,14 +1563,23 @@ input[type=checkbox], input[type=radio]{
 }
 
 /* Large screens ----------- */
-@media screen
-and (min-width : 1824px) {
-
+@media screen and (min-width : 1824px) {
+  #app-content-wrapper.show-nav #app-content {
+    padding-right: 300px;
+    -webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    transform: translateX(0px);
+    -webkit-transform: translate3d(0px, 0, 0);
+    -moz-transform: translate3d(0px, 0, 0);
+    -ms-transform: translate3d(0px, 0, 0);
+    -o-transform: translate3d(0px, 0, 0);
+    transform: translate3d(0px, 0, 0);
+  }
 }
 
 /* iPhone 4 ----------- */
-@media
-screen and (-webkit-min-device-pixel-ratio : 1.5),
-screen and (min-device-pixel-ratio : 1.5) {
+@media screen and (-webkit-min-device-pixel-ratio : 1.5), screen and (min-device-pixel-ratio : 1.5) {
 /* Styles */
 }

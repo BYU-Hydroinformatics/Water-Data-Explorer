@@ -445,6 +445,7 @@ var water_data_explorer_PACKAGE = (function() {
           // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
           if($( window ).width() >= 768 && $( window ).width() <= 1366){
             console.log("tablet");
+            
             if(window.innerHeight > window.innerWidth){
                 //portrait
                 // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
@@ -454,14 +455,24 @@ var water_data_explorer_PACKAGE = (function() {
             }
             if(window.innerWidth > window.innerHeight){
                 //landscape
+                console.log("tablet landscape")
+
                 $('#inner-app-content').css({ "width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
 
                 // $('#app-content-wrapper #app-content #app-navigation').css({"width":"min-content", "position":"absolute"});
-                console.log("tablet landscape")
 
             }
           }
-          else{
+          if($( window ).width() > 1366){
+            console.log("laptop");
+            // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
+            // $('#inner-app-content').css({"width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
+            $('#inner-app-content').css({ "width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "300px"});
+
+
+          }
+          if($( window ).width() < 768){
+            console.log("phone")
             $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
 
           }
