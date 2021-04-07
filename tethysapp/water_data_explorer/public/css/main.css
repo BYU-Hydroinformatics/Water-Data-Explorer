@@ -899,6 +899,7 @@ input[type=checkbox], input[type=radio]{
     width: 100%;
   }
 
+
   #app-content-wrapper #app-content #app-navigation {
     position: absolute;
     top: 0;
@@ -922,8 +923,190 @@ input[type=checkbox], input[type=radio]{
 }
 
 /* iPads (portrait and landscape) ----------- */
-@media screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+@media screen and (min-device-width : 768px) and (max-device-width : 1366px) {
   /* Styles */
+  #app-content {
+    padding-right: 300px;
+  }
+  /* #app-content-wrapper.show-nav #app-content {
+    -webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    transform: translateX(0px);
+    -webkit-transform: translate3d(0px, 0, 0);
+    -moz-transform: translate3d(0px, 0, 0);
+    -ms-transform: translate3d(0px, 0, 0);
+    -o-transform: translate3d(0px, 0, 0);
+    transform: translate3d(0px, 0, 0);
+  } */
+  /* #app-navigation{
+    display: block;
+    max-width: 100%;
+  }
+  #inner-app-content {
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+    left: 300px;
+    padding-right: 300px;
+  }
+
+
+  #app-content-wrapper #app-content #app-navigation {
+    width: min-content;
+    left: 0px;
+    position: absolute;
+  } */
+  /* #app-navigation{
+    display: block;
+    max-width: 100%;
+  }
+  #app-content-wrapper #app-content #app-navigation {
+      width: min-content;
+      left: 0px;
+  }
+  #inner-app-content {
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+    left: 300px;
+  } */
+  /* #app-navigation{
+    display: none;
+    max-width: 100%;
+  }
+  #inner-app-content{
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+    left: 0px;
+  } */
+  /* #app-content-wrapper.show-nav #app-content {
+    padding-right: 300px;
+  } */
+  /* #app-navigation{
+    display: block;
+    max-width: 100%;
+  }
+  #app-content-wrapper.show-nav #app-content {
+    padding-right: 300px;
+  }
+
+  #inner-app-content{
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 100px;
+    position: relative;
+    left: 300px;
+  }
+  #app-content-wrapper #app-content #app-navigation{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: min-content !important;
+    background: #efefef;
+    padding: 0 0px;
+    padding-top: 1%;
+    max-width: 100%;
+    left: 0px;
+  } */
+
+
+  /* #inner-app-content{
+    width: 100%;
+    display:flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 100px;
+    position: relative;
+    left: 300px;
+
+  }
+  #app-content-wrapper #app-content #app-navigation{
+    position: absolute;
+    top: 0;
+    left: -300px;
+    width: 400px;
+    height: 100%;
+    background: #efefef;
+    padding: 0 0px;
+    padding-top: 1%;
+  } */
+
+  #map{
+    width: 100%;
+    height: 100%;
+    flex:1 1 40%;
+    order: 1;
+    max-width: 100%;
+    overflow-y: hidden;
+  }
+  #graph{
+    flex: 1 1 60%;
+    order: 2;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+  #ipad_lay_contr{
+    order: 1;
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    flex: 1 1 30%;
+  }
+
+  #secondContainer{
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 30%;
+  }
+  #firstContainer{
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 70%;
+  }
+
+  #select-graphs{
+    flex: 1 1 50%;
+  }
+  #timeControllers{
+    flex: 1 1 50%;
+  }
+
+  #thirdContainer{
+    order: 3;
+    flex: 1 1 10%;
+  }
+
+  #graphAddLoading{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+  }
+
+
+
   /* #app-navigation{
     display: none;
     max-width: 100%;
@@ -970,6 +1153,13 @@ input[type=checkbox], input[type=radio]{
     max-width: 100%;
     overflow-y: hidden;
   }
+  #graph{
+    flex: 1 1 60%;
+    order: 2;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
   #options {
     padding-left: 2%;
     padding-top: 2%;
@@ -1012,13 +1202,7 @@ input[type=checkbox], input[type=radio]{
     order: 4;
     flex: 1 1 70%;
   }
-  #graph{
-    flex: 1 1 60%;
-    order: 2;
-    width: 100%;
-    height: 100%;
-    display: none;
-  }
+
 
   .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9{
     position: relative;
@@ -1044,8 +1228,98 @@ input[type=checkbox], input[type=radio]{
 }
 
 /* iPads (landscape) ----------- */
-@media screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+@media screen and (min-device-width : 768px) and (max-device-width : 1366px) and (orientation : landscape) {
   /* Styles */
+  #app-content-wrapper.show-nav #app-content {
+    padding-right: 300px;
+    -webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    transform: translateX(0px);
+    -webkit-transform: translate3d(0px, 0, 0);
+    -moz-transform: translate3d(0px, 0, 0);
+    -ms-transform: translate3d(0px, 0, 0);
+    -o-transform: translate3d(0px, 0, 0);
+    transform: translate3d(0px, 0, 0);
+  }
+  #app-navigation{
+    display: block;
+    max-width: 100%;
+  }
+  #inner-app-content {
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+    left: 300px;
+  }
+
+
+  #app-content-wrapper #app-content #app-navigation {
+    width: min-content;
+    left: 0px;
+    position: absolute;
+  }
+  /* #app-navigation{
+    display: block;
+    max-width: 100%;
+  }
+
+  #app-content-wrapper #app-content #app-navigation {
+    position: absolute;
+    top: 0;
+    left: -300px;
+    width: min-content;
+    height: 100%;
+    background: #efefef;
+    padding: 0 0px;
+    padding-top: 1%;
+  }
+  #inner-app-content{
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+    left: 0px;
+  } */
+
+  #ipad_lay_contr{
+    order: 1;
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    flex: 1 1 30%;
+  }
+
+  #secondContainer{
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 30%;
+  }
+  #firstContainer{
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 70%;
+  }
+
+  #select-graphs{
+    flex: 1 1 50%;
+  }
+  #timeControllers{
+    flex: 1 1 50%;
+  }
+
+  #thirdContainer{
+    order: 3;
+    flex: 1 1 10%;
+  }
   /* #app-navigation{
     max-width: 100%;
   }
@@ -1089,16 +1363,94 @@ input[type=checkbox], input[type=radio]{
 }
 
 /* iPads (portrait) ----------- */
-@media screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+@media screen and (min-device-width : 768px) and (max-device-width : 1366px) and (orientation : portrait) {
   /* Styles */
-  /* #app-content-wrapper.show-nav #app-content {
-    padding-right: 39vw;
-  } */
+  #app-content {
+    padding-right: 300px;
+  }
+  #app-content-wrapper.show-nav #app-content {
+    padding-right: 300px;
+    -webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    transform: translateX(0px);
+    -webkit-transform: translate3d(0px, 0, 0);
+    -moz-transform: translate3d(0px, 0, 0);
+    -ms-transform: translate3d(0px, 0, 0);
+    -o-transform: translate3d(0px, 0, 0);
+    transform: translate3d(0px, 0, 0);
+  }
+  #app-navigation{
+    display: block;
+    max-width: 100%;
+  }
+  #inner-app-content {
+    width: 100%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 0 0 0;
+    padding-right: 0px;
+    position: relative;
+    left: 300px;
+  }
+  #app-content-wrapper #app-content #app-navigation {
+    width: min-content;
+    left: 0px;
+    position: absolute;
+  }
+  #ipad_lay_contr{
+    order: 1;
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    flex: 1 1 30%;
+  }
+
+  #secondContainer{
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 30%;
+  }
+  #firstContainer{
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 70%;
+  }
+
+  #select-graphs{
+    flex: 1 1 50%;
+  }
+  #timeControllers{
+    flex: 1 1 50%;
+  }
+
+  #thirdContainer{
+    order: 3;
+    flex: 1 1 10%;
+  }
 }
 
 /* Desktops and laptops ----------- */
-@media screen and (min-width : 1024px) {
+@media screen and (min-width : 1366px) {
   /* Styles */
+  #map{
+    width: 100%;
+    height: 100%;
+    flex:1 1 40%;
+    order: 1;
+    max-width: 100%;
+    overflow-y: hidden;
+  }
+  #graph{
+    flex: 1 1 60%;
+    order: 2;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+
   /* #app-navigation{
     display: none;
     width: 100%;

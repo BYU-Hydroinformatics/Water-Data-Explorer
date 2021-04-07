@@ -431,41 +431,87 @@ var water_data_explorer_PACKAGE = (function() {
       activate_deactivate_graphs();
       give_name();
       addLegendMap(map);
+
+      //make the picker to always appear//
+      $(".selectpicker").selectpicker({
+        "title": "Select Options"
+      }).selectpicker("render");
+
       $(".toggle-nav").on("click",function(){
         if($('#app-navigation').is(':visible')){
-          console.log("no me molestes")
+          console.log("visible toggle")
           $("#app-navigation").hide();
-          $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
-          setTimeout(function(){ map.updateSize(); }, 200);
+
+          // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
+          if($( window ).width() >= 768 && $( window ).width() <= 1366){
+            console.log("tablet");
+            if(window.innerHeight > window.innerWidth){
+                //portrait
+                // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
+                $('#inner-app-content').css({"width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
+
+                console.log("tablet portrait")
+            }
+            if(window.innerWidth > window.innerHeight){
+                //landscape
+                $('#inner-app-content').css({ "width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
+
+                // $('#app-content-wrapper #app-content #app-navigation').css({"width":"min-content", "position":"absolute"});
+                console.log("tablet landscape")
+
+            }
+          }
+          else{
+            $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+
+          }
+          // if($( window ).width() >= 768){
+          //   console.log("Tablet or bigger visible toggle");
+          //
+          // }
+          // else{
+          //   console.log("cellphone visible toggle");
+          //
+          //   $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+          //
+          // }
+
+          setTimeout(function(){ map.updateSize(); }, 500);
+
 
         }
 
         else{
-          console.log("not visible")
+          console.log("not visible toggle");
           $("#app-navigation").show();
-          if($( window ).width() >= 768 && $( window ).width() <= 1023){
+          if($( window ).width() >= 768 && $( window ).width() <= 1366){
             console.log("tablet");
             if(window.innerHeight > window.innerWidth){
                 //portrait
+                $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative","left": "300px"})
+                console.log("tablet portrait")
             }
             if(window.innerWidth > window.innerHeight){
                 //landscape
+                console.log("tablet landscape")
+                $('#inner-app-content').css({"width": "100%","display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "300px"})
+
             }
-            $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
-            console.log("opp")
+            // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+
           }
           if($( window ).width() < 768){
             console.log("phone");
 
             if(window.innerHeight > window.innerWidth){
                 //portrait
-                console.log("portrait");
+                console.log("phone portrait");
                 $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
 
             }
             if(window.innerWidth > window.innerHeight){
                 //landscape
-                console.log("landscape");
+                console.log("phone landscape");
                 // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
             }
 
