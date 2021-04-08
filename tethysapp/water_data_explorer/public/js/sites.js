@@ -97,12 +97,13 @@ activate_layer_values = function (){
                       <tr class="danger">
                         <th>Observed Variables</th>
                         <th>Unit</th>
-                        <th>Aggregation Period</th>
+                        <th>Interpolation Type</th>
+                        <th>Aggregation Duration</th>
                       </tr>`;
                   //1) combine the arrays:
                  var list_e = [];
                  for (var j = 0; j <result['variables'].length; j++)
-                     list_e.push({'variables_name': result['variables'][j], 'units': result['units'][j],'timeUnit': result['timeUnitName'][j]});
+                     list_e.push({'variables_name': result['variables'][j], 'units': result['units'][j],'interpolation': result['dataType'][j] ,'timeSupport':result['timeSupport'][j],'timeUnits':result['timeUnitName'][j]});
 
                  //2) sort:
                  list_e.sort(function(a, b) {
@@ -114,21 +115,25 @@ activate_layer_values = function (){
                  for (var k = 0; k < list_e.length; k++) {
                      result['variables'][k] = list_e[k].variables_name;
                      result['units'][k] = list_e[k].units;
-                     result['timeUnitName'][k] = list_e[k].timeUnit;
+                     result['dataType'][k] = list_e[k].interpolation;
+                     result['timeUnitName'][k] = list_e[k].timeUnits;
+                     result['timeSupport'][k] = list_e[k].timeSupport;
                  }
                 for(let i=0; i<result['variables'].length ; ++i){
                   let variable_new = result['variables'][i];
                   let variable_unit = result['units'][i];
-                  let time_unit_name_ = result['timeUnitName'][i];
+                  let aggregation_dur = `${result['timeSupport'][i]} ${result['timeUnitName'][i]}`;
                   let time_serie_range = result['times_series'][variable_new];
                   let begin_date = time_serie_range['beginDateTime'].split('T')[0];
                   let end_date = time_serie_range['endDateTime'].split('T')[0];
+                  let interpolation_type = result['dataType'][i];
                   let newRow =
                   `
                   <tr>
                     <th>${variable_new}</th>
                     <th>${variable_unit}</th>
-                    <th>${time_unit_name_}</th>
+                    <th>${interpolation_type}</th>
+                    <th>${aggregation_dur}</th>
                   </tr>
                   `
                   table_begin = table_begin + newRow;

@@ -67,6 +67,8 @@ def get_values_hs(request):
             return_obj['times_series'] = []
             return_obj['geolo'] = []
             return_obj['timeUnitName'] = []
+            return_obj['TimeSupport'] = []
+            return_obj['dataType'] = []
             return JsonResponse(return_obj)
         pd.set_option('display.max_columns', None)
         print(df)
@@ -74,7 +76,9 @@ def get_values_hs(request):
         return_obj['variables'] = df['variableName'].tolist()
         return_obj['units'] = df['unitAbbreviation'].tolist()
         return_obj['codes'] = df['variableCode'].tolist()
-        return_obj['timeUnitName'] = df['timeUnitName'].tolist()
+        return_obj['timeUnitName'] = df['timeUnitName'].tolist();
+        return_obj['timeSupport'] = df['timeSupport'].tolist();
+        return_obj['dataType'] = df['dataType'].tolist();
 
         obj_var_desc = {}
         obj_var_times_s = {}
