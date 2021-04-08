@@ -146,13 +146,18 @@ var water_data_explorer_PACKAGE = (function() {
           myZoom = 3;
         }
         var projection = ol.proj.get("EPSG:3857")
-        var baseLayer = new ol.layer.Tile({
-            source: new ol.source.BingMaps({
-                key:
-                    "As822KVqVMwb1JcFVv2JG9lqZB6G0v08RWNHogMBpVAZAXI5PMASZAPiNdnHjf6B",
-                imagerySet: "AerialWithLabels" // Options 'Aerial', 'AerialWithLabels', 'Road'
+        // var baseLayer = new ol.layer.Tile({
+        //     source: new ol.source.BingMaps({
+        //         key:
+        //             "As822KVqVMwb1JcFVv2JG9lqZB6G0v08RWNHogMBpVAZAXI5PMASZAPiNdnHjf6B",
+        //         imagerySet: "AerialWithLabels" // Options 'Aerial', 'AerialWithLabels', 'Road'
+        //     })
+        // })
+        const baseLayer = new ol.layer.Tile({ 
+            source: new ol.source.XYZ({
+                url:'http://{1-4}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
             })
-        })
+        });
         //Creating an empty source and layer to store the shapefile geojson object
         shpSource = new ol.source.Vector()
         shpLayer = new ol.layer.Vector({
