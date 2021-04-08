@@ -268,6 +268,56 @@ select_variable_change = function(){
                         )
                       });
                     }
+                    else if(selectedDownloadType == "NetCDF" ){
+                      $("#graphAddLoading").removeClass("hidden");
+                      let url_base = object_request_variable['hs_url'].split("?")[0];
+                      let SITE = object_request_variable['code'];
+                      let VARIABLE = object_request_variable['code_variable'];
+                      let BEGINDATE = x_array[0].replace(" ","T");
+                      let ENDDATE = x_array[x_array.length -1].replace(" ","T");
+                      let url_download = `${url_base}?request=GetValuesObject&site=${SITE}&variable=${VARIABLE}&beginDate=${BEGINDATE}&endDate=${ENDDATE}&format=NetCDF`;
+                      fetch(url_download).then(res => res.blob()) // Gets the response and returns it as a blob
+                        .then(blob => {
+                          var pom = document.createElement('a');
+                          var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.nc`;
+                          var pom = document.createElement('a');
+                          pom.setAttribute('href', window.URL.createObjectURL(blob));
+                          pom.setAttribute('download', filename);
+
+                          pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
+                          pom.draggable = true;
+                          pom.classList.add('dragout');
+                          pom.click();
+                          $("#graphAddLoading").addClass("hidden");
+
+                          $.notify(
+                              {
+                                  message: `Download completed for the ${object_request_graphs['variable']} variable in NetCDF format`
+                              },
+                              {
+                                  type: "success",
+                                  allow_dismiss: true,
+                                  z_index: 20000,
+                                  delay: 5000
+                              }
+                          )
+                      }).
+                      catch(error =>{ console
+                        $("#graphAddLoading").addClass("hidden");
+
+                        $.notify(
+                            {
+                                message: `There Service ${object_request_variable['hs_url']} does not provide NetCDF downloads`
+                            },
+                            {
+                                type: "danger",
+                                allow_dismiss: true,
+                                z_index: 20000,
+                                delay: 5000
+                            }
+                        )
+                      });
+                    }
                   }
                 }
 
