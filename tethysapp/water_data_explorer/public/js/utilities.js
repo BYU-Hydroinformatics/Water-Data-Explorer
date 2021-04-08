@@ -4,7 +4,8 @@ responsive_graphs =  function(){
   console.log($( window ).width())
   if($( window ).width() > 1224){
     $("#graph").empty()
-    newHtml = `<div id="options">
+    newHtml = `
+    <div id="options">
       <h3 id= "siteName_title"> Select a Station</h3>
         <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
           in this part such as a name and a description.
@@ -13,18 +14,21 @@ responsive_graphs =  function(){
     </div>
     <div id="plots2">
       <h3></h3>
-      <div id="controlGraphs">
-        <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" width: '100%'>
-          <option > No Variables Available . . .</option>
-        </select>
-        <select id="type_graph_select2" class="selectpicker" data-width="fit">
+      <div id= "ipad_lay_contr">
+      <div id= "firstContainer" class="controlGraphs2">
+        <div id= "select-graphs">
+          <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="100%" >
+            <option > Variables</option>
+          </select>
+          <select id="type_graph_select2" class="selectpicker" data-width="100%">
 
-          <optgroup label="Individual Variable Plots">
-            <option> Scatter </option>
-            <option> Whisker and Box </option>
-        </optgroup>
-        </select>
-        <div class="containerTime">
+            <optgroup label="Individual Variable Plots">
+              <option> Scatter </option>
+              <option> Whisker and Box </option>
+          </optgroup>
+          </select>
+        </div>
+        <div id= "timeControllers" class="containerTime">
             <div class='col-md-5'>
                 <div class="form-group">
                     <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
@@ -46,14 +50,18 @@ responsive_graphs =  function(){
                 </div>
             </div>
         </div>
-        <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
-        <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit">
-            <option value="Download">Download</option>
-            <option value="CSV" >CSV</option>
-            <option value = "WaterML1.0">WaterML 1.0</option>
-            <option value = "WaterML2.0">WaterML 2.0</option>
-        </select>
       </div>
+      <div id= "secondContainer" class="controlGraphs2">
+          <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
+          <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit" data-size="mini">
+              <option value="Download">Download</option>
+              <option value="CSV" >CSV</option>
+              <option value = "WaterML1.0">WaterML 1.0</option>
+              <option value = "WaterML2.0">WaterML 2.0</option>
+          </select>
+      </div>
+      </div>
+
 
       <div id="plots"></div>
     </div>
@@ -63,7 +71,7 @@ responsive_graphs =  function(){
 
     $("#graph").empty()
     newHtml = `
-    <div id="carouselExampleIndicators" class="carousel slide" >
+    <div id="carouselExampleIndicators" class="carousel slide" data-interval="false" >
       <ol class="carousel-indicators">
         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
         </li>

@@ -417,7 +417,7 @@ var water_data_explorer_PACKAGE = (function() {
    *************************************************************************/
   $(function() {
     try{
-      responsive_graphs();
+      // responsive_graphs();
 
       // console.log(uuidv4());
       init_jquery_var();
@@ -435,119 +435,122 @@ var water_data_explorer_PACKAGE = (function() {
       //make the picker to always appear//
       $(".selectpicker").selectpicker("refresh");
 
-
       $(".toggle-nav").on("click",function(){
-        if($('#app-navigation').is(':visible')){
-          console.log("visible toggle")
-          $("#app-navigation").hide();
-
-          // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
-          if($( window ).width() >= 768 && $( window ).width() <= 1366){
-            console.log("tablet");
-
-            if(window.innerHeight > window.innerWidth){
-                //portrait
-                // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
-                $('#inner-app-content').css({"width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
-
-                console.log("tablet portrait")
-            }
-            if(window.innerWidth > window.innerHeight){
-                //landscape
-                console.log("tablet landscape")
-
-                $('#inner-app-content').css({ "width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
-
-                // $('#app-content-wrapper #app-content #app-navigation').css({"width":"min-content", "position":"absolute"});
-
-            }
-          }
-          if($( window ).width() > 1366){
-            console.log("laptop visible");
-            // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
-            // $('#inner-app-content').css({"width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
-            $('#inner-app-content').css({ "width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
-
-
-          }
-          if($( window ).width() < 768){
-            console.log("phone")
-            $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
-
-          }
-          // if($( window ).width() >= 768){
-          //   console.log("Tablet or bigger visible toggle");
-          //
-          // }
-          // else{
-          //   console.log("cellphone visible toggle");
-          //
-          //   $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
-          //
-          // }
-
-          setTimeout(function(){ map.updateSize(); }, 500);
-
-
-        }
-
-        else{
-          console.log("not visible toggle");
-          $("#app-navigation").show();
-          if($( window ).width() >= 768 && $( window ).width() <= 1366){
-            console.log("tablet");
-            if(window.innerHeight > window.innerWidth){
-                //portrait
-                $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative","left": "300px"})
-                console.log("tablet portrait")
-            }
-            if(window.innerWidth > window.innerHeight){
-                //landscape
-                console.log("tablet landscape")
-                $('#inner-app-content').css({"width": "100%","display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "300px"})
-
-            }
-            // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
-
-          }
-          if($( window ).width() > 1366){
-            console.log("laptop visible");
-            // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
-            // $('#inner-app-content').css({"width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
-            $('#inner-app-content').css({ "width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "300px"});
-
-
-          }
-          if($( window ).width() < 768){
-            console.log("phone");
-
-            if(window.innerHeight > window.innerWidth){
-                //portrait
-                console.log("phone portrait");
-                $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative","left": "200px"})
-
-            }
-            if(window.innerWidth > window.innerHeight){
-                //landscape
-                console.log("phone landscape");
-                // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
-            }
-
-          }
-          // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
 
           setTimeout(function(){ map.updateSize(); }, 200);
-        }
-        setTimeout(function(){
-          if($('#plots').is(':visible')){
-            Plotly.Plots.resize("plots");
-              Plotly.relayout($("plots"), {
-                'xaxis.autorange': true,
-                'yaxis.autorange': true
-              });
-          }
-        },500)
-      });
+          setTimeout(function(){
+            if($('#plots').is(':visible')){
+              Plotly.Plots.resize("plots");
+                Plotly.relayout($("plots"), {
+                  'xaxis.autorange': true,
+                  'yaxis.autorange': true
+                });
+            }
+          },500)
+      })
+      // $(".toggle-nav").on("click",function(){
+      //   if($('#app-navigation').is(':visible')){
+      //     console.log("visible toggle")
+      //     $("#app-navigation").hide();
+      //
+      //     // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
+      //     if($( window ).width() >= 768 && $( window ).width() <= 1366){
+      //       console.log("tablet");
+      //
+      //       if(window.innerHeight > window.innerWidth){
+      //           //portrait
+      //           // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
+      //           $('#inner-app-content').css({"width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
+      //
+      //           console.log("tablet portrait")
+      //       }
+      //       if(window.innerWidth > window.innerHeight){
+      //           //landscape
+      //           console.log("tablet landscape")
+      //
+      //           $('#inner-app-content').css({ "width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
+      //
+      //           // $('#app-content-wrapper #app-content #app-navigation').css({"width":"min-content", "position":"absolute"});
+      //
+      //       }
+      //     }
+      //     if($( window ).width() > 1366){
+      //       console.log("laptop visible");
+      //       // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
+      //       // $('#inner-app-content').css({"width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
+      //       $('#inner-app-content').css({ "width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
+      //
+      //
+      //     }
+      //     if($( window ).width() < 768){
+      //       console.log("phone")
+      //       $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+      //
+      //     }
+      //
+      //     setTimeout(function(){ map.updateSize(); }, 500);
+      //
+      //
+      //   }
+      //
+      //   else{
+      //     console.log("not visible toggle");
+      //     $("#app-navigation").show();
+      //     if($( window ).width() >= 768 && $( window ).width() <= 1366){
+      //       console.log("tablet");
+      //       if(window.innerHeight > window.innerWidth){
+      //           //portrait
+      //           $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative","left": "300px"})
+      //           console.log("tablet portrait")
+      //       }
+      //       if(window.innerWidth > window.innerHeight){
+      //           //landscape
+      //           console.log("tablet landscape")
+      //           $('#inner-app-content').css({"width": "100%","display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "300px"})
+      //
+      //       }
+      //       // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+      //
+      //     }
+      //     if($( window ).width() > 1366){
+      //       console.log("laptop visible");
+      //       // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "200px"})
+      //       // $('#inner-app-content').css({"width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"});
+      //       $('#inner-app-content').css({ "width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "300px"});
+      //
+      //
+      //     }
+      //     if($( window ).width() < 768){
+      //       console.log("phone");
+      //
+      //       if(window.innerHeight > window.innerWidth){
+      //           //portrait
+      //           console.log("phone portrait");
+      //           $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative","left": "200px"})
+      //
+      //       }
+      //       if(window.innerWidth > window.innerHeight){
+      //           //landscape
+      //           console.log("phone landscape");
+      //           // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+      //       }
+      //
+      //     }
+      //     // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "100px"})
+      //
+      //     setTimeout(function(){ map.updateSize(); }, 200);
+      //   }
+      //   setTimeout(function(){ map.updateSize(); }, 200);
+      //   setTimeout(function(){
+      //     if($('#plots').is(':visible')){
+      //       Plotly.Plots.resize("plots");
+      //         Plotly.relayout($("plots"), {
+      //           'xaxis.autorange': true,
+      //           'yaxis.autorange': true
+      //         });
+      //     }
+      //   },500)
+      // });
 
       //Event for the clusters of the map
       map.getView().on('change:resolution', function(evt){
