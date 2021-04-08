@@ -324,9 +324,8 @@ activate_deactivate_graphs = function(){
       element_graphs.style.cssText=  "display: flex !important; flex-direction: row;";
       map.updateSize();
     }
-
-
   }
+
   else{
 
     ////console.log("off");
@@ -337,6 +336,7 @@ activate_deactivate_graphs = function(){
     }
 
   }
+
 };
 $('#sG').change(activate_deactivate_graphs)
 

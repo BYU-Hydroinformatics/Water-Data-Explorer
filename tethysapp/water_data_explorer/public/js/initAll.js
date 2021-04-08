@@ -448,6 +448,10 @@ var water_data_explorer_PACKAGE = (function() {
             }
           },500)
       })
+      $(".carousel-control.right").on("click",function(e){
+        console.log("hols");
+        map.updateSize();
+      })
       // $(".toggle-nav").on("click",function(){
       //   if($('#app-navigation').is(':visible')){
       //     console.log("visible toggle")

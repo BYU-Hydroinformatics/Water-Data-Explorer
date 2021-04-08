@@ -672,11 +672,27 @@ input[type=checkbox], input[type=radio]{
 }
 
 
-.carousel-control .glyphicon-chevron-right, .carousel-control .icon-next {
-  color: blue;
+.carousel-control .glyphicon-arrow-right, .carousel-control .icon-next {
+  color: #f7f7f7;
+  padding: 1vw;
+  background: #5cb85c;
+  width: auto;
+  height: auto;
+  box-sizing: content-box;
 }
-.carousel-control .glyphicon-chevron-left, .carousel-control .icon-next {
-  color: blue;
+.carousel-control .glyphicon-arrow-left, .carousel-control .icon-next {
+  color: #f7f7f7;
+  padding: 1vw;
+  background: #5cb85c;
+  width: auto;
+  height: auto;
+  box-sizing: content-box;
+}
+.carousel-inner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 3%;
 }
 
 #app-content-wrapper #app-content{
@@ -744,6 +760,17 @@ input[type=checkbox], input[type=radio]{
   .form-group{
     margin-bottom: 0px;
   }
+  #tableLegend{
+    position: absolute;
+    top: 3%;
+    right: 1%;
+    padding: 0.5em;
+    background-color: rgba(255,255,255,0.5);
+    width: fit-content;
+    max-width: 30%;
+    word-break: break-all;
+  }
+
   /* #app-navigation{
     display: none;
     max-width: 100%;
@@ -888,6 +915,16 @@ input[type=checkbox], input[type=radio]{
   .form-group{
     margin-bottom: 0px;
   }
+  #tableLegend{
+    position: absolute;
+    top: 3%;
+    right: 1%;
+    padding: 0.5em;
+    background-color: rgba(255,255,255,0.5);
+    width: fit-content;
+    max-width: 30%;
+    word-break: break-all;
+  }
   /* #app-content-wrapper #app-content #app-navigation{
     width: min-content;
   }
@@ -987,7 +1024,16 @@ input[type=checkbox], input[type=radio]{
 /* Smartphones (portrait) ----------- */
 @media screen and (max-width : 500px) {
   /* Styles */
-
+  #tableLegend{
+    position: absolute;
+    top: 3%;
+    right: 1%;
+    padding: 0.5em;
+    background-color: rgba(255,255,255,0.5);
+    width: fit-content;
+    max-width: 100%;
+    word-break: break-all;
+  }
 
   /* #app-navigation{
     display: none;
