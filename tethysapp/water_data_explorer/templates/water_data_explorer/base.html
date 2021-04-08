@@ -150,17 +150,36 @@
   <script type="text/javascript">
 
     $(window).resize(function(e) {
+      if($( window ).width() < 500){
+        if($("#inner-app-content").width() < $( window ).width()){
+          $('#sG-legend').bootstrapToggle('off');
+          $('#sG').bootstrapToggle('off');
 
-      setTimeout(function(){ map.updateSize(); }, 200);
-      setTimeout(function(){
-        if($('#plots').is(':visible')){
-          Plotly.Plots.resize("plots");
-            Plotly.relayout($("plots"), {
-              'xaxis.autorange': true,
-              'yaxis.autorange': true
-            });
         }
-      },500)
+        else{
+          $('#sG-legend').bootstrapToggle('on');
+          $('#sG').bootstrapToggle('on');
+
+
+
+        }
+      }
+      setTimeout(function(){
+        try{
+          if($('#plots').is(':visible')){
+            Plotly.Plots.resize("plots");
+              Plotly.relayout($("plots"), {
+                'xaxis.autorange': true,
+                'yaxis.autorange': true
+              });
+          }
+        }
+        catch(e){
+          console.log("Simple plotly error")
+        }
+        map.updateSize()
+      },200)
+
     })
     // $(window).resize(function(e) {
     //   console.log("height")

@@ -439,18 +439,37 @@ var water_data_explorer_PACKAGE = (function() {
 
           setTimeout(function(){ map.updateSize(); }, 200);
           setTimeout(function(){
-            if($('#plots').is(':visible')){
-              Plotly.Plots.resize("plots");
-                Plotly.relayout($("plots"), {
-                  'xaxis.autorange': true,
-                  'yaxis.autorange': true
-                });
+            try{
+              if($('#plots').is(':visible')){
+                Plotly.Plots.resize("plots");
+                  Plotly.relayout($("plots"), {
+                    'xaxis.autorange': true,
+                    'yaxis.autorange': true
+                  });
+              }
             }
+            catch(e){
+              console.log("Simple plotly error")
+            }
+
           },500)
-      })
+          if($( window ).width() < 500){
+            if($("#inner-app-content").width() < $( window ).width()){
+              $('#sG-legend').bootstrapToggle('on');
+            }
+            else{
+              $('#sG-legend').bootstrapToggle('off');
+              $('#sG').bootstrapToggle('off');
+
+
+            }
+          }
+
+      });
       $(".carousel-control.right").on("click",function(e){
         console.log("hols");
         map.updateSize();
+
       })
       // $(".toggle-nav").on("click",function(){
       //   if($('#app-navigation').is(':visible')){

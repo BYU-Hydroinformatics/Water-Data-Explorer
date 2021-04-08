@@ -692,13 +692,21 @@ input[type=checkbox], input[type=radio]{
     position: relative;
     width: 100%;
     overflow: hidden;
-    margin-top: 3%;
+    margin-top: 2%;
 }
 
 #app-content-wrapper #app-content{
   padding-bottom: 0px;
 }
+#graphAddLoading{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  margin:auto;
 
+}
 /* Smartphones (portrait and landscape) ----------- */
 @media screen and (min-device-width : 320px) and (max-device-width : 480px) {
   /* Styles */

@@ -35,12 +35,8 @@ select_variable_change = function(){
       object_request_variable['network'] =  object_request_graphs['network'];
 
       if(selectedItem !== "0"){
-        if($( window ).width() <= 768){
-          $("#graphAddLoading").css({left:'0',bottom:"0",right:"0",top:"0", margin:"auto", position:'fixed',"z-index": 9999});
-        }
-        else{
-            $("#graphAddLoading").css({left:'50%',bottom:"15%", position:'absolute',"z-index": 9999});
-        }
+
+        $("#graphAddLoading").css({left:'0',bottom:"0",right:"0",top:"0", margin:"auto", position:'fixed',"z-index": 9999});
 
         $("#graphAddLoading").removeClass("hidden");
         $.ajax({
