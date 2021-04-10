@@ -585,7 +585,7 @@ function html_for_groups(isAdmin, title, id_group_separator){
         <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
           <div class="panel-body">
               <div id= ${id_group_separator} class="divForServers">
-                <button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group does not have hydroservers</button>
+                <button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group is empty</button>
               </div>
           </div>
         </div>
