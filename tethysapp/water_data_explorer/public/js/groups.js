@@ -11,33 +11,50 @@ give_available_services = function(){
       dataType: "HTML",
       data: url_alone,
       success: function(data){
-        $("#rows_servs").empty();
-        var json_response = JSON.parse(data)
-        var services_ava = json_response['services']
-        var i = 1;
-        var row = ""
-        services_ava.forEach(function(serv){
-          var title_new = serv['title'].replace(/ /g,"_");
-          row += `<tr>
-                    <th scope="row">${i}</th>
-                    <td><input type="checkbox" name="server_${i}" id="server" value=${title_new}></td>
-                    <td>${serv['title']}</td>
-                  </tr>`
-          i += 1;
-        })
-        $("#available_services").show();
-        $("#modalAddGroupServer").find("#rows_servs").html(row)
+        try{
+          $("#rows_servs").empty();
+          var json_response = JSON.parse(data)
+          var services_ava = json_response['services']
+          var i = 1;
+          var row = ""
+          services_ava.forEach(function(serv){
+            var title_new = serv['title'].replace(/ /g,"_");
+            row += `<tr>
+                      <th scope="row">${i}</th>
+                      <td><input type="checkbox" name="server_${i}" id="server" value=${title_new}></td>
+                      <td>${serv['title']}</td>
+                    </tr>`
+            i += 1;
+          })
+          $("#available_services").show();
+          $("#modalAddGroupServer").find("#rows_servs").html(row)
 
-        $("#available_services").removeClass("hidden");
-        $("#soapAddLoading-group").addClass("hidden")
+          $("#available_services").removeClass("hidden");
+          $("#soapAddLoading-group").addClass("hidden")
 
-        $("#btn-check_all").removeClass("hidden");
+          $("#btn-check_all").removeClass("hidden");
+        }
+        catch(e){
+          $("#soapAddLoading-group").addClass("hidden");
+          $.notify(
+              {
+                  message: `There was an error retrieving the different web services contained in the view`
+              },
+              {
+                  type: "danger",
+                  allow_dismiss: true,
+                  z_index: 20000,
+                  delay: 5000
+              }
+          )
+        }
+
       },
       error: function(error){
-        $("#soapAddLoading-group").addClass("hidden")
+        $("#soapAddLoading-group").addClass("hidden");
         $.notify(
             {
-                message: `There was an error retrieving the different web services contained in the endpoind from the group web service endpoint`
+                message: `There was an error retrieving the different web services contained in the view`
             },
             {
                 type: "danger",
@@ -55,7 +72,7 @@ give_available_services = function(){
     $("#soapAddLoading-group").addClass("hidden");
     $.notify(
         {
-            message: `There was an retriving the input data from the WaterOneFlow web service`
+            message: `There was an error retriving the input data from the Web Service`
         },
         {
             type: "danger",
@@ -80,35 +97,53 @@ show_variables_groups = function(){
     url: `available-variables/`,
     dataType: "JSON",
     success: function(data){
-      variables_list = data['variables'];
-      const chunk = (arr, size) =>
-        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-          arr.slice(i * size, i * size + size)
-        );
-      let arr=chunk(variables_list, 2);
+      try{
+        variables_list = data['variables'];
+        const chunk = (arr, size) =>
+          Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+            arr.slice(i * size, i * size + size)
+          );
+        let arr=chunk(variables_list, 2);
 
-      var HSTableHtml =
-          `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+        var HSTableHtml =
+            `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
 
-        arr.forEach(l_arr => {
-          HSTableHtml +=  '<tr class="odd gradeX">'
-          l_arr.forEach(i =>{
-            let new_i = i.replace(/ /g,"_");
-            let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+          arr.forEach(l_arr => {
+            HSTableHtml +=  '<tr class="odd gradeX">'
+            l_arr.forEach(i =>{
+              let new_i = i.replace(/ /g,"_");
+              let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
 
-            HSTableHtml +=  `<td id =${new_i2}_td ><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+              HSTableHtml +=  `<td id =${new_i2}_td ><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
 
 
+            })
+
+                HSTableHtml += '</tr>';
           })
 
-              HSTableHtml += '</tr>';
-        })
 
+          HSTableHtml += "</tbody></table>"
+        ////console.log(HSTableHtml)
+        $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
+        $("#KeywordLoading").addClass("hidden");
+      }
+      catch(e){
+        $("#KeywordLoading").addClass("hidden");
+        $.notify(
+            {
+                message: `There was an error retrieving the different variables for the selected group`
+            },
+            {
+                type: "danger",
+                allow_dismiss: true,
+                z_index: 20000,
+                delay: 5000
+            }
+        )
 
-        HSTableHtml += "</tbody></table>"
-      ////console.log(HSTableHtml)
-      $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
-      $("#KeywordLoading").addClass("hidden");
+      }
+
     },
     error: function(error){
       $("#KeywordLoading").addClass("hidden");
@@ -134,52 +169,69 @@ available_regions = function(){
     url: `available-regions/`,
     dataType: "JSON",
     success: function(data){
-      countries_available = data['countries']
-      const chunk = (arr, size) =>
-        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-          arr.slice(i * size, i * size + size)
-        );
-      let arr=chunk(countries_available, 2);
-      var HSTableHtml =
-          `<table id="data-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+      try{
+        countries_available = data['countries']
+        const chunk = (arr, size) =>
+          Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+            arr.slice(i * size, i * size + size)
+          );
+        let arr=chunk(countries_available, 2);
+        var HSTableHtml =
+            `<table id="data-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
 
-        arr.forEach(l_arr => {
-          HSTableHtml +=  '<tr class="odd gradeX">'
-          l_arr.forEach(i =>{
-            let new_i = i.replace(/ /g,"_");
-            HSTableHtml +=  `<td><input type="checkbox" id= "server" name="countries" value=${new_i} /> ${i}</td>`;
+          arr.forEach(l_arr => {
+            HSTableHtml +=  '<tr class="odd gradeX">'
+            l_arr.forEach(i =>{
+              let new_i = i.replace(/ /g,"_");
+              HSTableHtml +=  `<td><input type="checkbox" id= "server" name="countries" value=${new_i} /> ${i}</td>`;
+            })
+
+                HSTableHtml += '</tr>';
           })
 
-              HSTableHtml += '</tr>';
-        })
+          HSTableHtml += "</tbody></table>"
+        $("#modalKeyWordSearch").find("#groups_countries").html(HSTableHtml);
+        $("#KeywordLoading").addClass("hidden");
+        // let checkboxes = $('#data-table').find("input[type=checkbox][name=countries]")
+        ////console.log(checkboxes)
+        // let countries_selected = [];
 
-        HSTableHtml += "</tbody></table>"
-      $("#modalKeyWordSearch").find("#groups_countries").html(HSTableHtml);
-      $("#KeywordLoading").addClass("hidden");
-      // let checkboxes = $('#data-table').find("input[type=checkbox][name=countries]")
-      ////console.log(checkboxes)
-      // let countries_selected = [];
+        // Attach a change event handler to the checkboxes of the countries to receive the countries.
 
-      // Attach a change event handler to the checkboxes of the countries to receive the countries.
+        // checkboxes.click(function() {
+        //   countries_selected = checkboxes
+        //     .filter(":checked") // Filter out unchecked boxes.
+        //     .map(function() { // Extract values using jQuery map.
+        //       return this.value.replace(/_/g, ' ');
+        //     })
+        //     .get() // Get array.
+        //   if (countries_selected.length > 0){
+        //     ////console.log(countries_selected);
+        //     listener_checkbox(countries_selected)
+        //   }
+        //   else{
+        //     show_variables_groups()
+        //   }
+        // });
+      }
+      catch(e){
+        $("#KeywordLoading").addClass("hidden");
+        $.notify(
+            {
+                message: `There was an error trying to retrieve the different countries contained by the web services in the app`
+            },
+            {
+                type: "danger",
+                allow_dismiss: true,
+                z_index: 20000,
+                delay: 5000
+            }
+        )
+      }
 
-      // checkboxes.click(function() {
-      //   countries_selected = checkboxes
-      //     .filter(":checked") // Filter out unchecked boxes.
-      //     .map(function() { // Extract values using jQuery map.
-      //       return this.value.replace(/_/g, ' ');
-      //     })
-      //     .get() // Get array.
-      //   if (countries_selected.length > 0){
-      //     ////console.log(countries_selected);
-      //     listener_checkbox(countries_selected)
-      //   }
-      //   else{
-      //     show_variables_groups()
-      //   }
-      // });
     },
     error: function(error){
-      $("#KeywordLoading").addClass("hidden")
+      $("#KeywordLoading").addClass("hidden");
       $.notify(
           {
               message: `There was an error trying to retrieve the different countries contained by the web services in the app`
@@ -196,68 +248,115 @@ available_regions = function(){
   })
 }
 listener_checkbox = function(list_countries){
-  let le_object = {
-    "countries": list_countries
-  };
-  $("#KeywordLoading").removeClass("hidden")
+  try{
+    let le_object = {
+      "countries": list_countries
+    };
+    $("#KeywordLoading").removeClass("hidden")
 
-  $.ajax({
-    type: "GET",
-    url: `get-variables-for-country/`,
-    dataType: "JSON",
-    data: le_object,
-    success: function(result){
+    $.ajax({
+      type: "GET",
+      url: `get-variables-for-country/`,
+      dataType: "JSON",
+      data: le_object,
+      success: function(result){
+        try{
+          $("#modalKeyWordSearch").find("#groups_variables").empty();
+          variables_list = result['variables'];
+          const chunk = (arr, size) =>
+            Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+              arr.slice(i * size, i * size + size)
+            );
+          let arr=chunk(variables_list, 2);
 
-      $("#modalKeyWordSearch").find("#groups_variables").empty();
-      variables_list = result['variables'];
-      const chunk = (arr, size) =>
-        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-          arr.slice(i * size, i * size + size)
-        );
-      let arr=chunk(variables_list, 2);
+          var HSTableHtml =
+              `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
 
-      var HSTableHtml =
-          `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+            arr.forEach(l_arr => {
+              HSTableHtml +=  '<tr class="odd gradeX">'
+              l_arr.forEach(i =>{
+                let new_i = i.replace(/ /g,"_");
+                HSTableHtml +=  `<td><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+              })
 
-        arr.forEach(l_arr => {
-          HSTableHtml +=  '<tr class="odd gradeX">'
-          l_arr.forEach(i =>{
-            let new_i = i.replace(/ /g,"_");
-            HSTableHtml +=  `<td><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
-          })
+                  HSTableHtml += '</tr>';
+            })
 
-              HSTableHtml += '</tr>';
-        })
+            HSTableHtml += "</tbody></table>"
+          $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
+          $("#KeywordLoading").addClass("hidden");
+        }
+        catch(e){
+          $("#KeywordLoading").addClass("hidden");
+          $.notify(
+              {
+                  message: `There was an error retrieving the different variables for the selected web service`
+              },
+              {
+                  type: "danger",
+                  allow_dismiss: true,
+                  z_index: 20000,
+                  delay: 5000
+              }
+          )
+        }
+      },
+      error: function(error){
+        $("#KeywordLoading").addClass("hidden");
+        $.notify(
+            {
+                message: `There was an error retrieving the different variables for the selected web service`
+            },
+            {
+                type: "danger",
+                allow_dismiss: true,
+                z_index: 20000,
+                delay: 5000
+            }
+        )
+      }
 
-        HSTableHtml += "</tbody></table>"
-      $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
-      $("#KeywordLoading").addClass("hidden");
+    })
+  }
+  catch(e){
+    $("#KeywordLoading").addClass("hidden");
+    $.notify(
+        {
+            message: `There was an error retrieving the different variables for the selected web service`
+        },
+        {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000
+        }
+    )
+  }
 
-    },
-    error: function(error){
-      $("#KeywordLoading").addClass("hidden")
-      $.notify(
-          {
-              message: `There was an error retrieving the different variables for the selected web service`
-          },
-          {
-              type: "danger",
-              allow_dismiss: true,
-              z_index: 20000,
-              delay: 5000
-          }
-      )
-    }
-
-  })
 
 }
 load_search_group_modal = function(){
   // clean the modal //
-  $("#modalFilterGroup").find("#groups_countries2").empty();
-  $("#modalFilterGroup").find("#groups_variables2").empty();
-  show_variables_group();
-  available_regions_group();
+  try{
+    $("#modalFilterGroup").find("#groups_countries2").empty();
+    $("#modalFilterGroup").find("#groups_variables2").empty();
+    show_variables_group();
+    available_regions_group();
+  }
+  catch(e){
+    $.notify(
+        {
+            message: `Problem loading the Filter for the groups of views`
+        },
+        {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000
+        }
+    )
+  }
+
 
 }
 $(document).on("click", "#btn-filter-group-f", load_search_group_modal);
@@ -276,57 +375,75 @@ available_regions_group = function(){
       data: group_obj,
 
       success: function(data){
-        countries_available = data['countries']
-        const chunk = (arr, size) =>
-          Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-            arr.slice(i * size, i * size + size)
-          );
-        let arr=chunk(countries_available, 2);
+        try{
+          countries_available = data['countries']
+          const chunk = (arr, size) =>
+            Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+              arr.slice(i * size, i * size + size)
+            );
+          let arr=chunk(countries_available, 2);
 
-        var HSTableHtml =
-            `<table id="data-table2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+          var HSTableHtml =
+              `<table id="data-table2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
 
-          arr.forEach(l_arr => {
-            HSTableHtml +=  '<tr class="odd gradeX">'
-            l_arr.forEach(i =>{
-              let new_i = i.replace(/ /g,"_");
-              HSTableHtml +=  `<td><input type="checkbox" id= "server" name="countries" value=${new_i} /> ${i}</td>`;
+            arr.forEach(l_arr => {
+              HSTableHtml +=  '<tr class="odd gradeX">'
+              l_arr.forEach(i =>{
+                let new_i = i.replace(/ /g,"_");
+                HSTableHtml +=  `<td><input type="checkbox" id= "server" name="countries" value=${new_i} /> ${i}</td>`;
+              })
+
+                  HSTableHtml += '</tr>';
             })
 
-                HSTableHtml += '</tr>';
-          })
+
+            HSTableHtml += "</tbody></table>"
+          $("#modalFilterGroup").find("#groups_countries2").html(HSTableHtml);
+          $("#KeywordLoading2").addClass("hidden");
 
 
-          HSTableHtml += "</tbody></table>"
-        $("#modalFilterGroup").find("#groups_countries2").html(HSTableHtml);
-        $("#KeywordLoading2").addClass("hidden");
+          // // Attach a change event handler to the checkboxes to filter the variables.
 
+          // let checkboxes = $('#data-table2 input[type=checkbox][name=countries]')
+          // let countries_selected = [];
+          // checkboxes.click(function() {
+          //   countries_selected = checkboxes
+          //     .filter(":checked") // Filter out unchecked boxes.
+          //     .map(function() { // Extract values using jQuery map.
+          //       return this.value.replace(/_/g, ' ');
+          //     })
+          //     .get() // Get array.
+          //   if (countries_selected.length > 0){
+          //     ////console.log(countries_selected);
+          //     listener_checkbox_group(countries_selected)
+          //   }
+          //   else{
+          //     show_variables_group()
+          //   }
+          // });
+        }
+        catch(e){
+          $("#KeywordLoading2").addClass("hidden");
+          $.notify(
+              {
+                message: `There was an retriving the regions available in the WaterOneFlow web service`
 
-        // // Attach a change event handler to the checkboxes to filter the variables.
+              },
+              {
+                  type: "danger",
+                  allow_dismiss: true,
+                  z_index: 20000,
+                  delay: 5000
+              }
+          )
+        }
 
-        // let checkboxes = $('#data-table2 input[type=checkbox][name=countries]')
-        // let countries_selected = [];
-        // checkboxes.click(function() {
-        //   countries_selected = checkboxes
-        //     .filter(":checked") // Filter out unchecked boxes.
-        //     .map(function() { // Extract values using jQuery map.
-        //       return this.value.replace(/_/g, ' ');
-        //     })
-        //     .get() // Get array.
-        //   if (countries_selected.length > 0){
-        //     ////console.log(countries_selected);
-        //     listener_checkbox_group(countries_selected)
-        //   }
-        //   else{
-        //     show_variables_group()
-        //   }
-        // });
       },
       error: function(error){
-        $("#KeywordLoading2").addClass("hidden")
+        $("#KeywordLoading2").addClass("hidden");
         $.notify(
             {
-                message: `There was an retriving the input data from the WaterOneFlow web service`
+                message: `There was an retriving the regions available in the WaterOneFlow web service`
 
             },
             {
@@ -345,7 +462,7 @@ available_regions_group = function(){
 
     $.notify(
         {
-          message: `We are having a hard time to recognize the actual group for the request`
+          message: `We are having a problem to recognize the actual group for the request`
         },
         {
             type: "danger",
@@ -373,35 +490,51 @@ listener_checkbox_group = function(list_countries){
       dataType: "JSON",
       data: le_object,
       success: function(result){
+        try{
+          $("#modalFilterGroup").find("#groups_variables2").empty();
+          variables_list = result['variables'];
+          const chunk = (arr, size) =>
+            Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+              arr.slice(i * size, i * size + size)
+            );
+          let arr=chunk(variables_list, 2);
 
-        $("#modalFilterGroup").find("#groups_variables2").empty();
-        variables_list = result['variables'];
-        const chunk = (arr, size) =>
-          Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-            arr.slice(i * size, i * size + size)
-          );
-        let arr=chunk(variables_list, 2);
+          var HSTableHtml =
+              `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
 
-        var HSTableHtml =
-            `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+            arr.forEach(l_arr => {
+              HSTableHtml +=  '<tr class="odd gradeX">'
+              l_arr.forEach(i =>{
+                let new_i = i.replace(/ /g,"_");
+                HSTableHtml +=  `<td><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+              })
 
-          arr.forEach(l_arr => {
-            HSTableHtml +=  '<tr class="odd gradeX">'
-            l_arr.forEach(i =>{
-              let new_i = i.replace(/ /g,"_");
-              HSTableHtml +=  `<td><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+                  HSTableHtml += '</tr>';
             })
 
-                HSTableHtml += '</tr>';
-          })
+            HSTableHtml += "</tbody></table>"
+          $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
+          $("#KeywordLoading2").addClass("hidden");
 
-          HSTableHtml += "</tbody></table>"
-        $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
-        $("#KeywordLoading2").addClass("hidden");
+        }
+        catch(e){
+          $("#KeywordLoading2").addClass("hidden");
+          $.notify(
+              {
+                  message: `There was an error trying to find the variables for the selected country`
+              },
+              {
+                  type: "danger",
+                  allow_dismiss: true,
+                  z_index: 20000,
+                  delay: 5000
+              }
+          )
+        }
 
       },
       error: function(error){
-        $("#KeywordLoading2").addClass("hidden")
+        $("#KeywordLoading2").addClass("hidden");
         $.notify(
             {
                 message: `There was an error trying to find the variables for the selected country`
@@ -422,7 +555,7 @@ listener_checkbox_group = function(list_countries){
 
     $.notify(
         {
-            message: `There was an retriving the input data from the WaterOneFlow Web Service`
+            message: `There was an retriving the input data from the Web Service`
         },
         {
             type: "danger",
@@ -448,39 +581,56 @@ show_variables_group = function(){
       dataType: "JSON",
       data: group_obj,
       success: function(data){
-        variables_list = data['variables'];
-        const chunk = (arr, size) =>
-          Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-            arr.slice(i * size, i * size + size)
-          );
-        let arr=chunk(variables_list, 2);
+        try{
+          variables_list = data['variables'];
+          const chunk = (arr, size) =>
+            Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+              arr.slice(i * size, i * size + size)
+            );
+          let arr=chunk(variables_list, 2);
 
-        var HSTableHtml =
-            `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+          var HSTableHtml =
+              `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
 
-          arr.forEach(l_arr => {
-            HSTableHtml +=  '<tr class="odd gradeX">'
-            l_arr.forEach(i =>{
-              let new_i = i.replace(/ /g,"_");
-              let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+            arr.forEach(l_arr => {
+              HSTableHtml +=  '<tr class="odd gradeX">'
+              l_arr.forEach(i =>{
+                let new_i = i.replace(/ /g,"_");
+                let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
 
-              HSTableHtml +=  `<td id =${new_i2}_td2 ><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+                HSTableHtml +=  `<td id =${new_i2}_td2 ><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
 
+              })
+
+                  HSTableHtml += '</tr>';
             })
 
-                HSTableHtml += '</tr>';
-          })
+            HSTableHtml += "</tbody></table>"
+          $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
+          $("#KeywordLoading2").addClass("hidden");
+        }
+        catch(e){
+          $("#KeywordLoading2").addClass("hidden");
+          $.notify(
+              {
+                  message: `There was an error retrieving the variables from the selected group Web Service`
+              },
+              {
+                  type: "danger",
+                  allow_dismiss: true,
+                  z_index: 20000,
+                  delay: 5000
+              }
+          )
+        }
 
-          HSTableHtml += "</tbody></table>"
-        $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
-        $("#KeywordLoading2").addClass("hidden");
 
       },
       error: function(error){
-        $("#KeywordLoading2").addClass("hidden")
+        $("#KeywordLoading2").addClass("hidden");
         $.notify(
             {
-                message: `There was an error retrieving the variables from the selected group web services`
+                message: `There was an error retrieving the variables from the selected group Web Service`
             },
             {
                 type: "danger",
@@ -497,7 +647,7 @@ show_variables_group = function(){
     $("#KeywordLoading2").addClass("hidden")
     $.notify(
         {
-            message: `There was an retriving the input data from the WaterOneFlow web service`
+            message: `There was an retriving the input data from the Web Service`
         },
         {
             type: "danger",
@@ -561,114 +711,132 @@ create_group_hydroservers = function(){
         data: datastring,
         success: function(result) {
             //Returning the geoserver layer metadata from the controller
-            var json_response = JSON.parse(result)
+            try{
+              var json_response = JSON.parse(result)
 
-            let group=json_response
-            if(group.message !== "There was an error while adding th group.") {
-              // let title=group.title;
-              let title=group.title;
-              let description=group.description;
-              information_model[`${title}`] = [];
-              let new_title = unique_id_group;
+              let group=json_response
+              if(group.message !== "There was an error while adding th group.") {
+                // let title=group.title;
+                let title=group.title;
+                let description=group.description;
+                information_model[`${title}`] = [];
+                let new_title = unique_id_group;
 
-              let id_group_separator = `${new_title}_list_separator`;
+                let id_group_separator = `${new_title}_list_separator`;
 
 
-              // let id_group_separator = `${title}_list_separator`;
-              let newHtml;
-              if(can_delete_hydrogroups){
-                newHtml = html_for_groups(can_delete_hydrogroups, new_title, id_group_separator);
+                // let id_group_separator = `${title}_list_separator`;
+                let newHtml;
+                if(can_delete_hydrogroups){
+                  newHtml = html_for_groups(can_delete_hydrogroups, new_title, id_group_separator);
+                }
+                else{
+                  newHtml = html_for_groups(false, new_title, id_group_separator);
+                }
+
+                $(newHtml).appendTo("#current-Groupservers");
+
+                $(`#${title}-noGroups`).show();
+
+                let li_object = document.getElementById(`${new_title}`);
+                let input_check = li_object.getElementsByClassName("chkbx-layers")[0];
+
+                if(!input_check.checked){
+                  // //console.log("HERE NOT CHECKEC")
+                  load_individual_hydroservers_group(title);
+                }
+                input_check.addEventListener("change", function(){
+                  change_effect_groups(this,id_group_separator);
+                });
+
+
+                let $title="#"+new_title;
+                let $title_list="#"+new_title+"list";
+                ////console.log($title_list);
+
+
+                $($title).click(function(){
+                  $("#pop-up_description2").html("");
+
+                  actual_group = `&actual-group=${title}`;
+
+                  let description_html=`
+                  <h1>Group Metadata<h1>
+                  <h3>Group Title</h3>
+                  <p>${title}</p>
+                  <h3>Group Description</h3>
+                  <p>${description}</p>`;
+                  $("#pop-up_description2").html(description_html);
+
+                });
+
+                $(".ui-state-default").click(function(){
+                  //console.log("hola");
+                });
+                    $("#soapAddLoading-group").addClass("hidden")
+                    $("#btn-add-addHydro").show()
+
+                    $("#modalAddGroupServer").modal("hide")
+                    $("#modalAddGroupServerForm").each(function() {
+                        this.reset()
+                    })
+
+                    $.notify(
+                        {
+                            message: `Successfully Created Group of views to the database`
+                        },
+                        {
+                            type: "success",
+                            allow_dismiss: true,
+                            z_index: 20000,
+                            delay: 5000
+                        }
+                    )
+                    $("#modalAddGroupServer").modal("hide");
+                    $("#rows_servs").empty();
+                    $("#available_services").hide();
               }
-              else{
-                newHtml = html_for_groups(false, new_title, id_group_separator);
-              }
 
-              $(newHtml).appendTo("#current-Groupservers");
-
-              $(`#${title}-noGroups`).show();
-
-              let li_object = document.getElementById(`${new_title}`);
-              let input_check = li_object.getElementsByClassName("chkbx-layers")[0];
-
-              if(!input_check.checked){
-                // //console.log("HERE NOT CHECKEC")
-                load_individual_hydroservers_group(title);
-              }
-              input_check.addEventListener("change", function(){
-                change_effect_groups(this,id_group_separator);
-              });
-
-
-              let $title="#"+new_title;
-              let $title_list="#"+new_title+"list";
-              ////console.log($title_list);
-
-
-              $($title).click(function(){
-                $("#pop-up_description2").html("");
-
-                actual_group = `&actual-group=${title}`;
-
-                let description_html=`
-                <h1>Group Metadata<h1>
-                <h3>Group Title</h3>
-                <p>${title}</p>
-                <h3>Group Description</h3>
-                <p>${description}</p>`;
-                $("#pop-up_description2").html(description_html);
-
-              });
-
-              $(".ui-state-default").click(function(){
-                //console.log("hola");
-              });
+              else {
                   $("#soapAddLoading-group").addClass("hidden")
                   $("#btn-add-addHydro").show()
-
-                  $("#modalAddGroupServer").modal("hide")
-                  $("#modalAddGroupServerForm").each(function() {
-                      this.reset()
-                  })
-
                   $.notify(
                       {
-                          message: `Successfully Created Group of HydroServers to the database`
+                          message: `Failed to add to the group. Please check and try again.`
                       },
                       {
-                          type: "success",
+                          type: "danger",
                           allow_dismiss: true,
                           z_index: 20000,
                           delay: 5000
                       }
                   )
-                  $("#modalAddGroupServer").modal("hide");
-                  $("#rows_servs").empty();
-                  $("#available_services").hide();
+              }
+              $("#btn-check_all").addClass("hidden");
+            }
+            catch(e){
+              $("soapAddLoading-group").addClass("hidden");
+              $("#btn-add-addHydro").show();
+              $.notify(
+                  {
+                      message: `There was an error adding the group of views`
+                  },
+                  {
+                      type: "danger",
+                      allow_dismiss: true,
+                      z_index: 20000,
+                      delay: 5000
+                  }
+              )
             }
 
-            else {
-                $("#soapAddLoading-group").addClass("hidden")
-                $("#btn-add-addHydro").show()
-                $.notify(
-                    {
-                        message: `Failed to add to the group. Please check and try again.`
-                    },
-                    {
-                        type: "danger",
-                        allow_dismiss: true,
-                        z_index: 20000,
-                        delay: 5000
-                    }
-                )
-            }
-            $("#btn-check_all").addClass("hidden");
         },
         error: function(error) {
-            $("soapAddLoading-group").addClass("hidden")
-            $("#btn-add-addHydro").show()
+            $("soapAddLoading-group").addClass("hidden");
+            $("#btn-add-addHydro").show();
             $.notify(
                 {
-                    message: `There was an error while adding the group of WaterOneFlow web services`
+                    message: `There was an error adding the group of views`
                 },
                 {
                     type: "danger",
@@ -778,7 +946,7 @@ load_group_hydroservers = function(){
             $("#GeneralLoading").addClass("hidden")
             $.notify(
                 {
-                    message: `There was an error while loading the different WaterOneFlow Web Services`
+                    message: `There was an error while loading the different Web Services`
                 },
                 {
                     type: "danger",
@@ -796,7 +964,7 @@ load_group_hydroservers = function(){
 
        $.notify(
            {
-               message: `There was an error while loading the different WaterOneFlow Web Services`
+               message: `There was an error while loading the different Web Services`
            },
            {
                type: "danger",
@@ -825,6 +993,7 @@ remove_individual_hydroservers_group = function(group_name){
         dataType: "JSON",
         data: group_name_obj,
         success: result => {
+          try{
             let servers = result["hydroserver"]
 
             //USE A FUNCTION TO FIND THE LI ASSOCIATED WITH THAT GROUP  AND DELETE IT FROM THE MAP AND MAKE ALL
@@ -852,6 +1021,21 @@ remove_individual_hydroservers_group = function(group_name){
                 let lis_to_delete = li_arrays.filter(x => title === x.attributes['layer-name'].value);
                 let ul_servers = document.getElementById(`${id_group_separator}`);
             })
+          }
+          catch(e){
+            $.notify(
+                {
+                    message: `We are having an error updating the interface, please reload the page`
+                },
+                {
+                    type: "danger",
+                    allow_dismiss: true,
+                    z_index: 20000,
+                    delay: 5000
+                }
+            )
+          }
+
 
         },
         error: function(error) {
@@ -979,6 +1163,7 @@ get_hs_list_from_hydroserver = function(){
           dataType: "JSON",
           data:group_name_obj,
           success: function(result) {
+            try{
               //Dynamically generate the list of existing hydroservers
               var server = result["hydroserver"]
               var HSTableHtml =
@@ -1015,6 +1200,21 @@ get_hs_list_from_hydroserver = function(){
                   HSTableHtml += "</tbody></table>"
                   $modalDelete.find(".modal-body").html(HSTableHtml)
               }
+            }
+            catch(e){
+              $.notify(
+                  {
+                      message: `We are having an error trying to get the list of servers that are in the group`
+                  },
+                  {
+                      type: "danger",
+                      allow_dismiss: true,
+                      z_index: 20000,
+                      delay: 5000
+                  }
+              )
+            }
+
           },
           error: function(error) {
               console.log(error);
@@ -1074,71 +1274,102 @@ delete_group_of_hydroservers = function(){
         dataType: "JSON",
         data: groups_to_delete_obj,
         success: function(result){
+          try{
+            let groups_to_erase = result.groups;
+            let hydroservers_to_erase = result.hydroservers;
 
+            $("#pop-up_description2").empty();
 
-          let groups_to_erase = result.groups;
-          let hydroservers_to_erase = result.hydroservers;
-
-          $("#pop-up_description2").empty();
-
-          groups_to_erase.forEach(function(group){
-            let group_name_e3;
-            Object.keys(id_dictionary).forEach(function(key) {
-              if(id_dictionary[key] == group ){
-                group_name_e3 = key;
-              }
-            });
-            let element=document.getElementById(group_name_e3);
-            element.parentNode.removeChild(element);
-            let id_group_separator = `${group_name_e3}_list_separator`;
-            let separator = document.getElementById(id_group_separator);
-            separator.parentNode.removeChild(separator);
-            let group_panel_id = `${group_name_e3}_panel`;
-            let group_panel = document.getElementById(group_panel_id);
-            group_panel.parentNode.removeChild(group_panel);
-            $(`#${group_name_e3}deleteID`).remove();
-          });
-
-          hydroservers_to_erase.forEach(function(hydroserver){
-              // let hydroserver2  = hydroserver.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
-              let new_title;
+            groups_to_erase.forEach(function(group){
+              let group_name_e3;
               Object.keys(id_dictionary).forEach(function(key) {
-                if(id_dictionary[key] == hydroserver ){
-                  new_title = key;
+                if(id_dictionary[key] == group ){
+                  group_name_e3 = key;
                 }
               });
-              map.removeLayer(layersDict[hydroserver]);
-              if (layersDict.hasOwnProperty(hydroserver)){
-                delete layersDict[hydroserver]
-                $(`#${new_title}-row-complete`).remove()
-              }
-          });
-          if(layersDict['selectedPointModal']){
-            map.removeLayer(layersDict['selectedPointModal'])
-            map.updateSize()
+              let element=document.getElementById(group_name_e3);
+              element.parentNode.removeChild(element);
+              let id_group_separator = `${group_name_e3}_list_separator`;
+              let separator = document.getElementById(id_group_separator);
+              separator.parentNode.removeChild(separator);
+              let group_panel_id = `${group_name_e3}_panel`;
+              let group_panel = document.getElementById(group_panel_id);
+              group_panel.parentNode.removeChild(group_panel);
+              $(`#${group_name_e3}deleteID`).remove();
+            });
 
+            hydroservers_to_erase.forEach(function(hydroserver){
+                // let hydroserver2  = hydroserver.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+                let new_title;
+                Object.keys(id_dictionary).forEach(function(key) {
+                  if(id_dictionary[key] == hydroserver ){
+                    new_title = key;
+                  }
+                });
+                map.removeLayer(layersDict[hydroserver]);
+                if (layersDict.hasOwnProperty(hydroserver)){
+                  delete layersDict[hydroserver]
+                  $(`#${new_title}-row-complete`).remove()
+                }
+            });
+            if(layersDict['selectedPointModal']){
+              map.removeLayer(layersDict['selectedPointModal'])
+              map.updateSize()
+
+            }
+
+            if(layersDict['selectedPoint']){
+              map.removeLayer(layersDict['selectedPoint'])
+              map.updateSize()
+            }
+
+            map.updateSize();
+
+              $.notify(
+                  {
+                      message: `Successfully Deleted Group!`
+                  },
+                  {
+                      type: "success",
+                      allow_dismiss: true,
+                      z_index: 20000,
+                      delay: 5000
+                  }
+              )
           }
-
-          if(layersDict['selectedPoint']){
-            map.removeLayer(layersDict['selectedPoint'])
-            map.updateSize()
-          }
-
-          map.updateSize();
-
+          catch(e){
+            console.log(error);
             $.notify(
                 {
-                    message: `Successfully Deleted Group!`
+                    message: `We are having an error deleting the selected groups of views`
                 },
                 {
-                    type: "success",
+                    type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
                     delay: 5000
                 }
             )
+          }
 
+
+
+        },
+        error: function(error) {
+            console.log(error);
+            $.notify(
+                {
+                    message: `We are having an error deleting the selected groups of views`
+                },
+                {
+                    type: "danger",
+                    allow_dismiss: true,
+                    z_index: 20000,
+                    delay: 5000
+                }
+            )
         }
+
 
       })
     }
@@ -1148,7 +1379,7 @@ delete_group_of_hydroservers = function(){
               message: `You need to select at least one group to delete`
           },
           {
-              type: "danger",
+              type: "info",
               allow_dismiss: true,
               z_index: 20000,
               delay: 5000
@@ -1191,150 +1422,167 @@ catalog_filter = function(){
         dataType: "HTML",
         data: datastring,
         success: function(result) {
-
-          let hs_available = JSON.parse(result)['hs'];
-          let new_hs_available = []
-          hs_available.forEach(function(hs){
-            // hs = hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
-            // new_hs_available.push(hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,''));
-            let hs_new2;
-            Object.keys(id_dictionary).forEach(function(key) {
-              if(id_dictionary[key] == hs ){
-                hs_new2 = key;
+          try{
+            let hs_available = JSON.parse(result)['hs'];
+            let new_hs_available = []
+            hs_available.forEach(function(hs){
+              // hs = hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+              // new_hs_available.push(hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,''));
+              let hs_new2;
+              Object.keys(id_dictionary).forEach(function(key) {
+                if(id_dictionary[key] == hs ){
+                  hs_new2 = key;
+                }
+              });
+              new_hs_available.push(hs_new2);
+            })
+            let sitesObj =  JSON.parse(result)['stations'];
+            map.getLayers().forEach(function(layer) {
+              if(layer instanceof ol.layer.Vector){
+                layer.setStyle(new ol.style.Style({}));
               }
             });
-            new_hs_available.push(hs_new2);
-          })
-          let sitesObj =  JSON.parse(result)['stations'];
-          map.getLayers().forEach(function(layer) {
-            if(layer instanceof ol.layer.Vector){
-              layer.setStyle(new ol.style.Style({}));
-            }
-          });
-          for(let i = 0;  i< sitesObj.length; ++i){
-            let title = sitesObj[i]['title']
-            let url = sitesObj[i]['url']
-            let sites = sitesObj[i]['sites'];
-            var vectorLayer = map_layers(sites,title,url)[0]
-            var vectorSource = map_layers(sites,title,url)[1]
-            map.getLayers().forEach(function(layer) {
-              // if(layer instanceof ol.layer.Vector){
-              //   layer.setStyle(new ol.style.Style({}));
-              // }
-              //
-                 if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                     layer.setStyle(new ol.style.Style({}));
-                   }
-             });
-
-            map.addLayer(vectorLayer)
-            vectorLayer.set("selectable", true)
-            layer_object_filter[title] = vectorLayer;
-
-            if(layersDict['selectedPointModal']){
-              map.removeLayer(layersDict['selectedPointModal'])
-              map.updateSize()
-            }
-            if(layersDict['selectedPoint']){
-              map.removeLayer(layersDict['selectedPoint'])
-              map.updateSize()
-            }
-
-          }
-          $("#btn-r-reset").show()
-          $("#btn-r-reset").on("click", reset_keywords);
-          $("#current-Groupservers").find("li").each(function()
-             {
-               var $li=$(this)['0'];
-               let id_li = $li['id'];
-               $(`#${id_li} input[type=checkbox]`).each(function() {
-                 this.checked = false;
+            for(let i = 0;  i< sitesObj.length; ++i){
+              let title = sitesObj[i]['title']
+              let url = sitesObj[i]['url']
+              let sites = sitesObj[i]['sites'];
+              var vectorLayer = map_layers(sites,title,url)[0]
+              var vectorSource = map_layers(sites,title,url)[1]
+              map.getLayers().forEach(function(layer) {
+                // if(layer instanceof ol.layer.Vector){
+                //   layer.setStyle(new ol.style.Style({}));
+                // }
+                //
+                   if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                       layer.setStyle(new ol.style.Style({}));
+                     }
                });
-             });
-          $("#current-Groupservers").find("li").each(function()
-             {
-                var $li=$(this)['0'];
-                let id_li = $li['id'];
 
-                if(new_hs_available.includes(id_li)){
+              map.addLayer(vectorLayer)
+              vectorLayer.set("selectable", true)
+              layer_object_filter[title] = vectorLayer;
 
-                  $(`#${id_li}`).css({"opacity": "1",
-                                      "border-color": "#ac2925",
-                                      "border-width": "2px",
-                                      "border-style": "solid",
-                                      "color": "black",
-                                      "font-weight": "bold"});
-                  $(`#${id_li} input[type=checkbox]`).each(function() {
-                    this.checked = true;
-                  });
+              if(layersDict['selectedPointModal']){
+                map.removeLayer(layersDict['selectedPointModal'])
+                map.updateSize()
+              }
+              if(layersDict['selectedPoint']){
+                map.removeLayer(layersDict['selectedPoint'])
+                map.updateSize()
+              }
 
-                }
-                else{
-                  let groups_divs = Object.keys(information_model);
-                  let groups_divs_3e = []
-                  groups_divs.forEach(function(g3){
-                    let g_new2;
-                    Object.keys(id_dictionary).forEach(function(key) {
-                      if(id_dictionary[key] == g3 ){
-                        g_new2 = key;
-                      }
+            }
+            $("#btn-r-reset").show()
+            $("#btn-r-reset").on("click", reset_keywords);
+            $("#current-Groupservers").find("li").each(function()
+               {
+                 var $li=$(this)['0'];
+                 let id_li = $li['id'];
+                 $(`#${id_li} input[type=checkbox]`).each(function() {
+                   this.checked = false;
+                 });
+               });
+            $("#current-Groupservers").find("li").each(function()
+               {
+                  var $li=$(this)['0'];
+                  let id_li = $li['id'];
+
+                  if(new_hs_available.includes(id_li)){
+
+                    $(`#${id_li}`).css({"opacity": "1",
+                                        "border-color": "#ac2925",
+                                        "border-width": "2px",
+                                        "border-style": "solid",
+                                        "color": "black",
+                                        "font-weight": "bold"});
+                    $(`#${id_li} input[type=checkbox]`).each(function() {
+                      this.checked = true;
                     });
-                    groups_divs_3e.push(g_new2);
-                  })
-                  groups_divs = groups_divs_3e
-                  if (!groups_divs.includes(id_li)){
-                    $(`#${id_li}`).css({"opacity": "0.5",
-                                         "border-color": "#d3d3d3",
-                                         "border-width":"1px",
-                                         "border-style":"solid",
-                                         "color":"#555555",
-                                         "font-weight": "normal"});
+
                   }
-                }
-             });
-             let groups_divs = Object.keys(information_model);
+                  else{
+                    let groups_divs = Object.keys(information_model);
+                    let groups_divs_3e = []
+                    groups_divs.forEach(function(g3){
+                      let g_new2;
+                      Object.keys(id_dictionary).forEach(function(key) {
+                        if(id_dictionary[key] == g3 ){
+                          g_new2 = key;
+                        }
+                      });
+                      groups_divs_3e.push(g_new2);
+                    })
+                    groups_divs = groups_divs_3e
+                    if (!groups_divs.includes(id_li)){
+                      $(`#${id_li}`).css({"opacity": "0.5",
+                                           "border-color": "#d3d3d3",
+                                           "border-width":"1px",
+                                           "border-style":"solid",
+                                           "color":"#555555",
+                                           "font-weight": "normal"});
+                    }
+                  }
+               });
+               let groups_divs = Object.keys(information_model);
 
-             for(let i=0; i< groups_divs.length; ++i){
-               let check_all = []
-               for(let j=0; j< information_model[groups_divs[i]].length; ++j){
+               for(let i=0; i< groups_divs.length; ++i){
+                 let check_all = []
+                 for(let j=0; j< information_model[groups_divs[i]].length; ++j){
 
-                 let service_div = information_model[groups_divs[i]][j];
-                 let new_service_div;
-                 Object.keys(id_dictionary).forEach(function(key) {
-                   if(id_dictionary[key] == service_div ){
-                     new_service_div = key;
-                   }
-                 });
-                 // service_div = service_div.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
-                 $(`#${new_service_div} input[type=checkbox]`).each(function(){
-                   if(this.checked){
-                     check_all.push(true);
-                   }
-                   else{
-                     check_all.push(false);
-                   }
-                 });
-               }
-               if(!check_all.includes(false) && check_all.length > 0){
-                 let groups_divs_3e = []
-                 groups_divs.forEach(function(g3){
-                   let g_new2;
+                   let service_div = information_model[groups_divs[i]][j];
+                   let new_service_div;
                    Object.keys(id_dictionary).forEach(function(key) {
-                     if(id_dictionary[key] == g3 ){
-                       g_new2 = key;
+                     if(id_dictionary[key] == service_div ){
+                       new_service_div = key;
                      }
                    });
-                   groups_divs_3e.push(g_new2);
-                 })
+                   // service_div = service_div.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+                   $(`#${new_service_div} input[type=checkbox]`).each(function(){
+                     if(this.checked){
+                       check_all.push(true);
+                     }
+                     else{
+                       check_all.push(false);
+                     }
+                   });
+                 }
+                 if(!check_all.includes(false) && check_all.length > 0){
+                   let groups_divs_3e = []
+                   groups_divs.forEach(function(g3){
+                     let g_new2;
+                     Object.keys(id_dictionary).forEach(function(key) {
+                       if(id_dictionary[key] == g3 ){
+                         g_new2 = key;
+                       }
+                     });
+                     groups_divs_3e.push(g_new2);
+                   })
 
-                 $(`#${groups_divs_3e[i]} input[type=checkbox]`).each(function() {
-                   this.checked = true;
-                 });
+                   $(`#${groups_divs_3e[i]} input[type=checkbox]`).each(function() {
+                     this.checked = true;
+                   });
+                 }
                }
-             }
 
 
-          $("#KeywordLoading").addClass("hidden");
+            $("#KeywordLoading").addClass("hidden");
+
+          }
+          catch(e){
+            $("#KeywordLoading").addClass("hidden");
+
+            $.notify(
+                {
+                    message: `Something were wrong when filtering the web services by region`
+                },
+                {
+                    type: "danger",
+                    allow_dismiss: true,
+                    z_index: 20000,
+                    delay: 5000
+                }
+            )
+          }
 
         },
         error: function(error) {
@@ -1385,34 +1633,52 @@ catalog_filter_server = function(){
         dataType: "HTML",
         data: datastring,
         success: function(result) {
-          let check_for_none = []
-          let hs_available = JSON.parse(result)['hs'];
-          let arrayActual_group=actual_group.split('=')[1];
-          $(`#${arrayActual_group}_list_separator`).find("li").each(function()
-             {
-                var $li=$(this)['0'];
-                let id_li = $li['id'];
-                if(hs_available.includes(id_li)){
-                  $(`#${id_li}`).css({"opacity": "1",
-                                      "border-color": "#ac2925",
-                                      "border-width": "2px",
-                                      "border-style": "solid",
-                                      "color": "black",
-                                      "font-weight": "bold"});
+          try{
+            let check_for_none = []
+            let hs_available = JSON.parse(result)['hs'];
+            let arrayActual_group=actual_group.split('=')[1];
+            $(`#${arrayActual_group}_list_separator`).find("li").each(function()
+               {
+                  var $li=$(this)['0'];
+                  let id_li = $li['id'];
+                  if(hs_available.includes(id_li)){
+                    $(`#${id_li}`).css({"opacity": "1",
+                                        "border-color": "#ac2925",
+                                        "border-width": "2px",
+                                        "border-style": "solid",
+                                        "color": "black",
+                                        "font-weight": "bold"});
 
+                  }
+                  else{
+
+                    $(`#${id_li}`).css({"opacity": "0.5",
+                                        "border-color": "#d3d3d3",
+                                        "border-width":"1px",
+                                        "border-style":"solid",
+                                        "color":"#555555",
+                                        "font-weight": "normal"});
+                  }
+               });
+
+               $("#KeywordLoading2").addClass("hidden");
+          }
+          catch(e){
+            $("#KeywordLoading2").addClass("hidden");
+
+            $.notify(
+                {
+                    message: `Something were wrong when applying the filter with variables and regions`
+                },
+                {
+                    type: "danger",
+                    allow_dismiss: true,
+                    z_index: 20000,
+                    delay: 5000
                 }
-                else{
+            )
+          }
 
-                  $(`#${id_li}`).css({"opacity": "0.5",
-                                      "border-color": "#d3d3d3",
-                                      "border-width":"1px",
-                                      "border-style":"solid",
-                                      "color":"#555555",
-                                      "font-weight": "normal"});
-                }
-             });
-
-             $("#KeywordLoading2").addClass("hidden");
 
         },
         error: function(error) {
@@ -1602,6 +1868,17 @@ load_search_modal = function(){
   }
   catch(error){
     console.log(error);
+    $.notify(
+        {
+            message: `We are having an error trying to load the menu`
+        },
+        {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000
+        }
+    )
   }
 
 
