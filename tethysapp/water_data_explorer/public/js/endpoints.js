@@ -1527,8 +1527,8 @@ update_hydroserver = function(){
     let hsActual = this.id.split("_")[0];
     let group_name = this.id.split("_")[1]
     let requestObject = {
-      hs: hsActual,
-      group: group_name
+      hs: id_dictionary[hsActual],
+      group: id_dictionary[group_name]
     }
     $("#GeneralLoading").css({
        position:'fixed',
@@ -1567,7 +1567,7 @@ update_hydroserver = function(){
 
               $.notify(
                   {
-                      message: `Successfully updated the Web Service , ${sitesAdded} have been added to the Map`
+                      message: `Successfully updated the Web Service , ${sitesAdded} have been added to the Map.`
                   },
                   {
                       type: "success",
@@ -1582,7 +1582,7 @@ update_hydroserver = function(){
             $("#GeneralLoading").addClass("hidden");
             $.notify(
                 {
-                    message: `There was an error updating the Web Service`
+                    message: `There was an error updating the Web Service 1`
                 },
                 {
                     type: "success",
@@ -1597,10 +1597,10 @@ update_hydroserver = function(){
           $("#GeneralLoading").addClass("hidden");
           $.notify(
               {
-                  message: `There was an error updating the Web Service`
+                  message: `There was an error updating the Web Service.`
               },
               {
-                  type: "success",
+                  type: "danger",
                   allow_dismiss: true,
                   z_index: 20000,
                   delay: 5000
