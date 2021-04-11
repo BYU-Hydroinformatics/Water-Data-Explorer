@@ -223,7 +223,7 @@ disable_map =  function (){
             message: `Boundary layer was not setup, please go to settings and set up the boundary layer`
         },
         {
-            type: "danger",
+            type: "info",
             allow_dismiss: true,
             z_index: 20000,
             delay: 5000
