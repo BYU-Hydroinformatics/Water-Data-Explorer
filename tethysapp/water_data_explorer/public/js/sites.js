@@ -279,7 +279,7 @@ activate_layer_values = function (){
 
             $.notify(
                 {
-                    message: `The following error: ${xhr.statusText} is not allowing to retrieve the values for the ${feature_single.values_['name']} site `
+                    message: `There is an error to retrieve the values for the ${feature_single.values_['name']} site `
                 },
                 {
                     type: "danger",
