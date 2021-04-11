@@ -47,7 +47,6 @@ select_variable_change = function(){
           success: function(result1){
             try{
               if(result1.graphs.length > 0){
-                console.log(result1)
                 let time_series_array = result1['graphs'];
                 let time_series_array_interpolation = result1['interpolation'];
 

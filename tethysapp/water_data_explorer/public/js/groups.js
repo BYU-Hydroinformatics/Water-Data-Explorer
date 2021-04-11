@@ -878,7 +878,6 @@ load_group_hydroservers = function(){
        success: result => {
           try{
             let groups =result["hydroservers"];
-            console.log(groups)
 
             $(".divForServers").empty() //Resetting the catalog
             let extent = ol.extent.createEmpty()

@@ -65,7 +65,6 @@ activate_layer_values = function (){
 
         $("#GeneralLoading").removeClass("hidden");
         $('#sG').bootstrapToggle('on');
-        console.log($('#sG'))
         $.ajax({
           type:"GET",
           url: `get-values-hs`,
@@ -74,7 +73,6 @@ activate_layer_values = function (){
           success: function(result){
             try{
               let description_site = document.getElementById('siteDes')
-              console.log(result['codes'])
               if (result.hasOwnProperty('codes') && result['codes'].length > 0){
                 let geolocations = result['geolo'];
                 let country_name = result['country'];
