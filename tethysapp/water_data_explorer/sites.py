@@ -74,7 +74,7 @@ def get_values_hs(request):
             return_obj['dataType'] = []
             return JsonResponse(return_obj)
         pd.set_option('display.max_columns', None)
-        print(df)
+        # print(df)
         return_obj['country'] = df['country'].tolist()[0]
         return_obj['variables'] = df['variableName'].tolist()
         return_obj['units'] = df['unitAbbreviation'].tolist()
@@ -340,7 +340,7 @@ def GetSiteInfo(client,site_full_code, format ="json"):
     return_array = []
     try:
         site_info_Mc = client.service.GetSiteInfo(site_full_code)
-        print(site_info_Mc)
+        # print(site_info_Mc)
         if format is 'waterml':
             return site_info_Mc
         site_info_Mc_dict = xmltodict.parse(site_info_Mc)

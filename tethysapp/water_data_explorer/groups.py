@@ -236,8 +236,8 @@ def addMultipleViews(hs_list,group):
         water = pwml.WaterMLOperations(url = new_url)
 
         return_obj = {}
-        print("********************")
-        print(hs)
+        # print("********************")
+        # print(hs)
         try:
             sites_object = water.GetSites()
             sites_parsed_json = json.dumps(sites_object)
