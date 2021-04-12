@@ -341,7 +341,6 @@ activate_deactivate_graphs = function(){
 $('#sG').change(activate_deactivate_graphs)
 
 legend_change = function(){
-  console.log("nonfa");
   let actual_state=$(this).prop('checked');
   if(actual_state){
     $("#tableLegend").show()

@@ -71,7 +71,6 @@
   	var baseStatic = "{% static 'water_data_explorer/index.html' %}";
   	baseStatic = baseStatic.replace('\/index.html','');
     var can_block_map = {{can_block_map|yesno:"true,false"}};
-    console.log("noooo")
     console.log(can_block_map)
     var can_delete_hydrogroups = {{can_delete_hydrogroups|yesno:"true,false"}};
     var endpointGeoServer = "{{ geoEndpoint|safe }}";

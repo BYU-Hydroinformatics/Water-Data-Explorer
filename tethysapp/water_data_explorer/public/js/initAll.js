@@ -140,7 +140,6 @@ var water_data_explorer_PACKAGE = (function() {
         var myZoom;
         if($( window ).width() <= 768){
           myZoom = 2;
-          console.log(myZoom);
         }
         else{
           myZoom = 3;
@@ -439,6 +438,9 @@ var water_data_explorer_PACKAGE = (function() {
 
       //make the picker to always appear//
       $(".selectpicker").selectpicker("refresh");
+      if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+        $('.selectpicker').selectpicker('mobile');
+      }
 
       $(".toggle-nav").on("click",function(){
 
