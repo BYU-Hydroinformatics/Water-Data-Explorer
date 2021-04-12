@@ -104,221 +104,284 @@ select_variable_change = function(){
 
                   $("#download_dropdown").unbind('change');
                   let funcDown = function(){
-                    let selectedDownloadType = $('#download_dropdown')['0'].value;
-                    let selectedDownloadTypeText = $('#download_dropdown')['0'];
-                    if(selectedDownloadType != "Download"){
-                      if(selectedDownloadType == "CSV" ){
-                        var csvData = [];
-                        var header = [units_y,units_x] //main header.
-                        csvData.push(header);
-                        for (var i = 0; i < x_array.length; i++){ //data
-                          var line = [x_array[i],y_array[i]];
-                          csvData.push(line);
+                    try{
+                      let selectedDownloadType = $('#download_dropdown')['0'].value;
+                      let selectedDownloadTypeText = $('#download_dropdown')['0'];
+                      if(selectedDownloadType != "Download"){
+                        if(selectedDownloadType == "CSV" ){
+                          var csvData = [];
+                          var header = [units_y,units_x] //main header.
+                          csvData.push(header);
+                          for (var i = 0; i < x_array.length; i++){ //data
+                            var line = [x_array[i],y_array[i]];
+                            csvData.push(line);
+                          }
+                          var csvFile = csvData.map(e=>e.map(a=>'"'+((a||"").toString().replace(/"/gi,'""'))+'"').join(",")).join("\r\n"); //quote all fields, escape quotes by doubling them.
+                          var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+                          var link = document.createElement("a");
+                          var url = URL.createObjectURL(blob);
+                          link.setAttribute("href", url);
+                          link.setAttribute("download", title_graph.replace(/[^a-z0-9_.-]/gi,'_') + ".csv");
+                          link.style.visibility = 'hidden';
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                          $.notify(
+                              {
+                                  message: `Download completed for the ${object_request_graphs['variable']} variable in CSV format`
+                              },
+                              {
+                                  type: "sucess",
+                                  allow_dismiss: true,
+                                  z_index: 20000,
+                                  delay: 5000
+                              }
+                          )
                         }
-                        var csvFile = csvData.map(e=>e.map(a=>'"'+((a||"").toString().replace(/"/gi,'""'))+'"').join(",")).join("\r\n"); //quote all fields, escape quotes by doubling them.
-                        var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
-                        var link = document.createElement("a");
-                        var url = URL.createObjectURL(blob);
-                        link.setAttribute("href", url);
-                        link.setAttribute("download", title_graph.replace(/[^a-z0-9_.-]/gi,'_') + ".csv");
-                        link.style.visibility = 'hidden';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        $.notify(
-                            {
-                                message: `Download completed for the ${object_request_graphs['variable']} variable in CSV format`
-                            },
-                            {
-                                type: "sucess",
-                                allow_dismiss: true,
-                                z_index: 20000,
-                                delay: 5000
+                        else if(selectedDownloadType == "WaterML1.0" ){
+                          $("#graphAddLoading").removeClass("hidden");
+                          let url_base = object_request_variable['hs_url'].split("?")[0];
+                          let SITE = object_request_variable['code'];
+                          let VARIABLE = object_request_variable['code_variable'];
+                          let BEGINDATE = x_array[0].replace(" ","T");
+                          let ENDDATE = x_array[x_array.length -1].replace(" ","T");
+                          let url_download = `${url_base}?request=GetValuesObject&site=${SITE}&variable=${VARIABLE}&beginDate=${BEGINDATE}&endDate=${ENDDATE}&format=WML1`;
+                          //console.log(url_download)
+                          fetch(url_download).then(res => res.blob()) // Gets the response and returns it as a blob
+                            .then(blob => {
+                              var pom = document.createElement('a');
+                              var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
+                              var pom = document.createElement('a');
+                              // var bb = new Blob([xmltext], {type: 'application/octet-stream'});
+                              // pom.setAttribute('href', window.URL.createObjectURL(bb));
+                              pom.setAttribute('href', window.URL.createObjectURL(blob));
+                              pom.setAttribute('download', filename);
+
+                              pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
+                              pom.draggable = true;
+                              pom.classList.add('dragout');
+                              pom.click();
+                              $("#graphAddLoading").addClass("hidden");
+
+                              $.notify(
+                                  {
+                                      message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 1.0 format`
+                                  },
+                                  {
+                                      type: "success",
+                                      allow_dismiss: true,
+                                      z_index: 20000,
+                                      delay: 5000
+                                  }
+                              )
+                          }).
+                          catch(error =>{
+
+                             console
+                             $.ajax({
+                               type:"GET",
+                               url: `get-xml`,
+                               dataType: "JSON",
+                               data: object_request_variable,
+                               success: function(result1){
+                                 console.log(result1)
+                                 var xmltext = result1['waterml'];
+                                 var pom = document.createElement('a');
+                                 var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
+                                 var pom = document.createElement('a');
+                                 var bb = new Blob([xmltext], {type: 'application/octet-stream'});
+                                 pom.setAttribute('href', window.URL.createObjectURL(bb));
+                                 pom.setAttribute('download', filename);
+
+                                 pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
+                                 pom.draggable = true;
+                                 pom.classList.add('dragout');
+                                 pom.click();
+                                 $("#graphAddLoading").addClass("hidden");
+
+                                 $.notify(
+                                     {
+                                         message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 1.0 format`
+                                     },
+                                     {
+                                         type: "success",
+                                         allow_dismiss: true,
+                                         z_index: 20000,
+                                         delay: 5000
+                                     }
+                                 )
+
+                               },
+                               error:function(){
+                                 $("#graphAddLoading").addClass("hidden");
+
+                                 $.notify(
+                                     {
+                                         message: `Something went wrong when Downloading the data for the ${object_request_graphs['variable']} in WaterML 1.0 format`
+                                     },
+                                     {
+                                         type: "danger",
+                                         allow_dismiss: true,
+                                         z_index: 20000,
+                                         delay: 5000
+                                     }
+                                 )
+                               }
+
+
+                             })
+
+                          });
+
+                        }
+                        else if(selectedDownloadType == "WaterML2.0" ){
+                          $("#graphAddLoading").removeClass("hidden");
+                          let url_base = object_request_variable['hs_url'].split("?")[0];
+                          let SITE = object_request_variable['code'];
+                          let VARIABLE = object_request_variable['code_variable'];
+                          let BEGINDATE = x_array[0].replace(" ","T");
+                          let ENDDATE = x_array[x_array.length -1].replace(" ","T");
+                          let url_download = `${url_base}?request=GetValuesObject&site=${SITE}&variable=${VARIABLE}&beginDate=${BEGINDATE}&endDate=${ENDDATE}&format=WML2`;
+                          fetch(url_download).then(res => res.blob()) // Gets the response and returns it as a blob
+                            .then(blob => {
+                              var pom = document.createElement('a');
+                              var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
+                              var pom = document.createElement('a');
+                              pom.setAttribute('href', window.URL.createObjectURL(blob));
+                              pom.setAttribute('download', filename);
+
+                              pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
+                              pom.draggable = true;
+                              pom.classList.add('dragout');
+                              pom.click();
+                              $("#graphAddLoading").addClass("hidden");
+
+                              $.notify(
+                                  {
+                                      message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 2.0 format`
+                                  },
+                                  {
+                                      type: "success",
+                                      allow_dismiss: true,
+                                      z_index: 20000,
+                                      delay: 5000
+                                  }
+                              )
+                          }).
+                          catch(error =>{ console
+                            try{
+                              var xmlFile = result1['template_renderizado'];
+                              var blob = new Blob([xmlFile], { type: 'text/plain;charset=utf-8;' });
+                              var link = document.createElement("a");
+                              var url = URL.createObjectURL(blob);
+                              link.setAttribute("href", url);
+                              link.setAttribute("download", title_graph.replace(/[^a-z0-9_.-]/gi,'_') + ".xml");
+                              link.dataset.downloadurl = ['application/octet-stream', link.download, link.href].join(':');
+                              link.draggable = true;
+                              link.classList.add('dragout');
+                              link.click();
+
+
+                              $("#graphAddLoading").addClass("hidden");
+
+                              $.notify(
+                                  {
+                                      message: `There Service ${object_request_variable['hs_url']} does not provide WaterML 2.0 downloads, but the WDE provides ones `
+                                  },
+                                  {
+                                      type: "success",
+                                      allow_dismiss: true,
+                                      z_index: 20000,
+                                      delay: 5000
+                                  }
+                              )
                             }
-                        )
-                      }
-                      else if(selectedDownloadType == "WaterML1.0" ){
-                        $("#graphAddLoading").removeClass("hidden");
-                        let url_base = object_request_variable['hs_url'].split("?")[0];
-                        let SITE = object_request_variable['code'];
-                        let VARIABLE = object_request_variable['code_variable'];
-                        let BEGINDATE = x_array[0].replace(" ","T");
-                        let ENDDATE = x_array[x_array.length -1].replace(" ","T");
-                        let url_download = `${url_base}?request=GetValuesObject&site=${SITE}&variable=${VARIABLE}&beginDate=${BEGINDATE}&endDate=${ENDDATE}&format=WML1`;
-                        //console.log(url_download)
-                        fetch(url_download).then(res => res.blob()) // Gets the response and returns it as a blob
-                          .then(blob => {
-                            var pom = document.createElement('a');
-                            var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
-                            var pom = document.createElement('a');
-                            // var bb = new Blob([xmltext], {type: 'application/octet-stream'});
-                            // pom.setAttribute('href', window.URL.createObjectURL(bb));
-                            pom.setAttribute('href', window.URL.createObjectURL(blob));
-                            pom.setAttribute('download', filename);
+                            catch(e){
+                              $("#graphAddLoading").addClass("hidden");
 
-                            pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
-                            pom.draggable = true;
-                            pom.classList.add('dragout');
-                            pom.click();
+                              $.notify(
+                                  {
+                                      message: `Something went wrong when Downloading the data for the ${object_request_graphs['variable']} in WaterML 2.0 format`
+                                  },
+                                  {
+                                      type: "danger",
+                                      allow_dismiss: true,
+                                      z_index: 20000,
+                                      delay: 5000
+                                  }
+                              )
+                            }
+
+                          });
+                        }
+                        else if(selectedDownloadType == "NetCDF" ){
+                          $("#graphAddLoading").removeClass("hidden");
+                          let url_base = object_request_variable['hs_url'].split("?")[0];
+                          let SITE = object_request_variable['code'];
+                          let VARIABLE = object_request_variable['code_variable'];
+                          let BEGINDATE = x_array[0].replace(" ","T");
+                          let ENDDATE = x_array[x_array.length -1].replace(" ","T");
+                          let url_download = `${url_base}?request=GetValuesObject&site=${SITE}&variable=${VARIABLE}&beginDate=${BEGINDATE}&endDate=${ENDDATE}&format=NetCDF`;
+                          fetch(url_download).then(res => res.blob()) // Gets the response and returns it as a blob
+                            .then(blob => {
+                              var pom = document.createElement('a');
+                              var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.nc`;
+                              var pom = document.createElement('a');
+                              pom.setAttribute('href', window.URL.createObjectURL(blob));
+                              pom.setAttribute('download', filename);
+
+                              pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
+                              pom.draggable = true;
+                              pom.classList.add('dragout');
+                              pom.click();
+                              $("#graphAddLoading").addClass("hidden");
+
+                              $.notify(
+                                  {
+                                      message: `Download completed for the ${object_request_graphs['variable']} variable in NetCDF format`
+                                  },
+                                  {
+                                      type: "success",
+                                      allow_dismiss: true,
+                                      z_index: 20000,
+                                      delay: 5000
+                                  }
+                              )
+                          }).
+                          catch(error =>{ console
                             $("#graphAddLoading").addClass("hidden");
 
                             $.notify(
                                 {
-                                    message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 1.0 format`
+                                    message: `There Service ${object_request_variable['hs_url']} does not provide NetCDF downloads`
                                 },
                                 {
-                                    type: "success",
+                                    type: "danger",
                                     allow_dismiss: true,
                                     z_index: 20000,
                                     delay: 5000
                                 }
                             )
-                        }).
-                        catch(error =>{
-
-                           console
-                           $.ajax({
-                             type:"GET",
-                             url: `get-xml`,
-                             dataType: "JSON",
-                             data: object_request_variable,
-                             success: function(result1){
-                               console.log(result1)
-                               var xmltext = result1['waterml'];
-                               var pom = document.createElement('a');
-                               var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
-                               var pom = document.createElement('a');
-                               var bb = new Blob([xmltext], {type: 'application/octet-stream'});
-                               pom.setAttribute('href', window.URL.createObjectURL(bb));
-                               pom.setAttribute('download', filename);
-
-                               pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
-                               pom.draggable = true;
-                               pom.classList.add('dragout');
-                               pom.click();
-                               $("#graphAddLoading").addClass("hidden");
-
-                               $.notify(
-                                   {
-                                       message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 1.0 format`
-                                   },
-                                   {
-                                       type: "success",
-                                       allow_dismiss: true,
-                                       z_index: 20000,
-                                       delay: 5000
-                                   }
-                               )
-
-                             }
-
-
-                           })
-
-                        });
-
-                      }
-                      else if(selectedDownloadType == "WaterML2.0" ){
-                        $("#graphAddLoading").removeClass("hidden");
-                        let url_base = object_request_variable['hs_url'].split("?")[0];
-                        let SITE = object_request_variable['code'];
-                        let VARIABLE = object_request_variable['code_variable'];
-                        let BEGINDATE = x_array[0].replace(" ","T");
-                        let ENDDATE = x_array[x_array.length -1].replace(" ","T");
-                        let url_download = `${url_base}?request=GetValuesObject&site=${SITE}&variable=${VARIABLE}&beginDate=${BEGINDATE}&endDate=${ENDDATE}&format=WML2`;
-                        fetch(url_download).then(res => res.blob()) // Gets the response and returns it as a blob
-                          .then(blob => {
-                            var pom = document.createElement('a');
-                            var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.xml`;
-                            var pom = document.createElement('a');
-                            pom.setAttribute('href', window.URL.createObjectURL(blob));
-                            pom.setAttribute('download', filename);
-
-                            pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
-                            pom.draggable = true;
-                            pom.classList.add('dragout');
-                            pom.click();
-                            $("#graphAddLoading").addClass("hidden");
-
-                            $.notify(
-                                {
-                                    message: `Download completed for the ${object_request_graphs['variable']} variable in WaterML 2.0 format`
-                                },
-                                {
-                                    type: "success",
-                                    allow_dismiss: true,
-                                    z_index: 20000,
-                                    delay: 5000
-                                }
-                            )
-                        }).
-                        catch(error =>{ console
-                          $("#graphAddLoading").addClass("hidden");
-
-                          $.notify(
-                              {
-                                  message: `There Service ${object_request_variable['hs_url']} does not provide WaterML 2.0 downloads`
-                              },
-                              {
-                                  type: "danger",
-                                  allow_dismiss: true,
-                                  z_index: 20000,
-                                  delay: 5000
-                              }
-                          )
-                        });
-                      }
-                      else if(selectedDownloadType == "NetCDF" ){
-                        $("#graphAddLoading").removeClass("hidden");
-                        let url_base = object_request_variable['hs_url'].split("?")[0];
-                        let SITE = object_request_variable['code'];
-                        let VARIABLE = object_request_variable['code_variable'];
-                        let BEGINDATE = x_array[0].replace(" ","T");
-                        let ENDDATE = x_array[x_array.length -1].replace(" ","T");
-                        let url_download = `${url_base}?request=GetValuesObject&site=${SITE}&variable=${VARIABLE}&beginDate=${BEGINDATE}&endDate=${ENDDATE}&format=NetCDF`;
-                        fetch(url_download).then(res => res.blob()) // Gets the response and returns it as a blob
-                          .then(blob => {
-                            var pom = document.createElement('a');
-                            var filename = `${object_request_variable['code_variable']}_${object_request_graphs['variable']}.nc`;
-                            var pom = document.createElement('a');
-                            pom.setAttribute('href', window.URL.createObjectURL(blob));
-                            pom.setAttribute('download', filename);
-
-                            pom.dataset.downloadurl = ['application/octet-stream', pom.download, pom.href].join(':');
-                            pom.draggable = true;
-                            pom.classList.add('dragout');
-                            pom.click();
-                            $("#graphAddLoading").addClass("hidden");
-
-                            $.notify(
-                                {
-                                    message: `Download completed for the ${object_request_graphs['variable']} variable in NetCDF format`
-                                },
-                                {
-                                    type: "success",
-                                    allow_dismiss: true,
-                                    z_index: 20000,
-                                    delay: 5000
-                                }
-                            )
-                        }).
-                        catch(error =>{ console
-                          $("#graphAddLoading").addClass("hidden");
-
-                          $.notify(
-                              {
-                                  message: `There Service ${object_request_variable['hs_url']} does not provide NetCDF downloads`
-                              },
-                              {
-                                  type: "danger",
-                                  allow_dismiss: true,
-                                  z_index: 20000,
-                                  delay: 5000
-                              }
-                          )
-                        });
+                          });
+                        }
                       }
                     }
+                    catch(e){
+                      $("#graphAddLoading").addClass("hidden");
+
+                      $.notify(
+                          {
+                              message: `There was a problem downloading the file for the Service ${object_request_variable['hs_url']}`
+                          },
+                          {
+                              type: "danger",
+                              allow_dismiss: true,
+                              z_index: 20000,
+                              delay: 5000
+                          }
+                      )
+                    }
+
                   }
 
 

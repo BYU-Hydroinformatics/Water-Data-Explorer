@@ -7,11 +7,14 @@ import json
 import pandas as pd
 import numpy as np
 import pywaterml.waterML as pwml
+from datetime import datetime
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.conf import settings
+from django.template import Context, Template
+from django.template.loader import render_to_string, get_template
 
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData
@@ -207,6 +210,7 @@ def get_values_graph_hs(request):
     site_desc = network + ':' + site_code
     water = pwml.WaterMLOperations(url = hs_url)
     values = water.GetValues(site_desc, variable_desc, start_date, end_date, format = 'json')
+    # print(values)
     df = pd.DataFrame.from_dict(values['values'])
     if df.empty:
         return_obj['graphs'] = []
@@ -226,7 +230,34 @@ def get_values_graph_hs(request):
     return_obj['unit_name'] = unit_name
     return_obj['variablename'] = variable_name
     return_obj['timeUnitName'] = time_unit_name
+    dict_xml = []
 
+    for gps_ in return_obj['graphs']:
+        chunk_xml = {}
+        chunk_xml['DateTimeUTC']=gps_[0]
+        chunk_xml['DataValue']=gps_[1]
+        dict_xml.append(chunk_xml)
+
+    current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    my_vals = values['values'][0]
+
+    context = {
+        "data_values": dict_xml,
+        "current_date": current_date,
+        "init_date": time_series_timeUTC[0],
+        "final_date": time_series_timeUTC[-1],
+        "network": network,
+        "code_variable": code_variable,
+        "code_site": site_code,
+        "site_name": my_vals["siteName"],
+        "unitAbbreviation": my_vals["unitAbbreviation"],
+        "latitude_longitude": f'{my_vals["latitude"]} {my_vals["longitude"]}',
+        "site_id": my_vals["siteID"],
+        "dataType": my_vals["dataType"],
+    }
+
+    template_renderizado = render_to_string('water_data_explorer/wml2_values_template.xml', context)
+    return_obj['template_renderizado'] = template_renderizado
     return JsonResponse(return_obj)
 
 def get_xml(request):
