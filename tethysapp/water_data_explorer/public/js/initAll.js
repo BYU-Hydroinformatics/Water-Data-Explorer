@@ -423,7 +423,6 @@ var water_data_explorer_PACKAGE = (function() {
     try{
       // responsive_graphs();
 
-      // console.log(uuidv4());
       init_jquery_var();
       addDefaultBehaviorToAjax();
       init_map();

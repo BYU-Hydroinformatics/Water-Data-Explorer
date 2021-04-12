@@ -31,12 +31,12 @@ get_vars_from_site = function (resultList){
 
               reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
               $("#variable_choose").off("change.something2").on("change", function(){
-                console.log("change unbind variable");
+                // console.log("change unbind variable");
               });
               $("#variable_choose").on("change.something2").on("change", function(){
                 reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
               });
-              console.log($("#variable_choose")['0'].value);
+              // console.log($("#variable_choose")['0'].value);
 
               $("#btn-add-download").unbind();
               $("#btn-add-download").on("click", function(){
@@ -751,7 +751,6 @@ delete_hydroserver= function(){
     });
     var datastring = $modalDelete.serialize() //Delete the record in the database
     datastring += actual_group;
-    console.log(datastring);
     $.ajax({
         type: "POST",
         url: `delete-group-hydroserver/`,
@@ -775,7 +774,6 @@ delete_hydroserver= function(){
                   new_title = key;
                 }
               });
-              console.log(title)
               $(`#${new_title}-row-complete`).remove()
 
               let element = document.getElementById(new_title);
@@ -787,11 +785,8 @@ delete_hydroserver= function(){
 
               let id_group_separator = `${group_name_e3}_list_separator`;
               let separator_element = document.getElementById(id_group_separator);
-              console.log(separator_element);
               let children_element = Array.from(separator_element.children);
-              console.log(children_element);
               if(children_element.length < 2){
-                console.log("empty")
                 $(`#${group_name_e3}-noGroups`).show();
 
               }
@@ -875,7 +870,6 @@ delete_hydroserver_Individual= function(group,server){
               let i_string=i.toString();
               let title=json_response[i_string];
               title  = title.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
-              console.log(title)
               let element = document.getElementById(title);
               element.parentNode.removeChild(element);
               map.removeLayer(layersDict[title])
@@ -967,7 +961,6 @@ showVariables = function(){
           data: filterSites,
           success: result => {
             try{
-              console.log(result);
               var HSTableHtml =
                   `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
               if (result['variables_name'].length === 0) {

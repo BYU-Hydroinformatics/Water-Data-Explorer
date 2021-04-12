@@ -1,7 +1,5 @@
 responsive_graphs =  function(){
-  console.log("asghafasfa")
   let newHtml;
-  console.log($( window ).width())
   if($( window ).width() > 1224){
     $("#graph").empty()
     newHtml = `
@@ -642,7 +640,6 @@ function change_effect_groups(element_to_check,id_group_separator){
       map.updateSize()
     }
     let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
-    console.log(servers_checks);
     for(i = 0; i < servers_checks.length; i++) {
       let server_name = servers_checks[i].id;
        let checkbox = Array.from(servers_checks[i].children)

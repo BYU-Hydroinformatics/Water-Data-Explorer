@@ -235,7 +235,7 @@ activate_layer_values = function (){
 
               }
               else{
-                console.log(feature_single.values_)
+                // console.log(feature_single.values_)
                 description_site.innerHTML =
                   ` <p> <em> Station/Platform Name:</em> ${feature_single.values_['name']}<p>`
 

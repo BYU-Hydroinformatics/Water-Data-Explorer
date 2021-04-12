@@ -941,7 +941,6 @@ load_group_hydroservers = function(){
             })
           }
           catch(e){
-            console.log("noasfasf")
             $("#GeneralLoading").addClass("hidden")
             $.notify(
                 {
