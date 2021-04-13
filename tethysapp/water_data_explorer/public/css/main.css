@@ -692,7 +692,7 @@ input[type=checkbox], input[type=radio]{
 }
 
 
-.carousel-control .glyphicon-arrow-right, .carousel-control .icon-next {
+.carousel-control .golang, .carousel-control .icon-next {
   color: #f7f7f7;
   padding: 1vw;
   background: #5cb85c;
@@ -700,7 +700,7 @@ input[type=checkbox], input[type=radio]{
   height: auto;
   box-sizing: content-box;
 }
-.carousel-control .glyphicon-arrow-left, .carousel-control .icon-next {
+.carousel-control .golang, .carousel-control .icon-next {
   color: #f7f7f7;
   padding: 1vw;
   background: #5cb85c;

@@ -440,7 +440,20 @@ var water_data_explorer_PACKAGE = (function() {
       if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         $('.selectpicker').selectpicker('mobile');
       }
-
+      $(".carousel-control.left ").hide();
+      $(".carousel-control").on("click",function(){
+        console.log("hoal")
+        if ($("#tables_info").hasClass("active")) {
+         console.log("table!");
+         $(".carousel-control.right ").hide();
+         $(".carousel-control.left ").show();
+        }
+        if ($("#plots_info").hasClass("active")) {
+         console.log("plots");
+         $(".carousel-control.right ").show();
+         $(".carousel-control.left ").hide();
+        }
+      })
       $(".toggle-nav").on("click",function(){
 
           setTimeout(function(){ map.updateSize(); }, 200);
