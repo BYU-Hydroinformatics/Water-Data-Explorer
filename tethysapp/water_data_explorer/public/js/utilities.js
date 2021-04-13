@@ -417,9 +417,13 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
           mode: 'lines',
           type: type,
           name: `Mean Interpolation`,
+
           text: [],
           marker: { size: 5 },
-          line: {color: '#FF6347'}
+          line: {
+            color: '#FF6347',
+            dash: 'dot',
+          }
         };
         data.push(interpolation_trace);
       }
