@@ -54,7 +54,7 @@ def home(request):
     boundaryColor = app.get_custom_setting('Boundary Color')
     boundaryWidth = app.get_custom_setting('Boundary Width')
     nameViews = app.get_custom_setting('Views Names')
-
+    logoInst = app.get_custom_setting('InstitutionLogo')
     context = {
      "geoEndpoint": boundaryEndpoint,
      "geoWorkspace": boundaryWorkspace,
@@ -64,7 +64,8 @@ def home(request):
      "geoWidth":boundaryWidth,
      'can_delete_hydrogroups': has_permission(request, 'delete_hydrogroups'),
      'can_block_map': has_permission(request, 'block_map'),
-     'views_names': nameViews
+     'views_names': nameViews,
+     'logo_institucion': logoInst
     }
 
     return render(request, 'water_data_explorer/home.html', context)

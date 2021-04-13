@@ -548,11 +548,30 @@ input[type=checkbox], input[type=radio]{
   justify-content: center;
   width: 100%
 }
+.logo_institucion{
+  display: flex;
+  justify-content: center;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  align-items: center;
+  width: inherit;
+  height: inherit;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
+.panel{
+  margin-bottom: 0px;
+}
 .image_button{
   /* display: flex; */
   /* justify-content: center; */
   width: 100%
 }
+
 .image_button img{
   border-radius: 0.5em;
   border-color: gray;
