@@ -468,7 +468,7 @@ var water_data_explorer_PACKAGE = (function() {
               console.log("Simple plotly error, not worry")
             }
 
-          },500)
+          },200)
           if($( window ).width() < 500){
             if($("#inner-app-content").width() < $( window ).width()){
               $('#sG-legend').bootstrapToggle('on');

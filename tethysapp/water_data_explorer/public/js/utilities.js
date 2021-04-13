@@ -429,6 +429,7 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
       }
 
       var layout = {
+        width: $(".carousel-inner").parent().width(),
         yaxis: {
           title: {
            text: yTitle,
@@ -437,6 +438,9 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
              color: '#7f7f7f'
            }
          },
+         automargin: true,
+        },
+        xaxis: {
          automargin: true,
         },
         // title: title_graph,
@@ -457,6 +461,7 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
           pad: 10
         },
       };
+
 
       Plotly.newPlot('plots', data, layout, config);
 
@@ -490,6 +495,8 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
             'yaxis.autorange': true
         });
     };
+
+
   }
   catch(e){
     $.notify(
