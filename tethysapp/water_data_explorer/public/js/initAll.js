@@ -442,14 +442,11 @@ var water_data_explorer_PACKAGE = (function() {
       }
       $(".carousel-control.left ").hide();
       $(".carousel-control").on("click",function(){
-        console.log("hoal")
         if ($("#tables_info").hasClass("active")) {
-         console.log("table!");
          $(".carousel-control.right ").hide();
          $(".carousel-control.left ").show();
         }
         if ($("#plots_info").hasClass("active")) {
-         console.log("plots");
          $(".carousel-control.right ").show();
          $(".carousel-control.left ").hide();
         }
