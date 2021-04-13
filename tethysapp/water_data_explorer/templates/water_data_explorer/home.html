@@ -34,7 +34,7 @@
           <button id="btn-del-groups-f" class="btn btn-danger"  data-toggle="modal" data-target="#modalDeleteGroups"> <span class="glyphicon glyphicon-trash"></span></button>
           {% endif %}
           <button id="btn-filter-groups-f" class="btn btn-success" data-toggle="modal" data-target="#modalKeyWordSearch">
-            <img src="{% static 'water_data_explorer/images/countries_filter.png' %}" alt="Icon"/>
+            <span class="glyphicon glyphicon-filter"></span>
           </button>
 
           <button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>
@@ -121,7 +121,7 @@
             </div>
           </div>
           <div id= "secondContainer" class="controlGraphs2">
-              <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
+              <button type="button" id= "update_graphs" class="btn btn-danger">Plot</button>
               <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit" data-size="mini">
                   <option value="Download">Download</option>
                   <option value="CSV" >CSV</option>
