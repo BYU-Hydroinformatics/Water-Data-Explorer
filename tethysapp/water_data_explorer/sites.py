@@ -352,6 +352,8 @@ def GetSiteInfo(client,site_full_code, format ="json"):
             object_methods = site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
             # print(object_methods)
             object_siteInfo = site_info_Mc_json['sitesResponse']['site']['siteInfo']
+            print(object_methods)
+            print(object_siteInfo)
             return_array = []
             if(isinstance(object_methods,(dict))):
                 return_obj = _getSiteInfoHelper(object_siteInfo,object_methods)
@@ -448,15 +450,18 @@ def _getSiteInfoHelper(object_siteInfo,object_methods):
 
         try:
             sitePorperty_Info = object_siteInfo['siteProperty']
+            print(sitePorperty_Info)
             return_obj['country'] = "No Data was Provided"
             if type(sitePorperty_Info) is list:
                 for props in sitePorperty_Info:
                     if props['@name'] == 'Country':
                         return_obj['country'] = props['#text']
             else:
-                if props["@name"] is 'Country':
-                    return_obj['country'] = props['#text']
+                if str(sitePorperty_Info['@name']) == 'Country':
+                    return_obj['country'] = str(sitePorperty_Info['#text'])
+                    # print(return_obj['country'])
         except Exception as e:
+            print(e)
             return_obj['country'] = "No Data was Provided"
         try:
             # return_obj['siteName'] = object_siteInfo['siteName']
