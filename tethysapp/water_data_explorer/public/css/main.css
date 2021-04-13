@@ -558,10 +558,11 @@ input[type=checkbox], input[type=radio]{
   -webkit-align-items: center;
   -webkit-box-align: center;
   align-items: center;
-  width: inherit;
-  height: inherit;
   padding-top: 1vh;
   padding-bottom: 1vh;
+}
+.logo_institucion img{
+  width: 200px;
 }
 .panel{
   margin-bottom: 0px;
