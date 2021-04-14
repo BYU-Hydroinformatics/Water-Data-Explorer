@@ -232,6 +232,32 @@ def get_values_graph_hs(request):
     return_obj['timeUnitName'] = time_unit_name
     dict_xml = []
 
+    return_array = values['values']
+    df = pd.DataFrame.from_dict(return_array)
+    # time_pd, values_pd = zip(*GetValuesResponse)
+    pds={}
+
+    pds['time'] = df['dateTime'].tolist()
+    pds['value'] = df['dataValue'].tolist()
+    df_interpolation= pd.DataFrame(pds,columns = ["time","value"])
+    print(df_interpolation)
+    df_interpolation.replace("No Data Provided", np.NaN, inplace=True)
+    df_interpolation.loc[df_interpolation.value < 0] = np.NaN
+    df_interpolation['time'] = pd.to_datetime(df_interpolation['time'])
+    df_interpolation = df_interpolation.set_index('time').resample('D').mean()
+    df_interpolation['value'] = df_interpolation['value'].interpolate()
+    df_interpolation.reset_index(level=0, inplace=True)
+    listVals = df_interpolation['value'].to_list()
+    listTimes = df_interpolation['time'].to_list()
+    dataInterpolated = []
+    for t,v in zip(listTimes,listVals):
+        dataInterpolated.append([t,v])
+
+    return_obj['interpolation'] = dataInterpolated
+
+
+
+
     for gps_ in return_obj['graphs']:
         chunk_xml = {}
         chunk_xml['DateTimeUTC']=gps_[0]
@@ -450,7 +476,6 @@ def _getSiteInfoHelper(object_siteInfo,object_methods):
 
         try:
             sitePorperty_Info = object_siteInfo['siteProperty']
-            print(sitePorperty_Info)
             return_obj['country'] = "No Data was Provided"
             if type(sitePorperty_Info) is list:
                 for props in sitePorperty_Info:
