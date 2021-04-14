@@ -322,6 +322,19 @@ activate_deactivate_graphs = function(){
       element_graphs.style.cssText=  "display: flex !important; flex-direction: row;";
       map.updateSize();
     }
+    
+    try{
+      if($('#plots').is(':visible')){
+        Plotly.Plots.resize("plots");
+          Plotly.relayout($("plots"), {
+            'xaxis.autorange': true,
+            'yaxis.autorange': true
+          });
+      }
+    }
+    catch(e){
+      console.log("Simple plotly error, not worry")
+    }
   }
 
   else{
