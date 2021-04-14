@@ -16,7 +16,9 @@
 <input id="sG-legend" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-th-list'></span>" data-off="<span class='glyphicon glyphicon-th-list'></span>" data-size="mini" data-onstyle = "danger"></input>
 <input id="sG" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="mini" data-onstyle = "danger"></input>
 {% if can_block_map %}
-<input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="mini" data-onstyle = "danger"></input>
+  {% if geoEndpoint %}
+    <input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="mini" data-onstyle = "danger"></input>
+  {% endif %}
 {% endif %}
 
 <div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Manage HydroServers">
