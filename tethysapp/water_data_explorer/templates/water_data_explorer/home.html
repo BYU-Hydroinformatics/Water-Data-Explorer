@@ -24,8 +24,7 @@
 
     <div id="collapseCP" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingCP">
       <div id= "panel-bodyh" class="panel-body">
-        <img src="https://img.icons8.com/nolan/36/linode.png"/>
-        <h4 class="titleh">Views</h4>
+        <h4 class="titleh"> Views </h4>
         {% if can_delete_hydrogroups %}
         <button class="btn btn-primary" data-toggle="modal" data-target="#modalAddGroupServer"> <span class="glyphicon glyphicon-plus"></span></button>
           {% endif %}
@@ -77,9 +76,8 @@
     <div class="carousel-inner">
       <div id = "tables_info" class="item active">
           <div id="options">
-            <h3 id= "siteName_title"> Select a Station</h3>
-              <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
-                in this part such as a name and a description.
+            <h3 id= "siteName_title"> Please select a Station/Platform on the map</h3>
+              <p id= "siteDes">
               </p>
             <div id="table_div"></div>
           </div>
@@ -91,7 +89,7 @@
           <div id= "firstContainer" class="controlGraphs2">
             <div id= "select-graphs">
               <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="100%">
-                <option > Variables</option>
+                <option > Select Variable</option>
               </select>
 
               <select id="type_graph_select2" class="selectpicker" data-width="100%">
@@ -128,13 +126,14 @@
             </div>
           </div>
           <div id= "secondContainer" class="controlGraphs2">
-              <button type="button" id= "update_graphs" class="btn btn-danger">Plot</button>
+              <button type="button" id= "update_graphs" class="btn btn-success">Plot Time Series</button>
               <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit" data-size="mini">
                   <option value="Download">Download</option>
-                  <option value="CSV" >CSV</option>
-                  <option value = "WaterML1.0">WaterML 1.0</option>
-                  <option value = "WaterML2.0">WaterML 2.0</option>
-                  <option value = "NetCDF">NetCDF</option>
+                    <option value="CSV" >CSV</option>
+                    <option value = "WaterML1.0">WaterML 1.0</option>
+                    <option value = "WaterML2.0">WaterML 2.0</option>
+                    <option value = "NetCDF">NetCDF</option>
+
               </select>
 
 

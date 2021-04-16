@@ -761,10 +761,9 @@ create_group_hydroservers = function(){
                   actual_group = `&actual-group=${title}`;
 
                   let description_html=`
-                  <h1>Group Metadata<h1>
-                  <h3>Group Title</h3>
+                  <h3>Catalog Title</h3>
                   <p>${title}</p>
-                  <h3>Group Description</h3>
+                  <h3>Catalog Description</h3>
                   <p>${description}</p>`;
                   $("#pop-up_description2").html(description_html);
 
@@ -928,10 +927,9 @@ load_group_hydroservers = function(){
                   actual_group = `&actual-group=${title}`;
 
                   let description_html=`
-                  <h1>Group Metadata<h1>
-                  <h3>Group Title</h3>
+                  <h3>Catalog Title</h3>
                   <p>${title}</p>
-                  <h3>Group Description</h3>
+                  <h3>Catalog Description</h3>
                   <p>${description}</p>`;
                   $("#pop-up_description2").html(description_html);
 
@@ -1099,7 +1097,7 @@ make_list_groups = function(){
     });
     console.log(finalGroupArray)
     var HSTableHtml =
-        '<table id="tbl-hydrogroups"><thead><th>Select</th><th>Title</th></thead><tbody>'
+        '<table id="tbl-hydrogroups"><thead><th>Select</th><th>Catalog Title</th></thead><tbody>'
     if (finalGroupArray.length < 0) {
       $("#modalDeleteGroups").find(".modal-body")
             .html(
@@ -1165,7 +1163,7 @@ get_hs_list_from_hydroserver = function(){
               //Dynamically generate the list of existing hydroservers
               var server = result["hydroserver"]
               var HSTableHtml =
-                  '<table id="tbl-hydroservers"><thead><th>Check</th><th>Title</th><th>URL</th></thead><tbody>'
+                  '<table id="tbl-hydroservers"><thead><th>Select</th><th>View Title</th><th>URL</th></thead><tbody>'
               if (server.length === 0) {
                   $modalDelete
                       .find(".modal-body")
@@ -1809,7 +1807,7 @@ generateListServices = function(){
            '<tr>'+
                 `<td> <p id="titleSite">${i+1}.- ${result1['siteInfo'][i]['sitename']}
                 <button type="button" class="btn btn-primary" id="${result1['siteInfo'][i]['sitecode']}_modal"><span class="glyphicon glyphicon-pushpin"></span></button></p>
-                  <p>Site Code: ${result1['siteInfo'][i]['sitecode']}</p>
+                  <p>Station/Platform Code: ${result1['siteInfo'][i]['sitecode']}</p>
                   <p>Network: ${result1['siteInfo'][i]['network']}</p>
                   <p>Latitude: ${result1['siteInfo'][i]['latitude']}</p>
                   <p>Longitude: ${result1['siteInfo'][i]['longitude']}</p>

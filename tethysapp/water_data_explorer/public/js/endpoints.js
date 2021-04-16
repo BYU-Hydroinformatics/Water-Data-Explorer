@@ -1298,7 +1298,7 @@ hydroserver_information = function(){
     hsActual = id_dictionary[hsActual]
     filterSites['group']=groupActual;
     filterSites['hs']=hsActual;
-    $("#hydroserverTitle").html(filterSites['hs']);
+    $("#hydroserverTitle").html(`${filterSites['hs']} View`);
     $.ajax({
       type:"GET",
       url: `get-hydroserver-info`,
@@ -1364,7 +1364,7 @@ hydroserver_information = function(){
                  '<tr>'+
                       `<td> <p id="titleSite">${i+1}.- ${result1['siteInfo'][i]['sitename']}
                       <button type="button" class="btn btn-primary" id="${result1['siteInfo'][i]['sitecode']}_modal"><span class="glyphicon glyphicon-pushpin"></span></button></p>
-                        <p>Site Code: ${result1['siteInfo'][i]['sitecode']}</p>
+                        <p>Station/Platform Code: ${result1['siteInfo'][i]['sitecode']}</p>
                         <p>Network: ${result1['siteInfo'][i]['network']}</p>
                         <p>Latitude: ${result1['siteInfo'][i]['latitude']}</p>
                         <p>Longitude: ${result1['siteInfo'][i]['longitude']}</p>

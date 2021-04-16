@@ -349,11 +349,11 @@ var water_data_explorer_PACKAGE = (function() {
     give_name = function(){
       try{
         if(views_names != "None"){
-          $(".titleh").html(`${views_names} Views`)
+          $(".titleh").html(`${views_names} Views `)
           // $(".app-title").html(`${views_names} Data Explorer`)
         }
         else{
-          $(".titleh").html(`Views`)
+          $(".titleh").html(`Views `)
           $(".app-title").html(`Water Data Explorer`)
           $.notify(
               {

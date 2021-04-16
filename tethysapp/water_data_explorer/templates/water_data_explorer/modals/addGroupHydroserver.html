@@ -12,15 +12,16 @@
 
                 <br>
                 <label for="addGroup-title">Title (Required):</label>
-                <input type="text" class="form-control" name="addGroup-title" id="addGroup-title" placeholder="Please enter a valid Title for the Hydroserver Group">
+                <input type="text" class="form-control" name="addGroup-title" id="addGroup-title" placeholder="Please enter a valid Title">
                 <label for="addGroup-description"> Description (Required): </label>
-                <textarea name="textarea" rows="10" cols="50" class="form-control" name="addGroup-description" id="addGroup-description" placeholder="Please enter a valid description for the HydroServer Group"></textarea>
+                <textarea name="textarea" rows="10" cols="50" class="form-control" name="addGroup-description" id="addGroup-description" placeholder="Please enter a valid Description"></textarea>
                 <!-- <input type="text" class="form-control" name="addGroup-description" id="addGroup-description" placeholder="Please enter a valid description for the HydroServer Group"> -->
-                <p> <em>** If there is a HIS catalog available for the group provide it for automatically generate the group</em></p>
+                <br>
+                <p> If available, please enter below a catalog endpoint to automatically import its views.</p>
                 <div class="form-row">
                     <div class="col-md-12 mb-3 form-group">
-                        <label for="url">URL (Optional):</label>
-                        <input type="text" class="form-control" name="url" id="url" placeholder="Please enter a hiscentral compliant endpoint " required>
+                        <label for="url">Endpoint/URL (Optional):</label>
+                        <input type="text" class="form-control" name="url" id="url" placeholder="Please enter an Endpoint " required>
                         <br>
                         <button id= "btn-check_available_serv" type="button" class="btn btn-primary">Check Services</button>
 
@@ -32,13 +33,14 @@
 
                 <div class="form-row">
                     <div class="col-md-12 mb-3 form-group hidden" id="available_services">
-                      <p>Available Services</p>
+                      <br>
+                      <p>Available Views</p>
                       <table id="table-check-services" class="table table-sm">
                         <thead>
                           <tr>
                             <th scope="col">#</th>
                             <th scope="col">Add</th>
-                            <th scope="col">Service Name</th>
+                            <th scope="col">View Name</th>
                           </tr>
                         </thead>
                         <tbody id= "rows_servs">
@@ -55,9 +57,9 @@
             </div>
             <div class="modal-footer">
                 <div class="button-group">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" id="btn-add-addHydro" class="btn btn-default">Add</button>
-                    <button id= "btn-check_all" type="button" class="btn btn-danger hidden">Select All Services</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" id="btn-add-addHydro" class="btn btn-success">Create Catalog</button>
+                    <button id= "btn-check_all" type="button" class="btn btn-primary hidden">Select All Views</button>
                 </div>
             </div>
         </div>

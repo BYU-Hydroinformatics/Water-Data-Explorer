@@ -12,15 +12,15 @@
             <div class="modal-body">
                 <p class="hsinfo">Description</p>
                 <p id="description_Hydroserver"></p>
-                <p class="hsinfo"> Endpoint Url  <button onclick="copyToClipboard('#urlHydroserver')" class="btn btn-light btn-sm"> <span class="glyphicon glyphicon-copy"></span></button></p>
+                <p class="hsinfo"> Endpoint/URL  <button onclick="copyToClipboard('#urlHydroserver')" class="btn btn-light btn-sm"> <span class="glyphicon glyphicon-copy"></span></button></p>
                 <p id="urlHydroserver"></p>
 
                 <div class="image_button">
                   <h3>Analysis Tools</h3>
                   <p>The Water Data Explorer application uses a python package called "Pywaterml". The Pywaterml allows to access WaterOneFlow (WOF) web services
-                   and retrieve information in different formats </p>
+                   and retrieve information in different formats. </p>
 
-                   <span class="hsinfo"> Learning Resources </span>
+                   <span class="hsinfo"> Documentation </span>
                    <span>
                      <a href="https://gist.github.com/romer8/2ea44f0a9536e4cdad8ed7242ca27933" target="_blank">
                        <img src="{% static 'water_data_explorer/images/colab_icon.png' %}" alt="google_colab" />
@@ -34,7 +34,7 @@
                    </span>
                    <br>
                    <br>
-                  <span class="hsinfo"> Analisys Resources </span>
+                  <span class="hsinfo"> Python Notebooks </span>
                   <span>
 
                     <a href="https://gist.github.com/romer8/89c851014afb276b0f20cb61c9c731f6" target="_blank">
@@ -45,11 +45,12 @@
                 </div>
 
                 <br>
-                <h2 class="hsinfo">Explore Sites</h2>
+                <h2 class="hsinfo">Explore Stations/Platforms: </h2>
                 <div id="map2">
                 </div>
-                <p class="hsinfo">Stations/Platforms</p>
-                <input type="text" id="myInput" placeholder="Search for site names" title="Type in a name">
+                <br>
+                <p class="hsinfo">List of Stations/Platforms:</p>
+                <input type="text" id="myInput" placeholder="Search for Stations/Platforms names" title="Type in a name">
                 <div id="infoTable">
 
                 </div>

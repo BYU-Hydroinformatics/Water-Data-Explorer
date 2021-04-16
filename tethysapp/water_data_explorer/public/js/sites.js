@@ -158,7 +158,7 @@ activate_layer_values = function (){
                 let i = 1;
                 let array_variables=[]
                 let option_variables;
-                let option_beginning= `<option value= 0 selected= "selected" > Select an variable </option>`;
+                let option_beginning= `<option value= 0 selected= "selected" > Select Variable </option>`;
                 variable_select.append(option_beginning)
 
                 variables.forEach(function(variable){

@@ -390,8 +390,8 @@ tr:hover {
 }
 .titleh{
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: left;
+  justify-content: left;
   color:white;
   background-color:#5a6268;
 
