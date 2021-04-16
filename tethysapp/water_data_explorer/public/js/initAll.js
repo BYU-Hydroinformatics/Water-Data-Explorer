@@ -487,6 +487,13 @@ var water_data_explorer_PACKAGE = (function() {
 
       })
 
+
+      $('[data-toggle="tooltip"]').tooltip()
+
+      $('body').tooltip({
+          selector: '.tool_tip_h'
+      });
+
       //Event for the clusters of the map
       map.getView().on('change:resolution', function(evt){
         var view = evt.target;

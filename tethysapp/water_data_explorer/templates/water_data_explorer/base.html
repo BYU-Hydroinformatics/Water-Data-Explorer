@@ -13,8 +13,9 @@
 {# The name you provided in your app.py is accessible through the tethys_app.name context variable #}
 {% block app_title %}{{ tethys_app.name }}{% endblock %}
 {% block header_buttons %}
-<input id="sG-legend" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-th-list'></span>" data-off="<span class='glyphicon glyphicon-th-list'></span>" data-size="mini" data-onstyle = "danger"></input>
-<input id="sG" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="mini" data-onstyle = "danger"></input>
+
+<div class= 'tool_tip_h' data-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Legend'> <input id="sG-legend" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-th-list'></span>" data-off="<span class='glyphicon glyphicon-th-list'></span>" data-size="mini" data-onstyle = "danger"></input></div>
+<div class= 'tool_tip_h' data-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Graphs Panel'> <input id="sG" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="mini" data-onstyle = "danger"></input></div>
 {% if can_block_map %}
   {% if geoEndpoint %}
     <input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="mini" data-onstyle = "danger"></input>

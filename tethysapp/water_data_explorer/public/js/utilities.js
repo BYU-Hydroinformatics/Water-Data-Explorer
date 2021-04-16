@@ -716,12 +716,12 @@ function html_for_servers(title,group_name,isNew){
     <li class="ui-state-default" layer-name="${title}" id="${title}" >
     <span class="server-name">${id_dictionary[title]}</span>
     <input class="chkbx-layer" type="checkbox" ${check_var}>
-    <button type="button" id="${title}_${group_name}_reload" class="btn btn-dark btn-sm" data-toggle="popover" title="" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">
-     <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+    <button type="button" id="${title}_${group_name}_reload" class="btn btn-sm tool_tip_h" data-toggle="tooltip" data-placement="bottom" title="Update View">
+     <span  class="glyphicon glyphicon-refresh" aria-hidden="true">
+     </span>
     </button>
-    <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
+    <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm tool_tip_h" data-toggle="tooltip" data-placement="bottom" title="Zoom to View">
      <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-
     </button>
     <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariablesTable"> <span class=" glyphicon glyphicon-list-alt"></span>
     </button>
@@ -729,6 +729,8 @@ function html_for_servers(title,group_name,isNew){
     <button type="button" id="${title}_variables_info" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalHydroserInformation">
      <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
     </button>
+
+
     </li>
     `;
     return newHtml
