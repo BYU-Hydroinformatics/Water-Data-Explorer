@@ -1,3 +1,9 @@
+
+#modalCrazy {
+  width: unset;
+  height: fit-content;
+}
+
 .header-btns p{
   font-size: 1.1em;
   padding-top: 5%;

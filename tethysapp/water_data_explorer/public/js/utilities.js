@@ -178,7 +178,36 @@ copyToClipboard = function(element) {
   $temp.val($(element).text()).select();
   document.execCommand("copy");
   $temp.remove();
-  //console.log("jojfaaga")
+  $.notify(
+      {
+          message: `copied to clipboard`
+      },
+      {
+          element: '#urlHydroserver',
+          type: "info",
+          allow_dismiss: true,
+          z_index: 20000,
+          placement: {
+            from: "top",
+            align: "right"
+          },
+          offset: {
+            // x: -80,
+            y: 100,
+          },
+          delay:1000,
+          template: '<div id="modalCrazy" data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+          '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+          '<span data-notify="icon"></span> ' +
+          '<span data-notify="title">{1}</span> ' +
+          '<span data-notify="message">{2}</span>' +
+          '<div class="progress" data-notify="progressbar">' +
+            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+          '</div>' +
+          '<a href="{3}" target="{4}" data-notify="url"></a>' +
+          '</div>'
+      }
+  )
 }
 
 
@@ -723,6 +752,7 @@ function html_for_servers(title,group_name,isNew){
     <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm tool_tip_h" data-toggle="tooltip" data-placement="bottom" title="Zoom to View">
      <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
     </button>
+
     <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariablesTable"> <span class=" glyphicon glyphicon-list-alt"></span>
     </button>
 
