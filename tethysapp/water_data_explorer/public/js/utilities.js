@@ -605,10 +605,11 @@ function html_for_groups(isAdmin, title, id_group_separator){
     let newHtml;
     if (isAdmin){
       newHtml =
+
       `
       <div class="panel panel-default" id="${title}_panel">
         <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-          <h4 class="panel-title">
+          <h4 class="panel-title tool_tip_h" data-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">
             <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
             <span class="group-name"> ${id_dictionary[title]}</span>
 
@@ -652,9 +653,10 @@ function html_for_groups(isAdmin, title, id_group_separator){
       `
       <div class="panel panel-default" id="${title}_panel">
         <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-          <h4 class="panel-title">
+          <h4 class="panel-title tool_tip_h" data-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">
             <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
             <span class="group-name">${id_dictionary[title]}</span>
+
             </a>
           </h4>
           <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">

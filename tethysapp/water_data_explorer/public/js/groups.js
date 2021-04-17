@@ -1097,7 +1097,7 @@ make_list_groups = function(){
     });
     console.log(finalGroupArray)
     var HSTableHtml =
-        '<table id="tbl-hydrogroups"><thead><th>Select</th><th>Catalog Title</th></thead><tbody>'
+        '<table class="table table-condensed-xs" id="tbl-hydrogroups"><thead><th>Select</th><th>Catalog Title</th></thead><tbody>'
     if (finalGroupArray.length < 0) {
       $("#modalDeleteGroups").find(".modal-body")
             .html(
@@ -1163,7 +1163,7 @@ get_hs_list_from_hydroserver = function(){
               //Dynamically generate the list of existing hydroservers
               var server = result["hydroserver"]
               var HSTableHtml =
-                  '<table id="tbl-hydroservers"><thead><th>Select</th><th>View Title</th><th>URL</th></thead><tbody>'
+                  '<table class="table table-condensed-xs" id="tbl-hydroservers"><thead><th>Select</th><th>View Title</th></thead><tbody>'
               if (server.length === 0) {
                   $modalDelete
                       .find(".modal-body")
@@ -1182,14 +1182,11 @@ get_hs_list_from_hydroserver = function(){
                       var url = server[i].url
                       HSTableHtml +=
                           `<tr id="${new_title}deleteID">` +
-                          '<td><input type="checkbox" name="server" id="server" value="' +
+                          '<td><input class = "check_hs_delete" type="checkbox" name="server" id="server" value="' +
                           title +
                           '"></td>' +
                           '<td class="hs_title">' +
                           title +
-                          "</td>" +
-                          '<td class="hs_url">' +
-                          url +
                           "</td>" +
                           "</tr>"
                   }

@@ -96,7 +96,6 @@ activate_layer_values = function (){
                         <th>Observed Variables</th>
                         <th>Unit</th>
                         <th>Interpolation Type</th>
-                        <th>Aggregation Duration</th>
                       </tr>`;
                   //1) combine the arrays:
                  var list_e = [];
@@ -131,7 +130,6 @@ activate_layer_values = function (){
                     <th>${variable_new}</th>
                     <th>${variable_unit}</th>
                     <th>${interpolation_type}</th>
-                    <th>${aggregation_dur}</th>
                   </tr>
                   `
                   table_begin = table_begin + newRow;
