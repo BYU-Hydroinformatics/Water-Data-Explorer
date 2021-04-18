@@ -345,7 +345,7 @@ tr:hover {
 /* #options p {
   font-weight: bold;
 } */
-#options span,{
+#options span, #options i {
   font-weight: bold;
 }
 #variables_id{
