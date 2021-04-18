@@ -7,7 +7,6 @@ import pandas as pd
 import geopandas as gpd
 import numpy as np
 import sys
-sys.path.append("/home/elkin/Projects/condaPackages/pywaterml")
 import pywaterml.waterML as pwml
 import shapely.speedups
 from urllib.error import HTTPError
@@ -137,6 +136,7 @@ def available_variables(request):
 
     varaibles_list = {}
     hydroserver_variable_list = []
+    hydroserver_variable_code_list = []
 
     for server in hydroservers_groups:
         water = pwml.WaterMLOperations(url = server.url.strip())
@@ -144,8 +144,10 @@ def available_variables(request):
         for hs_variable in hs_variables:
             if hs_variable['variableName'] not in hydroserver_variable_list:
                 hydroserver_variable_list.append(hs_variable['variableName'])
+                hydroserver_variable_code_list.append(hs_variable['variableCode'])
 
     varaibles_list["variables"] = hydroserver_variable_list
+    varaibles_list["variables_codes"] = hydroserver_variable_code_list
     return JsonResponse(varaibles_list)
 
 def available_services(request):
@@ -408,7 +410,8 @@ def catalog_filter(request,app_workspace):
     variables = var_new
     countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
     hs_filtered_region = filter_region(countries_geojson_file_path,countries, actual_group= actual_group)
-    # hs_filtered_variable = filter_variable(variables, actual_group=actual_group)
+    hs_filtered_variable = filter_variable(variables, actual_group=actual_group)
+    print(hs_filtered_variable)
     # print("hs_filtered_region",hs_filtered_region)
 
     # Uncomment for filter varaible functionality #
@@ -537,13 +540,44 @@ def filter_variable(variables_list, actual_group = None):
         hs_list = []
         for hydroservers in hydroservers_selected:
             name = hydroservers.title
-            water = pwml.WaterMLOperations(url = hydroservers.url.strip())
-            variables_sever = water.GetVariables()['variables']
-            df_variables = pd.DataFrame.from_dict(variables_sever)
-            variables_array = df_variables['variableName'].tolist()
-            check = any(item in variables_array for item in variables_list)
-            if check is True:
-                hs_list.append(name)
+            hs_list_temp = []
+            # water = pwml.WaterMLOperations(url = hydroservers.url.strip())
+            for variable_single in variables_list:
+                url2 = f'{hydroservers.url.strip().split("?")[0]}/GetSites?variableCode={variable_single}'
+                print(url2)
+                datos = requests.get(url2).content
+                sites_dict = xmltodict.parse(datos)
+                # print(sites_dict)
+                sites_json_object = json.dumps(sites_dict)
+                sites_json = json.loads(sites_json_object)['soap:Envelope']['soap:Body']['GetSitesResponse']['GetSitesResult']
+                sites_dict2 = xmltodict.parse(sites_json)
+                sites_json_object2 = json.dumps(sites_dict2)
+                sites_json2 = json.loads(sites_json_object2)
+                # print(sites_json2)
+                # print(sites_json['soap:Envelope']['soap:Body']['GetSitesResponse']['GetSitesResult'])
+                try:
+                    sites_object = parseJSON(sites_json2)
+                    # print(sites_object)
+                    df = pd.DataFrame.from_dict(sites_object)
+                    # print(df)
+                    hs_list_temp.append(df)
+                except KeyError as e:
+                    print(e)
+            try:
+                df_temp = pd.concat(hs_list_temp).drop_duplicates().reset_index(drop=True)
+                # print(df_temp)
+                dict_temp = df_temp.to_dict('records')
+
+                hs_list.append(dict_temp)
+            except ValueError as e:
+                print(e)
+                #
+                # variables_sever = water.GetVariables()['variables']
+                # df_variables = pd.DataFrame.from_dict(variables_sever)
+                # variables_array = df_variables['variableName'].tolist()
+                # check = any(item in variables_array for item in variables_list)
+                # if check is True:
+                #     hs_list.append(name)
 
     return hs_list
 

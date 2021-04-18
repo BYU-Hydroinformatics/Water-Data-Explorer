@@ -98,28 +98,37 @@ show_variables_groups = function(){
     dataType: "JSON",
     success: function(data){
       try{
+        console.log(data);
         variables_list = data['variables'];
+        variables_codes_list = data['variables_codes'];
+        console.log(variables_codes_list);
         const chunk = (arr, size) =>
           Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
             arr.slice(i * size, i * size + size)
           );
         let arr=chunk(variables_list, 2);
+        let arr2=chunk(variables_codes_list, 2);
+        console.log(arr2);
+
 
         var HSTableHtml =
             `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
-
+          let z = 0;
           arr.forEach(l_arr => {
             HSTableHtml +=  '<tr class="odd gradeX">'
+            let j = 0
             l_arr.forEach(i =>{
               let new_i = i.replace(/ /g,"_");
               let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+              let new_codei = arr2[z][j].replace(/ /g,"_");
 
-              HSTableHtml +=  `<td id =${new_i2}_td ><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+              HSTableHtml +=  `<td id =${new_i2}_td ><input type="checkbox" id="server" name="variables" value=${new_codei} /> ${i}</td>`;
 
-
+              j = j +1;
             })
 
                 HSTableHtml += '</tr>';
+                z = z + 1;
           })
 
 
@@ -129,6 +138,7 @@ show_variables_groups = function(){
         $("#KeywordLoading").addClass("hidden");
       }
       catch(e){
+        console.log(e);
         $("#KeywordLoading").addClass("hidden");
         $.notify(
             {
@@ -1856,7 +1866,7 @@ load_info_model = function(){
 load_search_modal = function(){
   try{
     load_info_model();
-    // show_variables_groups();
+    show_variables_groups();
     available_regions();
   }
   catch(error){
