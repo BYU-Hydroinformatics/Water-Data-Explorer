@@ -2,6 +2,8 @@ import xmltodict
 import logging
 import itertools
 import sys
+
+
 import os
 import json
 import pandas as pd
@@ -212,6 +214,7 @@ def get_values_graph_hs(request):
     values = water.GetValues(site_desc, variable_desc, start_date, end_date, format = 'json')
     # print(values)
     df = pd.DataFrame.from_dict(values['values'])
+    # print(df)
     if df.empty:
         return_obj['graphs'] = []
         return_obj['interpolation'] = []
@@ -352,8 +355,8 @@ def GetSiteInfo(client,site_full_code, format ="json"):
             object_methods = site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
             # print(object_methods)
             object_siteInfo = site_info_Mc_json['sitesResponse']['site']['siteInfo']
-            print(object_methods)
-            print(object_siteInfo)
+            # print(object_methods)
+            # print(object_siteInfo)
             return_array = []
             if(isinstance(object_methods,(dict))):
                 return_obj = _getSiteInfoHelper(object_siteInfo,object_methods)

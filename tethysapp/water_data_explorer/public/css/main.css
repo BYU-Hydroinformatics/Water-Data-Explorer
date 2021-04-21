@@ -690,9 +690,15 @@ tr:hover {
   width: 1.3em;
 }
 
-.modal-backdrop {
-    display:none;
+.modal-backdrop{
+  display:none;
 }
+.example-open .modal-backdrop {
+  background-color: black;
+  display: inline-block;
+  opacity: 0.8;
+}
+
 #groups_hydroservers{
   margin:0.5%;
 }

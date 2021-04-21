@@ -41,6 +41,19 @@
 {% block app_content %}
 {% endblock %}
 
+
+{% block app_content_wrapper_override %}
+
+{{ block.super }}
+{% include "water_data_explorer/modals/terms_service.html" %}
+
+
+{% endblock %}
+
+
+
+
+
 {% block app_actions %}
 {% endblock %}
 
