@@ -1,5 +1,5 @@
 =============================
-Discovering WHOS Views Data
+WDE User Functionalities
 =============================
 
 The Water Data Explorer is able to discover data from the different WHOS views such as the transboundary view. The Water Data Explorer can
