@@ -745,7 +745,7 @@ function html_for_servers(title,group_name,isNew){
     let check_var = (( isNew == true ) ? 'checked' : '');
     let newHtml = `
     <li class="ui-state-default" layer-name="${title}" id="${title}" >
-    <span class="server-name">${id_dictionary[title]}</span>
+    <span class="server-name tool_tip_h" data-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">${id_dictionary[title]}</span>
     <input class="chkbx-layer" type="checkbox" ${check_var}>
     <button type="button" id="${title}_${group_name}_reload" class="btn btn-sm tool_tip_h" data-toggle="tooltip" data-placement="bottom" title="Update View">
      <span  class="glyphicon glyphicon-refresh" aria-hidden="true">
