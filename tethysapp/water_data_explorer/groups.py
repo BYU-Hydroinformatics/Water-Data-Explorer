@@ -219,8 +219,12 @@ def create_group(request):
                 water = pwml.WaterMLOperations(url = url_catalog2)
                 services = water.GetWaterOneFlowServicesInfo()
                 #print(services)
-                views = water.aux._giveServices(services,selected_services)['working']
-                group_obj['views'] = addMultipleViews(views,title)
+                if selected_services:
+                    views = water.aux._giveServices(services,selected_services)['working']
+                    group_obj['views'] = addMultipleViews(views,title)
+                else:
+                    views = water.aux._giveServices(services)['working']
+                    group_obj['views'] = addMultipleViews(views,title)
             except Exception as e:
                 #print(e)
                 group_obj['views'] = []

@@ -304,7 +304,7 @@ tr:hover {
     overflow: hidden;
     position: relative;
     display: inline-block;
-    text-align: center;
+    text-align: left;
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -667,7 +667,7 @@ tr:hover {
 #siteVariableTable th {
   font-weight: normal;
   word-break: break-all;
-  font-size: 0.9em;
+  /* font-size: 0.9em; */
 }
 #siteVariableTable .danger th {
   font-weight: bold;
