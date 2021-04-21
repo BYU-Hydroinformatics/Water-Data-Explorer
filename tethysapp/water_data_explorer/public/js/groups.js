@@ -116,7 +116,7 @@ show_variables_groups = function(){
           let z = 0;
           arr.forEach(l_arr => {
             HSTableHtml +=  '<tr class="odd gradeX">'
-            let j = 0
+            let j = 0;
             l_arr.forEach(i =>{
               let new_i = i.replace(/ /g,"_");
               let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
@@ -203,11 +203,11 @@ available_regions = function(){
         $("#modalKeyWordSearch").find("#groups_countries").html(HSTableHtml);
         $("#KeywordLoading").addClass("hidden");
         // let checkboxes = $('#data-table').find("input[type=checkbox][name=countries]")
-        ////console.log(checkboxes)
+        // //console.log(checkboxes)
         // let countries_selected = [];
-
-        // Attach a change event handler to the checkboxes of the countries to receive the countries.
-
+        //
+        // // Attach a change event handler to the checkboxes of the countries to receive the countries.
+        //
         // checkboxes.click(function() {
         //   countries_selected = checkboxes
         //     .filter(":checked") // Filter out unchecked boxes.
@@ -278,18 +278,25 @@ listener_checkbox = function(list_countries){
               arr.slice(i * size, i * size + size)
             );
           let arr=chunk(variables_list, 2);
+          let arr2=chunk(variables_codes_list, 2);
 
           var HSTableHtml =
               `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+            let z = 0;
 
             arr.forEach(l_arr => {
               HSTableHtml +=  '<tr class="odd gradeX">'
+              let j = 0;
               l_arr.forEach(i =>{
                 let new_i = i.replace(/ /g,"_");
-                HSTableHtml +=  `<td><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+                let new_codei = arr2[z][j].replace(/ /g,"_");
+
+                HSTableHtml +=  `<td id =${new_i2}_td ><input type="checkbox" id="server" name="variables" value=${new_codei} /> ${i}</td>`;
+                j = j +1;
               })
 
                   HSTableHtml += '</tr>';
+                  z = z + 1;
             })
 
             HSTableHtml += "</tbody></table>"
@@ -1426,6 +1433,8 @@ catalog_filter = function(){
         data: datastring,
         success: function(result) {
           try{
+            console.log(JSON.parse(result));
+            console.log(JSON.parse(result)['hs']);
             let hs_available = JSON.parse(result)['hs'];
             let new_hs_available = []
             hs_available.forEach(function(hs){

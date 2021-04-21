@@ -411,7 +411,75 @@ def catalog_filter(request,app_workspace):
     countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
     hs_filtered_region = filter_region(countries_geojson_file_path,countries, actual_group= actual_group)
     hs_filtered_variable = filter_variable(variables, actual_group=actual_group)
-    print(hs_filtered_variable)
+    list_columns_porsi = ["sitename", "latitude", "longitude", "sitecode", "url", "title"]
+    # print(hs_filtered_region)
+    array_sites_region = []
+    array_sites_variables = []
+    for part_sites in hs_filtered_region['stations']:
+        array_sites_region.append(pd.DataFrame(part_sites['sites']))
+
+    try:
+        df_countries = pd.concat(array_sites_region).drop_duplicates().reset_index(drop=True)
+    except Exception as e:
+        df_countries = pd.DataFrame(columns = list_columns_porsi)
+
+    for part_sites in hs_filtered_variable:
+        array_sites_variables.append(pd.DataFrame(part_sites))
+
+    try:
+        df_vars = pd.concat(array_sites_variables).drop_duplicates().reset_index(drop=True)
+    except Exception as e:
+        df_vars = pd.DataFrame(columns = list_columns_porsi)
+    # df_vars = df_vars.drop(['service'], axis=1)
+    print("df_vars")
+    print(df_vars)
+    print("df_contris")
+    print(df_countries)
+    # df_final = pd.concat([df_countries, df_vars]).drop_duplicates().reset_index(drop=True)
+    df_final = pd.DataFrame()
+    columns_list = list(df_vars.columns.values)
+    if df_vars.empty and not df_countries.empty:
+        df_final = df_countries
+    if df_countries.empty and not df_vars.empty:
+        df_final = df_vars
+    if not df_countries.empty and not df_vars.empty:
+        df_final = df_countries.merge(df_vars)
+
+    print(df_final)
+    # print(list(df_final.columns.values))
+    # df2 = df.rename({
+    #     'sitename_x': 'sitename',
+    #     'latitude_x': 'latitude',
+    #     'longitude_x': 'longitude',
+    #     'network_x': 'network',
+    #     'longitude_x': 'longitude',
+    #
+    #     }, axis=1)  # new method
+
+
+    # df_final.sort_values(by=['title_y'], axis=1, inplace=True)
+    final_obj_regions_vars = {}
+
+    #create unique list of names
+    uniqueNames = df_final.title.unique()
+    uniqueHS = uniqueNames.tolist()
+    #create a data frame dictionary to store your data frames
+    DataFrameDict = {elem : pd.DataFrame for elem in uniqueNames}
+    final_obj_regions_vars['hs'] = uniqueHS
+    final_obj_regions_vars['stations'] = []
+    for key in DataFrameDict.keys():
+        temp_dict_sites = {}
+        DataFrameDict[key] = df_final[:][df_final.title == key]
+        dict_temp = DataFrameDict[key].to_dict('records')
+        temp_dict_sites['sites'] = dict_temp
+        temp_dict_sites['title'] = DataFrameDict[key]['title'].tolist()[0]
+        temp_dict_sites['url'] = DataFrameDict[key]['url'].tolist()[0]
+        final_obj_regions_vars['stations'].append(temp_dict_sites)
+
+    # print(final_obj_regions_vars)
+    # print(df_final)
+
+
     # print("hs_filtered_region",hs_filtered_region)
 
     # Uncomment for filter varaible functionality #
@@ -429,7 +497,8 @@ def catalog_filter(request,app_workspace):
 
 
     # return JsonResponse(ret_obj)
-    return JsonResponse(hs_filtered_region)
+    # return JsonResponse(hs_filtered_region)
+    return JsonResponse(final_obj_regions_vars)
 
 
 def filter_region(countries_geojson_file_path,list_countries, actual_group = None):
@@ -476,7 +545,8 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
                 site_obj['longitude'] = site['longitude']
                 site_obj['network'] = site['network']
                 site_obj['sitecode'] = site['sitecode']
-
+                site_obj['url'] = server.url
+                site_obj['title'] = server.title
                 site_objInfo[site['fullSiteCode']] = site_obj
 
             # hydroserver_siteInfo.append(site_objInfo)
@@ -522,9 +592,15 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
                     my_indx = my_indx + 1
 
                 list_filtered.append(list_countries_stations)
-    ret_object['stations'] = list_filtered
-    ret_object['hs'] = region_list
-    return ret_object
+        ret_object['stations'] = list_filtered
+        ret_object['hs'] = region_list
+
+        return ret_object
+    else:
+        ret_object['stations'] = []
+        ret_object['hs'] = []
+        return ret_object
+
 
 def filter_variable(variables_list, actual_group = None):
     hs_list = []
@@ -556,12 +632,61 @@ def filter_variable(variables_list, actual_group = None):
                 # print(sites_json2)
                 # print(sites_json['soap:Envelope']['soap:Body']['GetSitesResponse']['GetSitesResult'])
                 try:
-                    sites_object = parseJSON(sites_json2)
+                    hs_sites = []
+                    if "sitesResponse" in sites_json2:
+                        sites_object = sites_json2['sitesResponse']['site']
+
+                        # If statement is executed for multiple sites within the HydroServer, if there is a single site then it goes to the else statement
+                        # Parse through the HydroServer and each site with its metadata as a
+                        # dictionary object to the hs_sites list
+                        if type(sites_object) is list:
+                            for site in sites_object:
+                                hs_json = {}
+                                latitude = site['siteInfo']['geoLocation'][
+                                    'geogLocation']['latitude']
+                                longitude = site['siteInfo']['geoLocation'][
+                                    'geogLocation']['longitude']
+                                site_name = site['siteInfo']['siteName']
+                                site_name = site_name.encode("utf-8")
+                                network = site['siteInfo']['siteCode']["@network"]
+                                sitecode = site['siteInfo']['siteCode']["#text"]
+
+                                hs_json["sitename"] = site_name.decode("UTF-8")
+                                hs_json["latitude"] = latitude
+                                hs_json["longitude"] = longitude
+                                hs_json["sitecode"] = sitecode
+                                hs_json["network"] = network
+                                hs_json["url"] = hydroservers.url
+                                hs_json["title"] = hydroservers.title
+                                hs_sites.append(hs_json)
+                        else:
+                            hs_json = {}
+                            latitude = sites_object['siteInfo'][
+                                'geoLocation']['geogLocation']['latitude']
+                            longitude = sites_object['siteInfo'][
+                                'geoLocation']['geogLocation']['longitude']
+                            site_name = sites_object['siteInfo']['siteName']
+                            site_name = site_name.encode("utf-8")
+                            network = sites_object['siteInfo']['siteCode']["@network"]
+                            sitecode = sites_object['siteInfo']['siteCode']["#text"]
+
+                            hs_json["sitename"] = site_name.decode("UTF-8")
+                            hs_json["latitude"] = latitude
+                            hs_json["longitude"] = longitude
+                            hs_json["sitecode"] = sitecode
+                            hs_json["network"] = network
+                            hs_json["url"] = hydroservers.url
+                            hs_json["title"] = hydroservers.title
+                            hs_sites.append(hs_json)
+
+
+                    # sites_object = parseJSON(sites_json2)
+                    sites_object = hs_sites
                     # print(sites_object)
                     df = pd.DataFrame.from_dict(sites_object)
                     # print(df)
                     hs_list_temp.append(df)
-                except KeyError as e:
+                except Exception as e:
                     print(e)
             try:
                 df_temp = pd.concat(hs_list_temp).drop_duplicates().reset_index(drop=True)
@@ -597,20 +722,23 @@ def get_variables_for_country(request,app_workspace):
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
 
-
-    for hs in hs_filtered_region:
-        hs_url = hs['url']
-        for key in hs:
-            if key is not 'url':
-                for site in hs[key]:
-                    hs_vars_site = []
-                    water = pwml.WaterMLOperations(url = hs_url)
-                    variables_sever = water.GetSiteInfo(site)['siteInfo']
-                    df_variables = pd.DataFrame.from_dict(variables_sever)
-                    variables_array = df_variables['variableName'].tolist()
-                    for vari in variables_array:
-                        variables_hs.append(vari)
-                        variables_hs = list(set(variables_hs))
+    print(hs_filtered_region)
+    for hs_big in hs_filtered_region['stations']:
+        for hs in hs_big['sites']:
+            hs_url = hs['url']
+            # for key in hs:
+            #     if key is not 'url':
+                    # for site in hs[key]:
+            site = hs['network'] + ":" + hs['sitecode']
+            water = pwml.WaterMLOperations(url = hs_url)
+            variables_sever = water.GetSiteInfo(site)['siteInfo']
+            df_variables = pd.DataFrame.from_dict(variables_sever)
+            # print(df_variables)
+            # print(list(df_variables))
+            variables_array = df_variables['variableName'].tolist()
+            for vari in variables_array:
+                variables_hs.append(vari)
+                variables_hs = list(set(variables_hs))
 
     variables_hs = list(set(variables_hs))
     response_obj['variables'] = variables_hs
