@@ -1,10 +1,213 @@
+responsive_graphs =  function(){
+  let newHtml;
+  if($( window ).width() > 1224){
+    $("#graph").empty()
+    newHtml = `
+    <div id="options">
+      <h3 id= "siteName_title"> Select a Station</h3>
+        <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
+          in this part such as a name and a description.
+        </p>
+      <div id="table_div"></div>
+    </div>
+    <div id="plots2">
+      <h3></h3>
+      <div id= "ipad_lay_contr">
+      <div id= "firstContainer" class="controlGraphs2">
+        <div id= "select-graphs">
+          <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="100%" >
+            <option > Variables</option>
+          </select>
+          <select id="type_graph_select2" class="selectpicker" data-width="100%">
+
+            <optgroup label="Individual Variable Plots">
+              <option> Scatter </option>
+              <option> Whisker and Box </option>
+          </optgroup>
+          </select>
+        </div>
+        <div id= "timeControllers" class="containerTime">
+            <div class='col-md-5'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
+                        <input type='text' class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-5'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
+                        <input type='text' class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div id= "secondContainer" class="controlGraphs2">
+          <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
+          <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit" data-size="mini">
+              <option value="Download">Download</option>
+              <option value="CSV" >CSV</option>
+              <option value = "WaterML1.0">WaterML 1.0</option>
+              <option value = "WaterML2.0">WaterML 2.0</option>
+          </select>
+      </div>
+      </div>
+
+
+      <div id="plots"></div>
+    </div>
+    `
+  }
+  if($( window ).width() >= 768 && $( window ).width() <= 1224){
+
+    $("#graph").empty()
+    newHtml = `
+    <div id="carouselExampleIndicators" class="carousel slide" data-interval="false" >
+      <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
+        </li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="item active">
+            <div id="options">
+              <h3 id= "siteName_title"> Select a Station</h3>
+                <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
+                  in this part such as a name and a description.
+                </p>
+              <div id="table_div"></div>
+            </div>
+        </div>
+        <div class="item">
+          <div id="plots2">
+            <h3></h3>
+            <div id= "ipad_lay_contr">
+            <div id= "firstContainer" class="controlGraphs2">
+              <div id= "select-graphs">
+                <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="100%" >
+                  <option > Variables</option>
+                </select>
+                <select id="type_graph_select2" class="selectpicker" data-width="100%">
+
+                  <optgroup label="Individual Variable Plots">
+                    <option> Scatter </option>
+                    <option> Whisker and Box </option>
+                </optgroup>
+                </select>
+              </div>
+              <div id= "timeControllers" class="containerTime">
+                  <div class='col-md-5'>
+                      <div class="form-group">
+                          <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
+                              <input type='text' class="form-control" />
+                              <span class="input-group-addon">
+                                  <span class="glyphicon glyphicon-calendar"></span>
+                              </span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class='col-md-5'>
+                      <div class="form-group">
+                          <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
+                              <input type='text' class="form-control" />
+                              <span class="input-group-addon">
+                                  <span class="glyphicon glyphicon-calendar"></span>
+                              </span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div id= "secondContainer" class="controlGraphs2">
+                <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
+                <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit" data-size="mini">
+                    <option value="Download">Download</option>
+                    <option value="CSV" >CSV</option>
+                    <option value = "WaterML1.0">WaterML 1.0</option>
+                    <option value = "WaterML2.0">WaterML 2.0</option>
+                </select>
+            </div>
+            </div>
+
+
+            <div id="plots"></div>
+          </div>
+
+
+        </div>
+      </div>
+      <a class="left carousel-control" href="#carouselExampleIndicators" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#carouselExampleIndicators" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+      </a>
+
+    </div>
+    `
+  }
+
+  $(newHtml).appendTo("#graph");
+}
+
+
+
+
+uuidv4 = function () {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+
+
+
 copyToClipboard = function(element) {
   var $temp = $("<input>");
   $("body").append($temp);
   $temp.val($(element).text()).select();
   document.execCommand("copy");
   $temp.remove();
-  //console.log("jojfaaga")
+  $.notify(
+      {
+          message: `copied to clipboard`
+      },
+      {
+          element: '#urlHydroserver',
+          type: "info",
+          allow_dismiss: true,
+          z_index: 20000,
+          placement: {
+            from: "top",
+            align: "right"
+          },
+          offset: {
+            // x: -80,
+            y: 100,
+          },
+          delay:1000,
+          template: '<div id="modalCrazy" data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+          '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+          '<span data-notify="icon"></span> ' +
+          '<span data-notify="title">{1}</span> ' +
+          '<span data-notify="message">{2}</span>' +
+          '<div class="progress" data-notify="progressbar">' +
+            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+          '</div>' +
+          '<a href="{3}" target="{4}" data-notify="url"></a>' +
+          '</div>'
+      }
+  )
 }
 
 
@@ -47,7 +250,7 @@ disable_map =  function (){
             message: `Boundary layer was not setup, please go to settings and set up the boundary layer`
         },
         {
-            type: "danger",
+            type: "info",
             allow_dismiss: true,
             z_index: 20000,
             delay: 5000
@@ -128,22 +331,6 @@ clear_coords = function() {
 }
 
 
-/*
-************ FUNCTION NAME: get_random_color**********************
-************ PURPOSE:LIST OF COLOTS FOR GENERATIING TEH STYLING OF THE POINTS ON THE MAP  ***********
-*/
-
-//
-get_random_color = function() {
-    var letters = "012345".split("")
-    var color = "#"
-    color += letters[Math.round(Math.random() * 5)]
-    letters = "0123456789ABCDEF".split("")
-    for (var i = 0; i < 5; i++) {
-        color += letters[Math.round(Math.random() * 15)]
-    }
-    return color
-}
 
 /*
 ************ FUNCTION NAME: ACTIVATE_DEACTIVATE_GRAPHS **********************
@@ -156,10 +343,29 @@ activate_deactivate_graphs = function(){
 
   let element_map =document.getElementById("map");
   if(actual_state){
-    element_graphs.style.cssText=  "display: flex !important; flex-direction: row;";
-    map.updateSize();
+    if($( window ).width() > 320 && $( window ).width() <= 480){
+      element_graphs.style.cssText=  "display: flex !important; flex-direction: column;";
+      map.updateSize();
+    }
+    else{
+      element_graphs.style.cssText=  "display: flex !important; flex-direction: row;";
+      map.updateSize();
+    }
 
+    try{
+      if($('#plots').is(':visible')){
+        Plotly.Plots.resize("plots");
+          Plotly.relayout($("plots"), {
+            'xaxis.autorange': true,
+            'yaxis.autorange': true
+          });
+      }
+    }
+    catch(e){
+      console.log("Simple plotly error, not worry")
+    }
   }
+
   else{
 
     ////console.log("off");
@@ -170,8 +376,20 @@ activate_deactivate_graphs = function(){
     }
 
   }
+
 };
 $('#sG').change(activate_deactivate_graphs)
+
+legend_change = function(){
+  let actual_state=$(this).prop('checked');
+  if(actual_state){
+    $("#tableLegend").show()
+  }
+  else{
+    $("#tableLegend").hide();
+  }
+}
+$('#sG-legend').change(legend_change)
 /*
 ************ FUNCTION NAME: CLEANGRAPH **********************
 ************ PURPOSE: RESET THE GRAPHS PORTION ***********
@@ -180,7 +398,7 @@ cleanGraphs = function(){
   //RESET THE GRAPHS PORTION //
   $( "#table_div" ).empty();
   initialize_graphs([],[],"No data Available","","","","scatter");
-  $("#siteName_title").html("Site Variables Info");
+  $("#siteName_title").html("Select a Station");
   $("#siteDes").html("No Site Selected, when a site is 'clicked' metadata of the site will display in this part such as a name and a description.");
   $('#variables_graph option').remove();
   $('#variables_graph').selectpicker('refresh');
@@ -195,188 +413,145 @@ cleanGraphs = function(){
 ************ PURPOSE: INITIALIZES ANY GRAH IN THE TIME SERIE OR BEGINNING ***********
 */
 initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,type,xArrayIn,yArrayIn){
-  let element_graphs=document.getElementById("graph");
-  $("#graphs").empty();
-  let element_map =document.getElementById("map");
-    //make the down part visible and also give the design of the model//
+  try{
+    let element_graphs=document.getElementById("graph");
+    $("#graphs").empty();
+    let element_map =document.getElementById("map");
+      //make the down part visible and also give the design of the model//
 
-    element_graphs.style.cssText=  "display: flex; flex-direction: row;";
+
+
+    if($( window ).width() > 320 && $( window ).width() <= 480){
+      element_graphs.style.cssText=  "display: flex; flex-direction: column;";
+    }
+    else{
+      element_graphs.style.cssText=  "display: flex !important; flex-direction: row;";
+    }
+
+
+
+
     map.updateSize();
     var config = {
-      modeBarButtonsToAdd: [{ name: 'downloadCsv', title: 'Download data as csv', icon: Plotly.Icons.disk, click: function(){
-        var csvData = [];
-        var header = [xTitle,yTitle] //main header.
-        csvData.push(header);
-        for (var i = 0; i < xArray.length; i++){ //data
-          var line = [xArray[i],yArray[i]];
-          csvData.push(line);
-        }
-        var csvFile = csvData.map(e=>e.map(a=>'"'+((a||"").toString().replace(/"/gi,'""'))+'"').join(",")).join("\r\n"); //quote all fields, escape quotes by doubling them.
-        var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
-        var link = document.createElement("a");
-        var url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", title_graph.replace(/[^a-z0-9_.-]/gi,'_') + ".csv");
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        } }],
-        responsive: true
-    }
-  if(type === "scatter"){
-    var trace1 = {
-      x: xArray,
-      y: yArray,
-      mode: 'lines',
-      type: type,
-      name: legend1,
-      text: [],
-      marker: { size: 5 },
-      line: {color: '#17BECF'}
+       modeBarButtonsToRemove: ['hoverClosestCartesian', 'hoverCompareCartesian','resetScale2d','toggleSpikelines'],
+       displaylogo: false,
+       responsive:true
     };
-    var interpolation_trace;
-    var data = [];
-    data.push(trace1)
-    if(xArrayIn != undefined && yArrayIn != undefined){
-      interpolation_trace = {
-        x: xArrayIn,
-        y: yArrayIn,
+
+    if(type === "scatter"){
+      var trace1 = {
+        x: xArray,
+        y: yArray,
         mode: 'lines',
         type: type,
-        name: `Mean Interpolation`,
+        name: legend1,
         text: [],
         marker: { size: 5 },
-        line: {color: '#FF6347'}
+        line: {color: '#17BECF'}
       };
-      data.push(interpolation_trace);
+      var interpolation_trace;
+      var data = [];
+      data.push(trace1)
+      if(xArrayIn != undefined && yArrayIn != undefined){
+        interpolation_trace = {
+          x: xArrayIn,
+          y: yArrayIn,
+          mode: 'lines',
+          type: type,
+          name: `Mean Interpolation`,
+
+          text: [],
+          marker: { size: 5 },
+          line: {
+            color: '#FF6347',
+            dash: 'dot',
+          }
+        };
+        data.push(interpolation_trace);
+      }
+
+      var layout = {
+        width: $(".carousel-inner").parent().width(),
+        yaxis: {
+          title: {
+           text: yTitle,
+           font: {
+             size: 15,
+             color: '#7f7f7f'
+           }
+         },
+         automargin: true,
+        },
+        xaxis: {
+         automargin: true,
+        },
+        // title: title_graph,
+        autosize: true,
+        showlegend:true,
+        legend: {
+          "orientation": "h",
+          yanchor: 'top',
+          xanchor:'center',
+          y:-0.15,
+          x:0.5
+        },
+        margin: {
+          l: 40,
+          r: 40,
+          b: 40,
+          t: 40,
+          pad: 10
+        },
+      };
+
+
+      Plotly.newPlot('plots', data, layout, config);
+
     }
 
-    var layout = {
-      xaxis: {
-        title: {
-         text: xTitle,
-         font: {
-           size: 15,
-           color: '#7f7f7f'
-         }
-       }
-      },
-      yaxis: {
-        title: {
-         text: yTitle,
-         font: {
-           size: 15,
-           color: '#7f7f7f'
-         }
-       }
-      },
-      title: title_graph,
-      autosize: true,
-      showlegend:true,
+    if(type === "whisker"){
+      let trace1 = {
+        y: yArray,
+        type: 'box',
+        name: 'All Points',
+        marker: {color: '#3D9970'},
+        boxpoints: 'outliers',
+        boxmean: 'sd'
+
+      };
+
+      let data = [trace1];
+
+      let layout = {
+        title: title_graph,
+        autosize: true,
+
+      };
+      Plotly.newPlot('plots', data, layout, config);
+    }
+    // update the layout to expand to the available size
+    // when the window is resized
+    window.onresize = function() {
+        Plotly.relayout('plots', {
+            'xaxis.autorange': true,
+            'yaxis.autorange': true
+        });
     };
 
-    Plotly.newPlot('plots', data, layout,config);
 
   }
-  if(type ==="bar"){
-
-    var trace1 = {
-      x: xArray,
-      y: yArray,
-      type: 'bar',
-      text: yArray.map(String),
-      textposition: 'auto',
-      hoverinfo: 'none',
-      marker: {
-        color: 'rgb(158,202,225)',
-        opacity: 0.6,
-        line: {
-          color: 'rgb(8,48,107)',
-          width: 1.5
+  catch(e){
+    $.notify(
+        {
+            message: `Unable to initialize the graphs`
+        },
+        {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000
         }
-      }
-    };
-
-    var data = [trace1];
-
-    var layout = {
-      title: 'Variables',
-      barmode: 'stack',
-      xaxis: {
-        title: {
-         text: xTitle,
-         font: {
-           size: 15,
-           color: '#7f7f7f'
-         }
-       },
-       rangemode: 'tozero'
-      },
-      yaxis: {
-        title: {
-         text: yTitle,
-         font: {
-           size: 15,
-           color: '#7f7f7f'
-         }
-       },
-       rangemode: 'tozero'
-      },
-      autosize: true,
-
-    };
-    // Plotly.newPlot('plotsDis', data, layout,config);
-
-  }
-  if(type === "pie"){
-    var data = [{
-      values:yArray,
-      labels:xArray,
-      type: type,
-      hoverinfo: 'label + percent',
-       textposition: 'inside'
-    }];
-
-    var layout = {
-      title: title_graph,
-      // height: 400,
-      // width: 900,
-      showlegend: true,
-      legend: {
-        xanchor:"center",
-        yanchor:"top",
-        y:-0.3, // play with it
-        x:0.5   // play with it
-      },
-      autosize: true,
-
-
-    };
-
-    // Plotly.newPlot('plotsDis', data, layout,config);
-
-  }
-  if(type === "whisker"){
-    let trace1 = {
-      y: yArray,
-      type: 'box',
-      name: 'All Points',
-      marker: {color: '#3D9970'},
-      boxpoints: 'outliers',
-      boxmean: 'sd'
-
-    };
-
-    let data = [trace1];
-
-    let layout = {
-      title: title_graph,
-      autosize: true,
-
-    };
-    Plotly.newPlot('plots', data, layout,config);
-
+    )
   }
 
 }
@@ -426,178 +601,224 @@ function get_new_color(){
 }
 
 function html_for_groups(isAdmin, title, id_group_separator){
-   let newHtml;
-  if (isAdmin){
-    newHtml =
-    `
-    <div class="panel panel-default" id="${title}_panel">
-      <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-        <h4 class="panel-title">
-          <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-          <span class="group-name"> ${title}</span>
+  try{
+    let newHtml;
+    if (isAdmin){
+      newHtml =
 
-          </a>
-        </h4>
-        <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+      `
+      <div class="panel panel-default" id="${title}_panel">
+        <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
+          <h4 class="panel-title tool_tip_h" data-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">
+            <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
+            <span class="group-name"> ${id_dictionary[title]}</span>
 
+            </a>
+          </h4>
+          <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
+
+              <input class="chkbx-layers" type="checkbox">
+              <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
+                <span class=" glyphicon glyphicon-info-sign "></span>
+              </button>
+
+              <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+              <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
+                <span class="glyphicon glyphicon-trash"></span>
+              </button>
+          </li>
+
+        </div>
+
+        <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
+        <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
+          <div class="panel-body">
+              <div id= ${id_group_separator} class="divForServers">
+                <button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group is empty</button>
+              </div>
+          </div>
+        </div>
+      </div>
+      `
+
+      // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
+      //   <span class=" glyphicon glyphicon-filter"></span>
+      // </button>
+      return newHtml
+    }
+    else{
+      newHtml =
+      `
+      <div class="panel panel-default" id="${title}_panel">
+        <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
+          <h4 class="panel-title tool_tip_h" data-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">
+            <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
+            <span class="group-name">${id_dictionary[title]}</span>
+
+            </a>
+          </h4>
+          <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
             <input class="chkbx-layers" type="checkbox">
             <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
               <span class=" glyphicon glyphicon-info-sign "></span>
             </button>
-
-            <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
-              <span class="glyphicon glyphicon-plus"></span>
-            </button>
-            <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
-              <span class="glyphicon glyphicon-trash"></span>
-            </button>
-        </li>
-
-      </div>
-
-      <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-      <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
-        <div class="panel-body">
-            <div id= ${id_group_separator} class="divForServers">
-              <button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group does not have hydroservers</button>
-            </div>
+          </li>
+        </div>
+        <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
+          <div class="panel-body">
+              <div id= ${id_group_separator} class="divForServers"></div>
+          </div>
         </div>
       </div>
-    </div>
-    `
-
-    // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
-    //   <span class=" glyphicon glyphicon-filter"></span>
-    // </button>
-    return newHtml
+      `
+      // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
+      //   <span class=" glyphicon glyphicon-filter"></span>
+      // </button>
+      return newHtml
+    }
   }
-  else{
-    newHtml =
-    `
-    <div class="panel panel-default" id="${title}_panel">
-      <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-        <h4 class="panel-title">
-          <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-          <span class="group-name">${title}</span>
-          </a>
-        </h4>
-        <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
-          <input class="chkbx-layers" type="checkbox">
-          <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
-            <span class=" glyphicon glyphicon-info-sign "></span>
-          </button>
-        </li>
-      </div>
-      <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-        <div class="panel-body">
-            <div id= ${id_group_separator} class="divForServers"></div>
-        </div>
-      </div>
-    </div>
-    `
-    // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
-    //   <span class=" glyphicon glyphicon-filter"></span>
-    // </button>
-    return newHtml
+  catch(e){
+    console.log(e);
   }
 }
+
 function change_effect_groups(element_to_check,id_group_separator){
-  let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
-  for(i = 0; i < servers_checks.length; i++) {
-    let server_name = servers_checks[i].id;
-     let checkbox = Array.from(servers_checks[i].children)
-     for (var j = 0; j < checkbox.length; j++) {
-         if (checkbox[j].className == "chkbx-layer") {
-           ////console.log(checkbox[j])
-           checkbox[j].checked = element_to_check.checked;
+  try{
+    if(layersDict['selectedPointModal']){
+      map.removeLayer(layersDict['selectedPointModal'])
+      map.updateSize()
+    }
+    if(layersDict['selectedPoint']){
+      map.removeLayer(layersDict['selectedPoint'])
+      map.updateSize()
+    }
+    let servers_checks = Array.from(document.getElementById(`${id_group_separator}`).children);
+    for(i = 0; i < servers_checks.length; i++) {
+      let server_name = servers_checks[i].id;
+       let checkbox = Array.from(servers_checks[i].children)
+       for (var j = 0; j < checkbox.length; j++) {
+           if (checkbox[j].className == "chkbx-layer") {
+             ////console.log(checkbox[j])
+             checkbox[j].checked = element_to_check.checked;
+           }
+       }
+       let server_new_name = id_dictionary[server_name];
+       ////console.log(checkbox);
+       map.getLayers().forEach(function(layer) {
+         if(layer_object_filter.hasOwnProperty(server_new_name) == false){
+           //console.log("false")
+           if(layer instanceof ol.layer.Vector && layer == layersDict[server_new_name]){
+             if(element_to_check.checked){
+
+               layer.setStyle(featureStyle(layerColorDict[server_new_name]));
+             }
+             else{
+               layer.setStyle(new ol.style.Style({}));
+             }
+           }
          }
+         else{
+           //console.log("true")
+           if(layer instanceof ol.layer.Vector && layer == layer_object_filter[server_new_name]){
+             if(element_to_check.checked){
+
+               layer.setStyle(featureStyle(layerColorDict[server_new_name]));
+             }
+             else{
+               layer.setStyle(new ol.style.Style({}));
+             }
+           }
+         }
+        });
      }
-     ////console.log(checkbox);
-     map.getLayers().forEach(function(layer) {
-       if(layer_object_filter.hasOwnProperty(server_name) == false){
-         //console.log("false")
-         if(layer instanceof ol.layer.Vector && layer == layersDict[server_name]){
-           if(element_to_check.checked){
 
-             layer.setStyle(featureStyle(layerColorDict[server_name]));
-           }
-           else{
-             layer.setStyle(new ol.style.Style({}));
-           }
-         }
-       }
-       else{
-         //console.log("true")
-         if(layer instanceof ol.layer.Vector && layer == layer_object_filter[server_name]){
-           if(element_to_check.checked){
-
-             layer.setStyle(featureStyle(layerColorDict[server_name]));
-           }
-           else{
-             layer.setStyle(new ol.style.Style({}));
-           }
-         }
-       }
-      });
-   }
+  }
+  catch(e){
+    console.log(e);
+  }
 }
+
 function html_for_servers(title,group_name,isNew){
-  let check_var = (( isNew == true ) ? 'checked' : '');
-  let newHtml = `
-  <li class="ui-state-default" layer-name="${title}" id="${title}" >
-  <span class="server-name">${title}</span>
-  <input class="chkbx-layer" type="checkbox" ${check_var}>
-  <button type="button" id="${title}_${group_name}_reload" class="btn btn-dark btn-sm">
-   <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-  </button>
-  <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm">
-   <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+  try{
+    let check_var = (( isNew == true ) ? 'checked' : '');
+    let newHtml = `
+    <li class="ui-state-default" layer-name="${title}" id="${title}" >
+    <span class="server-name tool_tip_h" data-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">${id_dictionary[title]}</span>
+    <input class="chkbx-layer" type="checkbox" ${check_var}>
+    <button type="button" id="${title}_${group_name}_reload" class="btn btn-sm tool_tip_h" data-toggle="tooltip" data-placement="bottom" title="Update View">
+     <span  class="glyphicon glyphicon-refresh" aria-hidden="true">
+     </span>
+    </button>
+    <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm tool_tip_h" data-toggle="tooltip" data-placement="bottom" title="Zoom to View">
+     <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+    </button>
 
-  </button>
-  <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariablesTable"> <span class=" glyphicon glyphicon-list-alt"></span>
-  </button>
+    <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariablesTable"> <span class=" glyphicon glyphicon-list-alt"></span>
+    </button>
 
-  <button type="button" id="${title}_variables_info" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalHydroserInformation">
-   <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-  </button>
-  </li>
-  `;
-  return newHtml
+    <button type="button" id="${title}_variables_info" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalHydroserInformation">
+     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+    </button>
+
+
+    </li>
+    `;
+    return newHtml
+  }
+  catch (e){
+    console.log(e);
+  }
 
 }
+
 function toDegreesMinutesAndSeconds(coordinate) {
-    var absolute = Math.abs(coordinate);
-    var degrees = Math.floor(absolute);
-    var minutesNotTruncated = (absolute - degrees) * 60;
-    var minutes = Math.floor(minutesNotTruncated);
-    var seconds = Math.floor((minutesNotTruncated - minutes) * 60);
+    try{
+      var absolute = Math.abs(coordinate);
+      var degrees = Math.floor(absolute);
+      var minutesNotTruncated = (absolute - degrees) * 60;
+      var minutes = Math.floor(minutesNotTruncated);
+      var seconds = Math.floor((minutesNotTruncated - minutes) * 60);
 
-    return degrees + "°" + minutes + "'" + seconds + "''";
+      return degrees + "°" + minutes + "'" + seconds + "''";
+    }
+    catch(e){
+      console.log(e);
+    }
+
 }
+
 getIconLegend = function(style,server) {
-  style = style.getImage();
-  var radius = style.getRadius();
-  var strokeWidth = style.getStroke().getWidth();
-  var dx = radius + strokeWidth;
+  try{
+    style = style.getImage();
+    var radius = style.getRadius();
+    var strokeWidth = style.getStroke().getWidth();
+    var dx = radius + strokeWidth;
 
-  var svgElem = $('<svg/>')
-  .attr({
-    class: 'svgs_legend',
-    width: 11,
-    height: 11
-  });
-  $('<circle />')
-  .attr({
-    cx: 5,
-    cy: 5,
-    r: 5,
-    stroke: style.getStroke().getColor(),
-    'stroke-width': strokeWidth,
-    fill: style.getFill().getColor()
-  })
-  .appendTo(svgElem);
+    var svgElem = $('<svg/>')
+    .attr({
+      class: 'svgs_legend',
+      width: 11,
+      height: 11
+    });
+    $('<circle />')
+    .attr({
+      cx: 5,
+      cy: 5,
+      r: 5,
+      stroke: style.getStroke().getColor(),
+      'stroke-width': strokeWidth,
+      fill: style.getFill().getColor()
+    })
+    .appendTo(svgElem);
 
 
-  // Convert DOM object to string to overcome from some SVG manipulation related oddities
-  return $('<div>').append(svgElem).html();
+    // Convert DOM object to string to overcome from some SVG manipulation related oddities
+    return $('<div>').append(svgElem).html();
+  }
+  catch(e){
+    console.log(e);
+  }
+
 }

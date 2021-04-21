@@ -9,13 +9,14 @@
 
             </div>
             <div class="modal-body">
-                <p class="hsinfo">WOF service</p>
+                <p class="hsinfo">Endpoint/URL</p>
                 <p id="url_WOF"></p>
-                <p class="hsinfo">Choose Site</p>
+                <p class="hsinfo">Choose Station/ Platform</p>
                 <select id="site_choose" class="selectpicker" data-style="btn-primary"></select>
+                <br>
+                <br>
                 <p class="hsinfo">Choose Variable</p>
                 <select id="variable_choose" class="selectpicker" data-style="btn-primary"></select>
-                <br>
                 <div class="success"></div>
                 <div class="loading_id">
                   <img id="downloading_loading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
@@ -23,8 +24,8 @@
             </div>
             <div class="modal-footer">
                 <div class="button-group">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" id="btn-add-download" class="btn btn-sucess">Download</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" id="btn-add-download" class="btn btn-success">Download</button>
                 </div>
             </div>
         </div>

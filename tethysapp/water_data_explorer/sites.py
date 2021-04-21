@@ -2,16 +2,21 @@ import xmltodict
 import logging
 import itertools
 import sys
+
+
 import os
 import json
 import pandas as pd
 import numpy as np
 import pywaterml.waterML as pwml
+from datetime import datetime
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.conf import settings
+from django.template import Context, Template
+from django.template.loader import render_to_string, get_template
 
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData
@@ -54,31 +59,45 @@ def get_values_hs(request):
 
     session = SessionMaker()  # Initiate a session
     client = Client(hs_url)
-    response_info = GetSiteInfo(client,site_desc)['siteInfo']
-    df = pd.DataFrame.from_dict(response_info)
-    if df.empty:
-        return_obj['country'] = []
-        return_obj['variables'] =[]
-        return_obj['units'] = []
-        return_obj['codes'] = []
-        return_obj['organization'] = []
-        return_obj['times_series'] = []
-        return_obj['geolo'] = []
+    try:
+        response_info = GetSiteInfo(client,site_desc)['siteInfo']
+        df = pd.DataFrame.from_dict(response_info)
+
+        if df.empty:
+            return_obj['country'] = []
+            return_obj['variables'] =[]
+            return_obj['units'] = []
+            return_obj['codes'] = []
+            return_obj['organization'] = []
+            return_obj['times_series'] = []
+            return_obj['geolo'] = []
+            return_obj['timeUnitName'] = []
+            return_obj['TimeSupport'] = []
+            return_obj['dataType'] = []
+            return JsonResponse(return_obj)
+        pd.set_option('display.max_columns', None)
+        # print(df)
+        return_obj['country'] = df['country'].tolist()[0]
+        return_obj['variables'] = df['variableName'].tolist()
+        return_obj['units'] = df['unitAbbreviation'].tolist()
+        return_obj['codes'] = df['variableCode'].tolist()
+        return_obj['timeUnitName'] = df['timeUnitName'].tolist();
+        return_obj['timeSupport'] = df['timeSupport'].tolist();
+        return_obj['dataType'] = df['dataType'].tolist();
+
+        obj_var_desc = {}
+        obj_var_times_s = {}
+        # print(df['description'].tolist())
+        for vari, desc, times_s in zip(df['variableName'].tolist(),df['organization'].tolist(),df['variableTimeInterval'].tolist()):
+            obj_var_desc[vari] = desc
+            obj_var_times_s[vari]  = times_s
+        return_obj['organization'] = obj_var_desc
+        return_obj['times_series'] = obj_var_times_s
+        return_obj['geolo'] = df['geolocation'].tolist()[0]
         return JsonResponse(return_obj)
-    print(df)
-    return_obj['country'] = df['country'].tolist()[0]
-    return_obj['variables'] = df['variableName'].tolist()
-    return_obj['units'] = df['unitAbbreviation'].tolist()
-    return_obj['codes'] = df['variableCode'].tolist()
-    obj_var_desc = {}
-    obj_var_times_s = {}
-    # print(df['description'].tolist())
-    for vari, desc, times_s in zip(df['variableName'].tolist(),df['organization'].tolist(),df['variableTimeInterval'].tolist()):
-        obj_var_desc[vari] = desc
-        obj_var_times_s[vari]  = times_s
-    return_obj['organization'] = obj_var_desc
-    return_obj['times_series'] = obj_var_times_s
-    return_obj['geolo'] = df['geolocation'].tolist()[0]
+    except Exception as e:
+        # return_obj = {}
+        return JsonResponse(return_obj)
 
     # keywords = client.service.GetVariables('[:]')
     # keywords_dict = xmltodict.parse(keywords)
@@ -177,7 +196,6 @@ def get_values_hs(request):
     # return_obj['siteInfo']= site_info_Mc_json
 
     # print("finished with the get_values_hs")
-    return JsonResponse(return_obj)
 
 def get_values_graph_hs(request):
     # print("inside the get_values_graph_hs")
@@ -193,8 +211,10 @@ def get_values_graph_hs(request):
     variable_desc = network + ':' + code_variable
     site_desc = network + ':' + site_code
     water = pwml.WaterMLOperations(url = hs_url)
-    values = water.GetValues(site_desc, variable_desc, start_date, end_date)
+    values = water.GetValues(site_desc, variable_desc, start_date, end_date, format = 'json')
+    # print(values)
     df = pd.DataFrame.from_dict(values['values'])
+    # print(df)
     if df.empty:
         return_obj['graphs'] = []
         return_obj['interpolation'] = []
@@ -204,7 +224,7 @@ def get_values_graph_hs(request):
         return JsonResponse(return_obj)
 
     variable_name = df['variableName'].tolist()[0]
-    unit_name = df['unitName'].tolist()[0]
+    unit_name = df['unitAbbreviation'].tolist()[0]
     time_unit_name = df['timeUnitName'].tolist()[0]
     time_series_vals = df['dataValue'].tolist()
     time_series_timeUTC = df['dateTime'].tolist()
@@ -213,7 +233,34 @@ def get_values_graph_hs(request):
     return_obj['unit_name'] = unit_name
     return_obj['variablename'] = variable_name
     return_obj['timeUnitName'] = time_unit_name
+    dict_xml = []
 
+    for gps_ in return_obj['graphs']:
+        chunk_xml = {}
+        chunk_xml['DateTimeUTC']=gps_[0]
+        chunk_xml['DataValue']=gps_[1]
+        dict_xml.append(chunk_xml)
+
+    current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    my_vals = values['values'][0]
+
+    context = {
+        "data_values": dict_xml,
+        "current_date": current_date,
+        "init_date": time_series_timeUTC[0],
+        "final_date": time_series_timeUTC[-1],
+        "network": network,
+        "code_variable": code_variable,
+        "code_site": site_code,
+        "site_name": my_vals["siteName"],
+        "unitAbbreviation": my_vals["unitAbbreviation"],
+        "latitude_longitude": f'{my_vals["latitude"]} {my_vals["longitude"]}',
+        "site_id": my_vals["siteID"],
+        "dataType": my_vals["dataType"],
+    }
+
+    template_renderizado = render_to_string('water_data_explorer/wml2_values_template.xml', context)
+    return_obj['template_renderizado'] = template_renderizado
     return JsonResponse(return_obj)
 
 def get_xml(request):
@@ -235,7 +282,7 @@ def get_xml(request):
 
     water = pwml.WaterMLOperations(url = hs_url)
 
-    return_obj['waterml'] = water.GetValues(site_desc, variable_desc, start_date, end_date, format='waterml')
+    return_obj['waterml'] = water.GetValues(site_desc, variable_desc,  start_date, end_date,format = 'waterml')
 
 
     return JsonResponse(return_obj)
@@ -293,58 +340,62 @@ def GetSiteInfo(client,site_full_code, format ="json"):
         firstSiteFullSiteCode = sites[0]['fullSiteCode']
         siteInfo = water.GetSiteInfo(firstSiteFullSiteCode)
     """
+    return_array = []
     try:
         site_info_Mc = client.service.GetSiteInfo(site_full_code)
+        # print(site_info_Mc)
+        if format is 'waterml':
+            return site_info_Mc
+        site_info_Mc_dict = xmltodict.parse(site_info_Mc)
+        site_info_Mc_json_object = json.dumps(site_info_Mc_dict)
+        site_info_Mc_json = json.loads(site_info_Mc_json_object)
+
+
+        try:
+            object_methods = site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
+            # print(object_methods)
+            object_siteInfo = site_info_Mc_json['sitesResponse']['site']['siteInfo']
+            # print(object_methods)
+            # print(object_siteInfo)
+            return_array = []
+            if(isinstance(object_methods,(dict))):
+                return_obj = _getSiteInfoHelper(object_siteInfo,object_methods)
+                return_array.append(return_obj)
+
+            else:
+                for object_method in object_methods:
+                    return_obj = _getSiteInfoHelper(object_siteInfo,object_method)
+                    return_array.append(return_obj)
+            if format is "json":
+                json_response = {
+                    'siteInfo':return_array
+                }
+                return json_response
+            elif format is "csv":
+                df = pd.DataFrame.from_dict(return_array)
+                csv_siteInfo = df.to_csv(index=False)
+                return csv_siteInfo
+            else:
+                return print("the only supported formats are json, csv, and waterml")
+        except KeyError as ke:
+            # print(ke)
+            # print("No series for the site")
+            return_array = []
+            if format is "json":
+                json_response = {
+                    'siteInfo':return_array
+                }
+                return json_response
+            elif format is "csv":
+                df = pd.DataFrame.from_dict(return_array)
+                csv_siteInfo = df.to_csv(index=False)
+                return csv_siteInfo
+            else:
+                return print("the only supported formats are json, csv, and waterml")
     except Exception as error:
+        return return_array
         print(error)
 
-    if format is 'waterml':
-        return site_info_Mc
-    site_info_Mc_dict = xmltodict.parse(site_info_Mc)
-    site_info_Mc_json_object = json.dumps(site_info_Mc_dict)
-    site_info_Mc_json = json.loads(site_info_Mc_json_object)
-
-
-    try:
-        object_methods = site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
-        # print(object_methods)
-        object_siteInfo = site_info_Mc_json['sitesResponse']['site']['siteInfo']
-        return_array = []
-        if(isinstance(object_methods,(dict))):
-            return_obj = _getSiteInfoHelper(object_siteInfo,object_methods)
-            return_array.append(return_obj)
-
-        else:
-            for object_method in object_methods:
-                return_obj = _getSiteInfoHelper(object_siteInfo,object_method)
-                return_array.append(return_obj)
-        if format is "json":
-            json_response = {
-                'siteInfo':return_array
-            }
-            return json_response
-        elif format is "csv":
-            df = pd.DataFrame.from_dict(return_array)
-            csv_siteInfo = df.to_csv(index=False)
-            return csv_siteInfo
-        else:
-            return print("the only supported formats are json, csv, and waterml")
-    except KeyError as ke:
-        # print(ke)
-        # print("No series for the site")
-        return_array = []
-        if format is "json":
-            json_response = {
-                'siteInfo':return_array
-            }
-            return json_response
-        elif format is "csv":
-            df = pd.DataFrame.from_dict(return_array)
-            csv_siteInfo = df.to_csv(index=False)
-            return csv_siteInfo
-        else:
-            return print("the only supported formats are json, csv, and waterml")
-        # return return_array
     return return_array
 
 
@@ -408,9 +459,11 @@ def _getSiteInfoHelper(object_siteInfo,object_methods):
                     if props['@name'] == 'Country':
                         return_obj['country'] = props['#text']
             else:
-                if props["@name"] is 'Country':
-                    return_obj['country'] = props['#text']
+                if str(sitePorperty_Info['@name']) == 'Country':
+                    return_obj['country'] = str(sitePorperty_Info['#text'])
+                    # print(return_obj['country'])
         except Exception as e:
+            print(e)
             return_obj['country'] = "No Data was Provided"
         try:
             # return_obj['siteName'] = object_siteInfo['siteName']

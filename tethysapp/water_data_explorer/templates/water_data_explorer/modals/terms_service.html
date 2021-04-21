@@ -1,0 +1,31 @@
+<div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="about-modal-label" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="about-modal-label"> Privacy and Terms of Service</h5>
+      </div>
+      <div class="modal-body">
+        <p id="overview">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget odio at lectus porttitor commodo. Duis lacinia, nisi quis interdum sollicitudin, magna augue iaculis orci, sit amet condimentum sapien erat bibendum libero. Integer sit amet sapien at dolor tincidunt fringilla. Nulla facilisi. Curabitur eget nulla magna. Phasellus ornare mauris vel massa bibendum, a pretium lacus posuere. Sed ornare imperdiet ullamcorper. Etiam sed varius enim. Nullam non magna iaculis, convallis lacus vel, consequat tellus. Donec cursus nisl arcu, quis commodo libero ullamcorper vitae. Maecenas mattis nisi id viverra aliquet. Curabitur eget turpis eu massa volutpat porttitor vitae vitae metus.
+          Fusce pellentesque, purus auctor ornare blandit, lorem risus vehicula turpis, et cursus odio risus nec diam. Donec a magna et eros aliquam maximus ac at dui. Vestibulum sit amet lorem sed nisi luctus varius sit amet in sem. Nam vulputate rutrum ligula pellentesque rutrum. Duis bibendum quam id felis ultricies euismod. Curabitur suscipit placerat rhoncus. Duis eros ante, lacinia at lectus et, luctus tincidunt est. Sed eleifend odio vel venenatis condimentum. Sed diam dolor, dapibus at eleifend at, commodo at est. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Quisque non commodo purus. Donec ultricies luctus eros. Aliquam luctus, dui ut posuere facilisis, arcu odio tempor nisi, eget sodales mauris libero in tortor.
+        </p>
+        <p>
+          By clicking "Accept", you agree to the terms of condition.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="TETHYS_APP_BASE.exit_app('/apps/');" class="btn btn-danger">Decline</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal">Accept</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $('#about').on('show.bs.modal', function (e) {
+    $('body').addClass("example-open");
+    console.log("nop")
+  }).on('hide.bs.modal', function (e) {
+        $('body').removeClass("example-open");
+  })
+</script>

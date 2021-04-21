@@ -52,7 +52,7 @@ def get_download_hs(request):
     hs_url = request.GET.get('hs_url')
     variable_hs = request.GET.get('variable_hs')
     site_hs = request.GET.get('site_hs')
-    url = ('https://gist.githubusercontent.com/romer8/f79eced595079930f7432abfadb51128/raw/dea862028f9f2a006704469015e476641b547c6e/pywaterml.ipynb')
+    url = ('https://gist.githubusercontent.com/romer8/89c851014afb276b0f20cb61c9c731f6/raw/a0ee55ca83e75f34f26eb94bd52941cc2a2199cd/pywaterml_template.ipynb')
     contents = requests.get(url).text
     #print(len(contents))
     nb = json.loads(contents)
@@ -470,8 +470,8 @@ def soap_group(request):
     if request.is_ajax() and request.method == 'POST':
         url = request.POST.get('soap-url')
         title = request.POST.get('soap-title')
-        title = title.replace(" ", "")
-        title = title.translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
+        # title = title.replace(" ", "")
+        # title = title.translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
         group = request.POST.get('actual-group')
         #print(group)
         description = request.POST.get('textarea')
