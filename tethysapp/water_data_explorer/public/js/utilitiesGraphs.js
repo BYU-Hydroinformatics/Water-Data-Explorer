@@ -472,8 +472,9 @@ select_variable_change = function(){
 }
 // let temp_var = $("#variables_graph")
 // $("#variables_graph").change(select_variable_change);
-$( document ).on( 'change', "#variables_graph", select_variable_change );
-$( document ).on( 'click', "#variables_graph", select_variable_change );
+
+// $( document ).on( 'change', "#variables_graph", select_variable_change );
+// $( document ).on( 'click', "#variables_graph", select_variable_change );
 
 $("#update_graphs").on("click",select_variable_change);
 /*
