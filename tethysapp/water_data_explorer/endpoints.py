@@ -5,9 +5,15 @@ import os
 import json
 import pandas as pd
 import numpy as np
-sys.path.append("/home/elkin/Projects/condaPackages/pywaterml")
+import geopandas as gpd
+import shapely.speedups
+# sys.path.append("/home/elkin/Projects/condaPackages/pywaterml")
 
 import pywaterml.waterML as pwml
+
+from shapely.geometry import Point, Polygon
+
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
@@ -37,6 +43,7 @@ from datetime import datetime
 
 from django.http import JsonResponse, HttpResponse
 from .app import WaterDataExplorer as app
+from tethys_sdk.workspaces import app_workspace
 
 Persistent_Store_Name = 'catalog_db'
 logging.basicConfig(level=logging.INFO)
@@ -458,12 +465,72 @@ def upload_hs(request):
 
     return JsonResponse(return_obj)
 
+@app_workspace
+def available_regions_2(request,app_workspace,siteinfo):
+    shapely.speedups.enable()
+    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
+    countries_gdf = gpd.read_file(countries_geojson_file_path)
+    countries_series = countries_gdf.loc[:,'geometry']
+    ret_object = {}
+    list_regions = []
 
+    region_list = []
+    hydroserver_lat_list = []
+    hydroserver_long_list = []
+    hydroserver_name_list = []
 
+    sites = json.loads(siteinfo)
+    ls_lats = []
+    ls_longs = []
+    site_names = []
+    for site in sites:
+        ls_lats.append(site['latitude'])
+        ls_longs.append(site['longitude'])
+        site_names.append(site['fullSiteCode'])
+    hydroserver_lat_list.append(ls_lats)
+    hydroserver_long_list.append(ls_longs)
+    hydroserver_name_list.append(site_names)
+
+    list_countries_stations = {}
+    for indx in range(0,len(hydroserver_name_list)):
+        df = pd.DataFrame({'SiteName': hydroserver_name_list[indx],'Latitude': hydroserver_lat_list[indx],'Longitude': hydroserver_long_list[indx]})
+        gdf = gpd.GeoDataFrame(geometry=gpd.points_from_xy(df.Longitude, df.Latitude), index = hydroserver_name_list[indx])
+        gdf = gdf.assign(**{str(key): gdf.within(geom) for key, geom in countries_series.items()})
+        trues_onlys = gdf.copy()
+        trues_onlys = trues_onlys.drop(['geometry'],axis=1)
+        trues_onlys = trues_onlys.loc[:,trues_onlys.any()]
+        countries_index = list(trues_onlys.columns)
+        trues_onlys_copy = trues_onlys.copy()
+        countries_index = [x for x in countries_index if x != 'geometry']
+
+        countries_index2 = [int(i) for i in countries_index]
+        countries_selected = countries_gdf.iloc[countries_index2]
+        list_countries_selected = list(countries_selected['name'])
+        for coun in list_countries_selected:
+            if coun not in region_list:
+                region_list.append(coun)
+
+    ret_object['countries'] = region_list
+    return ret_object
+
+def available_variables_2(url):
+    varaibles_list = {}
+    hydroserver_variable_list = []
+    hydroserver_variable_code_list = []
+    water = pwml.WaterMLOperations(url = url)
+    hs_variables = water.GetVariables()['variables']
+    for hs_variable in hs_variables:
+        hydroserver_variable_list.append(hs_variable['variableName'])
+        hydroserver_variable_code_list.append(hs_variable['variableCode'])
+
+    varaibles_list["variables"] = hydroserver_variable_list
+    varaibles_list["variables_codes"] = hydroserver_variable_code_list
+    return varaibles_list
 ######*****************************************************************************************################
 ######**ADD A HYDROSERVER TO THE SELECTED GROUP OF HYDROSERVERS THAT WERE CREATED BY THE USER *################
 ######*****************************************************************************************################
-def soap_group(request):
+@app_workspace
+def soap_group(request,app_workspace):
     # logging.basicConfig(level=logging.INFO)
     # logging.getLogger('suds.client').setLevel(logging.DEBUG)
     return_obj = {}
@@ -526,7 +593,8 @@ def soap_group(request):
             sites = water.GetSites()
 
             sites_parsed_json = json.dumps(sites)
-
+            countries_json = available_regions_2(request,app_workspace,sites_parsed_json)
+            variable_json = available_variables_2(url)
 
             return_obj['title'] = title
             return_obj['url'] = url
@@ -543,7 +611,9 @@ def soap_group(request):
             hs_one = HydroServer_Individual(title=title,
                              url=url,
                              description = description,
-                             siteinfo=sites_parsed_json)
+                             siteinfo=sites_parsed_json,
+                             variables = variable_json,
+                             countries = countries_json )
 
             hydroservers_group.hydroserver.append(hs_one)
             session.add(hydroservers_group)
