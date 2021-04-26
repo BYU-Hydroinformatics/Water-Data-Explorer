@@ -76,11 +76,29 @@ activate_layer_values = function (){
               if (result.hasOwnProperty('codes') && result['codes'].length > 0){
                 let geolocations = result['geolo'];
                 let country_name = result['country'];
-                let lats = parseFloat(geolocations['latitude'])
-                let lons = parseFloat(geolocations['longitude'])
-                let new_lat = toDegreesMinutesAndSeconds(lats)
-                let new_lon = toDegreesMinutesAndSeconds(lons)
+                if(country_name == null){
+                  country_name = "No Data Provided"
+                }
+                let lats = parseFloat(geolocations['latitude']);
+                if(lats == null){
+                  lats = "No Data Provided"
+                }
+                let lons = parseFloat(geolocations['longitude']);
+                if(lons == null){
+                  lons = "No Data Provided"
+                }
+                let new_lat = "No Data Provided"
+                let new_lon = "No Data Provided"
+                if(lats != null && lons != null ){
+                  new_lat = toDegreesMinutesAndSeconds(lats);
+                  new_lon = toDegreesMinutesAndSeconds(lons);
+                }
 
+
+                let organization_name = result['organization'][Object.keys(result['organization'])[0]];
+                if(organization_name == null){
+                  organization_name = "No Data Provided";
+                }
 
                 description_site.innerHTML =
                   ` <p> <span>Station/Platform Name: </span> ${feature_single.values_['name']}<p>
@@ -118,12 +136,31 @@ activate_layer_values = function (){
                  }
                 for(let i=0; i<result['variables'].length ; ++i){
                   let variable_new = result['variables'][i];
+                  if(variable_new == null){
+                    variable_new = "No Data Provided"
+                  }
                   let variable_unit = result['units'][i];
+                  if(variable_unit == null){
+                    variable_unit = "No Data Provided"
+                  }
                   let aggregation_dur = `${result['timeSupport'][i]} ${result['timeUnitName'][i]}`;
+                  if(aggregation_dur == null){
+                    aggregation_dur = "No Data Provided"
+                  }
                   let time_serie_range = result['times_series'][variable_new];
+
                   let begin_date = time_serie_range['beginDateTime'].split('T')[0];
+                  if(begin_date == null){
+                    begin_date = "No Data Provided"
+                  }
                   let end_date = time_serie_range['endDateTime'].split('T')[0];
+                  if(end_date == null){
+                    end_date = "No Data Provided"
+                  }
                   let interpolation_type = result['dataType'][i];
+                  if(interpolation_type == null){
+                    interpolation_type = "No Data Provided"
+                  }
                   let newRow =
                   `
                   <tr>
