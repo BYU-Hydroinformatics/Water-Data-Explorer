@@ -276,14 +276,10 @@ def create_group(request,app_workspace):
                 #print(services)
                 if selected_services:
                     views = water.aux._giveServices(services,selected_services)['working']
-                    print(views)
                     group_obj['views'] = addMultipleViews(request,hs_list=views,group = title)
-                    print(group_obj['views'])
                 else:
                     views = water.aux._giveServices(services)['working']
-                    print(views)
                     group_obj['views'] = addMultipleViews(request,hs_list=views,group = title)
-                    print(group_obj['views'])
 
             except Exception as e:
                 print(e)

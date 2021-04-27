@@ -746,7 +746,7 @@ function html_for_servers(title,group_name,isNew){
     let newHtml = `
     <li class="ui-state-default" layer-name="${title}" id="${title}" >
     <span class="server-name tool_tip_h" data-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">${id_dictionary[title]}</span>
-    <label class = "tool_tip_h" id="checkbox-label" data-toggle="tooltip" data-placement="bottom" title="Update View"><input class="chkbx-layer" type="checkbox" ${check_var}> </label>
+    <input class="chkbx-layer" type="checkbox" data-toggle="tooltip" data-placement="bottom" title="Update View" ${check_var}>
     <button type="button" id="${title}_${group_name}_reload" class="btn btn-sm" >
      <span  class="glyphicon glyphicon-refresh tool_tip_h" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Update View">
      </span>

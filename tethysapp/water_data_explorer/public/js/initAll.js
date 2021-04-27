@@ -507,6 +507,9 @@ var water_data_explorer_PACKAGE = (function() {
       $('body').tooltip({
           selector: '.tool_tip_h'
       });
+      $('#app-navigation').tooltip({
+          selector: '.chkbx-layer'
+      });
 
       $('#checkbox-label').on('show.bs.tooltip change', function (e) {
           $this = $(this);
