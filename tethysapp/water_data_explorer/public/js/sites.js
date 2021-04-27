@@ -71,6 +71,7 @@ activate_layer_values = function (){
           dataType: "JSON",
           data: object_request,
           success: function(result){
+            console.log(result)
             try{
               let description_site = document.getElementById('siteDes')
               if (result.hasOwnProperty('codes') && result['codes'].length > 0){
@@ -228,44 +229,76 @@ activate_layer_values = function (){
 
                 object_request2['variable']=selectedItem;
                 object_request2['code_variable']= code_variable[`${selectedItem}` -1];
-                object_request2['times_series'] = result['times_series']
-                object_request2['variables_array']=result['variables']
+                object_request2['times_series'] = result['times_series'];
+                time_series_cache = result['times_series'];
+                object_request2['variables_array']=result['variables'];
                 object_request_graphs = JSON.parse(JSON.stringify(object_request2));
-                let start_dateUTC = result['times_series'][Object.keys(result['times_series'])[0]]['beginDateTimeUTC']
-                let dateUTC_start = new Date(start_dateUTC)
-                let starts = start_dateUTC.split("T");
-                let starts_no_seconds = starts[1].split(":");
-                let end_dateUTC = result['times_series'][Object.keys(result['times_series'])[0]]['endDateTimeUTC']
-                let dateUTC_end = new Date(end_dateUTC)
 
-                let ends = end_dateUTC.split("T");
+                // $('#variables_graph').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                $('#variables_graph').on('change', function(e){
+                  try{
+                    $("#GeneralLoading").removeClass("hidden");
+                    let selectedItem = this.value - 1;
+                    console.log(selectedItem)
+                  // $( document ).on( 'change', "#variables_graph", function(){
+                    // do something...
+                    // let start_dateUTC = result['times_series'][Object.keys(result['times_series'])[0]]['beginDateTimeUTC']
+                    let start_dateUTC = result['times_series'][Object.keys(result['times_series'])[selectedItem]]['beginDateTimeUTC']
+                    let dateUTC_start = new Date(start_dateUTC)
+                    let starts = start_dateUTC.split("T");
+                    let starts_no_seconds = starts[1].split(":");
+                    let end_dateUTC = result['times_series'][Object.keys(result['times_series'])[selectedItem]]['endDateTimeUTC']
+                    let dateUTC_end = new Date(end_dateUTC)
 
-                let ends_no_seconds = ends[1].split(":");
+                    let ends = end_dateUTC.split("T");
 
-                // THIS IS NECESARRY TO RESET THE DATES OTHERWISE IT IS GOING TO HAVE EMPTY SPACES..
-                $('#datetimepicker6').datepicker('setStartDate', null);
-                $('#datetimepicker6').datepicker('setEndDate', null);
-                $('#datetimepicker7').datepicker('setEndDate',null);
+                    let ends_no_seconds = ends[1].split(":");
 
-                //@KrunchMuffin I found a workaround this issue:
-                //Before setting the value remove the limitation (endDate)
-                // Set the value
-                //Restore the limitation (endDate)
-                //
-                // Maybe it will work for you also
-                // https://github.com/uxsolutions/bootstrap-datepicker/issues/2292#issuecomment-341496634
+                    // THIS IS NECESARRY TO RESET THE DATES OTHERWISE IT IS GOING TO HAVE EMPTY SPACES..
+                    $('#datetimepicker6').datepicker('setStartDate', null);
+                    $('#datetimepicker6').datepicker('setEndDate', null);
+                    $('#datetimepicker7').datepicker('setEndDate',null);
 
-                $('#datetimepicker6').datepicker('update', dateUTC_start);
-                $('#datetimepicker7').datepicker('update', dateUTC_end);
+                    //@KrunchMuffin I found a workaround this issue:
+                    //Before setting the value remove the limitation (endDate)
+                    // Set the value
+                    //Restore the limitation (endDate)
+                    //
+                    // Maybe it will work for you also
+                    // https://github.com/uxsolutions/bootstrap-datepicker/issues/2292#issuecomment-341496634
 
-                ////console.log($('#datetimepicker6').datepicker('getDate'));
-                ////console.log($('#datetimepicker7').datepicker('getDate'));
+                    $('#datetimepicker6').datepicker('update', dateUTC_start);
+                    $('#datetimepicker7').datepicker('update', dateUTC_end);
 
-                $('#datetimepicker6').datepicker('setStartDate', dateUTC_start);
-                $('#datetimepicker6').datepicker('setEndDate', dateUTC_end);
-                // $('#datetimepicker7').datepicker('setStartDate',dateUTC_end);
-                $('#datetimepicker7').datepicker('setEndDate',dateUTC_end);
-                 $("#GeneralLoading").addClass("hidden")
+                    ////console.log($('#datetimepicker6').datepicker('getDate'));
+                    ////console.log($('#datetimepicker7').datepicker('getDate'));
+
+                    $('#datetimepicker6').datepicker('setStartDate', dateUTC_start);
+                    $('#datetimepicker6').datepicker('setEndDate', dateUTC_end);
+                    // $('#datetimepicker7').datepicker('setStartDate',dateUTC_end);
+                    $('#datetimepicker7').datepicker('setEndDate',dateUTC_end);
+                    $("#GeneralLoading").addClass("hidden");
+                  }
+                  catch(e){
+                    console.log(e);
+                    $("#GeneralLoading").addClass("hidden");
+
+                    $.notify(
+                        {
+                            message: `Please select a variable`
+                        },
+                        {
+                            type: "info",
+                            allow_dismiss: true,
+                            z_index: 20000,
+                            delay: 5000
+                        }
+                    )
+                  }
+
+                });
+
+                 $("#GeneralLoading").addClass("hidden");
                  $("#siteName_title").empty();
 
               }
