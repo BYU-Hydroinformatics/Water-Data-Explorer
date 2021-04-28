@@ -786,7 +786,8 @@ def get_variables_for_country(request,app_workspace):
 
     response_obj = {}
     countries = request.GET.getlist('countries[]')
-    variables_hs = []
+    list_variables = []
+    list_variables_codes = []
     countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
     if request.method == 'GET' and 'group' in request.GET:
         specific_group=request.GET.get('group')
@@ -796,26 +797,38 @@ def get_variables_for_country(request,app_workspace):
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
 
-    print(hs_filtered_region)
-    for hs_big in hs_filtered_region['stations']:
-        for hs in hs_big['sites']:
-            hs_url = hs['url']
-            # for key in hs:
-            #     if key is not 'url':
-                    # for site in hs[key]:
-            site = hs['network'] + ":" + hs['sitecode']
-            water = pwml.WaterMLOperations(url = hs_url)
-            variables_sever = water.GetSiteInfo(site)['siteInfo']
-            df_variables = pd.DataFrame.from_dict(variables_sever)
-            # print(df_variables)
-            # print(list(df_variables))
-            variables_array = df_variables['variableName'].tolist()
-            for vari in variables_array:
-                variables_hs.append(vari)
-                variables_hs = list(set(variables_hs))
+    hydroservers_selected = session.query(HydroServer_Individual).all()
+    for hs_selected in hydroservers_selected:
+        list_contries_final = json.loads(hs_selected.countries)['countries']
+        set_contries_final = set(list_contries_final)
+        set_request_final = set(countries)
+        if (set_contries_final & set_request_final):
+            hs_variables_json  = json.loads(hs_selected.variables)
+            list_variables = hs_variables_json['variables']
+            list_variables_codes = hs_variables_json['variables_codes']
 
-    variables_hs = list(set(variables_hs))
-    response_obj['variables'] = variables_hs
+
+    # for hs_big in hs_filtered_region['stations']:
+        # for hs in hs_big['sites']:
+        #     hs_url = hs['url']
+        #     # for key in hs:
+        #     #     if key is not 'url':
+        #             # for site in hs[key]:
+        #     site = hs['network'] + ":" + hs['sitecode']
+        #     water = pwml.WaterMLOperations(url = hs_url)
+        #     variables_sever = water.GetSiteInfo(site)['siteInfo']
+        #     df_variables = pd.DataFrame.from_dict(variables_sever)
+        #     # print(df_variables)
+        #     # print(list(df_variables))
+        #     variables_array = df_variables['variableName'].tolist()
+        #     for vari in variables_array:
+        #         variables_hs.append(vari)
+        #         variables_hs = list(set(variables_hs))
+
+    # variables_hs = list(set(variables_hs))
+    response_obj['variables'] = list_variables
+    response_obj['variables_codes'] = list_variables_codes
+    print(response_obj)
     return JsonResponse(response_obj)
 
 ######*****************************************************************************************################
