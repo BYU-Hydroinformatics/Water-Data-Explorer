@@ -255,6 +255,21 @@ def parseJSON(json):
                     site_name = site_name.encode("utf-8")
                     network = site['siteInfo']['siteCode']["@network"]
                     sitecode = site['siteInfo']['siteCode']["#text"]
+                    hs_json['country'] = "No Data was Provided"
+                    try:
+                        sitePorperty_Info = site['siteInfo']['siteProperty']
+
+                        if type(sitePorperty_Info) is list:
+                            for props in sitePorperty_Info:
+                                if props['@name'] == 'Country':
+                                    hs_json['country'] = props['#text']
+                        else:
+                            if str(sitePorperty_Info['@name']) == 'Country':
+                                hs_json['country'] = str(sitePorperty_Info['#text'])
+                                # print(return_obj['country'])
+                    except Exception as e:
+                        print(e)
+                        hs_json['country'] = "No Data was Provided"
 
                     hs_json["sitename"] = site_name.decode("UTF-8")
                     hs_json["latitude"] = latitude
@@ -273,6 +288,22 @@ def parseJSON(json):
                 site_name = site_name.encode("utf-8")
                 network = sites_object['siteInfo']['siteCode']["@network"]
                 sitecode = sites_object['siteInfo']['siteCode']["#text"]
+
+                hs_json['country'] = "No Data was Provided"
+                try:
+                    sitePorperty_Info = sites_object['siteInfo']['siteProperty']
+
+                    if type(sitePorperty_Info) is list:
+                        for props in sitePorperty_Info:
+                            if props['@name'] == 'Country':
+                                hs_json['country'] = props['#text']
+                    else:
+                        if str(sitePorperty_Info['@name']) == 'Country':
+                            hs_json['country'] = str(sitePorperty_Info['#text'])
+                            # print(return_obj['country'])
+                except Exception as e:
+                    print(e)
+                    hs_json['country'] = "No Data was Provided"
 
                 hs_json["sitename"] = site_name.decode("UTF-8")
                 hs_json["latitude"] = latitude
