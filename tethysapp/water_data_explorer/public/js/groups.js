@@ -2039,10 +2039,16 @@ searchGroups = function() {
 }
 document.getElementById('myInputKeyword').addEventListener("keyup", searchGroups);
 
-// searchVariables = function() {
-//   general_search("myInputKeyword2","data-table-var");
-// }
-// document.getElementById('myInputKeyword2').addEventListener("keyup", searchVariables);
+searchVariables = function() {
+  try{
+    general_search("myInputKeyword2","data-table-var");
+
+  }
+  catch(error){
+    console.log(error);
+  }
+}
+document.getElementById('myInputKeyword2').addEventListener("keyup", searchVariables);
 
 // for only one group
 searchGroups_group = function() {
