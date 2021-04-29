@@ -468,7 +468,8 @@ def upload_hs(request):
 @app_workspace
 def available_regions_2(request,app_workspace,siteinfo):
     shapely.speedups.enable()
-    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
+    # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries2.geojson')
+    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries3.geojson')
     countries_gdf = gpd.read_file(countries_geojson_file_path)
     countries_series = countries_gdf.loc[:,'geometry']
     ret_object = {}
@@ -505,7 +506,9 @@ def available_regions_2(request,app_workspace,siteinfo):
 
         countries_index2 = [int(i) for i in countries_index]
         countries_selected = countries_gdf.iloc[countries_index2]
-        list_countries_selected = list(countries_selected['name'])
+        # list_countries_selected = list(countries_selected['name'])
+        # list_countries_selected = list(countries_selected['ADMIN'])
+        list_countries_selected = list(countries_selected['admin'])
         for coun in list_countries_selected:
             if coun not in region_list:
                 region_list.append(coun)

@@ -104,7 +104,7 @@ activate_layer_values = function (){
                 description_site.innerHTML =
                   ` <p> <span>Station/Platform Name: </span> ${feature_single.values_['name']}<p>
                     <p> <span> Territory of origin of data:</span> ${country_name}<p>
-                    <p> <span> Supervising Organization:</span> ${result['organization'][Object.keys(result['organization'])[0]]} <p>
+                    <p> <span> Supervising Organization:</span> ${organization_name} <p>
                     <p> <span> Geospatial Location:</span> lat: ${new_lat} lon: ${new_lon} <p>`
 
                 let table_begin =

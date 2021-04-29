@@ -482,18 +482,31 @@ def catalog_filter(request,app_workspace):
     for varia in variables:
         var_new.append(varia.replace("_"," "))
     variables = var_new
-    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
+    # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries2.geojson')
+    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries3.geojson')
+
+    countries_gdf = gpd.read_file(countries_geojson_file_path)
+    # selected_countries_plot = countries_gdf[countries_gdf['name'].isin(countries)].reset_index(drop=True)
+    # selected_countries_plot = countries_gdf[countries_gdf['ADMIN'].isin(countries)].reset_index(drop=True)
+    selected_countries_plot = countries_gdf[countries_gdf['admin'].isin(countries)].reset_index(drop=True)
+    json_selected_country = selected_countries_plot.to_json()
+    # print(json_selected_country)
+
+
     hs_filtered_region = filter_region(countries_geojson_file_path,countries, actual_group= actual_group)
     hs_filtered_variable = filter_variable(variables, actual_group=actual_group)
     list_columns_porsi = ["sitename", "latitude", "longitude", "sitecode", "url", "title"]
     # print(hs_filtered_region)
     array_sites_region = []
     array_sites_variables = []
+    # print(hs_filtered_region['stations'])
     for part_sites in hs_filtered_region['stations']:
         array_sites_region.append(pd.DataFrame(part_sites['sites']))
 
     try:
+        print(pd.concat(array_sites_region))
         df_countries = pd.concat(array_sites_region).drop_duplicates().reset_index(drop=True)
+        print(df_countries)
     except Exception as e:
         df_countries = pd.DataFrame(columns = list_columns_porsi)
 
@@ -505,10 +518,12 @@ def catalog_filter(request,app_workspace):
     except Exception as e:
         df_vars = pd.DataFrame(columns = list_columns_porsi)
     # df_vars = df_vars.drop(['service'], axis=1)
-    print("df_vars")
-    print(df_vars)
-    print("df_contris")
-    print(df_countries)
+
+    # print("df_vars")
+    # print(df_vars)
+    # print("df_contris")
+    # print(df_countries)
+
     # df_final = pd.concat([df_countries, df_vars]).drop_duplicates().reset_index(drop=True)
     df_final = pd.DataFrame()
     columns_list = list(df_vars.columns.values)
@@ -549,7 +564,7 @@ def catalog_filter(request,app_workspace):
         temp_dict_sites['title'] = DataFrameDict[key]['title'].tolist()[0]
         temp_dict_sites['url'] = DataFrameDict[key]['url'].tolist()[0]
         final_obj_regions_vars['stations'].append(temp_dict_sites)
-
+    final_obj_regions_vars['geojson'] = json_selected_country
     # print(final_obj_regions_vars)
     # print(df_final)
 
@@ -582,9 +597,11 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
         shapely.speedups.enable()
         countries_gdf = gpd.read_file(countries_geojson_file_path)
 
-        countries_gdf2 = countries_gdf[countries_gdf['name'].isin(list_countries)]
+        # countries_gdf2 = countries_gdf[countries_gdf['name'].isin(list_countries)]
+        # countries_gdf2 = countries_gdf[countries_gdf['ADMIN'].isin(list_countries)]
+        countries_gdf2 = countries_gdf[countries_gdf['admin'].isin(list_countries)]
         countries_series = countries_gdf2.loc[:,'geometry']
-        # # print(countries_gdf2)
+        print(countries_gdf2)
         SessionMaker = app.get_persistent_store_database(
             Persistent_Store_Name, as_sessionmaker=True)
         session = SessionMaker()
@@ -628,6 +645,7 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
             hydroserver_long_list.append(ls_longs)
             hydroserver_name_list.append(site_names)
         list_filtered = []
+        list_countries_selected = []
         for indx in range(0,len(hydroserver_name_list)):
             list_countries_stations = {}
             list_countries_stations['title'] = hydroservers_selected[indx].title
@@ -646,29 +664,47 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
             countries_index = [x for x in countries_index if x != 'geometry']
             countries_index2 = [int(i) for i in countries_index]
             countries_selected = countries_gdf.iloc[countries_index2]
-            list_countries_selected = list(countries_selected['name'])
-            if len(list_countries_selected) > 0:
+            # list_countries_selected = list(countries_selected['name'])
+            # list_countries_selected = list(countries_selected['ADMIN'])
+            list_countries_selected = list(countries_selected['admin'])
+
+            # list_countries_selected.extend(list(countries_selected['ADMIN']))
+            # list_countries_selected = list(set(list_countries_selected))
+            print("this list",list_countries_selected)
+            # if len(list_countries_selected) > 0:
+            # for my_indx in range(0,len(list(countries_selected['ADMIN']))):
+            # if len(list(countries_selected['ADMIN'])) > 0:
+            if len(list(countries_selected['admin'])) > 0:
                 region_list.append(hydroservers_selected[indx].title)
                 my_indx = 0
+                print(trues_onlys_copy[countries_index])
+                list_countries_stations['sites'] = []
                 for column_ in trues_onlys_copy[countries_index]:
                     trues_onlys_copy[column_] = np.where(trues_onlys_copy[column_] == True, trues_onlys_copy.index, trues_onlys_copy[column_])
                     list_co = trues_onlys_copy[column_].tolist()
                     list_co = list(filter(lambda list_co: list_co != False, list_co))
+                    print("station codes ",len(list_co))
                     sites_info_filter = []
                     for site_fullcode_single in list_co:
                         sites_info_filter.append(site_objInfo[site_fullcode_single])
 
                     country_sel = list_countries_selected[my_indx]
-                    if country_sel not in list_countries_stations:
-                        list_countries_stations['sites'] = sites_info_filter
-                    else:
-                        list_countries_stations['sites'].extend(sites_info_filter)
+                    # print(country_sel, list_countries_stations)
+                    # if country_sel not in list_countries_stations:
+                    #     list_countries_stations['sites'] = sites_info_filter
+                    #     print("none",len(list_countries_stations['sites']))
+                    #
+                    # else:
+                    #     list_countries_stations['sites'].extend(sites_info_filter)
+                    #     print("yes",len(list_countries_stations['sites']))
+                    list_countries_stations['sites'].extend(sites_info_filter)
+                    print("yes",len(list_countries_stations['sites']))
                     my_indx = my_indx + 1
 
                 list_filtered.append(list_countries_stations)
         ret_object['stations'] = list_filtered
         ret_object['hs'] = region_list
-
+        # print(ret_object)
         return ret_object
     else:
         ret_object['stations'] = []
@@ -782,13 +818,12 @@ def filter_variable(variables_list, actual_group = None):
 
 @app_workspace
 def get_variables_for_country(request,app_workspace):
-
-
     response_obj = {}
     countries = request.GET.getlist('countries[]')
     list_variables = []
     list_variables_codes = []
-    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
+    # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries2.geojson')
+    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries3.geojson')
     if request.method == 'GET' and 'group' in request.GET:
         specific_group=request.GET.get('group')
         hs_filtered_region = filter_region(countries_geojson_file_path,countries,actual_group = specific_group )
@@ -804,8 +839,8 @@ def get_variables_for_country(request,app_workspace):
         set_request_final = set(countries)
         if (set_contries_final & set_request_final):
             hs_variables_json  = json.loads(hs_selected.variables)
-            list_variables = hs_variables_json['variables']
-            list_variables_codes = hs_variables_json['variables_codes']
+            list_variables = list_variables + hs_variables_json['variables']
+            list_variables_codes = list_variables_codes +hs_variables_json['variables_codes']
 
 
     # for hs_big in hs_filtered_region['stations']:
@@ -828,7 +863,7 @@ def get_variables_for_country(request,app_workspace):
     # variables_hs = list(set(variables_hs))
     response_obj['variables'] = list_variables
     response_obj['variables_codes'] = list_variables_codes
-    print(response_obj)
+    # print(response_obj)
     return JsonResponse(response_obj)
 
 ######*****************************************************************************************################
