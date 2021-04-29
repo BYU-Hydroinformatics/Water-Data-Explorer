@@ -295,7 +295,7 @@ def GetSites_WHOS(url):
     try:
         client = Client(hs_url)
         sites = client.service.GetSites('[:]')
-    
+
         sites_json={}
         if isinstance(sites, str):
             sites_dict = xmltodict.parse(sites)
@@ -326,7 +326,8 @@ def addMultipleViews(request,hs_list,group):
         # print("********************")
         # print(hs)
         try:
-            sites_object = water.GetSites()
+            # sites_object = water.GetSites()
+            sites_object = GetSites_WHOS(new_url)
             sites_parsed_json = json.dumps(sites_object)
             countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
             print(countries_json)

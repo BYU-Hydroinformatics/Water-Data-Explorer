@@ -29,7 +29,7 @@ from tethys_sdk.gizmos import TimeSeries, SelectInput, DatePicker, TextInput, Go
 from tethys_sdk.permissions import permission_required, has_permission
 
 from .auxiliary import *
-
+from .groups import GetSites_WHOS
 import xml.etree.ElementTree as ET
 import psycopg2
 from owslib.waterml.wml11 import WaterML_1_1 as wml11
@@ -593,8 +593,9 @@ def soap_group(request,app_workspace):
         else:
 
             return_obj['zoom'] = 'false'
-            sites = water.GetSites()
+            # sites = water.GetSites()
 
+            sites = GetSites_WHOS(url)
             sites_parsed_json = json.dumps(sites)
             countries_json = available_regions_2(request,app_workspace,sites_parsed_json)
             variable_json = available_variables_2(url)
