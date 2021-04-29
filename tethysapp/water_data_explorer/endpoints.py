@@ -496,7 +496,7 @@ def available_regions_2(request,app_workspace,siteinfo):
     hydroserver_long_list.append(ls_longs)
     hydroserver_name_list.append(site_names)
     hydroserver_country_list.append(countries_list)
-    
+
     if (len(hydroserver_country_list) > 0):
         ret_object['countries'] = list(set(hydroserver_country_list))
         return ret_object
@@ -573,7 +573,8 @@ def soap_group(request,app_workspace):
             return_obj['level'] = extent_value
             ext_list = extent_value.split(',')
             sitesByBoundingBox = water.GetSitesByBoxObject(ext_list,'epsg:3857')
-
+            countries_json = available_regions_2(request,app_workspace,sites_parsed_json)
+            variable_json = available_variables_2(url)
 
             return_obj['title'] = title
             return_obj['url'] = url
@@ -591,7 +592,9 @@ def soap_group(request,app_workspace):
             hs_one = HydroServer_Individual(title=title,
                              url=url,
                              description = description,
-                             siteinfo=sites_parsed_json)
+                             siteinfo=sites_parsed_json,
+                             variables = variable_json,
+                             countries = countries_json )
                              # siteinfo=sitesByBoundingBoxs)
 
             hydroservers_group.hydroserver.append(hs_one)
