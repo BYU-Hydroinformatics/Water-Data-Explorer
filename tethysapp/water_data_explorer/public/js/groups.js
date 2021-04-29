@@ -1518,47 +1518,51 @@ catalog_filter = function(){
         success: function(result) {
           try{
             let jeojson = JSON.parse(JSON.parse(result)['geojson']);
-            console.log(jeojson);
-            for(let z = 0; z < jeojson['features'].length; ++z){
-              if(jeojson['features'][z]['geometry']['type'] == "Polygon"){
-                // console.log(jeojson['features'][0]['geometry']['coordinates'].length);
-                for (let i = 0; i < jeojson['features'][z]['geometry']['coordinates'][0].length; ++i){
-                  jeojson['features'][z]['geometry']['coordinates'][0][i] = ol.proj.transform(jeojson['features'][z]['geometry']['coordinates'][0][i],
-                      "EPSG:4326",
-                      "EPSG:3857"
-                  )
-                }
-              }
-              if(jeojson['features'][z]['geometry']['type'] == "MultiPolygon"){
-                // console.log(jeojson['features'][0]['geometry']['coordinates'].length);
-                for (let i = 0; i < jeojson['features'][z]['geometry']['coordinates'].length; ++i){
-                  for(let j= 0; j < jeojson['features'][z]['geometry']['coordinates'][i][0].length; ++j){
-                    // console.log(jeojson['features'][0]['geometry']['coordinates'][i][0].length);
+            map.removeLayer(layer_selected_countries['countries']);
 
-                    jeojson['features'][z]['geometry']['coordinates'][i][0][j] = ol.proj.transform(jeojson['features'][z]['geometry']['coordinates'][i][0][j],
+            if(jeojson['features'].length > 0){
+              for(let z = 0; z < jeojson['features'].length; ++z){
+                if(jeojson['features'][z]['geometry']['type'] == "Polygon"){
+                  // console.log(jeojson['features'][0]['geometry']['coordinates'].length);
+                  for (let i = 0; i < jeojson['features'][z]['geometry']['coordinates'][0].length; ++i){
+                    jeojson['features'][z]['geometry']['coordinates'][0][i] = ol.proj.transform(jeojson['features'][z]['geometry']['coordinates'][0][i],
                         "EPSG:4326",
                         "EPSG:3857"
                     )
                   }
                 }
+                if(jeojson['features'][z]['geometry']['type'] == "MultiPolygon"){
+                  // console.log(jeojson['features'][0]['geometry']['coordinates'].length);
+                  for (let i = 0; i < jeojson['features'][z]['geometry']['coordinates'].length; ++i){
+                    for(let j= 0; j < jeojson['features'][z]['geometry']['coordinates'][i][0].length; ++j){
+                      // console.log(jeojson['features'][0]['geometry']['coordinates'][i][0].length);
+
+                      jeojson['features'][z]['geometry']['coordinates'][i][0][j] = ol.proj.transform(jeojson['features'][z]['geometry']['coordinates'][i][0][j],
+                          "EPSG:4326",
+                          "EPSG:3857"
+                      )
+                    }
+                  }
+                }
               }
+
+              var vectorSource = new ol.source.Vector({
+                features: (new ol.format.GeoJSON()).readFeatures(jeojson)
+              });
+
+              var vectorLayer2 = new ol.layer.Vector({
+                source: vectorSource,
+                style: styleFunction
+
+              });
+              map.removeLayer(layer_selected_countries['countries']);
+              layer_selected_countries['countries'] = vectorLayer2
             }
-            var vectorSource = new ol.source.Vector({
-              features: (new ol.format.GeoJSON()).readFeatures(jeojson)
-            });
 
 
-            var vectorLayer2 = new ol.layer.Vector({
-              source: vectorSource,
-              style: styleFunction
 
-            });
-            map.removeLayer(layer_selected_countries['countries']);
-            layer_selected_countries['countries'] = vectorLayer2
-
-
-            console.log(JSON.parse(result));
-            console.log(JSON.parse(result)['hs']);
+            // console.log(JSON.parse(result));
+            // console.log(JSON.parse(result)['hs']);
             let hs_available = JSON.parse(result)['hs'];
             let new_hs_available = []
             hs_available.forEach(function(hs){
@@ -1578,9 +1582,13 @@ catalog_filter = function(){
                 layer.setStyle(new ol.style.Style({}));
               }
             });
-            map.addLayer(layer_selected_countries['countries']);
-            map.getView().fit(vectorSource.getExtent());
-            map.updateSize();
+            if(jeojson['features'].length > 0){
+              map.addLayer(layer_selected_countries['countries']);
+              map.getView().fit(layer_selected_countries['countries'].getSource().getExtent());
+              map.updateSize();
+            }
+
+
             for(let i = 0;  i< sitesObj.length; ++i){
               let title = sitesObj[i]['title']
               let url = sitesObj[i]['url']

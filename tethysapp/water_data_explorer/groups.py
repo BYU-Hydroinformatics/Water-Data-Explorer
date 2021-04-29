@@ -490,7 +490,7 @@ def catalog_filter(request,app_workspace):
     # selected_countries_plot = countries_gdf[countries_gdf['ADMIN'].isin(countries)].reset_index(drop=True)
     selected_countries_plot = countries_gdf[countries_gdf['admin'].isin(countries)].reset_index(drop=True)
     json_selected_country = selected_countries_plot.to_json()
-    # print(json_selected_country)
+    print(json_selected_country)
 
 
     hs_filtered_region = filter_region(countries_geojson_file_path,countries, actual_group= actual_group)
@@ -601,7 +601,7 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
         # countries_gdf2 = countries_gdf[countries_gdf['ADMIN'].isin(list_countries)]
         countries_gdf2 = countries_gdf[countries_gdf['admin'].isin(list_countries)]
         countries_series = countries_gdf2.loc[:,'geometry']
-        print(countries_gdf2)
+        # print(countries_gdf2)
         SessionMaker = app.get_persistent_store_database(
             Persistent_Store_Name, as_sessionmaker=True)
         session = SessionMaker()
@@ -670,20 +670,20 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
 
             # list_countries_selected.extend(list(countries_selected['ADMIN']))
             # list_countries_selected = list(set(list_countries_selected))
-            print("this list",list_countries_selected)
+            # print("this list",list_countries_selected)
             # if len(list_countries_selected) > 0:
             # for my_indx in range(0,len(list(countries_selected['ADMIN']))):
             # if len(list(countries_selected['ADMIN'])) > 0:
             if len(list(countries_selected['admin'])) > 0:
                 region_list.append(hydroservers_selected[indx].title)
                 my_indx = 0
-                print(trues_onlys_copy[countries_index])
+                # print(trues_onlys_copy[countries_index])
                 list_countries_stations['sites'] = []
                 for column_ in trues_onlys_copy[countries_index]:
                     trues_onlys_copy[column_] = np.where(trues_onlys_copy[column_] == True, trues_onlys_copy.index, trues_onlys_copy[column_])
                     list_co = trues_onlys_copy[column_].tolist()
                     list_co = list(filter(lambda list_co: list_co != False, list_co))
-                    print("station codes ",len(list_co))
+                    # print("station codes ",len(list_co))
                     sites_info_filter = []
                     for site_fullcode_single in list_co:
                         sites_info_filter.append(site_objInfo[site_fullcode_single])
@@ -698,7 +698,7 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
                     #     list_countries_stations['sites'].extend(sites_info_filter)
                     #     print("yes",len(list_countries_stations['sites']))
                     list_countries_stations['sites'].extend(sites_info_filter)
-                    print("yes",len(list_countries_stations['sites']))
+                    # print("yes",len(list_countries_stations['sites']))
                     my_indx = my_indx + 1
 
                 list_filtered.append(list_countries_stations)
