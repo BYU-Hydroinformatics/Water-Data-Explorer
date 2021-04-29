@@ -291,6 +291,30 @@ def create_group(request,app_workspace):
     # print(group_obj['views'])
     return JsonResponse(group_obj)
 
+def GetSites_WHOS(url):
+    try:
+        client = Client(hs_url)
+        sites = client.service.GetSites('[:]')
+    
+        sites_json={}
+        if isinstance(sites, str):
+            sites_dict = xmltodict.parse(sites)
+            sites_json_object = json.dumps(sites_dict)
+            sites_json = json.loads(sites_json_object)
+        else:
+            sites_json_object = json.dumps(recursive_asdict(sites))
+            sites_json = json.loads(sites_json_object)
+
+        sites_object = parseJSON(sites_json)
+
+
+        return sites_object
+
+    except Exception as error:
+        print(error)
+        sites_object={}
+
+        return sites_object
 
 def addMultipleViews(request,hs_list,group):
     ret_object = []
