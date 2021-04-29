@@ -479,18 +479,27 @@ def available_regions_2(request,app_workspace,siteinfo):
     hydroserver_lat_list = []
     hydroserver_long_list = []
     hydroserver_name_list = []
+    hydroserver_country_list = []
 
     sites = json.loads(siteinfo)
     ls_lats = []
     ls_longs = []
     site_names = []
+    countries_list = []
     for site in sites:
         ls_lats.append(site['latitude'])
         ls_longs.append(site['longitude'])
         site_names.append(site['fullSiteCode'])
+        if site['country'] != "No Data was Provided":
+            countries_list.append(site['country'])
     hydroserver_lat_list.append(ls_lats)
     hydroserver_long_list.append(ls_longs)
     hydroserver_name_list.append(site_names)
+    hydroserver_country_list.append(countries_list)
+    
+    if (len(hydroserver_country_list) > 0):
+        ret_object['countries'] = list(set(hydroserver_country_list))
+        return ret_object
 
     list_countries_stations = {}
     for indx in range(0,len(hydroserver_name_list)):
