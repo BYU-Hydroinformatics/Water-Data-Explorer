@@ -291,36 +291,13 @@ def create_group(request,app_workspace):
     # print(group_obj['views'])
     return JsonResponse(group_obj)
 
-def GetSites_WHOS(url):
-    try:
-        client = Client(hs_url)
-        sites = client.service.GetSites('[:]')
 
-        sites_json={}
-        if isinstance(sites, str):
-            sites_dict = xmltodict.parse(sites)
-            sites_json_object = json.dumps(sites_dict)
-            sites_json = json.loads(sites_json_object)
-        else:
-            sites_json_object = json.dumps(recursive_asdict(sites))
-            sites_json = json.loads(sites_json_object)
-
-        sites_object = parseJSON(sites_json)
-
-
-        return sites_object
-
-    except Exception as error:
-        print(error)
-        sites_object={}
-
-        return sites_object
 
 def addMultipleViews(request,hs_list,group):
     ret_object = []
     for hs in hs_list:
         new_url = hs['url']
-        water = pwml.WaterMLOperations(url = new_url)
+        # water = pwml.WaterMLOperations(url = new_url)
 
         return_obj = {}
         # print("********************")
@@ -673,70 +650,84 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
             hydroserver_lat_list.append(ls_lats)
             hydroserver_long_list.append(ls_longs)
             hydroserver_name_list.append(site_names)
-            hydroserver_country_list.append(country_list_names))
+            hydroserver_country_list.append(country_list_names)
 
         list_filtered = []
         list_countries_selected = []
-        if(hydroserver_country_list)
-        region_list.append(hydroservers_selected[indx].title)
-
 
         for indx in range(0,len(hydroserver_name_list)):
-            list_countries_stations = {}
-            list_countries_stations['title'] = hydroservers_selected[indx].title
-            list_countries_stations['url'] = hydroservers_selected[indx].url
-            df = pd.DataFrame({'SiteName': hydroserver_name_list[indx],'Latitude': hydroserver_lat_list[indx],'Longitude': hydroserver_long_list[indx]})
-            gdf = gpd.GeoDataFrame(geometry=gpd.points_from_xy(df.Longitude, df.Latitude), index = hydroserver_name_list[indx])
-
-            gdf = gdf.assign(**{str(key): gdf.within(geom) for key, geom in countries_series.items()})
-            trues_onlys = gdf.copy()
-            trues_onlys = trues_onlys.drop(['geometry'],axis=1)
-
-            trues_onlys = trues_onlys.loc[:,trues_onlys.any()]
-            trues_onlys_copy = trues_onlys.copy()
-
-            countries_index = list(trues_onlys.columns)
-            countries_index = [x for x in countries_index if x != 'geometry']
-            countries_index2 = [int(i) for i in countries_index]
-            countries_selected = countries_gdf.iloc[countries_index2]
-            # list_countries_selected = list(countries_selected['name'])
-            # list_countries_selected = list(countries_selected['ADMIN'])
-            list_countries_selected = list(countries_selected['admin'])
-
-            # list_countries_selected.extend(list(countries_selected['ADMIN']))
-            # list_countries_selected = list(set(list_countries_selected))
-            # print("this list",list_countries_selected)
-            # if len(list_countries_selected) > 0:
-            # for my_indx in range(0,len(list(countries_selected['ADMIN']))):
-            # if len(list(countries_selected['ADMIN'])) > 0:
-            if len(list(countries_selected['admin'])) > 0:
-                region_list.append(hydroservers_selected[indx].title)
-                my_indx = 0
-                # print(trues_onlys_copy[countries_index])
+            if(len(hydroserver_country_list[indx]) > 0 ):
+                list_countries_stations = {}
+                list_countries_stations['title'] = hydroservers_selected[indx].title
+                list_countries_stations['url'] = hydroservers_selected[indx].url
                 list_countries_stations['sites'] = []
-                for column_ in trues_onlys_copy[countries_index]:
-                    trues_onlys_copy[column_] = np.where(trues_onlys_copy[column_] == True, trues_onlys_copy.index, trues_onlys_copy[column_])
-                    list_co = trues_onlys_copy[column_].tolist()
-                    list_co = list(filter(lambda list_co: list_co != False, list_co))
-                    # print("station codes ",len(list_co))
-                    sites_info_filter = []
-                    for site_fullcode_single in list_co:
-                        sites_info_filter.append(site_objInfo[site_fullcode_single])
 
-                    country_sel = list_countries_selected[my_indx]
-                    # print(country_sel, list_countries_stations)
-                    # if country_sel not in list_countries_stations:
-                    #     list_countries_stations['sites'] = sites_info_filter
-                    #     print("none",len(list_countries_stations['sites']))
-                    #
-                    # else:
-                    #     list_countries_stations['sites'].extend(sites_info_filter)
-                    #     print("yes",len(list_countries_stations['sites']))
-                    list_countries_stations['sites'].extend(sites_info_filter)
-                    # print("yes",len(list_countries_stations['sites']))
-                    my_indx = my_indx + 1
-
+                # region_list.append(hydroservers_selected[indx].title)
+                df2 = pd.DataFrame({'SiteName': hydroserver_name_list[indx],'Country': hydroserver_country_list[indx]})
+                df_sites_within_countries = df2[df2['Country'].isin(list_countries)]
+                sites_info_filter = []
+                for site_fullcode_single in df_sites_within_countries['SiteName'].tolist():
+                    sites_info_filter.append(site_objInfo[site_fullcode_single])
+                list_countries_stations['sites'].extend(sites_info_filter)
                 list_filtered.append(list_countries_stations)
+
+            else:
+                print("joasfasg")
+                list_countries_stations = {}
+                list_countries_stations['title'] = hydroservers_selected[indx].title
+                list_countries_stations['url'] = hydroservers_selected[indx].url
+                df = pd.DataFrame({'SiteName': hydroserver_name_list[indx],'Latitude': hydroserver_lat_list[indx],'Longitude': hydroserver_long_list[indx]})
+                gdf = gpd.GeoDataFrame(geometry=gpd.points_from_xy(df.Longitude, df.Latitude), index = hydroserver_name_list[indx])
+
+                gdf = gdf.assign(**{str(key): gdf.within(geom) for key, geom in countries_series.items()})
+                trues_onlys = gdf.copy()
+                trues_onlys = trues_onlys.drop(['geometry'],axis=1)
+
+                trues_onlys = trues_onlys.loc[:,trues_onlys.any()]
+                trues_onlys_copy = trues_onlys.copy()
+
+                countries_index = list(trues_onlys.columns)
+                countries_index = [x for x in countries_index if x != 'geometry']
+                countries_index2 = [int(i) for i in countries_index]
+                countries_selected = countries_gdf.iloc[countries_index2]
+                # list_countries_selected = list(countries_selected['name'])
+                # list_countries_selected = list(countries_selected['ADMIN'])
+                list_countries_selected = list(countries_selected['admin'])
+
+                # list_countries_selected.extend(list(countries_selected['ADMIN']))
+                # list_countries_selected = list(set(list_countries_selected))
+                # print("this list",list_countries_selected)
+                # if len(list_countries_selected) > 0:
+                # for my_indx in range(0,len(list(countries_selected['ADMIN']))):
+                # if len(list(countries_selected['ADMIN'])) > 0:
+                if len(list(countries_selected['admin'])) > 0:
+                    region_list.append(hydroservers_selected[indx].title)
+                    my_indx = 0
+                    # print(trues_onlys_copy[countries_index])
+                    list_countries_stations['sites'] = []
+                    for column_ in trues_onlys_copy[countries_index]:
+                        trues_onlys_copy[column_] = np.where(trues_onlys_copy[column_] == True, trues_onlys_copy.index, trues_onlys_copy[column_])
+                        list_co = trues_onlys_copy[column_].tolist()
+                        list_co = list(filter(lambda list_co: list_co != False, list_co))
+                        # print("station codes ",len(list_co))
+                        sites_info_filter = []
+                        for site_fullcode_single in list_co:
+                            sites_info_filter.append(site_objInfo[site_fullcode_single])
+
+                        country_sel = list_countries_selected[my_indx]
+                        # print(country_sel, list_countries_stations)
+                        # if country_sel not in list_countries_stations:
+                        #     list_countries_stations['sites'] = sites_info_filter
+                        #     print("none",len(list_countries_stations['sites']))
+                        #
+                        # else:
+                        #     list_countries_stations['sites'].extend(sites_info_filter)
+                        #     print("yes",len(list_countries_stations['sites']))
+                        list_countries_stations['sites'].extend(sites_info_filter)
+                        # print("yes",len(list_countries_stations['sites']))
+                        my_indx = my_indx + 1
+
+                    list_filtered.append(list_countries_stations)
         ret_object['stations'] = list_filtered
         ret_object['hs'] = region_list
         # print(ret_object)

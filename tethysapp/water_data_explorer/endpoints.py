@@ -29,7 +29,6 @@ from tethys_sdk.gizmos import TimeSeries, SelectInput, DatePicker, TextInput, Go
 from tethys_sdk.permissions import permission_required, has_permission
 
 from .auxiliary import *
-from .groups import GetSites_WHOS
 import xml.etree.ElementTree as ET
 import psycopg2
 from owslib.waterml.wml11 import WaterML_1_1 as wml11
@@ -495,7 +494,7 @@ def available_regions_2(request,app_workspace,siteinfo):
     hydroserver_lat_list.append(ls_lats)
     hydroserver_long_list.append(ls_longs)
     hydroserver_name_list.append(site_names)
-    hydroserver_country_list.append(countries_list)
+    hydroserver_country_list.extend(countries_list)
 
     if (len(hydroserver_country_list) > 0):
         ret_object['countries'] = list(set(hydroserver_country_list))
@@ -609,8 +608,10 @@ def soap_group(request,app_workspace):
 
             sites = GetSites_WHOS(url)
             sites_parsed_json = json.dumps(sites)
-            countries_json = available_regions_2(request,app_workspace,sites_parsed_json)
-            variable_json = available_variables_2(url)
+            countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
+            print(countries_json)
+
+            variable_json = json.dumps(available_variables_2(url))
 
             return_obj['title'] = title
             return_obj['url'] = url
