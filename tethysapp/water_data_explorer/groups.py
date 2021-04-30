@@ -633,6 +633,7 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
         hydroserver_lat_list = []
         hydroserver_long_list = []
         hydroserver_name_list = []
+        hydroserver_country_list = []
         hydroserver_siteInfo = []
         site_objInfo ={}
 
@@ -649,12 +650,15 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
             ls_lats = []
             ls_longs = []
             site_names = []
+            country_list_names = []
 
             for site in sites:
                 ls_lats.append(site['latitude'])
                 ls_longs.append(site['longitude'])
                 site_names.append(site['fullSiteCode'])
-
+                if(site['country'] != "No Data was Provided"):
+                    country_list_names.append(site['country'])
+                    site_obj['country'] = site['country']
                 site_obj = {}
                 site_obj['sitename'] = site['sitename']
                 site_obj['latitude'] = site['latitude']
@@ -669,8 +673,14 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
             hydroserver_lat_list.append(ls_lats)
             hydroserver_long_list.append(ls_longs)
             hydroserver_name_list.append(site_names)
+            hydroserver_country_list.append(country_list_names))
+
         list_filtered = []
         list_countries_selected = []
+        if(hydroserver_country_list)
+        region_list.append(hydroservers_selected[indx].title)
+
+
         for indx in range(0,len(hydroserver_name_list)):
             list_countries_stations = {}
             list_countries_stations['title'] = hydroservers_selected[indx].title
