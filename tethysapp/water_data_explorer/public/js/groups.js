@@ -85,9 +85,21 @@ give_available_services = function(){
 }
 $("#btn-check_available_serv").on("click", give_available_services);
 $("#btn-check_all").on("click", function(){
-  $("#modalAddGroupServer :checkbox").each(function(){
-    this.checked = true;
-  })
+
+  if($("#btn-check_all").html() == "Select All Views"){
+    $("#btn-check_all").html("Unselect All Views");
+    $("#modalAddGroupServer :checkbox").each(function(){
+      this.checked = true;
+    })
+  }
+  else{
+    $("#btn-check_all").html("Select All Views");
+    $("#modalAddGroupServer :checkbox").each(function(){
+      this.checked = false;
+    })
+  }
+
+
 });
 
 show_variables_groups = function(){
@@ -1517,7 +1529,9 @@ catalog_filter = function(){
         data: datastring,
         success: function(result) {
           try{
+            // console.log(result);
             let jeojson = JSON.parse(JSON.parse(result)['geojson']);
+            console.log(jeojson);
             map.removeLayer(layer_selected_countries['countries']);
 
             if(jeojson['features'].length > 0){
