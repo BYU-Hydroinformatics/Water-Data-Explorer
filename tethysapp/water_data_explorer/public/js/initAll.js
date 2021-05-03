@@ -161,7 +161,8 @@ var water_data_explorer_PACKAGE = (function() {
         // });
 
         // how to add the UN map //
-        //https://openlayers.org/en/latest/examples/arcgis-tiled.html//
+        //https://openlayers.org/en/latest/examples/arcgis-tiled.html
+        //https://geoportal.un.org/arcgis/home/item.html?id=541557fd0d4d42efb24449be614e6887
         const baseLayer =  new ol.layer.Tile({
                 source: new ol.source.TileArcGISRest({
                   url: url_UN
