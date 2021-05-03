@@ -71,6 +71,7 @@ def available_regions(request, app_workspace):
         hydroservers_selected = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
 
     for server in hydroservers_selected:
+        # print(server.title,json.loads(server.countries)['countries'])
         countries = json.loads(server.countries)['countries']
         region_list = region_list + list(set(countries) - set(region_list))
 
@@ -490,9 +491,10 @@ def catalog_filter(request,app_workspace):
     countries_gdf = gpd.read_file(countries_geojson_file_path)
     # selected_countries_plot = countries_gdf[countries_gdf['name'].isin(countries)].reset_index(drop=True)
     # selected_countries_plot = countries_gdf[countries_gdf['ADMIN'].isin(countries)].reset_index(drop=True)
-    selected_countries_plot = countries_gdf[countries_gdf['admin'].isin(countries)].reset_index(drop=True)
+    # selected_countries_plot = countries_gdf[countries_gdf['admin'].isin(countries)].reset_index(drop=True)
+    selected_countries_plot = countries_gdf[countries_gdf['name_long'].isin(countries)].reset_index(drop=True)
     json_selected_country = selected_countries_plot.to_json()
-    print(json_selected_country)
+    # print(json_selected_country)
 
 
     hs_filtered_region = filter_region(countries_geojson_file_path,countries, actual_group= actual_group)
@@ -506,9 +508,9 @@ def catalog_filter(request,app_workspace):
         array_sites_region.append(pd.DataFrame(part_sites['sites']))
 
     try:
-        print(pd.concat(array_sites_region))
+        # print(pd.concat(array_sites_region))
         df_countries = pd.concat(array_sites_region).drop_duplicates().reset_index(drop=True)
-        print(df_countries)
+        # print(df_countries)
     except Exception as e:
         df_countries = pd.DataFrame(columns = list_columns_porsi)
 
@@ -536,7 +538,7 @@ def catalog_filter(request,app_workspace):
     if not df_countries.empty and not df_vars.empty:
         df_final = df_countries.merge(df_vars)
 
-    print(df_final)
+    # print(df_final)
     # print(list(df_final.columns.values))
     # df2 = df.rename({
     #     'sitename_x': 'sitename',
@@ -602,6 +604,7 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
         # countries_gdf2 = countries_gdf[countries_gdf['name'].isin(list_countries)]
         # countries_gdf2 = countries_gdf[countries_gdf['ADMIN'].isin(list_countries)]
         countries_gdf2 = countries_gdf[countries_gdf['admin'].isin(list_countries)]
+        # countries_gdf2 = countries_gdf[countries_gdf['name_long'].isin(list_countries)]
         countries_series = countries_gdf2.loc[:,'geometry']
         # print(countries_gdf2)
         SessionMaker = app.get_persistent_store_database(
@@ -611,6 +614,7 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
         hydroserver_long_list = []
         hydroserver_name_list = []
         hydroserver_country_list = []
+        hydroserver_country_list_check = []
         hydroserver_siteInfo = []
         site_objInfo ={}
 
@@ -628,15 +632,16 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
             ls_longs = []
             site_names = []
             country_list_names = []
-
+            country_list_names_check = []
             for site in sites:
+                site_obj = {}
                 ls_lats.append(site['latitude'])
                 ls_longs.append(site['longitude'])
                 site_names.append(site['fullSiteCode'])
                 if(site['country'] != "No Data was Provided"):
-                    country_list_names.append(site['country'])
-                    site_obj['country'] = site['country']
-                site_obj = {}
+                    country_list_names_check.append("country_metadata")
+                country_list_names.append(site['country'])
+                site_obj['country'] = site['country']
                 site_obj['sitename'] = site['sitename']
                 site_obj['latitude'] = site['latitude']
                 site_obj['longitude'] = site['longitude']
@@ -651,12 +656,15 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
             hydroserver_long_list.append(ls_longs)
             hydroserver_name_list.append(site_names)
             hydroserver_country_list.append(country_list_names)
-
+            hydroserver_country_list_check.append(country_list_names_check)
+        # print(hydroserver_country_list)
+        # print(hydroserver_name_list)
         list_filtered = []
         list_countries_selected = []
 
         for indx in range(0,len(hydroserver_name_list)):
-            if(len(hydroserver_country_list[indx]) > 0 ):
+            print(hydroservers_selected[indx].title,len(hydroserver_country_list[indx]),len(hydroserver_name_list[indx]))
+            if(len(hydroserver_country_list_check[indx]) > 0 ):
                 list_countries_stations = {}
                 list_countries_stations['title'] = hydroservers_selected[indx].title
                 list_countries_stations['url'] = hydroservers_selected[indx].url
@@ -664,15 +672,22 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
 
                 # region_list.append(hydroservers_selected[indx].title)
                 df2 = pd.DataFrame({'SiteName': hydroserver_name_list[indx],'Country': hydroserver_country_list[indx]})
-                df_sites_within_countries = df2[df2['Country'].isin(list_countries)]
-                sites_info_filter = []
-                for site_fullcode_single in df_sites_within_countries['SiteName'].tolist():
-                    sites_info_filter.append(site_objInfo[site_fullcode_single])
-                list_countries_stations['sites'].extend(sites_info_filter)
-                list_filtered.append(list_countries_stations)
+                if len(hydroserver_country_list[indx]) != len(hydroserver_name_list[indx]):
+                    df2 = df2[df.Country != "No Data was Provided"]
 
+                df_sites_within_countries = df2[df2['Country'].isin(list_countries)]
+                # print(df_sites_within_countries)
+                if not df_sites_within_countries.empty:
+                    # print(df_sites_within_countries)
+                    sites_info_filter = []
+                    for site_fullcode_single in df_sites_within_countries['SiteName'].tolist():
+                        sites_info_filter.append(site_objInfo[site_fullcode_single])
+                    list_countries_stations['sites'].extend(sites_info_filter)
+                    region_list.append(hydroservers_selected[indx].title)
+                    list_filtered.append(list_countries_stations)
+                    # print(list_filtered)
             else:
-                print("joasfasg")
+                # print("joasfasg")
                 list_countries_stations = {}
                 list_countries_stations['title'] = hydroservers_selected[indx].title
                 list_countries_stations['url'] = hydroservers_selected[indx].url
@@ -711,11 +726,14 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
                         list_co = list(filter(lambda list_co: list_co != False, list_co))
                         # print("station codes ",len(list_co))
                         sites_info_filter = []
+                        country_sel = list_countries_selected[my_indx]
+
                         for site_fullcode_single in list_co:
+                            site_objInfo[site_fullcode_single]['country'] = country_sel
                             sites_info_filter.append(site_objInfo[site_fullcode_single])
 
-                        country_sel = list_countries_selected[my_indx]
-                        # print(country_sel, list_countries_stations)
+                        # country_sel = list_countries_selected[my_indx]
+                        # print(country_sel)
                         # if country_sel not in list_countries_stations:
                         #     list_countries_stations['sites'] = sites_info_filter
                         #     print("none",len(list_countries_stations['sites']))
@@ -728,8 +746,10 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
                         my_indx = my_indx + 1
 
                     list_filtered.append(list_countries_stations)
+                    # print(list_filtered)
         ret_object['stations'] = list_filtered
         ret_object['hs'] = region_list
+        # print(region_list)
         # print(ret_object)
         return ret_object
     else:
@@ -756,7 +776,7 @@ def filter_variable(variables_list, actual_group = None):
             # water = pwml.WaterMLOperations(url = hydroservers.url.strip())
             for variable_single in variables_list:
                 url2 = f'{hydroservers.url.strip().split("?")[0]}/GetSites?variableCode={variable_single}'
-                print(url2)
+                # print(url2)
                 datos = requests.get(url2).content
                 sites_dict = xmltodict.parse(datos)
                 # print(sites_dict)
@@ -849,12 +869,14 @@ def get_variables_for_country(request,app_workspace):
     list_variables = []
     list_variables_codes = []
     # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries2.geojson')
-    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries3.geojson')
-    if request.method == 'GET' and 'group' in request.GET:
-        specific_group=request.GET.get('group')
-        hs_filtered_region = filter_region(countries_geojson_file_path,countries,actual_group = specific_group )
-    else:
-        hs_filtered_region = filter_region(countries_geojson_file_path,countries)
+
+    # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries3.geojson')
+    # if request.method == 'GET' and 'group' in request.GET:
+    #     specific_group=request.GET.get('group')
+    #     hs_filtered_region = filter_region(countries_geojson_file_path,countries,actual_group = specific_group )
+    # else:
+    #     hs_filtered_region = filter_region(countries_geojson_file_path,countries)
+
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
 
@@ -862,6 +884,7 @@ def get_variables_for_country(request,app_workspace):
     for hs_selected in hydroservers_selected:
         list_contries_final = json.loads(hs_selected.countries)['countries']
         set_contries_final = set(list_contries_final)
+        print(set_contries_final)
         set_request_final = set(countries)
         if (set_contries_final & set_request_final):
             hs_variables_json  = json.loads(hs_selected.variables)
