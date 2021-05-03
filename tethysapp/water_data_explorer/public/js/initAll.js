@@ -137,6 +137,7 @@ var water_data_explorer_PACKAGE = (function() {
 
     init_map = function() {
       try{
+        var url_UN = "https://geoservices.un.org/arcgis/rest/services/ClearMap_WebTopo/MapServer";
         var myZoom;
         if($( window ).width() <= 768){
           myZoom = 2;
@@ -153,22 +154,19 @@ var water_data_explorer_PACKAGE = (function() {
         //     })
         // })
 
-        const baseLayer = new ol.layer.Tile({
-            source: new ol.source.XYZ({
-                url:'http://{1-4}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-            })
-        });
-
-
-        // const baseLayer =  new ol.layer.Tile({
-        //         source: new ol.source.TileWMS({
-        //             url: "https://geoservices.un.org/arcgis/rest/services/ClearMap_webtopo/MapServer/WMSServer",
-        //             params:{
-        //                 LAYERS:"0",
-        //                 FORMAT:"image/png",
-        //             }
-        //          })
+        // const baseLayer = new ol.layer.Tile({
+        //     source: new ol.source.XYZ({
+        //         url:'http://{1-4}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
         //     })
+        // });
+
+        // how to add the UN map //
+        //https://openlayers.org/en/latest/examples/arcgis-tiled.html//
+        const baseLayer =  new ol.layer.Tile({
+                source: new ol.source.TileArcGISRest({
+                  url: url_UN
+                })
+        })
 
         //Creating an empty source and layer to store the shapefile geojson object
         shpSource = new ol.source.Vector()
