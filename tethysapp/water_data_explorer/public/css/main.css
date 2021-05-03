@@ -1,3 +1,7 @@
+.FootNote{
+  text-align: left;
+}
+
 .button-group-temp{
   display: flex;
   justify-content: flex-end;
