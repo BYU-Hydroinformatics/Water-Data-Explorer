@@ -771,41 +771,63 @@ def filter_variable(variables_list, actual_group = None):
             hydroservers_selected = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
         hs_list = []
         for hydroservers in hydroservers_selected:
-            name = hydroservers.title
-            hs_list_temp = []
-            # water = pwml.WaterMLOperations(url = hydroservers.url.strip())
-            for variable_single in variables_list:
-                url2 = f'{hydroservers.url.strip().split("?")[0]}/GetSites?variableCode={variable_single}'
-                # print(url2)
-                datos = requests.get(url2).content
-                sites_dict = xmltodict.parse(datos)
-                # print(sites_dict)
-                sites_json_object = json.dumps(sites_dict)
-                sites_json = json.loads(sites_json_object)['soap:Envelope']['soap:Body']['GetSitesResponse']['GetSitesResult']
-                sites_dict2 = xmltodict.parse(sites_json)
-                sites_json_object2 = json.dumps(sites_dict2)
-                sites_json2 = json.loads(sites_json_object2)
-                # print(sites_json2)
-                # print(sites_json['soap:Envelope']['soap:Body']['GetSitesResponse']['GetSitesResult'])
-                try:
-                    hs_sites = []
-                    if "sitesResponse" in sites_json2:
-                        sites_object = sites_json2['sitesResponse']['site']
+            # Safe Guard
+            if "whos" in hydroservers.url:
+                print(hydroservers.title)
+                name = hydroservers.title
+                hs_list_temp = []
+                # water = pwml.WaterMLOperations(url = hydroservers.url.strip())
+                for variable_single in variables_list:
+                    url2 = f'{hydroservers.url.strip().split("?")[0]}/GetSites?variableCode={variable_single}'
+                    # print(url2)
+                    datos = requests.get(url2).content
+                    sites_dict = xmltodict.parse(datos)
+                    # print(sites_dict)
+                    sites_json_object = json.dumps(sites_dict)
+                    sites_json = json.loads(sites_json_object)['soap:Envelope']['soap:Body']['GetSitesResponse']['GetSitesResult']
+                    sites_dict2 = xmltodict.parse(sites_json)
+                    sites_json_object2 = json.dumps(sites_dict2)
+                    sites_json2 = json.loads(sites_json_object2)
+                    # print(sites_json2)
+                    # print(sites_json['soap:Envelope']['soap:Body']['GetSitesResponse']['GetSitesResult'])
+                    try:
+                        hs_sites = []
+                        if "sitesResponse" in sites_json2:
+                            sites_object = sites_json2['sitesResponse']['site']
 
-                        # If statement is executed for multiple sites within the HydroServer, if there is a single site then it goes to the else statement
-                        # Parse through the HydroServer and each site with its metadata as a
-                        # dictionary object to the hs_sites list
-                        if type(sites_object) is list:
-                            for site in sites_object:
+                            # If statement is executed for multiple sites within the HydroServer, if there is a single site then it goes to the else statement
+                            # Parse through the HydroServer and each site with its metadata as a
+                            # dictionary object to the hs_sites list
+                            if type(sites_object) is list:
+                                for site in sites_object:
+                                    hs_json = {}
+                                    latitude = site['siteInfo']['geoLocation'][
+                                        'geogLocation']['latitude']
+                                    longitude = site['siteInfo']['geoLocation'][
+                                        'geogLocation']['longitude']
+                                    site_name = site['siteInfo']['siteName']
+                                    site_name = site_name.encode("utf-8")
+                                    network = site['siteInfo']['siteCode']["@network"]
+                                    sitecode = site['siteInfo']['siteCode']["#text"]
+
+                                    hs_json["sitename"] = site_name.decode("UTF-8")
+                                    hs_json["latitude"] = latitude
+                                    hs_json["longitude"] = longitude
+                                    hs_json["sitecode"] = sitecode
+                                    hs_json["network"] = network
+                                    hs_json["url"] = hydroservers.url
+                                    hs_json["title"] = hydroservers.title
+                                    hs_sites.append(hs_json)
+                            else:
                                 hs_json = {}
-                                latitude = site['siteInfo']['geoLocation'][
-                                    'geogLocation']['latitude']
-                                longitude = site['siteInfo']['geoLocation'][
-                                    'geogLocation']['longitude']
-                                site_name = site['siteInfo']['siteName']
+                                latitude = sites_object['siteInfo'][
+                                    'geoLocation']['geogLocation']['latitude']
+                                longitude = sites_object['siteInfo'][
+                                    'geoLocation']['geogLocation']['longitude']
+                                site_name = sites_object['siteInfo']['siteName']
                                 site_name = site_name.encode("utf-8")
-                                network = site['siteInfo']['siteCode']["@network"]
-                                sitecode = site['siteInfo']['siteCode']["#text"]
+                                network = sites_object['siteInfo']['siteCode']["@network"]
+                                sitecode = sites_object['siteInfo']['siteCode']["#text"]
 
                                 hs_json["sitename"] = site_name.decode("UTF-8")
                                 hs_json["latitude"] = latitude
@@ -815,43 +837,24 @@ def filter_variable(variables_list, actual_group = None):
                                 hs_json["url"] = hydroservers.url
                                 hs_json["title"] = hydroservers.title
                                 hs_sites.append(hs_json)
-                        else:
-                            hs_json = {}
-                            latitude = sites_object['siteInfo'][
-                                'geoLocation']['geogLocation']['latitude']
-                            longitude = sites_object['siteInfo'][
-                                'geoLocation']['geogLocation']['longitude']
-                            site_name = sites_object['siteInfo']['siteName']
-                            site_name = site_name.encode("utf-8")
-                            network = sites_object['siteInfo']['siteCode']["@network"]
-                            sitecode = sites_object['siteInfo']['siteCode']["#text"]
-
-                            hs_json["sitename"] = site_name.decode("UTF-8")
-                            hs_json["latitude"] = latitude
-                            hs_json["longitude"] = longitude
-                            hs_json["sitecode"] = sitecode
-                            hs_json["network"] = network
-                            hs_json["url"] = hydroservers.url
-                            hs_json["title"] = hydroservers.title
-                            hs_sites.append(hs_json)
 
 
-                    # sites_object = parseJSON(sites_json2)
-                    sites_object = hs_sites
-                    # print(sites_object)
-                    df = pd.DataFrame.from_dict(sites_object)
-                    # print(df)
-                    hs_list_temp.append(df)
-                except Exception as e:
+                        # sites_object = parseJSON(sites_json2)
+                        sites_object = hs_sites
+                        # print(sites_object)
+                        df = pd.DataFrame.from_dict(sites_object)
+                        # print(df)
+                        hs_list_temp.append(df)
+                    except Exception as e:
+                        print(e)
+                try:
+                    df_temp = pd.concat(hs_list_temp).drop_duplicates().reset_index(drop=True)
+                    # print(df_temp)
+                    dict_temp = df_temp.to_dict('records')
+
+                    hs_list.append(dict_temp)
+                except ValueError as e:
                     print(e)
-            try:
-                df_temp = pd.concat(hs_list_temp).drop_duplicates().reset_index(drop=True)
-                # print(df_temp)
-                dict_temp = df_temp.to_dict('records')
-
-                hs_list.append(dict_temp)
-            except ValueError as e:
-                print(e)
                 #
                 # variables_sever = water.GetVariables()['variables']
                 # df_variables = pd.DataFrame.from_dict(variables_sever)
