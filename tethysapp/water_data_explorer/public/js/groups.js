@@ -1596,11 +1596,12 @@ catalog_filter = function(){
                 layer.setStyle(new ol.style.Style({}));
               }
             });
-            if(jeojson['features'].length > 0){
-              map.addLayer(layer_selected_countries['countries']);
-              map.getView().fit(layer_selected_countries['countries'].getSource().getExtent());
-              map.updateSize();
-            }
+
+            // if(jeojson['features'].length > 0){
+            //   map.addLayer(layer_selected_countries['countries']);
+            //   map.getView().fit(layer_selected_countries['countries'].getSource().getExtent());
+            //   map.updateSize();
+            // }
 
 
             for(let i = 0;  i< sitesObj.length; ++i){
