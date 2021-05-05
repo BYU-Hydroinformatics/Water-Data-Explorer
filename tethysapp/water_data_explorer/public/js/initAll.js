@@ -137,6 +137,7 @@ var water_data_explorer_PACKAGE = (function() {
 
     init_map = function() {
       try{
+        var url_UN = "https://geoservices.un.org/arcgis/rest/services/ClearMap_WebTopo/MapServer";
         var myZoom;
         if($( window ).width() <= 768){
           myZoom = 2;
@@ -152,11 +153,22 @@ var water_data_explorer_PACKAGE = (function() {
         //         imagerySet: "AerialWithLabels" // Options 'Aerial', 'AerialWithLabels', 'Road'
         //     })
         // })
-        const baseLayer = new ol.layer.Tile({
-            source: new ol.source.XYZ({
-                url:'http://{1-4}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-            })
-        });
+
+        // const baseLayer = new ol.layer.Tile({
+        //     source: new ol.source.XYZ({
+        //         url:'http://{1-4}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+        //     })
+        // });
+
+        // how to add the UN map //
+        //https://openlayers.org/en/latest/examples/arcgis-tiled.html
+        //https://geoportal.un.org/arcgis/home/item.html?id=541557fd0d4d42efb24449be614e6887
+        const baseLayer =  new ol.layer.Tile({
+                source: new ol.source.TileArcGISRest({
+                  url: url_UN
+                })
+        })
+
         //Creating an empty source and layer to store the shapefile geojson object
         shpSource = new ol.source.Vector()
         shpLayer = new ol.layer.Vector({
@@ -440,6 +452,7 @@ var water_data_explorer_PACKAGE = (function() {
       if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         $('.selectpicker').selectpicker('mobile');
       }
+
       $(".carousel-control.left ").hide();
       $(".carousel-control").on("click",function(){
         if ($("#tables_info").hasClass("active")) {
@@ -492,6 +505,19 @@ var water_data_explorer_PACKAGE = (function() {
 
       $('body').tooltip({
           selector: '.tool_tip_h'
+      });
+      $('#app-navigation').tooltip({
+          selector: '.chkbx-layer'
+      });
+
+      $('#checkbox-label').on('show.bs.tooltip change', function (e) {
+          $this = $(this);
+          console.log("hoppp");
+          if (e.type == 'show' && $this.find(":checkbox").is(":checked")) {
+              e.preventDefault();
+          } else if (e.type == 'change') {
+              $this.find(":checkbox").is(":checked") ? $this.tooltip('hide') : $this.tooltip('show');
+          }
       });
 
       //Event for the clusters of the map

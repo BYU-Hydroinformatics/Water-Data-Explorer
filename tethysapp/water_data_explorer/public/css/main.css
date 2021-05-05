@@ -1,3 +1,12 @@
+.FootNote{
+  text-align: left;
+}
+
+.button-group-temp{
+  display: flex;
+  justify-content: flex-end;
+}
+
 .check_hs_delete, .chkbx-group{
   position:relative;
   border-radius:5px;
@@ -295,10 +304,8 @@ tr:hover {
     -webkit-flex: 1 1 auto;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
-    /* word-break: break-all; */
     margin-right: 10%;
     margin-left: 2%;
-    /* width: 200px; */
     overflow: hidden;
     position: relative;
     display: inline-block;
@@ -316,12 +323,12 @@ tr:hover {
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
-    /* -webkit-box-flex: 1;
+    -webkit-box-flex: 1;
     -webkit-flex: 1 1 auto;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
     max-width: 218px;
-    word-break: break-all; */
+    /* word-break: break-all; */
 }
 #buttonsBar{
   margin-left: 10%;

@@ -85,9 +85,21 @@ give_available_services = function(){
 }
 $("#btn-check_available_serv").on("click", give_available_services);
 $("#btn-check_all").on("click", function(){
-  $("#modalAddGroupServer :checkbox").each(function(){
-    this.checked = true;
-  })
+
+  if($("#btn-check_all").html() == "Select All Views"){
+    $("#btn-check_all").html("Unselect All Views");
+    $("#modalAddGroupServer :checkbox").each(function(){
+      this.checked = true;
+    })
+  }
+  else{
+    $("#btn-check_all").html("Select All Views");
+    $("#modalAddGroupServer :checkbox").each(function(){
+      this.checked = false;
+    })
+  }
+
+
 });
 
 show_variables_groups = function(){
@@ -98,17 +110,17 @@ show_variables_groups = function(){
     dataType: "JSON",
     success: function(data){
       try{
-        console.log(data);
+        // console.log(data);
         variables_list = data['variables'];
         variables_codes_list = data['variables_codes'];
-        console.log(variables_codes_list);
+        // console.log(variables_codes_list);
         const chunk = (arr, size) =>
           Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
             arr.slice(i * size, i * size + size)
           );
         let arr=chunk(variables_list, 2);
         let arr2=chunk(variables_codes_list, 2);
-        console.log(arr2);
+        // console.log(arr2);
 
 
         var HSTableHtml =
@@ -156,6 +168,7 @@ show_variables_groups = function(){
 
     },
     error: function(error){
+      console.log(e);
       $("#KeywordLoading").addClass("hidden");
       $.notify(
           {
@@ -202,27 +215,6 @@ available_regions = function(){
           HSTableHtml += "</tbody></table>"
         $("#modalKeyWordSearch").find("#groups_countries").html(HSTableHtml);
         $("#KeywordLoading").addClass("hidden");
-        // let checkboxes = $('#data-table').find("input[type=checkbox][name=countries]")
-        // //console.log(checkboxes)
-        // let countries_selected = [];
-        //
-        // // Attach a change event handler to the checkboxes of the countries to receive the countries.
-        //
-        // checkboxes.click(function() {
-        //   countries_selected = checkboxes
-        //     .filter(":checked") // Filter out unchecked boxes.
-        //     .map(function() { // Extract values using jQuery map.
-        //       return this.value.replace(/_/g, ' ');
-        //     })
-        //     .get() // Get array.
-        //   if (countries_selected.length > 0){
-        //     ////console.log(countries_selected);
-        //     listener_checkbox(countries_selected)
-        //   }
-        //   else{
-        //     show_variables_groups()
-        //   }
-        // });
       }
       catch(e){
         $("#KeywordLoading").addClass("hidden");
@@ -269,42 +261,49 @@ listener_checkbox = function(list_countries){
       url: `get-variables-for-country/`,
       dataType: "JSON",
       data: le_object,
-      success: function(result){
+      success: function(data){
         try{
           $("#modalKeyWordSearch").find("#groups_variables").empty();
-          variables_list = result['variables'];
+
+          variables_list = data['variables'];
+          variables_codes_list = data['variables_codes'];
+          console.log(variables_codes_list);
           const chunk = (arr, size) =>
             Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
               arr.slice(i * size, i * size + size)
             );
           let arr=chunk(variables_list, 2);
           let arr2=chunk(variables_codes_list, 2);
+          console.log(arr2);
+
 
           var HSTableHtml =
               `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
             let z = 0;
-
             arr.forEach(l_arr => {
               HSTableHtml +=  '<tr class="odd gradeX">'
               let j = 0;
               l_arr.forEach(i =>{
                 let new_i = i.replace(/ /g,"_");
+                let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
                 let new_codei = arr2[z][j].replace(/ /g,"_");
 
                 HSTableHtml +=  `<td id =${new_i2}_td ><input type="checkbox" id="server" name="variables" value=${new_codei} /> ${i}</td>`;
+
                 j = j +1;
               })
 
                   HSTableHtml += '</tr>';
                   z = z + 1;
             })
-
             HSTableHtml += "</tbody></table>"
+          ////console.log(HSTableHtml)
           $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
           $("#KeywordLoading").addClass("hidden");
         }
         catch(e){
           $("#KeywordLoading").addClass("hidden");
+          console.log(e);
           $.notify(
               {
                   message: `There was an error retrieving the different variables for the selected web service`
@@ -319,6 +318,7 @@ listener_checkbox = function(list_countries){
         }
       },
       error: function(error){
+        console.log(error);
         $("#KeywordLoading").addClass("hidden");
         $.notify(
             {
@@ -352,6 +352,8 @@ listener_checkbox = function(list_countries){
 
 
 }
+// $(document).on("click", "#btn-filter-group-f", load_search_group_modal);
+
 load_search_group_modal = function(){
   // clean the modal //
   try{
@@ -376,7 +378,43 @@ load_search_group_modal = function(){
 
 
 }
-$(document).on("click", "#btn-filter-group-f", load_search_group_modal);
+$(document).on("click", "#btn-key-update-variables", function(){
+  let checkboxes = $('#data-table').find("input[type=checkbox][name=countries]")
+  //console.log(checkboxes)
+  let countries_selected = [];
+
+  // Attach a change event handler to the checkboxes of the countries to receive the countries.
+
+    countries_selected = checkboxes
+      .filter(":checked") // Filter out unchecked boxes.
+      .map(function() { // Extract values using jQuery map.
+        return this.value.replace(/_/g, ' ');
+      }).get() // Get array.
+
+    if (countries_selected.length > 0){
+      ////console.log(countries_selected);
+      listener_checkbox(countries_selected)
+    }
+    else{
+      show_variables_groups();
+    }
+  // checkboxes.click(function() {
+    // countries_selected = checkboxes
+    //   .filter(":checked") // Filter out unchecked boxes.
+    //   .map(function() { // Extract values using jQuery map.
+    //     return this.value.replace(/_/g, ' ');
+    //   })
+    //   .get() // Get array.
+    // if (countries_selected.length > 0){
+    //   ////console.log(countries_selected);
+    //   listener_checkbox(countries_selected)
+    // }
+    // else{
+    //   show_variables_groups()
+    // }
+  // });
+
+});
 
 available_regions_group = function(){
   try{
@@ -506,10 +544,36 @@ listener_checkbox_group = function(list_countries){
       url: `get-variables-for-country/`,
       dataType: "JSON",
       data: le_object,
-      success: function(result){
+      // success: function(result){
+        // try{
+          // $("#modalFilterGroup").find("#groups_variables2").empty();
+          // variables_list = result['variables'];
+          // const chunk = (arr, size) =>
+          //   Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+          //     arr.slice(i * size, i * size + size)
+          //   );
+          // let arr=chunk(variables_list, 2);
+          //
+          // var HSTableHtml =
+          //     `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+          //
+          //   arr.forEach(l_arr => {
+          //     HSTableHtml +=  '<tr class="odd gradeX">'
+          //     l_arr.forEach(i =>{
+          //       let new_i = i.replace(/ /g,"_");
+          //       HSTableHtml +=  `<td><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+          //     })
+          //
+          //         HSTableHtml += '</tr>';
+          //   })
+          //
+          //   HSTableHtml += "</tbody></table>"
+          // $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
+          // $("#KeywordLoading2").addClass("hidden");
+      success: function(data){
         try{
           $("#modalFilterGroup").find("#groups_variables2").empty();
-          variables_list = result['variables'];
+          variables_list = data['variables'];
           const chunk = (arr, size) =>
             Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
               arr.slice(i * size, i * size + size)
@@ -523,7 +587,10 @@ listener_checkbox_group = function(list_countries){
               HSTableHtml +=  '<tr class="odd gradeX">'
               l_arr.forEach(i =>{
                 let new_i = i.replace(/ /g,"_");
-                HSTableHtml +=  `<td><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+                let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+
+                HSTableHtml +=  `<td id =${new_i2}_td2 ><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+
               })
 
                   HSTableHtml += '</tr>';
@@ -531,6 +598,7 @@ listener_checkbox_group = function(list_countries){
 
             HSTableHtml += "</tbody></table>"
           $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
+
           $("#KeywordLoading2").addClass("hidden");
 
         }
@@ -1422,6 +1490,34 @@ $("#btn-del-hydro-groups").on("click", delete_group_of_hydroservers);
 
 */
 catalog_filter = function(){
+  var styles = {
+    'MultiPolygon': [new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: 'rgb(128,128,128)',
+        lineDash: [4],
+        width: 3
+      }),
+      fill: new ol.style.Fill({
+        color: 'rgba(119,136,153, 0.05)'
+      })
+    })],
+    'Polygon': [new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'rgb(128,128,128)',
+          lineDash: [4],
+          width: 3
+        }),
+        fill: new ol.style.Fill({
+          color: 'rgba(119,136,153, 0.05)'
+        })
+      })],
+  };
+
+  var styleFunction = function(feature, resolution) {
+    return styles[feature.getGeometry().getType()];
+  };
+
+
   try{
     let elementForm= $("#modalKeyWordSearch");
     let datastring= elementForm.serialize();
@@ -1433,8 +1529,54 @@ catalog_filter = function(){
         data: datastring,
         success: function(result) {
           try{
-            console.log(JSON.parse(result));
-            console.log(JSON.parse(result)['hs']);
+            // console.log(result);
+            let jeojson = JSON.parse(JSON.parse(result)['geojson']);
+            console.log(jeojson);
+            map.removeLayer(layer_selected_countries['countries']);
+
+            if(jeojson['features'].length > 0){
+              for(let z = 0; z < jeojson['features'].length; ++z){
+                if(jeojson['features'][z]['geometry']['type'] == "Polygon"){
+                  // console.log(jeojson['features'][0]['geometry']['coordinates'].length);
+                  for (let i = 0; i < jeojson['features'][z]['geometry']['coordinates'][0].length; ++i){
+                    jeojson['features'][z]['geometry']['coordinates'][0][i] = ol.proj.transform(jeojson['features'][z]['geometry']['coordinates'][0][i],
+                        "EPSG:4326",
+                        "EPSG:3857"
+                    )
+                  }
+                }
+                if(jeojson['features'][z]['geometry']['type'] == "MultiPolygon"){
+                  // console.log(jeojson['features'][0]['geometry']['coordinates'].length);
+                  for (let i = 0; i < jeojson['features'][z]['geometry']['coordinates'].length; ++i){
+                    for(let j= 0; j < jeojson['features'][z]['geometry']['coordinates'][i][0].length; ++j){
+                      // console.log(jeojson['features'][0]['geometry']['coordinates'][i][0].length);
+
+                      jeojson['features'][z]['geometry']['coordinates'][i][0][j] = ol.proj.transform(jeojson['features'][z]['geometry']['coordinates'][i][0][j],
+                          "EPSG:4326",
+                          "EPSG:3857"
+                      )
+                    }
+                  }
+                }
+              }
+
+              var vectorSource = new ol.source.Vector({
+                features: (new ol.format.GeoJSON()).readFeatures(jeojson)
+              });
+
+              var vectorLayer2 = new ol.layer.Vector({
+                source: vectorSource,
+                style: styleFunction
+
+              });
+              map.removeLayer(layer_selected_countries['countries']);
+              layer_selected_countries['countries'] = vectorLayer2
+            }
+
+
+
+            // console.log(JSON.parse(result));
+            // console.log(JSON.parse(result)['hs']);
             let hs_available = JSON.parse(result)['hs'];
             let new_hs_available = []
             hs_available.forEach(function(hs){
@@ -1454,6 +1596,13 @@ catalog_filter = function(){
                 layer.setStyle(new ol.style.Style({}));
               }
             });
+            if(jeojson['features'].length > 0){
+              map.addLayer(layer_selected_countries['countries']);
+              map.getView().fit(layer_selected_countries['countries'].getSource().getExtent());
+              map.updateSize();
+            }
+
+
             for(let i = 0;  i< sitesObj.length; ++i){
               let title = sitesObj[i]['title']
               let url = sitesObj[i]['url']
@@ -1469,6 +1618,7 @@ catalog_filter = function(){
                        layer.setStyle(new ol.style.Style({}));
                      }
                });
+
 
               map.addLayer(vectorLayer)
               vectorLayer.set("selectable", true)
@@ -1581,6 +1731,7 @@ catalog_filter = function(){
 
           }
           catch(e){
+            console.log(e);
             $("#KeywordLoading").addClass("hidden");
 
             $.notify(
@@ -1598,6 +1749,7 @@ catalog_filter = function(){
 
         },
         error: function(error) {
+          console.log(error);
           $("#KeywordLoading").addClass("hidden");
 
           $.notify(
@@ -1749,6 +1901,8 @@ reset_keywords = function(){
 
 
     });
+    map.removeLayer(layer_selected_countries['countries']);
+
     layer_object_filter={};
 
     $("#current-Groupservers").find("li").each(function(){
@@ -1907,10 +2061,16 @@ searchGroups = function() {
 }
 document.getElementById('myInputKeyword').addEventListener("keyup", searchGroups);
 
-// searchVariables = function() {
-//   general_search("myInputKeyword2","data-table-var");
-// }
-// document.getElementById('myInputKeyword2').addEventListener("keyup", searchVariables);
+searchVariables = function() {
+  try{
+    general_search("myInputKeyword2","data-table-var");
+
+  }
+  catch(error){
+    console.log(error);
+  }
+}
+document.getElementById('myInputKeyword2').addEventListener("keyup", searchVariables);
 
 // for only one group
 searchGroups_group = function() {

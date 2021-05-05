@@ -184,6 +184,8 @@ var filter_words,
     id_dictionary = {},
     legend_change,
     responsive_graphs,
+    time_series_cache = {},
+    layer_selected_countries = {},
     generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that

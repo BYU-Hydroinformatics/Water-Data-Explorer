@@ -7,7 +7,7 @@ from .app import WaterDataExplorer as app
 
 
 def init_catalog_db(engine, first_time):
-    print("Customizing Persintant Storage")
+    print("Initializing Persistant Storage")
     Base.metadata.create_all(engine)
     if first_time:
     # # Make session
@@ -15,3 +15,4 @@ def init_catalog_db(engine, first_time):
         session = SessionMaker()
 
         session.close()
+        print("Finishing Initializing Persistant Storage")

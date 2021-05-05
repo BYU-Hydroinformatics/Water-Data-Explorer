@@ -2,41 +2,56 @@
 WDE User Functionalities
 =============================
 
-The Water Data Explorer is able to discover data from the different WHOS views such as the transboundary view. The Water Data Explorer can
-check for the available data in this views, and it also is able to add the data from them
+Data Discovery
+**************
 
-Steps for Data Discovery
-************************
+The user can filter the available Views by countries and variables of interest.
 
-In this example for data discovering, we will use the transboundary view with the following endpoint:
+Figure:  three boxes one around the “Filter” icon, and other two for each one of the blocks of the filters.
 
-- http://gs-service-production.geodab.eu/gs-service/services/essi/view/whos-country/hiscentral.asmx
-
-We will start also in a new and fresh version of the Water Data explorer.
-The following Figure shows how to access the Water Data Explorer menu for data discovery
-
-.. image:: images/menu_catalog_disc.png
-   :width: 600
+.. note::
+   The user can update the variables to only display the variables of the selected countries in the country filter portion by
+   using the "Update Variables" Button.
 
 
-Upon filling the require metadata from the menu. We will be able to click in the button "Check services" in order to see the available data in the View as suggested by the following Figure
-
-.. image:: images/disc_catalog_sevs.png
-   :width: 600
+To display the available stations/platforms of a specific View on the map, the user should use the
+“Show/Hide View” icon. To see the available variables of a specific View, the user should use the
+“View variables” icon. To display the information about a specific View including description, endpoint,
+and list of stations as well as the available analysis tools, the user should use the “Information” icon.
+To zoom to a specific View on the map, the user should use the “Zoom to View” icon.
 
 
 .. note::
-   After see all the different available services, you can press the button check all to select all the services.
+   To have the data and information of a specific View up to date, the user should update the View by using the “Update View” icon.
+
+Screenshot with squares and numbers of the icons that we have just mentioned.
+
+Data Analysis
+*************
+
+The Water Data Explorer application uses a python package called "Pywaterml". The Pywaterml allows access to WaterOneFlow (WOF) web services and retrieves information in different formats. The Pywaterml can be used in Python Notebook.
+
+Users can open a Python notebook tutorial and the Pywaterml documentation by using the “Google Colab” and “Pywaterml Documentation” icons.
+
+Users can also open in Google Colab a Python notebook template  for the selected View containing the Pywaterml functionalities. The Python notebook can also be downloaded for a specific station/platform and specific variable.
+
+Screenshot with squares and numbers of the icons that we have just mentioned.
 
 
-Once the services are selected, you can add by clicking the button "Add" as the following Figure suggest.
+Time Series Visualization and Downloading
+*****************************************
+
+To visualize and download time series available for a specific station, the user should select a station of interest on the WDE map interface, thus opening the WDE Graphs Panel at the bottom of the application. To select the time series of interest to be visualized or downloaded, user should select the “Time Series Plot” icon on the top right of the Graphs Panel.
 
 
-.. image:: images/submit_cat_disc.png
-	:width: 600
+Screenshot: Highlights the selected station, the graph panel icon , the Time series plot icon
 
-After it is finished the discovered services for the transboundary view will be added to the Water Data Explorer
+.. note::
+   Image of the show hide icon.
+   User can hide or show the Graphs Panel by means of the “Graphs Panel” icon on the right of the application header.
 
+In the opened window, User can select a variable of interest, plot type, and time period of interest
 
-.. image:: images/afeter_disc.png
-	:width: 600
+.. note::
+   Image of the menu
+   WDE uses the Plotly library, which allows users to download plots in PNG format, pan to, zoom in/out, and autoscale plots.

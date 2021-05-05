@@ -1307,13 +1307,17 @@ hydroserver_information = function(){
       success: function(result1){
         try{
           let hs_title = result1['title'];
+          var url_UN = "https://geoservices.un.org/arcgis/rest/services/ClearMap_WebTopo/MapServer";
+
           setTimeout(function(){
             if(map2 ==undefined){
               map2 = new ol.Map({
                      target: 'map2',
                      layers: [
                        new ol.layer.Tile({
-                          source: new ol.source.OSM()
+                               source: new ol.source.TileArcGISRest({
+                                 url: url_UN
+                               })
                        })
                      ],
                      view: new ol.View({
