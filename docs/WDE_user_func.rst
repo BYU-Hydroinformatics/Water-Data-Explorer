@@ -9,6 +9,11 @@ The user can filter the available Views by countries and variables of interest.
 
 Figure:  three boxes one around the “Filter” icon, and other two for each one of the blocks of the filters.
 
+.. note::
+   The user can update the variables to only display the variables of the selected countries in the country filter portion by
+   using the "Update Variables" Button.
+
+
 To display the available stations/platforms of a specific View on the map, the user should use the
 “Show/Hide View” icon. To see the available variables of a specific View, the user should use the
 “View variables” icon. To display the information about a specific View including description, endpoint,
