@@ -1,17 +1,33 @@
-=============================
+.. |vspace| raw:: latex
+
+  \vspace{2mm}
+
+.. |br| raw:: html
+
+  <br />
+
+.. |update_vars| image:: images/update_vars.png
+.. |update_view| image:: images/update_view.png
+
+========================
 WDE User Functionalities
-=============================
+========================
 
 Data Discovery
 **************
 
 The user can filter the available Views by countries and variables of interest.
 
-Figure:  three boxes one around the “Filter” icon, and other two for each one of the blocks of the filters.
+.. image:: images/1.5.png
+   :width: 1000
+   :align: center
+
+|br|
 
 .. note::
+
    The user can update the variables to only display the variables of the selected countries in the country filter portion by
-   using the "Update Variables" Button.
+   using the |update_vars| Button.
 
 
 To display the available stations/platforms of a specific View on the map, the user should use the
@@ -20,11 +36,14 @@ To display the available stations/platforms of a specific View on the map, the u
 and list of stations as well as the available analysis tools, the user should use the “Information” icon.
 To zoom to a specific View on the map, the user should use the “Zoom to View” icon.
 
-
 .. note::
-   To have the data and information of a specific View up to date, the user should update the View by using the “Update View” icon.
+   To have the data and information of a specific View up to date, the user should update the View by using the |update_view| icon.
 
-Screenshot with squares and numbers of the icons that we have just mentioned.
+.. image:: images/1.6.png
+   :width: 1000
+   :align: center
+
+|br|
 
 Data Analysis
 *************
@@ -35,8 +54,11 @@ Users can open a Python notebook tutorial and the Pywaterml documentation by usi
 
 Users can also open in Google Colab a Python notebook template  for the selected View containing the Pywaterml functionalities. The Python notebook can also be downloaded for a specific station/platform and specific variable.
 
-Screenshot with squares and numbers of the icons that we have just mentioned.
+.. image:: images/1.7.png
+   :width: 1000
+   :align: center
 
+|br|
 
 Time Series Visualization and Downloading
 *****************************************
@@ -44,7 +66,11 @@ Time Series Visualization and Downloading
 To visualize and download time series available for a specific station, the user should select a station of interest on the WDE map interface, thus opening the WDE Graphs Panel at the bottom of the application. To select the time series of interest to be visualized or downloaded, user should select the “Time Series Plot” icon on the top right of the Graphs Panel.
 
 
-Screenshot: Highlights the selected station, the graph panel icon , the Time series plot icon
+.. image:: images/1.8.png
+   :width: 1000
+   :align: center
+
+|br|
 
 .. note::
    Image of the show hide icon.
