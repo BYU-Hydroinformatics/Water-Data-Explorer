@@ -6,8 +6,8 @@
 
   <br />
 
-.. |logo1| image:: images/wde.png
-   :scale: 50%
+
+
 
 =========================
 WDE Admin Functionalities
@@ -29,9 +29,10 @@ To add Catalogs, administrator should use the “+” icon to access the “Add 
 In this menu, to add a new Catalog of Views, administrator should enter its title, description, and endpoint if available.
 
 .. note::
-
-   |logo1|
-   ScreenShot: of the ULR input
+   .. image:: images/URL_add_catalog.png
+      :align: center
+      :scale: 75
+      
    To add a Catalog that is already published and accessible through WaterOneFlow web services, administrator should enter the Catalog endpoint to automatically import its Views.
 
 Administrator can check the available Views accessible through the Catalog’s endpoint by using the “Check Services” button.

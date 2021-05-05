@@ -7,7 +7,16 @@
   <br />
 
 .. |update_vars| image:: images/update_vars.png
+   :scale: 75%
+
 .. |update_view| image:: images/update_view.png
+   :scale: 25%
+
+.. |graph_panel| image:: images/graph_panel.png
+
+.. |menu_plotly| image:: images/menu_plotly.png
+   :align: middle
+
 
 ========================
 WDE User Functionalities
@@ -73,11 +82,12 @@ To visualize and download time series available for a specific station, the user
 |br|
 
 .. note::
-   Image of the show hide icon.
-   User can hide or show the Graphs Panel by means of the “Graphs Panel” icon on the right of the application header.
+   User can hide or show the Graphs Panel by means of the |graph_panel| icon on the right of the application header.
 
 In the opened window, User can select a variable of interest, plot type, and time period of interest
 
 .. note::
-   Image of the menu
-   WDE uses the Plotly library, which allows users to download plots in PNG format, pan to, zoom in/out, and autoscale plots.
+   .. image:: images/menu_plotly.png
+      :align: center
+
+   WDE uses the Plotly library which provides the menu above, to allow users to download plots in PNG format, pan to, zoom in/out, and autoscale plots.
