@@ -10,32 +10,6 @@ from sqlalchemy.sql import func
 Base = declarative_base()
 
 
-# class Catalog(Base):
-#     __tablename__ = 'hydroservers'
-#
-#     id = Column(Integer, primary_key=True)  # Record number.
-#     title = Column(String(50))  # Tile as given by the admin
-#     url = Column(String(2083))  # URL of the SOAP endpointx
-#     siteinfo = Column(JSON)
-#     time_updated = Column(DateTime(timezone=True), onupdate=func.now())
-#
-#     def __init__(self, title, url, siteinfo):
-#         self.title = title
-#         self.url = url
-#         self.siteinfo = siteinfo
-#
-# class HISCatalog(Base):
-#     __tablename__ = 'hiscentrals'
-#
-#     id = Column(Integer, primary_key=True)
-#     title = Column(String(50))
-#     url = Column(String(2083))
-#
-#     def __init__(self, title, url):
-#         self.title = title
-#         self.url = url
-
-
 class Groups(Base):
     __tablename__ = 'Group_Hydroserver_Individuals'
 
@@ -59,16 +33,20 @@ class HydroServer_Individual(Base):
     url = Column(String(2083))  # URL of the SOAP endpointx
     description = Column(Text)  # URL of the SOAP endpointx
     siteinfo = Column(JSON)
+    variables = Column(JSON)
+    countries = Column(JSON)
     group_id = Column(Integer, ForeignKey('Group_Hydroserver_Individuals.id'))
     group = relationship("Groups", back_populates="hydroserver")  # Tile as given by the admin
     #cascade="all, delete-orphan"
     time_updated = Column(DateTime(timezone=True), onupdate=func.now())
 
-    def __init__(self, title, url,description, siteinfo):
+    def __init__(self, title, url,description, siteinfo,variables,countries):
         self.title = title
         self.url = url
         self.description = description
         self.siteinfo = siteinfo
+        self.variables = variables
+        self.countries = countries
 
 
 

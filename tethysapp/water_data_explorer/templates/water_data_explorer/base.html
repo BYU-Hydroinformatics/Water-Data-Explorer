@@ -14,10 +14,12 @@
 {% block app_title %}{{ tethys_app.name }}{% endblock %}
 {% block header_buttons %}
 
-<input id="sG" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="small" data-onstyle = "danger"></input>
-<p class= "spacer_fake"></p>
+<div class= 'tool_tip_h' data-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Legend'> <input id="sG-legend" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-th-list'></span>" data-off="<span class='glyphicon glyphicon-th-list'></span>" data-size="mini" data-onstyle = "danger"></input></div>
+<div class= 'tool_tip_h' data-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Graphs Panel'> <input id="sG" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="mini" data-onstyle = "danger"></input></div>
 {% if can_block_map %}
-<input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="small" data-onstyle = "danger"></input>
+  {% if geoEndpoint %}
+    <input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="mini" data-onstyle = "danger"></input>
+  {% endif %}
 {% endif %}
 
 <div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Manage HydroServers">
@@ -38,6 +40,19 @@
 
 {% block app_content %}
 {% endblock %}
+
+
+{% block app_content_wrapper_override %}
+
+{{ block.super }}
+{% include "water_data_explorer/modals/terms_service.html" %}
+
+
+{% endblock %}
+
+
+
+
 
 {% block app_actions %}
 {% endblock %}
@@ -67,10 +82,11 @@
 {% block scripts %}
   {{ block.super }}
   <script>
+    var windowSize = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
   	var baseStatic = "{% static 'water_data_explorer/index.html' %}";
   	baseStatic = baseStatic.replace('\/index.html','');
     var can_block_map = {{can_block_map|yesno:"true,false"}};
-    console.log("noooo")
     console.log(can_block_map)
     var can_delete_hydrogroups = {{can_delete_hydrogroups|yesno:"true,false"}};
     var endpointGeoServer = "{{ geoEndpoint|safe }}";
@@ -80,7 +96,41 @@
     var geoServerWidth = "{{ geoWidth|safe }}";
     var geoServerMovement = {{geoMovement|yesno:"true,false"}};
     var views_names = "{{ views_names|safe }}";
-    console.log(views_names);
+
+    // #graph{
+    //   flex: 1 1 60%;
+    //   order: 2;
+    //   width: 100%;
+    //   height: 100%;
+    //   display: none;
+    //   overflow-y: scroll;
+    //   flex-direction: column;
+    // }
+    //
+    // #options{
+    //   padding-left: 2%;
+    //   flex: 1 1 30%;
+    //   order: 1;
+    //   width: 100%;
+    //   height: 100%;
+    // }
+    //
+    // #plots2{
+    //   display: flex;
+    //   flex: 1 1 70%;
+    //   order: 3;
+    //   width: 100%;
+    //   height: 100%;
+    //   flex-direction: column
+    // }
+
+
+
+
+
+
+
+
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" type="text/javascript"></script>
@@ -104,6 +154,7 @@
   <script src="{% static 'water_data_explorer/vendor/contextMenu/contextMenu.min.js' %}" async="async"></script>
   <script src="{% static 'water_data_explorer/vendor/openlayers/ol.js' %}" type="text/javascript"></script>
   <script src="{% static 'water_data_explorer/vendor/fontawesome-free-5.12.1-web/js/all.js' %}" type="text/javascript"></script>
+
   <script src="{% static 'water_data_explorer/js/variables.js' %}" type="text/javascript"></script>
   <script src="{% static 'water_data_explorer/js/utilities.js' %}" type="text/javascript"></script>
   <script src="{% static 'water_data_explorer/js/initAll.js' %}" type="text/javascript"></script>
@@ -111,7 +162,259 @@
   <script src="{% static 'water_data_explorer/js/groups.js' %}" type="text/javascript"></script>
   <script src="{% static 'water_data_explorer/js/endpoints.js' %}" type="text/javascript"></script>
   <script src="{% static 'water_data_explorer/js/sites.js' %}" type="text/javascript"></script>
+  <script type="text/javascript">
 
+    $(window).resize(function(e) {
+      if($( window ).width() < 500){
+        if($("#inner-app-content").width() < $( window ).width()){
+          $('#sG-legend').bootstrapToggle('off');
+          $('#sG').bootstrapToggle('off');
+
+        }
+        else{
+          $('#sG-legend').bootstrapToggle('on');
+          $('#sG').bootstrapToggle('on');
+
+
+
+        }
+      }
+      setTimeout(function(){
+        try{
+          if($('#plots').is(':visible')){
+            Plotly.Plots.resize("plots");
+              Plotly.relayout($("plots"), {
+                'xaxis.autorange': true,
+                'yaxis.autorange': true
+              });
+          }
+        }
+        catch(e){
+          console.log("Simple plotly error")
+        }
+        map.updateSize()
+      },200)
+
+    })
+    // $(window).resize(function(e) {
+    //   console.log("height")
+    //   console.log($( window ).height());
+    //   console.log("width")
+    //
+    //   console.log($( window ).width());
+    //   if($( window ).width() < 1366){
+    //
+    //     $("#graph").empty()
+    //     let newHtml = `
+    //     <div id="carouselExampleIndicators" class="carousel slide" >
+    //       <ol class="carousel-indicators">
+    //         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
+    //         </li>
+    //         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    //       </ol>
+    //       <div class="carousel-inner">
+    //         <div class="item active">
+    //             <div id="options">
+    //               <h3 id= "siteName_title"> Select a Station</h3>
+    //                 <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
+    //                   in this part such as a name and a description.
+    //                 </p>
+    //               <div id="table_div"></div>
+    //             </div>
+    //         </div>
+    //         <div class="item">
+    //           <div id="plots2">
+    //             <h3></h3>
+    //             <div id= "ipad_lay_contr">
+    //             <div id= "firstContainer" class="controlGraphs2">
+    //               <div id= "select-graphs">
+    //                 <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="100%" >
+    //                   <option > Variables</option>
+    //                 </select>
+    //                 <select id="type_graph_select2" class="selectpicker" data-width="100%">
+    //
+    //                   <optgroup label="Individual Variable Plots">
+    //                     <option> Scatter </option>
+    //                     <option> Whisker and Box </option>
+    //                 </optgroup>
+    //                 </select>
+    //               </div>
+    //               <div id= "timeControllers" class="containerTime">
+    //                   <div class='col-md-5'>
+    //                       <div class="form-group">
+    //                           <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
+    //                               <input type='text' class="form-control" />
+    //                               <span class="input-group-addon">
+    //                                   <span class="glyphicon glyphicon-calendar"></span>
+    //                               </span>
+    //                           </div>
+    //                       </div>
+    //                   </div>
+    //                   <div class='col-md-5'>
+    //                       <div class="form-group">
+    //                           <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
+    //                               <input type='text' class="form-control" />
+    //                               <span class="input-group-addon">
+    //                                   <span class="glyphicon glyphicon-calendar"></span>
+    //                               </span>
+    //                           </div>
+    //                       </div>
+    //                   </div>
+    //               </div>
+    //             </div>
+    //             <div id= "secondContainer" class="controlGraphs2">
+    //                 <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
+    //                 <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit" data-size="mini">
+    //                     <option value="Download">Download</option>
+    //                     <option value="CSV" >CSV</option>
+    //                     <option value = "WaterML1.0">WaterML 1.0</option>
+    //                     <option value = "WaterML2.0">WaterML 2.0</option>
+    //                 </select>
+    //             </div>
+    //             </div>
+    //
+    //
+    //             <div id="plots"></div>
+    //           </div>
+    //
+    //
+    //         </div>
+    //       </div>
+    //       <a class="left carousel-control" href="#carouselExampleIndicators" data-slide="prev">
+    //         <span class="glyphicon glyphicon-chevron-left"></span>
+    //         <span class="sr-only">Previous</span>
+    //       </a>
+    //       <a class="right carousel-control" href="#carouselExampleIndicators" data-slide="next">
+    //         <span class="glyphicon glyphicon-chevron-right"></span>
+    //         <span class="sr-only">Next</span>
+    //       </a>
+    //
+    //     </div>
+    //     `
+    //     $(newHtml).appendTo("#graph");
+    //     // $(".selectpicker").selectpicker({
+    //     //   "title": "Select Options"
+    //     // }).selectpicker("render");
+    //     $(".selectpicker").selectpicker("refresh");
+    //   }
+    //   else{
+    //
+    //     $("#graph").empty()
+    //     newHtml = `<div id="options">
+    //       <h3 id= "siteName_title"> Select a Station</h3>
+    //         <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
+    //           in this part such as a name and a description.
+    //         </p>
+    //       <div id="table_div"></div>
+    //     </div>
+    //     <div id="plots2">
+    //       <h3></h3>
+    //       <div id="controlGraphs">
+    //         <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" width: '100%'>
+    //           <option > No Variables Available . . .</option>
+    //         </select>
+    //         <select id="type_graph_select2" class="selectpicker" data-width="fit">
+    //
+    //           <optgroup label="Individual Variable Plots">
+    //             <option> Scatter </option>
+    //             <option> Whisker and Box </option>
+    //         </optgroup>
+    //         </select>
+    //         <div class="containerTime">
+    //             <div class='col-md-5'>
+    //                 <div class="form-group">
+    //                     <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
+    //                         <input type='text' class="form-control" />
+    //                         <span class="input-group-addon">
+    //                             <span class="glyphicon glyphicon-calendar"></span>
+    //                         </span>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //             <div class='col-md-5'>
+    //                 <div class="form-group">
+    //                     <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
+    //                         <input type='text' class="form-control" />
+    //                         <span class="input-group-addon">
+    //                             <span class="glyphicon glyphicon-calendar"></span>
+    //                         </span>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //         <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
+    //         <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit">
+    //             <option value="Download">Download</option>
+    //             <option value="CSV" >CSV</option>
+    //             <option value = "WaterML1.0">WaterML 1.0</option>
+    //             <option value = "WaterML2.0">WaterML 2.0</option>
+    //         </select>
+    //       </div>
+    //
+    //       <div id="plots"></div>
+    //     </div>
+    //     `
+    //     $(newHtml).appendTo("#graph");
+    //     // $(".selectpicker").selectpicker({
+    //     //   "title": "Select Options"
+    //     // }).selectpicker("render");
+    //     $(".selectpicker").selectpicker("refresh");
+    //   }
+    //
+    //
+    //   if($( window ).width() > 320 && $( window ).width() < 768){
+    //     console.log("phone event resize");
+    //
+    //     if(window.innerHeight > window.innerWidth){
+    //         //portrait
+    //         console.log("portrait event");
+    //         if($('#app-navigation').is(':visible')){
+    //           $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative","left": "200px"})
+    //         }
+    //         else{
+    //           // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "0px"})
+    //         }
+    //
+    //     }
+    //     if(window.innerWidth > window.innerHeight){
+    //         //landscape
+    //         console.log("landscape event");
+    //         $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+    //     }
+    //
+    //   }
+    //   if($( window ).width() >= 768 && $( window ).width() <= 1366){
+    //     console.log("tablet event resize")
+    //     if(window.innerHeight > window.innerWidth){
+    //         //portrait
+    //         console.log("tablet portrait event base");
+    //         if($('#app-navigation').is(':visible')){
+    //           $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative","left": "300px"})
+    //         }
+    //         else{
+    //           // $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "100px", "position": "relative","left": "0px"})
+    //           $('#inner-app-content').css({"width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+    //
+    //         }
+    //
+    //     }
+    //     if(window.innerWidth > window.innerHeight){
+    //         //landscape
+    //         console.log("tablet landscape event base");
+    //         if($('#app-navigation').is(':visible')){
+    //           $('#inner-app-content').css({"width": "100%", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative","left": "300px"});
+    //         }
+    //         else{
+    //           $('#inner-app-content').css({"width": "100vw", "display":"flex", "height": "100%" , "flex-direction": "column","padding": "0 0 0 0","padding-right": "0px", "position": "relative", "left": "0px"})
+    //
+    //         }
+    //     }
+    //
+    //   }
+    //
+    //   setTimeout(function(){ map.updateSize(); }, 200);
+    // });
+  </script>
   <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> -->
   <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->

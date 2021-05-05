@@ -147,6 +147,12 @@ class WaterDataExplorer(TethysAppBase):
                 required=False
             ),
             CustomSetting(
+                name='InstitutionLogo',
+                type = CustomSetting.TYPE_STRING,
+                description='Link containing the isntitution logo.',
+                required=False
+            ),
+            CustomSetting(
                 name='Boundary Geoserver Endpoint',
                 type = CustomSetting.TYPE_STRING,
                 description='Geoserver endpoint for the hydroshare resource containning the layer (e.g:"https://geoserver.hydroshare.org/geoserver/layerID")',
@@ -183,6 +189,7 @@ class WaterDataExplorer(TethysAppBase):
                 description='Width of the boundary. A number from 1 to 10',
                 required=False
             ),
+
         )
         # return
         return custom_settings

@@ -42,6 +42,30 @@ except ImportError:
 
 extract_base_path = '/tmp'
 
+def GetSites_WHOS(url):
+    try:
+        client = Client(url,timeout= 500)
+        sites = client.service.GetSites('[:]')
+
+        sites_json={}
+        if isinstance(sites, str):
+            sites_dict = xmltodict.parse(sites)
+            sites_json_object = json.dumps(sites_dict)
+            sites_json = json.loads(sites_json_object)
+        else:
+            sites_json_object = json.dumps(recursive_asdict(sites))
+            sites_json = json.loads(sites_json_object)
+
+        sites_object = parseJSON(sites_json)
+
+
+        return sites_object
+
+    except Exception as error:
+        print(error)
+        sites_object={}
+
+    return sites_object
 
 def checkCentral(centralUrl):
     # Currently just checking if its a valid endpoint.
@@ -255,12 +279,30 @@ def parseJSON(json):
                     site_name = site_name.encode("utf-8")
                     network = site['siteInfo']['siteCode']["@network"]
                     sitecode = site['siteInfo']['siteCode']["#text"]
+                    siteID = site['siteInfo']['siteCode']["@siteID"]
+                    hs_json['country'] = "No Data was Provided"
+                    try:
+                        sitePorperty_Info = site['siteInfo']['siteProperty']
 
+                        if type(sitePorperty_Info) is list:
+                            for props in sitePorperty_Info:
+                                if props['@name'] == 'Country':
+                                    hs_json['country'] = props['#text']
+                        else:
+                            if str(sitePorperty_Info['@name']) == 'Country':
+                                hs_json['country'] = str(sitePorperty_Info['#text'])
+                                # print(return_obj['country'])
+                    except Exception as e:
+                        print(e)
+                        hs_json['country'] = "No Data was Provided"
+                        print(hs_json['country'])
                     hs_json["sitename"] = site_name.decode("UTF-8")
                     hs_json["latitude"] = latitude
                     hs_json["longitude"] = longitude
                     hs_json["sitecode"] = sitecode
                     hs_json["network"] = network
+                    hs_json["fullSiteCode"] = network +":" + sitecode
+                    hs_json["siteID"] = siteID
                     hs_json["service"] = "SOAP"
                     hs_sites.append(hs_json)
             else:
@@ -273,12 +315,31 @@ def parseJSON(json):
                 site_name = site_name.encode("utf-8")
                 network = sites_object['siteInfo']['siteCode']["@network"]
                 sitecode = sites_object['siteInfo']['siteCode']["#text"]
+                siteID = sites_object['siteInfo']['siteCode']["@siteID"]
 
+                hs_json['country'] = "No Data was Provided"
+                try:
+                    sitePorperty_Info = sites_object['siteInfo']['siteProperty']
+
+                    if type(sitePorperty_Info) is list:
+                        for props in sitePorperty_Info:
+                            if props['@name'] == 'Country':
+                                hs_json['country'] = props['#text']
+                    else:
+                        if str(sitePorperty_Info['@name']) == 'Country':
+                            hs_json['country'] = str(sitePorperty_Info['#text'])
+                            # print(return_obj['country'])
+                except Exception as e:
+                    print(e)
+                    hs_json['country'] = "No Data was Provided"
+                    print(hs_json['country'])
                 hs_json["sitename"] = site_name.decode("UTF-8")
                 hs_json["latitude"] = latitude
                 hs_json["longitude"] = longitude
                 hs_json["sitecode"] = sitecode
                 hs_json["network"] = network
+                hs_json["fullSiteCode"] = network +":" + sitecode
+                hs_json["siteID"] = siteID
                 hs_json["service"] = "SOAP"
                 hs_sites.append(hs_json)
     except ValueError:
