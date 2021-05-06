@@ -506,8 +506,8 @@ def catalog_filter(request,app_workspace):
     # print(hs_filtered_region['stations'])
     for part_sites in hs_filtered_region['stations']:
         array_sites_region.append(pd.DataFrame(part_sites['sites']))
-
     try:
+        # print(array_sites_region)
         # print(pd.concat(array_sites_region))
         df_countries = pd.concat(array_sites_region).drop_duplicates().reset_index(drop=True)
         # print(df_countries)
@@ -555,7 +555,9 @@ def catalog_filter(request,app_workspace):
 
     #create unique list of names
     uniqueNames = df_final.title.unique()
+    # print(uniqueNames)
     uniqueHS = uniqueNames.tolist()
+
     #create a data frame dictionary to store your data frames
     DataFrameDict = {elem : pd.DataFrame for elem in uniqueNames}
     final_obj_regions_vars['hs'] = uniqueHS
@@ -649,7 +651,8 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
                 site_obj['sitecode'] = site['sitecode']
                 site_obj['url'] = server.url
                 site_obj['title'] = server.title
-                site_objInfo[site['fullSiteCode']] = site_obj
+                site_fullname_title = site['fullSiteCode'] + server.title
+                site_objInfo[site_fullname_title] = site_obj
 
             # hydroserver_siteInfo.append(site_objInfo)
             hydroserver_lat_list.append(ls_lats)
@@ -663,8 +666,10 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
         list_countries_selected = []
 
         for indx in range(0,len(hydroserver_name_list)):
-            print(hydroservers_selected[indx].title,len(hydroserver_country_list[indx]),len(hydroserver_name_list[indx]))
-            if(len(hydroserver_country_list_check[indx]) > 0 ):
+            if ("country_metadata" in hydroserver_country_list_check[indx]):
+                # print(hydroservers_selected[indx].title,len(hydroserver_country_list[indx]),len(hydroserver_name_list[indx]))
+                # print(hydroservers_selected[indx].title,len(list(set(hydroserver_country_list_check[indx]))),list(set(hydroserver_country_list_check[indx]))[0])
+
                 list_countries_stations = {}
                 list_countries_stations['title'] = hydroservers_selected[indx].title
                 list_countries_stations['url'] = hydroservers_selected[indx].url
@@ -680,8 +685,10 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
                 if not df_sites_within_countries.empty:
                     # print(df_sites_within_countries)
                     sites_info_filter = []
+
                     for site_fullcode_single in df_sites_within_countries['SiteName'].tolist():
-                        sites_info_filter.append(site_objInfo[site_fullcode_single])
+                        site_full_name = site_fullcode_single + hydroservers_selected[indx].title
+                        sites_info_filter.append(site_objInfo[site_full_name])
                     list_countries_stations['sites'].extend(sites_info_filter)
                     region_list.append(hydroservers_selected[indx].title)
                     list_filtered.append(list_countries_stations)
@@ -729,8 +736,11 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
                         country_sel = list_countries_selected[my_indx]
 
                         for site_fullcode_single in list_co:
-                            site_objInfo[site_fullcode_single]['country'] = country_sel
-                            sites_info_filter.append(site_objInfo[site_fullcode_single])
+                            site_full_name = site_fullcode_single + hydroservers_selected[indx].title
+
+                            site_objInfo[site_full_name]['country'] = country_sel
+
+                            sites_info_filter.append(site_objInfo[site_full_name])
 
                         # country_sel = list_countries_selected[my_indx]
                         # print(country_sel)
@@ -773,7 +783,7 @@ def filter_variable(variables_list, actual_group = None):
         for hydroservers in hydroservers_selected:
             # Safe Guard
             if "whos" in hydroservers.url:
-                print(hydroservers.title)
+                # print(hydroservers.title)
                 name = hydroservers.title
                 hs_list_temp = []
                 # water = pwml.WaterMLOperations(url = hydroservers.url.strip())
@@ -887,7 +897,7 @@ def get_variables_for_country(request,app_workspace):
     for hs_selected in hydroservers_selected:
         list_contries_final = json.loads(hs_selected.countries)['countries']
         set_contries_final = set(list_contries_final)
-        print(set_contries_final)
+        # print(set_contries_final)
         set_request_final = set(countries)
         if (set_contries_final & set_request_final):
             hs_variables_json  = json.loads(hs_selected.variables)

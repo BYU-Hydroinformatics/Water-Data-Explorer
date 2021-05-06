@@ -83,7 +83,14 @@ get_vars_from_site = function (resultList){
                             type: "danger",
                             allow_dismiss: true,
                             z_index: 20000,
-                            delay: 5000
+                            delay: 5000,
+                            animate: {
+                              enter: 'animated fadeInRight',
+                              exit: 'animated fadeOutRight'
+                            },
+                            onShow: function() {
+                                this.css({'width':'auto','height':'auto'});
+                            }
                         }
                     )
                   }
@@ -102,7 +109,14 @@ get_vars_from_site = function (resultList){
                       type: "info",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
             }
@@ -117,7 +131,14 @@ get_vars_from_site = function (resultList){
                     type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
           }
@@ -134,7 +155,14 @@ get_vars_from_site = function (resultList){
                   type: "danger",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
           )
         }
@@ -151,7 +179,14 @@ get_vars_from_site = function (resultList){
             type: "info",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -227,7 +262,14 @@ map_layers = function(sites,title,url){
             type: "info",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -420,7 +462,14 @@ load_individual_hydroservers_group = function(group_name){
                        type: "danger",
                        allow_dismiss: true,
                        z_index: 20000,
-                       delay: 5000
+                       delay: 5000,
+                       animate: {
+                         enter: 'animated fadeInRight',
+                         exit: 'animated fadeOutRight'
+                       },
+                       onShow: function() {
+                           this.css({'width':'auto','height':'auto'});
+                       }
                    }
                )
              }
@@ -438,7 +487,14 @@ load_individual_hydroservers_group = function(group_name){
                        type: "danger",
                        allow_dismiss: true,
                        z_index: 20000,
-                       delay: 5000
+                       delay: 5000,
+                       animate: {
+                         enter: 'animated fadeInRight',
+                         exit: 'animated fadeOutRight'
+                       },
+                       onShow: function() {
+                           this.css({'width':'auto','height':'auto'});
+                       }
                    }
                )
            }
@@ -663,7 +719,14 @@ add_hydroserver = function(){
                                   type: "success",
                                   allow_dismiss: true,
                                   z_index: 20000,
-                                  delay: 5000
+                                  delay: 5000,
+                                  animate: {
+                                    enter: 'animated fadeInRight',
+                                    exit: 'animated fadeOutRight'
+                                  },
+                                  onShow: function() {
+                                      this.css({'width':'auto','height':'auto'});
+                                  }
                               }
                           )
                           $("#soapAddLoading").addClass("hidden")
@@ -688,7 +751,14 @@ add_hydroserver = function(){
                         type: "danger",
                         allow_dismiss: true,
                         z_index: 20000,
-                        delay: 5000
+                        delay: 5000,
+                        animate: {
+                          enter: 'animated fadeInRight',
+                          exit: 'animated fadeOutRight'
+                        },
+                        onShow: function() {
+                            this.css({'width':'auto','height':'auto'});
+                        }
                     }
                 )
             }
@@ -705,7 +775,14 @@ add_hydroserver = function(){
                       type: "danger",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
           }
@@ -723,7 +800,14 @@ add_hydroserver = function(){
                 type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
   }
@@ -800,7 +884,14 @@ delete_hydroserver= function(){
                       type: "success",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
 
@@ -815,7 +906,14 @@ delete_hydroserver= function(){
                     type: "info",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
           }
@@ -829,7 +927,14 @@ delete_hydroserver= function(){
                     type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
         }
@@ -844,7 +949,14 @@ delete_hydroserver= function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -892,7 +1004,14 @@ delete_hydroserver_Individual= function(group,server){
                       type: "success",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
             }
@@ -906,7 +1025,14 @@ delete_hydroserver_Individual= function(group,server){
                     type: "info",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
           }
@@ -920,7 +1046,14 @@ delete_hydroserver_Individual= function(group,server){
                     type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
         }
@@ -935,7 +1068,14 @@ delete_hydroserver_Individual= function(group,server){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -991,7 +1131,14 @@ showVariables = function(){
                       type: "danger",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
             }
@@ -1005,7 +1152,14 @@ showVariables = function(){
                      type: "danger",
                      allow_dismiss: true,
                      z_index: 20000,
-                     delay: 5000
+                     delay: 5000,
+                     animate: {
+                       enter: 'animated fadeInRight',
+                       exit: 'animated fadeOutRight'
+                     },
+                     onShow: function() {
+                         this.css({'width':'auto','height':'auto'});
+                     }
                  }
              )
          }
@@ -1021,7 +1175,14 @@ showVariables = function(){
              type: "danger",
              allow_dismiss: true,
              z_index: 20000,
-             delay: 5000
+             delay: 5000,
+             animate: {
+               enter: 'animated fadeInRight',
+               exit: 'animated fadeOutRight'
+             },
+             onShow: function() {
+                 this.css({'width':'auto','height':'auto'});
+             }
          }
      )
    }
@@ -1103,7 +1264,14 @@ showVariables2 = function(){
                      type: "warning",
                      allow_dismiss: true,
                      z_index: 20000,
-                     delay: 5000
+                     delay: 5000,
+                     animate: {
+                       enter: 'animated fadeInRight',
+                       exit: 'animated fadeOutRight'
+                     },
+                     onShow: function() {
+                         this.css({'width':'auto','height':'auto'});
+                     }
                  }
              )
          }
@@ -1120,7 +1288,14 @@ showVariables2 = function(){
                   type: "warning",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
           )
       }
@@ -1137,7 +1312,14 @@ showVariables2 = function(){
            type: "danger",
            allow_dismiss: true,
            z_index: 20000,
-           delay: 5000
+           delay: 5000,
+           animate: {
+             enter: 'animated fadeInRight',
+             exit: 'animated fadeOutRight'
+           },
+           onShow: function() {
+               this.css({'width':'auto','height':'auto'});
+           }
        }
    )
  }
@@ -1228,7 +1410,14 @@ showAvailableSites = function(){
                       type: "danger",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
           }
@@ -1244,7 +1433,14 @@ showAvailableSites = function(){
                    type: "danger",
                    allow_dismiss: true,
                    z_index: 20000,
-                   delay: 5000
+                   delay: 5000,
+                   animate: {
+                     enter: 'animated fadeInRight',
+                     exit: 'animated fadeOutRight'
+                   },
+                   onShow: function() {
+                       this.css({'width':'auto','height':'auto'});
+                   }
                }
            )
        }
@@ -1262,7 +1458,14 @@ showAvailableSites = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -1287,7 +1490,7 @@ hydroserver_information = function(){
     site_select.empty();
     // $("#site_choose").unbind('change');
     $("#site_choose").off("change.something").on("change", function(){
-      console.log("change unbind");
+      // console.log("change unbind");
     });
 
     site_select.selectpicker("refresh");
@@ -1439,7 +1642,14 @@ hydroserver_information = function(){
                   type: "danger",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
           )
         }
@@ -1454,7 +1664,14 @@ hydroserver_information = function(){
                   type: "danger",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
           )
       }
@@ -1473,7 +1690,14 @@ hydroserver_information = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -1510,7 +1734,14 @@ searchSites = function() {
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -1570,7 +1801,14 @@ update_hydroserver = function(){
                       type: "success",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
             $("#GeneralLoading").addClass("hidden");
@@ -1585,7 +1823,14 @@ update_hydroserver = function(){
                     type: "success",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
           }
@@ -1600,7 +1845,14 @@ update_hydroserver = function(){
                   type: "danger",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
           )
 
@@ -1617,7 +1869,14 @@ update_hydroserver = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
 

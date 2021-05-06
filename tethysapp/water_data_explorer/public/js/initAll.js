@@ -124,7 +124,14 @@ var water_data_explorer_PACKAGE = (function() {
                 type: "info",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
       }
@@ -351,7 +358,14 @@ var water_data_explorer_PACKAGE = (function() {
                 type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
       }
@@ -376,8 +390,16 @@ var water_data_explorer_PACKAGE = (function() {
                   type: "info",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
+
           )
         }
       }
@@ -390,7 +412,14 @@ var water_data_explorer_PACKAGE = (function() {
                 type: "info",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
       }
@@ -551,7 +580,14 @@ var water_data_explorer_PACKAGE = (function() {
                 type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
       }
