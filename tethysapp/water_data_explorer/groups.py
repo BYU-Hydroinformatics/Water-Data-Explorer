@@ -50,8 +50,7 @@ Persistent_Store_Name = 'catalog_db'
 # logging.basicConfig(level=logging.INFO)
 # logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
-@app_workspace
-def available_regions(request, app_workspace):
+def available_regions(request):
 
     ret_object = {}
     list_regions = []
@@ -237,8 +236,7 @@ def available_services(request):
 ######*****************************************************************************************################
 ######***********************CREATE AN EMPTY GROUP OF HYDROSERVERS ****************************################
 ######*****************************************************************************************################
-@app_workspace
-def create_group(request,app_workspace):
+def create_group(request):
     group_obj={}
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()  # Initiate a session
@@ -467,8 +465,7 @@ def delete_group(request):
 
     return JsonResponse(list_response)
 
-@app_workspace
-def catalog_filter(request,app_workspace):
+def catalog_filter(request):
     ret_obj = {}
     actual_group = None
     if request.method == 'GET' and 'actual-group' in request.GET:
@@ -486,7 +483,7 @@ def catalog_filter(request,app_workspace):
         var_new.append(varia.replace("_"," "))
     variables = var_new
     # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries2.geojson')
-    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries3.geojson')
+    countries_geojson_file_path = os.path.join(app.get_app_workspace().path, 'countries3.geojson')
 
     countries_gdf = gpd.read_file(countries_geojson_file_path)
     # selected_countries_plot = countries_gdf[countries_gdf['name'].isin(countries)].reset_index(drop=True)
@@ -875,8 +872,7 @@ def filter_variable(variables_list, actual_group = None):
 
     return hs_list
 
-@app_workspace
-def get_variables_for_country(request,app_workspace):
+def get_variables_for_country(request):
     response_obj = {}
     countries = request.GET.getlist('countries[]')
     list_variables = []

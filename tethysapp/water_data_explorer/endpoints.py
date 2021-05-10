@@ -464,11 +464,10 @@ def upload_hs(request):
 
     return JsonResponse(return_obj)
 
-@app_workspace
-def available_regions_2(request,app_workspace,siteinfo):
+def available_regions_2(request,siteinfo):
     shapely.speedups.enable()
     # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries2.geojson')
-    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries3.geojson')
+    countries_geojson_file_path = os.path.join(app.get_app_workspace().path, 'countries3.geojson')
     countries_gdf = gpd.read_file(countries_geojson_file_path)
     countries_series = countries_gdf.loc[:,'geometry']
     ret_object = {}
@@ -540,8 +539,7 @@ def available_variables_2(url):
 ######*****************************************************************************************################
 ######**ADD A HYDROSERVER TO THE SELECTED GROUP OF HYDROSERVERS THAT WERE CREATED BY THE USER *################
 ######*****************************************************************************************################
-@app_workspace
-def soap_group(request,app_workspace):
+def soap_group(request):
     # logging.basicConfig(level=logging.INFO)
     # logging.getLogger('suds.client').setLevel(logging.DEBUG)
     return_obj = {}
@@ -572,7 +570,7 @@ def soap_group(request,app_workspace):
             return_obj['level'] = extent_value
             ext_list = extent_value.split(',')
             sitesByBoundingBox = water.GetSitesByBoxObject(ext_list,'epsg:3857')
-            countries_json = available_regions_2(request,app_workspace,sites_parsed_json)
+            countries_json = available_regions_2(request,sites_parsed_json)
             variable_json = available_variables_2(url)
 
             return_obj['title'] = title
