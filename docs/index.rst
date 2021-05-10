@@ -16,22 +16,17 @@
    :width: 10%
 
 
-=========================
-|wde| Water Data Explorer
-=========================
+===============================
+|wde| Water Data Explorer Guide
+===============================
 
-
-
-
-Water Data Explorer (WDE) is an application developed by Brigham Young University and The World Meteorological Organization.
-WDE provides the functionalities of data discovery, data access, data visualization, and data downloading from any Information
-System that makes available water data in WaterML format through WaterOneFlow web services.
-
-The following table of contents provides the documentation for a proper use for WDE administrator and regular users
+make the caption bold
 
 .. toctree::
-   :numbered:
-   :maxdepth: 3
+  :caption: Table of Contents
+  :maxdepth: 3
+  :numbered:
+
 
    Water Data Explorer (WDE) <WDE>
    WDE User Functionalities <WDE_user_func>
