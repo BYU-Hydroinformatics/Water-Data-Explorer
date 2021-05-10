@@ -62,11 +62,6 @@ Station/Platform time series data can be plotted as “Scatter” or “Whisker 
 Developers
 ----------
 
-.. image:: https://brightspotcdn.byu.edu/dims4/default/3467dcb/2147483647/strip/true/crop/3312x2484+0+268/resize/400x300!/quality/90/?url=https%3A%2F%2Fbrigham-young-brightspot.s3.amazonaws.com%2F95%2Fce%2F548e128d4a95bb0588d4a923f03c%2Fgroup-photo-true.jpg
-   :align: center
-   :width: 1000
-
-
 WDE has been developed by Elkin Giovanni Romero Bustamante
 at `Brigham Young University's (BYU) Hydroinformatics laboratory <https://hydroinformatics.byu.edu/>`_
 with the support of the World Meteorological Organization.
@@ -82,5 +77,3 @@ Source Code
 The WDE source code is available on Github:
 
   - https://github.com/BYU-Hydroinformatics/Water-Data-Explorer
-
-|br|
