@@ -71,7 +71,7 @@ activate_layer_values = function (){
           dataType: "JSON",
           data: object_request,
           success: function(result){
-            console.log(result)
+            // console.log(result)
             try{
               let description_site = document.getElementById('siteDes')
               if (result.hasOwnProperty('codes') && result['codes'].length > 0){
@@ -239,7 +239,7 @@ activate_layer_values = function (){
                   try{
                     $("#GeneralLoading").removeClass("hidden");
                     let selectedItem = this.value - 1;
-                    console.log(selectedItem)
+                    // console.log(selectedItem)
                   // $( document ).on( 'change', "#variables_graph", function(){
                     // do something...
                     // let start_dateUTC = result['times_series'][Object.keys(result['times_series'])[0]]['beginDateTimeUTC']
@@ -291,7 +291,14 @@ activate_layer_values = function (){
                             type: "info",
                             allow_dismiss: true,
                             z_index: 20000,
-                            delay: 5000
+                            delay: 5000,
+                            animate: {
+                              enter: 'animated fadeInRight',
+                              exit: 'animated fadeOutRight'
+                            },
+                            onShow: function() {
+                                this.css({'width':'auto','height':'auto'});
+                            }
                         }
                     )
                   }
@@ -316,7 +323,14 @@ activate_layer_values = function (){
                         type: "info",
                         allow_dismiss: true,
                         z_index: 20000,
-                        delay: 5000
+                        delay: 5000,
+                        animate: {
+                          enter: 'animated fadeInRight',
+                          exit: 'animated fadeOutRight'
+                        },
+                        onShow: function() {
+                            this.css({'width':'auto','height':'auto'});
+                        }
                     }
                 )
               }
@@ -332,7 +346,14 @@ activate_layer_values = function (){
                       type: "danger",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
             }
@@ -351,7 +372,14 @@ activate_layer_values = function (){
                     type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
           }
@@ -371,7 +399,14 @@ activate_layer_values = function (){
             type: "info",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }

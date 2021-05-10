@@ -3,26 +3,29 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. |wde| image:: images/wde.png
+   :scale: 10%
 
-.. image:: images/wde.png
-   :width: 100
-   :align: center
+.. |logo1| image:: images/WMO_blue_ENG.png
+   :align: middle
+   :width: 20%
 
-===================
-Water Data Explorer
-===================
+
+.. |logo2| image:: images/byu.png
+   :align: middle
+   :width: 10%
+
+
+===============================
+|wde| Water Data Explorer Guide
+===============================
 
 .. toctree::
-   :numbered:
-   :maxdepth: 3
-   :caption: Table of contents:
+  :caption: Table of Contents
+  :maxdepth: 3
+  :numbered:
+
 
    Water Data Explorer (WDE) <WDE>
    WDE User Functionalities <WDE_user_func>
    WDE Administrator Functionalities <WDE_admin_func>
-
-
-
-Indices
-=======
-* :ref:`search`

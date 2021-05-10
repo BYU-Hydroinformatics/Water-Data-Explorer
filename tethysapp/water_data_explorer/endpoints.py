@@ -609,7 +609,7 @@ def soap_group(request,app_workspace):
             sites = GetSites_WHOS(url)
             sites_parsed_json = json.dumps(sites)
             countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
-            print(countries_json)
+            # print(countries_json)
 
             variable_json = json.dumps(available_variables_2(url))
 

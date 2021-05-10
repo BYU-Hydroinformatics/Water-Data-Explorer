@@ -134,7 +134,14 @@ select_variable_change = function(){
                                   type: "sucess",
                                   allow_dismiss: true,
                                   z_index: 20000,
-                                  delay: 5000
+                                  delay: 5000,
+                                  animate: {
+                                    enter: 'animated fadeInRight',
+                                    exit: 'animated fadeOutRight'
+                                  },
+                                  onShow: function() {
+                                      this.css({'width':'auto','height':'auto'});
+                                  }
                               }
                           )
                         }
@@ -171,7 +178,14 @@ select_variable_change = function(){
                                       type: "success",
                                       allow_dismiss: true,
                                       z_index: 20000,
-                                      delay: 5000
+                                      delay: 5000,
+                                      animate: {
+                                        enter: 'animated fadeInRight',
+                                        exit: 'animated fadeOutRight'
+                                      },
+                                      onShow: function() {
+                                          this.css({'width':'auto','height':'auto'});
+                                      }
                                   }
                               )
                           }).
@@ -206,7 +220,14 @@ select_variable_change = function(){
                                          type: "success",
                                          allow_dismiss: true,
                                          z_index: 20000,
-                                         delay: 5000
+                                         delay: 5000,
+                                         animate: {
+                                           enter: 'animated fadeInRight',
+                                           exit: 'animated fadeOutRight'
+                                         },
+                                         onShow: function() {
+                                             this.css({'width':'auto','height':'auto'});
+                                         }
                                      }
                                  )
 
@@ -222,7 +243,14 @@ select_variable_change = function(){
                                          type: "danger",
                                          allow_dismiss: true,
                                          z_index: 20000,
-                                         delay: 5000
+                                         delay: 5000,
+                                         animate: {
+                                           enter: 'animated fadeInRight',
+                                           exit: 'animated fadeOutRight'
+                                         },
+                                         onShow: function() {
+                                             this.css({'width':'auto','height':'auto'});
+                                         }
                                      }
                                  )
                                }
@@ -263,7 +291,14 @@ select_variable_change = function(){
                                       type: "success",
                                       allow_dismiss: true,
                                       z_index: 20000,
-                                      delay: 5000
+                                      delay: 5000,
+                                      animate: {
+                                        enter: 'animated fadeInRight',
+                                        exit: 'animated fadeOutRight'
+                                      },
+                                      onShow: function() {
+                                          this.css({'width':'auto','height':'auto'});
+                                      }
                                   }
                               )
                           }).
@@ -291,7 +326,14 @@ select_variable_change = function(){
                                       type: "success",
                                       allow_dismiss: true,
                                       z_index: 20000,
-                                      delay: 5000
+                                      delay: 5000,
+                                      animate: {
+                                        enter: 'animated fadeInRight',
+                                        exit: 'animated fadeOutRight'
+                                      },
+                                      onShow: function() {
+                                          this.css({'width':'auto','height':'auto'});
+                                      }
                                   }
                               )
                             }
@@ -306,7 +348,14 @@ select_variable_change = function(){
                                       type: "danger",
                                       allow_dismiss: true,
                                       z_index: 20000,
-                                      delay: 5000
+                                      delay: 5000,
+                                      animate: {
+                                        enter: 'animated fadeInRight',
+                                        exit: 'animated fadeOutRight'
+                                      },
+                                      onShow: function() {
+                                          this.css({'width':'auto','height':'auto'});
+                                      }
                                   }
                               )
                             }
@@ -343,7 +392,14 @@ select_variable_change = function(){
                                       type: "success",
                                       allow_dismiss: true,
                                       z_index: 20000,
-                                      delay: 5000
+                                      delay: 5000,
+                                      animate: {
+                                        enter: 'animated fadeInRight',
+                                        exit: 'animated fadeOutRight'
+                                      },
+                                      onShow: function() {
+                                          this.css({'width':'auto','height':'auto'});
+                                      }
                                   }
                               )
                           }).
@@ -358,7 +414,14 @@ select_variable_change = function(){
                                     type: "danger",
                                     allow_dismiss: true,
                                     z_index: 20000,
-                                    delay: 5000
+                                    delay: 5000,
+                                    animate: {
+                                      enter: 'animated fadeInRight',
+                                      exit: 'animated fadeOutRight'
+                                    },
+                                    onShow: function() {
+                                        this.css({'width':'auto','height':'auto'});
+                                    }
                                 }
                             )
                           });
@@ -376,7 +439,14 @@ select_variable_change = function(){
                               type: "danger",
                               allow_dismiss: true,
                               z_index: 20000,
-                              delay: 5000
+                              delay: 5000,
+                              animate: {
+                                enter: 'animated fadeInRight',
+                                exit: 'animated fadeOutRight'
+                              },
+                              onShow: function() {
+                                  this.css({'width':'auto','height':'auto'});
+                              }
                           }
                       )
                     }
@@ -410,7 +480,14 @@ select_variable_change = function(){
                        type: "danger",
                        allow_dismiss: true,
                        z_index: 20000,
-                       delay: 5000
+                       delay: 5000,
+                       animate: {
+                         enter: 'animated fadeInRight',
+                         exit: 'animated fadeOutRight'
+                       },
+                       onShow: function() {
+                           this.css({'width':'auto','height':'auto'});
+                       }
                    }
                )
 
@@ -426,7 +503,14 @@ select_variable_change = function(){
                       type: "danger",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
             }
@@ -445,7 +529,14 @@ select_variable_change = function(){
                    type: "danger",
                    allow_dismiss: true,
                    z_index: 20000,
-                   delay: 5000
+                   delay: 5000,
+                   animate: {
+                     enter: 'animated fadeInRight',
+                     exit: 'animated fadeOutRight'
+                   },
+                   onShow: function() {
+                       this.css({'width':'auto','height':'auto'});
+                   }
                }
            )
          }
@@ -465,7 +556,14 @@ select_variable_change = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -507,7 +605,14 @@ change_type_graphs_group = function(){
                 type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
 
@@ -542,7 +647,14 @@ change_type_graphs_group = function(){
                 type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
 
@@ -561,7 +673,14 @@ change_type_graphs_group = function(){
             type: "info",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }

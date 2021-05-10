@@ -1,13 +1,10 @@
-.. |vspace| raw:: latex
+.. |add| image:: images/add.png
 
-  \vspace{2mm}
+.. |trash| image:: images/trash.png
 
-.. |br| raw:: html
+.. |check_services| image:: images/check_services.png
 
-  <br />
-
-.. |logo1| image:: images/wde.png
-   :scale: 50%
+.. |settings| image:: images/settings.png
 
 =========================
 WDE Admin Functionalities
@@ -18,58 +15,54 @@ The WDE admin functionalities are only available for the WDE administrators.
 Adding and Deleting Data Catalogs and Views
 *******************************************
 
-To add Catalogs, administrator should use the “+” icon to access the “Add a Catalog of Views” menu as shown on the Figure.
+To add Catalogs, administrators should use the |add| icon to access the “Add a Catalog of Views” menu.
 
 .. image:: images/1.9.png
    :width: 1000
    :align: center
 
-|br|
 
-In this menu, to add a new Catalog of Views, administrator should enter its title, description, and endpoint if available.
+In this menu, to add a new Catalog of Views, administrators should enter its title, description, and endpoint if available.
 
 .. note::
+   .. image:: images/URL_add_catalog.png
+      :align: center
+      :scale: 75
 
-   |logo1|
-   ScreenShot: of the ULR input
-   To add a Catalog that is already published and accessible through WaterOneFlow web services, administrator should enter the Catalog endpoint to automatically import its Views.
+   To add a Catalog that is already published and accessible through WaterOneFlow web services, administrators should enter the Catalog endpoint to automatically import its Views.
+   Administrators can check the available Views by using the |check_services| button.
 
-Administrator can check the available Views accessible through the Catalog’s endpoint by using the “Check Services” button.
-
-To delete Catalogs, administrator should use the “Trash” icon to access the “Delete Catalogs” menu and select the Catalog to be deleted as shown on the Figure.
+To delete Catalogs, administrators should use the |trash| icon to access the “Delete Catalogs” menu and select the Catalog to be deleted.
 
 .. image:: images/1.10.png
    :width: 1000
    :align: center
 
-|br|
 
-To add Views to a specific Catalog, administrator should use the “+” icon to the right of  the Catalog’s title to access the “Add Views to Catalog” menu as shown on the Figure.
+To add Views to a specific Catalog, administrators should use the |add| icon to the right of  the Catalog’s title to access the “Add Views to Catalog” menu.
 
 
 .. image:: images/1.11.png
    :width: 1000
    :align: center
 
-|br|
 
-To delete Views, the administrator should use the “Trash” icon to access the “Delete Views” menu and select the View to be deleted as shown on the Figure.
+To delete Views, the administrators should use the |trash| icon to access the “Delete Views” menu and select the View to be deleted.
 
 .. image:: images/1.12.png
    :width: 1000
    :align: center
 
-|br|
 
 Customizing the WDE User Interface
 **********************************
 
-Administrator can customize the WDE user interface by selecting the “Settings” icon as shown in the figure.
+Administrators can customize the WDE user interface by selecting the |settings| icon.
 
 .. image:: images/1.13.png
    :width: 1000
    :align: center
 
-|br|
 
-In the settings window, administrator can customize the name of the institution/system that provides Catalogs/Views to the WDE. Administrator can also customize the institution/system logo, as well as the boundaries of the WDE map interface. These customizations are available in the Custom Settings table shown in the figure.
+In the settings window, administrators can customize the name of the institution/system that provides Catalogs/Views to the WDE.
+Administrators can also customize the institution/system logo, as well as the boundaries of the WDE map interface. These customizations are available in the Custom Settings table.

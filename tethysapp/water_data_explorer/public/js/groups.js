@@ -44,7 +44,14 @@ give_available_services = function(){
                   type: "danger",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
           )
         }
@@ -60,7 +67,14 @@ give_available_services = function(){
                 type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
       }
@@ -78,7 +92,14 @@ give_available_services = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -160,7 +181,14 @@ show_variables_groups = function(){
                 type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
 
@@ -178,7 +206,14 @@ show_variables_groups = function(){
               type: "danger",
               allow_dismiss: true,
               z_index: 20000,
-              delay: 5000
+              delay: 5000,
+              animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+              },
+              onShow: function() {
+                  this.css({'width':'auto','height':'auto'});
+              }
           }
       )
     }
@@ -226,7 +261,14 @@ available_regions = function(){
                 type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
       }
@@ -242,7 +284,14 @@ available_regions = function(){
               type: "danger",
               allow_dismiss: true,
               z_index: 20000,
-              delay: 5000
+              delay: 5000,
+              animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+              },
+              onShow: function() {
+                  this.css({'width':'auto','height':'auto'});
+              }
           }
       )
     }
@@ -267,14 +316,14 @@ listener_checkbox = function(list_countries){
 
           variables_list = data['variables'];
           variables_codes_list = data['variables_codes'];
-          console.log(variables_codes_list);
+          // console.log(variables_codes_list);
           const chunk = (arr, size) =>
             Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
               arr.slice(i * size, i * size + size)
             );
           let arr=chunk(variables_list, 2);
           let arr2=chunk(variables_codes_list, 2);
-          console.log(arr2);
+          // console.log(arr2);
 
 
           var HSTableHtml =
@@ -312,7 +361,14 @@ listener_checkbox = function(list_countries){
                   type: "danger",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
           )
         }
@@ -328,7 +384,14 @@ listener_checkbox = function(list_countries){
                 type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
       }
@@ -345,7 +408,14 @@ listener_checkbox = function(list_countries){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -371,7 +441,14 @@ load_search_group_modal = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -488,7 +565,14 @@ available_regions_group = function(){
                   type: "danger",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
           )
         }
@@ -505,7 +589,14 @@ available_regions_group = function(){
                 type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
       }
@@ -523,7 +614,14 @@ available_regions_group = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -612,7 +710,14 @@ listener_checkbox_group = function(list_countries){
                   type: "danger",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
           )
         }
@@ -628,7 +733,14 @@ listener_checkbox_group = function(list_countries){
                 type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
       }
@@ -646,7 +758,14 @@ listener_checkbox_group = function(list_countries){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -704,7 +823,14 @@ show_variables_group = function(){
                   type: "danger",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
           )
         }
@@ -721,7 +847,14 @@ show_variables_group = function(){
                 type: "danger",
                 allow_dismiss: true,
                 z_index: 20000,
-                delay: 5000
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
             }
         )
       }
@@ -738,7 +871,14 @@ show_variables_group = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -892,7 +1032,14 @@ create_group_hydroservers = function(){
                           type: "danger",
                           allow_dismiss: true,
                           z_index: 20000,
-                          delay: 5000
+                          delay: 5000,
+                          animate: {
+                            enter: 'animated fadeInRight',
+                            exit: 'animated fadeOutRight'
+                          },
+                          onShow: function() {
+                              this.css({'width':'auto','height':'auto'});
+                          }
                       }
                   )
               }
@@ -909,7 +1056,14 @@ create_group_hydroservers = function(){
                       type: "danger",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
             }
@@ -926,7 +1080,14 @@ create_group_hydroservers = function(){
                     type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
         }
@@ -943,7 +1104,14 @@ create_group_hydroservers = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -1033,7 +1201,14 @@ load_group_hydroservers = function(){
                     type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
           }
@@ -1051,7 +1226,14 @@ load_group_hydroservers = function(){
                type: "danger",
                allow_dismiss: true,
                z_index: 20000,
-               delay: 5000
+               delay: 5000,
+               animate: {
+                 enter: 'animated fadeInRight',
+                 exit: 'animated fadeOutRight'
+               },
+               onShow: function() {
+                   this.css({'width':'auto','height':'auto'});
+               }
            }
        )
    }
@@ -1112,7 +1294,14 @@ remove_individual_hydroservers_group = function(group_name){
                     type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
           }
@@ -1128,7 +1317,14 @@ remove_individual_hydroservers_group = function(group_name){
                     type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
         }
@@ -1143,7 +1339,14 @@ remove_individual_hydroservers_group = function(group_name){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -1160,7 +1363,7 @@ make_list_groups = function(){
     let groupsDiv = $("#current-Groupservers").find(".panel.panel-default");
     let arrayGroups = Object.values(groupsDiv);
     let finalGroupArray=[];
-    console.log(arrayGroups)
+    // console.log(arrayGroups)
     arrayGroups.forEach(function(g){
       if(g.id){
         let stringGroups = g.id.split("_")[0];
@@ -1180,7 +1383,7 @@ make_list_groups = function(){
 
       }
     });
-    console.log(finalGroupArray)
+    // console.log(finalGroupArray)
     var HSTableHtml =
         '<table class="table table-condensed-xs" id="tbl-hydrogroups"><thead><th>Select</th><th>Catalog Title</th></thead><tbody>'
     if (finalGroupArray.length < 0) {
@@ -1214,7 +1417,14 @@ make_list_groups = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -1236,7 +1446,7 @@ get_hs_list_from_hydroserver = function(){
       let group_name_obj={
         group: arrayActual_group
       };
-      console.log(id_dictionary)
+      // console.log(id_dictionary)
 
       $.ajax({
           type: "GET",
@@ -1288,7 +1498,14 @@ get_hs_list_from_hydroserver = function(){
                       type: "danger",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
             }
@@ -1304,7 +1521,14 @@ get_hs_list_from_hydroserver = function(){
                       type: "danger",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
           }
@@ -1319,7 +1543,14 @@ get_hs_list_from_hydroserver = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
 
@@ -1411,7 +1642,14 @@ delete_group_of_hydroservers = function(){
                       type: "success",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
                   }
               )
           }
@@ -1425,7 +1663,14 @@ delete_group_of_hydroservers = function(){
                     type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
           }
@@ -1443,7 +1688,14 @@ delete_group_of_hydroservers = function(){
                     type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
         }
@@ -1460,7 +1712,14 @@ delete_group_of_hydroservers = function(){
               type: "info",
               allow_dismiss: true,
               z_index: 20000,
-              delay: 5000
+              delay: 5000,
+              animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+              },
+              onShow: function() {
+                  this.css({'width':'auto','height':'auto'});
+              }
           }
       )
 
@@ -1476,7 +1735,14 @@ delete_group_of_hydroservers = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
 
@@ -1531,7 +1797,7 @@ catalog_filter = function(){
           try{
             // console.log(result);
             let jeojson = JSON.parse(JSON.parse(result)['geojson']);
-            console.log(jeojson);
+            // console.log(jeojson);
             map.removeLayer(layer_selected_countries['countries']);
 
             if(jeojson['features'].length > 0){
@@ -1578,6 +1844,7 @@ catalog_filter = function(){
             // console.log(JSON.parse(result));
             // console.log(JSON.parse(result)['hs']);
             let hs_available = JSON.parse(result)['hs'];
+            // console.log(hs_available);
             let new_hs_available = []
             hs_available.forEach(function(hs){
               // hs = hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
@@ -1586,10 +1853,13 @@ catalog_filter = function(){
               Object.keys(id_dictionary).forEach(function(key) {
                 if(id_dictionary[key] == hs ){
                   hs_new2 = key;
+                  // console.log(hs_available);
+                  new_hs_available.push(hs_new2);
+
                 }
               });
-              new_hs_available.push(hs_new2);
             })
+            // console.log(new_hs_available);
             let sitesObj =  JSON.parse(result)['stations'];
             map.getLayers().forEach(function(layer) {
               if(layer instanceof ol.layer.Vector){
@@ -1743,7 +2013,14 @@ catalog_filter = function(){
                     type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
           }
@@ -1761,7 +2038,14 @@ catalog_filter = function(){
                   type: "danger",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
           )
         }
@@ -1778,7 +2062,14 @@ catalog_filter = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -1839,7 +2130,14 @@ catalog_filter_server = function(){
                     type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
-                    delay: 5000
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
                 }
             )
           }
@@ -1857,7 +2155,14 @@ catalog_filter_server = function(){
                   type: "danger",
                   allow_dismiss: true,
                   z_index: 20000,
-                  delay: 5000
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
               }
           )
 
@@ -1875,7 +2180,14 @@ catalog_filter_server = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -1905,16 +2217,27 @@ reset_keywords = function(){
     map.removeLayer(layer_selected_countries['countries']);
 
     layer_object_filter={};
+    //make the layers invisible
+    // map.getLayers().forEach(function(layer) {
+    //   if(layer instanceof ol.layer.Vector){
+    //     layer.setStyle(new ol.style.Style({}));
+    //   }
+    //  });
 
     $("#current-Groupservers").find("li").each(function(){
           var $li=$(this)['0'];
           let id_li = $li['id'];
+          // Uncheck the service
+          // $(`#${id_li} input[type=checkbox]`).each(function() {
+          //   this.checked = false;
+          // });
           $(`#${id_li}`).css({"opacity": "1",
                               "border-color": "#d3d3d3",
                               "border-width":"1px",
                               "border-style":"solid",
                               "color":"#555555",
                               "font-weight": "normal"});
+
 
    });
   }
@@ -1927,7 +2250,14 @@ reset_keywords = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -2000,7 +2330,14 @@ generateListServices = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -2043,7 +2380,14 @@ load_search_modal = function(){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
@@ -2122,7 +2466,14 @@ general_search = function(id_search_input, id_table){
             type: "danger",
             allow_dismiss: true,
             z_index: 20000,
-            delay: 5000
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
         }
     )
   }
