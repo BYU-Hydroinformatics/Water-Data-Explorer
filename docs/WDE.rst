@@ -1,11 +1,3 @@
-.. |vspace| raw:: latex
-
-  \vspace{2mm}
-
-.. |br| raw:: html
-
-  <br />
-
 =========================
 Water Data Explorer (WDE)
 =========================
@@ -36,49 +28,43 @@ User Interface
 To organize and manage various WaterOneFlow web services, WDE uses Data Views that are organized in Catalogs.
 
 
-.. figure:: images/1.1.png
+.. image:: images/1.1.png
    :width: 1000
    :align: center
 
-|br|
 
 Each Data View contains a set of data that is accessible through a specific WaterOneFlow web service.
 
 The stations for which data are accessible through a specific Data View are displayed on the WDE map interface along with a legend of the respective Data Views.
 
 
-.. figure:: images/1.2.png
+.. image:: images/1.2.png
    :width: 1000
    :align: center
 
-|br|
 
 For each Station/Platform, a set of metadata is available in the Graphs Panel of the WDE User Interface. Also, for each Station/Platform, a table of observed variables is available and includes variable names, units, and interpolation types.
 
 
-.. figure:: images/1.3.png
+.. image:: images/1.3.png
    :width: 1000
    :align: center
 
-|br|
 
 Station/Platform time series data can be plotted as “Scatter” or “Whisker and Box” plots, and be downloaded in CSV, `OGC NetCDF <https://www.ogc.org/standards/netcdf>`_ , `OGC WaterML 2.0 <https://www.ogc.org/standards/waterml>`_ , and `CUAHSI WaterML 1.0 <https://his.cuahsi.org/wofws.html>`_ formats for any available time period of interest in the Time Series Plots section.
 
 
-.. figure:: images/1.4.png
+.. image:: images/1.4.png
    :width: 1000
    :align: center
 
-|br|
 
 Developers
 ----------
 
-.. figure:: https://brightspotcdn.byu.edu/dims4/default/3467dcb/2147483647/strip/true/crop/3312x2484+0+268/resize/400x300!/quality/90/?url=https%3A%2F%2Fbrigham-young-brightspot.s3.amazonaws.com%2F95%2Fce%2F548e128d4a95bb0588d4a923f03c%2Fgroup-photo-true.jpg
+.. image:: https://brightspotcdn.byu.edu/dims4/default/3467dcb/2147483647/strip/true/crop/3312x2484+0+268/resize/400x300!/quality/90/?url=https%3A%2F%2Fbrigham-young-brightspot.s3.amazonaws.com%2F95%2Fce%2F548e128d4a95bb0588d4a923f03c%2Fgroup-photo-true.jpg
    :align: center
    :width: 1000
-
-|br|
 
 
 WDE has been developed by Elkin Giovanni Romero Bustamante

@@ -1,12 +1,3 @@
-.. |vspace| raw:: latex
-
-  \vspace{2mm}
-
-.. |br| raw:: html
-
-  <br />
-
-
 .. |add| image:: images/add.png
 
 .. |trash| image:: images/trash.png
@@ -30,7 +21,6 @@ To add Catalogs, administrators should use the |add| icon to access the “Add a
    :width: 1000
    :align: center
 
-|br|
 
 In this menu, to add a new Catalog of Views, administrators should enter its title, description, and endpoint if available.
 
@@ -48,7 +38,6 @@ To delete Catalogs, administrators should use the |trash| icon to access the “
    :width: 1000
    :align: center
 
-|br|
 
 To add Views to a specific Catalog, administrators should use the |add| icon to the right of  the Catalog’s title to access the “Add Views to Catalog” menu.
 
@@ -57,7 +46,6 @@ To add Views to a specific Catalog, administrators should use the |add| icon to 
    :width: 1000
    :align: center
 
-|br|
 
 To delete Views, the administrators should use the |trash| icon to access the “Delete Views” menu and select the View to be deleted.
 
@@ -65,7 +53,6 @@ To delete Views, the administrators should use the |trash| icon to access the �
    :width: 1000
    :align: center
 
-|br|
 
 Customizing the WDE User Interface
 **********************************
@@ -76,7 +63,6 @@ Administrators can customize the WDE user interface by selecting the |settings| 
    :width: 1000
    :align: center
 
-|br|
 
 In the settings window, administrators can customize the name of the institution/system that provides Catalogs/Views to the WDE.
 Administrators can also customize the institution/system logo, as well as the boundaries of the WDE map interface. These customizations are available in the Custom Settings table.

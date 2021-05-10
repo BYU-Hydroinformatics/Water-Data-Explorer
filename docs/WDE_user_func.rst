@@ -1,11 +1,3 @@
-.. |vspace| raw:: latex
-
-  \vspace{2mm}
-
-.. |br| raw:: html
-
-  <br />
-
 .. |update_vars| image:: images/update_vars.png
    :scale: 75%
 
@@ -51,7 +43,6 @@ The user can filter the available Views by countries and variables of interest b
    :width: 1000
    :align: center
 
-|br|
 
 .. note::
 
@@ -73,7 +64,6 @@ To zoom to a specific View on the map, the user should use the |marker| icon.
    :width: 1000
    :align: center
 
-|br|
 
 Data Analysis
 *************
@@ -89,7 +79,6 @@ For a selected View, users can open a Python notebook template in Google Colab. 
    :width: 1000
    :align: center
 
-|br|
 
 Time Series Visualization and Downloading
 *****************************************
@@ -103,6 +92,7 @@ the user should select the |plots| icon on the top right of the Graphs Panel.
 .. image:: images/1.8.png
    :width: 1000
    :align: center
+
 
 .. note::
    User can hide or show the Graphs Panel by means of the |graph_panel| icon on the right of the application header.
