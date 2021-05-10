@@ -20,8 +20,6 @@
 |wde| Water Data Explorer Guide
 ===============================
 
-make the caption bold
-
 .. toctree::
   :caption: Table of Contents
   :maxdepth: 3

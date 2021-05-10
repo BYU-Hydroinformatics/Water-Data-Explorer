@@ -12,13 +12,14 @@ Water Data Explorer (WDE)
 
 Introduction
 ************
-MAKE LINKS TO THE tools
-LESS space after all the figures
-Links for the formats
-Developers pictures better version
-|
 
-In recent years, there has been a growing recognition of the need for standardized ways of sharing water data on the web. In response to this need, the Consortium of Universities for the Advancement of Hydrologic Science (CUAHSI) Hydrologic Information System (HIS) has been developed along with the standardized WaterOneFlow web services and WaterML data exchange format. To access data that are shared using the WaterOneFlow services and WaterML format, tools already exist such as the Microsoft Windows HydroDesktop software (link), the WaterML R package(link), and the web-based CUAHSI HydroClient (link) which serves as an access point to the CUAHSI HIS database.
+In recent years, there has been a growing recognition of the need for standardized ways of sharing water data on the web.
+In response to this need, the Consortium of Universities for the Advancement of Hydrologic Science (CUAHSI)
+Hydrologic Information System (HIS) has been developed along with the standardized WaterOneFlow web services and WaterML
+data exchange format. To access data that are shared using the WaterOneFlow services and WaterML format,
+tools already exist such as the
+`Microsoft Windows HydroDesktop software <https://www.sciencedirect.com/science/article/pii/S1364815212001053>`_ ,
+`WaterML R package <https://github.com/jirikadlec2/waterml>`_, and the web-based `CUAHSI HydroClient <https://data.cuahsi.org/>`_ which serves as an access point to the `CUAHSI HIS <http://hiscentral.cuahsi.org/>`_ database.
 
 
 Water Data Explorer (WDE) is a newly developed web-based tool allowing a broad range of users to discover, access, visualize, and download data from any Information System that makes available water data in WaterML format through WaterOneFlow services. WDE is designed in a way that allows users to customize it for local or regional web portals.
@@ -61,7 +62,7 @@ For each Station/Platform, a set of metadata is available in the Graphs Panel of
 
 |br|
 
-Station/Platform time series data can be plotted as “Scatter” or “Whisker and Box” plots, and be downloaded in CSV, OGC NetCDF (CF conventions), OGC WaterML 2.0 and CUAHSI WaterML 1.0 formats for any available time period of interest in the Time Series Plots section.
+Station/Platform time series data can be plotted as “Scatter” or “Whisker and Box” plots, and be downloaded in CSV, `OGC NetCDF <https://www.ogc.org/standards/netcdf>`_ , `OGC WaterML 2.0 <https://www.ogc.org/standards/waterml>`_ , and `CUAHSI WaterML 1.0 <https://his.cuahsi.org/wofws.html>`_ formats for any available time period of interest in the Time Series Plots section.
 
 
 .. figure:: images/1.4.png
@@ -80,10 +81,13 @@ Developers
 |br|
 
 
-WDE has been developed by Elkin Giovanni Romero Bustamante at Brigham Young University's (BYU) Hydroinformatics laboratory with the support of the World Meteorological Organization.
-The BYU's Hydroinformatics laboratory focuses on delivering different software products and services for water
-modelling. Some of the most important works include: Global Streamflow Forecast Services API, creation of
-the Tethys Platform, and Hydroserver Lite. The most recent publications and works can be found on the BYU Hydroinformatics website.
+WDE has been developed by Elkin Giovanni Romero Bustamante
+at `Brigham Young University's (BYU) Hydroinformatics laboratory <https://hydroinformatics.byu.edu/>`_
+with the support of the World Meteorological Organization.
+The BYU's Hydroinformatics laboratory focuses on delivering different software products and services for water modelling. Some of the most important works include:
+`Global Streamflow Forecast Services API <https://hydroinformatics.byu.edu/global-streamflow-forecasts>`_ ,
+creation of the `Tethys Platform <https://hydroinformatics.byu.edu/tethys-platform>`_ ,
+and `Hydroserver Lite <http://128.187.106.131/Historical_Data_template.php>`_ .The most recent publications and works can be found on the BYU Hydroinformatics website.
 
 Source Code
 -----------

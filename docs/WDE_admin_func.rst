@@ -7,7 +7,13 @@
   <br />
 
 
-| button for "Check Services"
+.. |add| image:: images/add.png
+
+.. |trash| image:: images/trash.png
+
+.. |check_services| image:: images/check_services.png
+
+.. |settings| image:: images/settings.png
 
 =========================
 WDE Admin Functionalities
@@ -18,7 +24,7 @@ The WDE admin functionalities are only available for the WDE administrators.
 Adding and Deleting Data Catalogs and Views
 *******************************************
 
-To add Catalogs, administrators should use the “+” icon to access the “Add a Catalog of Views” menu.
+To add Catalogs, administrators should use the |add| icon to access the “Add a Catalog of Views” menu.
 
 .. image:: images/1.9.png
    :width: 1000
@@ -34,9 +40,9 @@ In this menu, to add a new Catalog of Views, administrators should enter its tit
       :scale: 75
 
    To add a Catalog that is already published and accessible through WaterOneFlow web services, administrators should enter the Catalog endpoint to automatically import its Views.
-   Administrators can check the available Views by using the “Check Services” button.
+   Administrators can check the available Views by using the |check_services| button.
 
-To delete Catalogs, administrators should use the “Trash” icon to access the “Delete Catalogs” menu and select the Catalog to be deleted.
+To delete Catalogs, administrators should use the |trash| icon to access the “Delete Catalogs” menu and select the Catalog to be deleted.
 
 .. image:: images/1.10.png
    :width: 1000
@@ -44,7 +50,7 @@ To delete Catalogs, administrators should use the “Trash” icon to access the
 
 |br|
 
-To add Views to a specific Catalog, administrators should use the “+” icon to the right of  the Catalog’s title to access the “Add Views to Catalog” menu.
+To add Views to a specific Catalog, administrators should use the |add| icon to the right of  the Catalog’s title to access the “Add Views to Catalog” menu.
 
 
 .. image:: images/1.11.png
@@ -53,7 +59,7 @@ To add Views to a specific Catalog, administrators should use the “+” icon t
 
 |br|
 
-To delete Views, the administrators should use the “Trash” icon to access the “Delete Views” menu and select the View to be deleted.
+To delete Views, the administrators should use the |trash| icon to access the “Delete Views” menu and select the View to be deleted.
 
 .. image:: images/1.12.png
    :width: 1000
@@ -64,7 +70,7 @@ To delete Views, the administrators should use the “Trash” icon to access th
 Customizing the WDE User Interface
 **********************************
 
-Administrators can customize the WDE user interface by selecting the “Settings” icon.
+Administrators can customize the WDE user interface by selecting the |settings| icon.
 
 .. image:: images/1.13.png
    :width: 1000
