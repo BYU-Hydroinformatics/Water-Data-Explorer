@@ -1654,7 +1654,7 @@ delete_group_of_hydroservers = function(){
               )
           }
           catch(e){
-            console.log(error);
+            console.log(e);
             $.notify(
                 {
                     message: `We are having an error deleting the selected groups of views`
