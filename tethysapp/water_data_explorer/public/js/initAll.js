@@ -174,7 +174,7 @@ var water_data_explorer_PACKAGE = (function() {
 
         const baseLayer =  new ol.layer.Tile({
                 source: new ol.source.TileArcGISRest({
-                  attributions: 'Copyright: Produced by United Nations Geospatial',
+                  attributions: 'Produced by United Nations Geospatial',
                   url: url_UN
                 })
         });
@@ -230,7 +230,7 @@ var water_data_explorer_PACKAGE = (function() {
                       new ol.control.Attribution({
                         collapsible: true,
                         collapsed: false,
-                        tipLabel: 'Copyright: Produced by United Nations Geospatial'
+                        tipLabel: 'Produced by United Nations Geospatial'
                       })
                   ]),
               crossOrigin: "anonymous",
