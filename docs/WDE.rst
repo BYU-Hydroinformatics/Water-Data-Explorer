@@ -68,7 +68,7 @@ with the support of the World Meteorological Organization.
 The BYU's Hydroinformatics laboratory focuses on delivering different software products and services for water modelling. Some of the most important works include:
 `Global Streamflow Forecast Services API <https://hydroinformatics.byu.edu/global-streamflow-forecasts>`_ ,
 creation of the `Tethys Platform <https://hydroinformatics.byu.edu/tethys-platform>`_ ,
-and `Hydroserver Lite <http://128.187.106.131/Historical_Data_template.php>`_ .The most recent publications and works can be found on the BYU Hydroinformatics website.
+and `Hydroserver Lite <http://128.187.106.131/Historical_Data_template.php>`_ . The most recent publications and works can be found on the BYU Hydroinformatics website.
 
 Source Code
 -----------

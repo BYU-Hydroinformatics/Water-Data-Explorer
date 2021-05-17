@@ -47,7 +47,7 @@ To add Views to a specific Catalog, administrators should use the |add| icon to 
    :align: center
 
 
-To delete Views, the administrators should use the |trash| icon to access the “Delete Views” menu and select the View to be deleted.
+To delete Views, administrators should use the |trash| icon to access the “Delete Views” menu and select the View to be deleted.
 
 .. image:: images/1.12.png
    :width: 1000

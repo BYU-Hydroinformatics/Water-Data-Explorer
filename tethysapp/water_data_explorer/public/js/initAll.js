@@ -152,7 +152,8 @@ var water_data_explorer_PACKAGE = (function() {
         else{
           myZoom = 3;
         }
-        var projection = ol.proj.get("EPSG:3857")
+        var projection = ol.proj.get("EPSG:3857");
+
         // var baseLayer = new ol.layer.Tile({
         //     source: new ol.source.BingMaps({
         //         key:
@@ -173,6 +174,7 @@ var water_data_explorer_PACKAGE = (function() {
 
         const baseLayer =  new ol.layer.Tile({
                 source: new ol.source.TileArcGISRest({
+                  attributions: 'Produced by United Nations Geospatial',
                   url: url_UN
                 })
         });
@@ -224,7 +226,12 @@ var water_data_explorer_PACKAGE = (function() {
                   .defaults()
                   .extend([
                       new ol.control.ZoomSlider(),
-                      new ol.control.FullScreen()
+                      new ol.control.FullScreen(),
+                      new ol.control.Attribution({
+                        collapsible: true,
+                        collapsed: false,
+                        tipLabel: 'Produced by United Nations Geospatial'
+                      })
                   ]),
               crossOrigin: "anonymous",
               // interactions: ol.interaction.defaults({ dragPan: false}),

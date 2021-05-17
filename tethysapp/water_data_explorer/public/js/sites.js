@@ -191,6 +191,8 @@ activate_layer_values = function (){
                 }
                 let variable_select = $("#variables_graph");
                 variable_select.empty();
+                variable_select.selectpicker("refresh");
+                
                 let i = 1;
                 let array_variables=[]
                 let option_variables;

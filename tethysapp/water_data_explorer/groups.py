@@ -50,8 +50,7 @@ Persistent_Store_Name = 'catalog_db'
 # logging.basicConfig(level=logging.INFO)
 # logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
-@app_workspace
-def available_regions(request, app_workspace):
+def available_regions(request):
 
     ret_object = {}
     list_regions = []
@@ -237,8 +236,7 @@ def available_services(request):
 ######*****************************************************************************************################
 ######***********************CREATE AN EMPTY GROUP OF HYDROSERVERS ****************************################
 ######*****************************************************************************************################
-@app_workspace
-def create_group(request,app_workspace):
+def create_group(request):
     group_obj={}
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()  # Initiate a session
@@ -308,10 +306,10 @@ def addMultipleViews(request,hs_list,group):
             sites_object = GetSites_WHOS(new_url)
             sites_parsed_json = json.dumps(sites_object)
             countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
-            print(countries_json)
+            # print(countries_json)
 
             variable_json = json.dumps(available_variables_2(hs['url']))
-            print(variable_json)
+            # print(variable_json)
             # return_obj['title'] = hs['title'].translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
             return_obj['title'] = hs['title']
             return_obj['url'] = hs['url']
@@ -430,45 +428,45 @@ def catalog_group(request):
 ######*****************************************************************************************################
 ############################## DELETE A GROUP OF HYDROSERVERS #############################
 ######*****************************************************************************************################
-@permission_required('delete_hydrogroups')
+
 def delete_group(request):
-    list_catalog = {}
-    list_groups ={}
     list_response = {}
-    SessionMaker = app.get_persistent_store_database(
-        Persistent_Store_Name, as_sessionmaker=True)
-    session = SessionMaker()
-    #print(request.POST)
-    if request.is_ajax() and request.method == 'POST':
-        groups=request.POST.getlist('groups[]')
-        list_groups['groups']=groups
-        list_response['groups']=groups
-        #print(groups)
-        i=0
-        arrayTitles = []
-        # for group in session.query(Groups).all():
-        #     print(group.title)
+    can_delete_permission = has_permission(request,"delete_hydrogroups")
+    if can_delete_permission:
+        list_catalog = {}
+        list_groups ={}
+        SessionMaker = app.get_persistent_store_database(
+            Persistent_Store_Name, as_sessionmaker=True)
+        session = SessionMaker()
+        #print(request.POST)
+        if request.is_ajax() and request.method == 'POST':
+            groups=request.POST.getlist('groups[]')
+            list_groups['groups']=groups
+            list_response['groups']=groups
+            #print(groups)
+            i=0
+            arrayTitles = []
+            # for group in session.query(Groups).all():
+            #     print(group.title)
 
-        for group in groups:
-            hydroservers_group = session.query(Groups).filter(Groups.title == group)[0].hydroserver
-            for server in hydroservers_group:
-                title=server.title
-                arrayTitles.append(title)
-                i_string=str(i);
-                list_catalog[i_string] = title
+            for group in groups:
+                hydroservers_group = session.query(Groups).filter(Groups.title == group)[0].hydroserver
+                for server in hydroservers_group:
+                    title=server.title
+                    arrayTitles.append(title)
+                    i_string=str(i);
+                    list_catalog[i_string] = title
 
-                i=i+1
-            hydroservers_group = session.query(Groups).filter(Groups.title == group).first()
-            session.delete(hydroservers_group)
-            session.commit()
-            session.close()
-        list_response['hydroservers']=arrayTitles
-
+                    i=i+1
+                hydroservers_group = session.query(Groups).filter(Groups.title == group).first()
+                session.delete(hydroservers_group)
+                session.commit()
+                session.close()
+            list_response['hydroservers']=arrayTitles
 
     return JsonResponse(list_response)
 
-@app_workspace
-def catalog_filter(request,app_workspace):
+def catalog_filter(request):
     ret_obj = {}
     actual_group = None
     if request.method == 'GET' and 'actual-group' in request.GET:
@@ -486,7 +484,7 @@ def catalog_filter(request,app_workspace):
         var_new.append(varia.replace("_"," "))
     variables = var_new
     # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries2.geojson')
-    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries3.geojson')
+    countries_geojson_file_path = os.path.join(app.get_app_workspace().path, 'countries3.geojson')
 
     countries_gdf = gpd.read_file(countries_geojson_file_path)
     # selected_countries_plot = countries_gdf[countries_gdf['name'].isin(countries)].reset_index(drop=True)
@@ -875,8 +873,7 @@ def filter_variable(variables_list, actual_group = None):
 
     return hs_list
 
-@app_workspace
-def get_variables_for_country(request,app_workspace):
+def get_variables_for_country(request):
     response_obj = {}
     countries = request.GET.getlist('countries[]')
     list_variables = []
