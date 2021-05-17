@@ -306,10 +306,10 @@ def addMultipleViews(request,hs_list,group):
             sites_object = GetSites_WHOS(new_url)
             sites_parsed_json = json.dumps(sites_object)
             countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
-            print(countries_json)
+            # print(countries_json)
 
             variable_json = json.dumps(available_variables_2(hs['url']))
-            print(variable_json)
+            # print(variable_json)
             # return_obj['title'] = hs['title'].translate ({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
             return_obj['title'] = hs['title']
             return_obj['url'] = hs['url']
@@ -428,40 +428,41 @@ def catalog_group(request):
 ######*****************************************************************************************################
 ############################## DELETE A GROUP OF HYDROSERVERS #############################
 ######*****************************************************************************************################
-@permission_required('delete_hydrogroups')
+
 def delete_group(request):
-    list_catalog = {}
-    list_groups ={}
     list_response = {}
-    SessionMaker = app.get_persistent_store_database(
-        Persistent_Store_Name, as_sessionmaker=True)
-    session = SessionMaker()
-    #print(request.POST)
-    if request.is_ajax() and request.method == 'POST':
-        groups=request.POST.getlist('groups[]')
-        list_groups['groups']=groups
-        list_response['groups']=groups
-        #print(groups)
-        i=0
-        arrayTitles = []
-        # for group in session.query(Groups).all():
-        #     print(group.title)
+    can_delete_permission = has_permission(request,"delete_hydrogroups")
+    if can_delete_permission:
+        list_catalog = {}
+        list_groups ={}
+        SessionMaker = app.get_persistent_store_database(
+            Persistent_Store_Name, as_sessionmaker=True)
+        session = SessionMaker()
+        #print(request.POST)
+        if request.is_ajax() and request.method == 'POST':
+            groups=request.POST.getlist('groups[]')
+            list_groups['groups']=groups
+            list_response['groups']=groups
+            #print(groups)
+            i=0
+            arrayTitles = []
+            # for group in session.query(Groups).all():
+            #     print(group.title)
 
-        for group in groups:
-            hydroservers_group = session.query(Groups).filter(Groups.title == group)[0].hydroserver
-            for server in hydroservers_group:
-                title=server.title
-                arrayTitles.append(title)
-                i_string=str(i);
-                list_catalog[i_string] = title
+            for group in groups:
+                hydroservers_group = session.query(Groups).filter(Groups.title == group)[0].hydroserver
+                for server in hydroservers_group:
+                    title=server.title
+                    arrayTitles.append(title)
+                    i_string=str(i);
+                    list_catalog[i_string] = title
 
-                i=i+1
-            hydroservers_group = session.query(Groups).filter(Groups.title == group).first()
-            session.delete(hydroservers_group)
-            session.commit()
-            session.close()
-        list_response['hydroservers']=arrayTitles
-
+                    i=i+1
+                hydroservers_group = session.query(Groups).filter(Groups.title == group).first()
+                session.delete(hydroservers_group)
+                session.commit()
+                session.close()
+            list_response['hydroservers']=arrayTitles
 
     return JsonResponse(list_response)
 
