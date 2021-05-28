@@ -596,7 +596,6 @@ def soap_group(request):
             # sites = water.GetSites()
 
             sites = GetSites_WHOS(url)
-            print(sites)
             sites_parsed_json = json.dumps(sites)
             countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
             # print(countries_json)
