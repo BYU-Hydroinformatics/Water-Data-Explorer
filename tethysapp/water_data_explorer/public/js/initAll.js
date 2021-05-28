@@ -154,20 +154,6 @@ var water_data_explorer_PACKAGE = (function() {
         }
         var projection = ol.proj.get("EPSG:3857");
 
-        // var baseLayer = new ol.layer.Tile({
-        //     source: new ol.source.BingMaps({
-        //         key:
-        //             "As822KVqVMwb1JcFVv2JG9lqZB6G0v08RWNHogMBpVAZAXI5PMASZAPiNdnHjf6B",
-        //         imagerySet: "AerialWithLabels" // Options 'Aerial', 'AerialWithLabels', 'Road'
-        //     })
-        // })
-
-        // const baseLayer = new ol.layer.Tile({
-        //     source: new ol.source.XYZ({
-        //         url:'http://{1-4}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-        //     })
-        // });
-
         // how to add the UN map //
         //https://openlayers.org/en/latest/examples/arcgis-tiled.html
         //https://geoportal.un.org/arcgis/home/item.html?id=541557fd0d4d42efb24449be614e6887
@@ -258,10 +244,7 @@ var water_data_explorer_PACKAGE = (function() {
                 map.addInteraction(draw)
             }
             if (featureType === "Point" || featureType === "Polygon") {
-                // draw.on('drawend', function (e) {
-                //     removeLastFeature();
-                //     lastFeature = e.feature;
-                // });
+
                 draw.on("drawend", function(e) {
                     lastFeature = e.feature
                 })
@@ -575,7 +558,6 @@ var water_data_explorer_PACKAGE = (function() {
           }
         });
       }, map);
-      // console.log(id_dictionary);
     }
       catch(error){
         console.log(error);

@@ -34,7 +34,6 @@ import psycopg2
 from owslib.waterml.wml11 import WaterML_1_1 as wml11
 from suds.client import Client  # For parsing WaterML/XML
 from suds.xsd.doctor import Import, ImportDoctor
-# from suds.sudsobject import SudObject
 from json import dumps, loads
 from pyproj import Proj, transform  # Reprojecting/Transforming coordinates
 from datetime import datetime
@@ -47,10 +46,6 @@ from tethys_sdk.workspaces import app_workspace
 Persistent_Store_Name = 'catalog_db'
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.client').setLevel(logging.DEBUG)
-
-# binding.envns=('SOAP-ENV', 'http://schemas.xmlsoap.org/soap/envelope')
-
-
 
 
 def get_download_hs(request):
@@ -73,9 +68,7 @@ def get_download_hs(request):
 
     return JsonResponse(nb)
 
-    # We write the notebook to a file on disk.
-    # with open(f'{hs_name}.ipynb', 'w') as f:
-    #     f.write(content_string)
+
 
 def get_variables_hs(request):
     list_catalog={}

@@ -21,7 +21,6 @@ activate_layer_values = function (){
 
             if(layersDict['selectedPoint']){
               map.removeLayer(layersDict['selectedPoint'])
-              // delete layersDict[title]
               map.updateSize()
             }
 
@@ -58,7 +57,6 @@ activate_layer_values = function (){
           'whisker':{}
         }
         let feature_single = feature.values_.features[0]
-        // $("#siteName_title").html("Site Information");
         object_request['hs_url']=feature_single.values_['hs_url'];
         object_request['code']=feature_single.values_['code'];
         object_request['network']=feature_single.values_['network'];
@@ -236,15 +234,11 @@ activate_layer_values = function (){
                 object_request2['variables_array']=result['variables'];
                 object_request_graphs = JSON.parse(JSON.stringify(object_request2));
 
-                // $('#variables_graph').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                 $('#variables_graph').on('change', function(e){
                   try{
                     $("#GeneralLoading").removeClass("hidden");
                     let selectedItem = this.value - 1;
-                    // console.log(selectedItem)
-                  // $( document ).on( 'change', "#variables_graph", function(){
-                    // do something...
-                    // let start_dateUTC = result['times_series'][Object.keys(result['times_series'])[0]]['beginDateTimeUTC']
+
                     let start_dateUTC = result['times_series'][Object.keys(result['times_series'])[selectedItem]]['beginDateTimeUTC']
                     let dateUTC_start = new Date(start_dateUTC)
                     let starts = start_dateUTC.split("T");
@@ -271,10 +265,6 @@ activate_layer_values = function (){
 
                     $('#datetimepicker6').datepicker('update', dateUTC_start);
                     $('#datetimepicker7').datepicker('update', dateUTC_end);
-
-                    ////console.log($('#datetimepicker6').datepicker('getDate'));
-                    ////console.log($('#datetimepicker7').datepicker('getDate'));
-
                     $('#datetimepicker6').datepicker('setStartDate', dateUTC_start);
                     $('#datetimepicker6').datepicker('setEndDate', dateUTC_end);
                     // $('#datetimepicker7').datepicker('setStartDate',dateUTC_end);
@@ -312,7 +302,6 @@ activate_layer_values = function (){
 
               }
               else{
-                // console.log(feature_single.values_)
                 description_site.innerHTML =
                   ` <p> <em> Station/Platform Name:</em> ${feature_single.values_['name']}<p>`
 

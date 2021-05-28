@@ -457,7 +457,6 @@ load_search_group_modal = function(){
 }
 $(document).on("click", "#btn-key-update-variables", function(){
   let checkboxes = $('#data-table').find("input[type=checkbox][name=countries]")
-  //console.log(checkboxes)
   let countries_selected = [];
 
   // Attach a change event handler to the checkboxes of the countries to receive the countries.
@@ -475,21 +474,6 @@ $(document).on("click", "#btn-key-update-variables", function(){
     else{
       show_variables_groups();
     }
-  // checkboxes.click(function() {
-    // countries_selected = checkboxes
-    //   .filter(":checked") // Filter out unchecked boxes.
-    //   .map(function() { // Extract values using jQuery map.
-    //     return this.value.replace(/_/g, ' ');
-    //   })
-    //   .get() // Get array.
-    // if (countries_selected.length > 0){
-    //   ////console.log(countries_selected);
-    //   listener_checkbox(countries_selected)
-    // }
-    // else{
-    //   show_variables_groups()
-    // }
-  // });
 
 });
 
@@ -533,26 +517,6 @@ available_regions_group = function(){
           $("#modalFilterGroup").find("#groups_countries2").html(HSTableHtml);
           $("#KeywordLoading2").addClass("hidden");
 
-
-          // // Attach a change event handler to the checkboxes to filter the variables.
-
-          // let checkboxes = $('#data-table2 input[type=checkbox][name=countries]')
-          // let countries_selected = [];
-          // checkboxes.click(function() {
-          //   countries_selected = checkboxes
-          //     .filter(":checked") // Filter out unchecked boxes.
-          //     .map(function() { // Extract values using jQuery map.
-          //       return this.value.replace(/_/g, ' ');
-          //     })
-          //     .get() // Get array.
-          //   if (countries_selected.length > 0){
-          //     ////console.log(countries_selected);
-          //     listener_checkbox_group(countries_selected)
-          //   }
-          //   else{
-          //     show_variables_group()
-          //   }
-          // });
         }
         catch(e){
           $("#KeywordLoading2").addClass("hidden");
@@ -642,32 +606,7 @@ listener_checkbox_group = function(list_countries){
       url: `get-variables-for-country/`,
       dataType: "JSON",
       data: le_object,
-      // success: function(result){
-        // try{
-          // $("#modalFilterGroup").find("#groups_variables2").empty();
-          // variables_list = result['variables'];
-          // const chunk = (arr, size) =>
-          //   Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-          //     arr.slice(i * size, i * size + size)
-          //   );
-          // let arr=chunk(variables_list, 2);
-          //
-          // var HSTableHtml =
-          //     `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
-          //
-          //   arr.forEach(l_arr => {
-          //     HSTableHtml +=  '<tr class="odd gradeX">'
-          //     l_arr.forEach(i =>{
-          //       let new_i = i.replace(/ /g,"_");
-          //       HSTableHtml +=  `<td><input type="checkbox" name="variables" value=${new_i} /> ${i}</td>`;
-          //     })
-          //
-          //         HSTableHtml += '</tr>';
-          //   })
-          //
-          //   HSTableHtml += "</tbody></table>"
-          // $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
-          // $("#KeywordLoading2").addClass("hidden");
+
       success: function(data){
         try{
           $("#modalFilterGroup").find("#groups_variables2").empty();
@@ -941,7 +880,6 @@ create_group_hydroservers = function(){
 
               let group=json_response
               if(group.message !== "There was an error while adding th group.") {
-                // let title=group.title;
                 let title=group.title;
                 let description=group.description;
                 information_model[`${title}`] = [];
@@ -950,7 +888,6 @@ create_group_hydroservers = function(){
                 let id_group_separator = `${new_title}_list_separator`;
 
 
-                // let id_group_separator = `${title}_list_separator`;
                 let newHtml;
                 if(can_delete_hydrogroups){
                   newHtml = html_for_groups(can_delete_hydrogroups, new_title, id_group_separator);
@@ -977,8 +914,6 @@ create_group_hydroservers = function(){
 
                 let $title="#"+new_title;
                 let $title_list="#"+new_title+"list";
-                ////console.log($title_list);
-
 
                 $($title).click(function(){
                   $("#pop-up_description2").html("");
@@ -1013,7 +948,14 @@ create_group_hydroservers = function(){
                             type: "success",
                             allow_dismiss: true,
                             z_index: 20000,
-                            delay: 5000
+                            delay: 5000,
+                            animate: {
+                              enter: 'animated fadeInRight',
+                              exit: 'animated fadeOutRight'
+                            },
+                            onShow: function() {
+                                this.css({'width':'auto','height':'auto'});
+                            }
                         }
                     )
                     $("#modalAddGroupServer").modal("hide");
@@ -1142,7 +1084,6 @@ load_group_hydroservers = function(){
                 let unique_id_group = uuidv4()
                 id_dictionary[unique_id_group] = title;
 
-                // let id_group_separator = `${title}_list_separator`;
                 information_model[`${title}`] = []
 
                 let new_title = unique_id_group;
@@ -1363,27 +1304,15 @@ make_list_groups = function(){
     let groupsDiv = $("#current-Groupservers").find(".panel.panel-default");
     let arrayGroups = Object.values(groupsDiv);
     let finalGroupArray=[];
-    // console.log(arrayGroups)
     arrayGroups.forEach(function(g){
       if(g.id){
         let stringGroups = g.id.split("_")[0];
 
-        // let stringGroup = ""
-        // for(var i = 0; i < stringGroups.length - 1 ; i++){
-        //   if (i >0){
-        //     stringGroup = stringGroup +"_"+stringGroups[i]
-        //   }
-        //   else{
-        //     stringGroup = stringGroup + stringGroups[i]
-        //   }
-        // }
-        // finalGroupArray.push(stringGroup);
         finalGroupArray.push(stringGroups);
 
 
       }
     });
-    // console.log(finalGroupArray)
     var HSTableHtml =
         '<table class="table table-condensed-xs" id="tbl-hydrogroups"><thead><th>Select</th><th>Catalog Title</th></thead><tbody>'
     if (finalGroupArray.length < 0) {
@@ -1446,7 +1375,6 @@ get_hs_list_from_hydroserver = function(){
       let group_name_obj={
         group: arrayActual_group
       };
-      // console.log(id_dictionary)
 
       $.ajax({
           type: "POST",
@@ -1608,7 +1536,6 @@ delete_group_of_hydroservers = function(){
             });
 
             hydroservers_to_erase.forEach(function(hydroserver){
-                // let hydroserver2  = hydroserver.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
                 let new_title;
                 Object.keys(id_dictionary).forEach(function(key) {
                   if(id_dictionary[key] == hydroserver ){
@@ -1795,15 +1722,12 @@ catalog_filter = function(){
         data: datastring,
         success: function(result) {
           try{
-            // console.log(result);
             let jeojson = JSON.parse(JSON.parse(result)['geojson']);
-            // console.log(jeojson);
             map.removeLayer(layer_selected_countries['countries']);
 
             if(jeojson['features'].length > 0){
               for(let z = 0; z < jeojson['features'].length; ++z){
                 if(jeojson['features'][z]['geometry']['type'] == "Polygon"){
-                  // console.log(jeojson['features'][0]['geometry']['coordinates'].length);
                   for (let i = 0; i < jeojson['features'][z]['geometry']['coordinates'][0].length; ++i){
                     jeojson['features'][z]['geometry']['coordinates'][0][i] = ol.proj.transform(jeojson['features'][z]['geometry']['coordinates'][0][i],
                         "EPSG:4326",
@@ -1812,10 +1736,8 @@ catalog_filter = function(){
                   }
                 }
                 if(jeojson['features'][z]['geometry']['type'] == "MultiPolygon"){
-                  // console.log(jeojson['features'][0]['geometry']['coordinates'].length);
                   for (let i = 0; i < jeojson['features'][z]['geometry']['coordinates'].length; ++i){
                     for(let j= 0; j < jeojson['features'][z]['geometry']['coordinates'][i][0].length; ++j){
-                      // console.log(jeojson['features'][0]['geometry']['coordinates'][i][0].length);
 
                       jeojson['features'][z]['geometry']['coordinates'][i][0][j] = ol.proj.transform(jeojson['features'][z]['geometry']['coordinates'][i][0][j],
                           "EPSG:4326",
@@ -1840,15 +1762,9 @@ catalog_filter = function(){
             }
 
 
-
-            // console.log(JSON.parse(result));
-            // console.log(JSON.parse(result)['hs']);
             let hs_available = JSON.parse(result)['hs'];
-            // console.log(hs_available);
             let new_hs_available = []
             hs_available.forEach(function(hs){
-              // hs = hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
-              // new_hs_available.push(hs.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,''));
               let hs_new2;
               Object.keys(id_dictionary).forEach(function(key) {
                 if(id_dictionary[key] == hs ){
@@ -1969,7 +1885,6 @@ catalog_filter = function(){
                        new_service_div = key;
                      }
                    });
-                   // service_div = service_div.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
                    $(`#${new_service_div} input[type=checkbox]`).each(function(){
                      if(this.checked){
                        check_all.push(true);
@@ -2217,20 +2132,12 @@ reset_keywords = function(){
     map.removeLayer(layer_selected_countries['countries']);
 
     layer_object_filter={};
-    //make the layers invisible
-    // map.getLayers().forEach(function(layer) {
-    //   if(layer instanceof ol.layer.Vector){
-    //     layer.setStyle(new ol.style.Style({}));
-    //   }
-    //  });
+
 
     $("#current-Groupservers").find("li").each(function(){
           var $li=$(this)['0'];
           let id_li = $li['id'];
-          // Uncheck the service
-          // $(`#${id_li} input[type=checkbox]`).each(function() {
-          //   this.checked = false;
-          // });
+
           $(`#${id_li}`).css({"opacity": "1",
                               "border-color": "#d3d3d3",
                               "border-width":"1px",
@@ -2278,7 +2185,6 @@ get_all_the_checked_keywords = function(){
     datastring.forEach(function(data){
       Array.from(data.children).forEach(function(column){
         if(Array.from(column.children)[0].checked ==true){
-          // ////console.log();
           key_words_to_search.push(Array.from(column.children)[0].nextSibling.nodeValue.trim())
         }
       })

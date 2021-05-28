@@ -25,8 +25,6 @@ select_variable_change = function(){
     object_request_variable['timeFrame'] = arrayTime;
 
     if(chart_type == "Scatter" || chart_type =="Whisker and Box"){
-      // $("#type_graph_select")['0'].disabled = false;
-
 
       object_request_graphs['variable']=selectedItem;
       object_request_variable['code_variable']= codes_variables_array[`${selectedItem}`-1];
@@ -455,8 +453,6 @@ select_variable_change = function(){
 
 
                   $("#download_dropdown").change(funcDown);
-                  // $( document ).on( 'change', "#download_dropdown", funcDown );
-                  // $( document ).on( 'click', "#download_dropdown", funcDown );
                 }
 
 
@@ -568,11 +564,6 @@ select_variable_change = function(){
     )
   }
 }
-// let temp_var = $("#variables_graph")
-// $("#variables_graph").change(select_variable_change);
-
-// $( document ).on( 'change', "#variables_graph", select_variable_change );
-// $( document ).on( 'click', "#variables_graph", select_variable_change );
 
 $("#update_graphs").on("click",select_variable_change);
 /*
@@ -581,10 +572,8 @@ $("#update_graphs").on("click",select_variable_change);
 */
 change_type_graphs_group = function(){
   try{
-    // let chart_type= $("#type_graph_select")['0'].value;
 
     if(chart_type === "Bar"){
-      // $("#variables_graph")['0'].disabled = true;
       $('#variables_graph').selectpicker('setStyle', 'btn-info');
 
 
@@ -592,7 +581,6 @@ change_type_graphs_group = function(){
         if(active_map_feature_graphs['bar']['y_array'].length > 0){
 
           initialize_graphs(active_map_feature_graphs['bar']['x_array'],active_map_feature_graphs['bar']['y_array'],active_map_feature_graphs['bar']['title_graph'],undefined,undefined,undefined,active_map_feature_graphs['bar']['type']);
-          ////console.log("the graph has been change to bar");
         }
       }
 
@@ -685,5 +673,3 @@ change_type_graphs_group = function(){
     )
   }
 }
-// $("#type_graph_select").change(change_type_graphs_group)
-// $("#type_graph_select2").change(change_type_graphs_individual)

@@ -47,35 +47,3 @@ class HydroServer_Individual(Base):
         self.siteinfo = siteinfo
         self.variables = variables
         self.countries = countries
-
-
-
-
-
-
-
-# #THIS IS A GENERIC CLASS AND IT IS USEFUL TO DEFINE AND TABLE CLASS, SO IT CAN BE USED FOR DIFFERENT
-# # TABLES THAT CONTAIN HYDROSERVERS THAT ARE RELATED TO EACH ONE.
-# class GroupCatalog(Base):
-#     def __init__(self, title, url, siteinfo):
-#         self.title = title
-#         self.url = url
-#         self.siteinfo = siteinfo
-
-
-
-# def init_group_table(table_name):
-#     group_hydroserver = Table(table_name, Base,
-#         Column('id', Integer, primary_key=True),
-#         Column('title', String(50)),
-#         Column('url', String(2083)),
-#         Column('siteinfo', JSON),
-#         Column('time_updated', DateTime(timezone=True), onupdate=func.now())
-#     )
-#     Base.metadata.create_all(engine)
-#     mapper(GroupCatalog, group_hydroserver)
-#
-# def declare_group_table(request, table_name):
-#     return_obj=[]
-#     init_group_table(table_name)
-#     return JsonResponse(return_obj)

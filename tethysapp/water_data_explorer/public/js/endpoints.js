@@ -36,7 +36,6 @@ get_vars_from_site = function (resultList){
               $("#variable_choose").on("change.something2").on("change", function(){
                 reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
               });
-              // console.log($("#variable_choose")['0'].value);
 
               $("#btn-add-download").unbind();
               $("#btn-add-download").on("click", function(){
@@ -48,15 +47,6 @@ get_vars_from_site = function (resultList){
                   data: reque_ob,
                   success: function(result2){
                     var name_together =reque_ob['hs_name'].replace(/(?!\w|\s)./g, '_').replace(/\s+/g, '_').replace(/^(\s*)([\W\w]*)(\b\s*$)/g, '$2');
-                    // var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(result2));
-                    // var downloadAnchorNode = document.createElement('a');
-                    // downloadAnchorNode.setAttribute("href",dataStr);
-                    // downloadAnchorNode.setAttribute("download", name_together + ".ipynb");
-                    // document.body.appendChild(downloadAnchorNode); // required for firefox
-                    // downloadAnchorNode.click();
-                    // downloadAnchorNode.remove();
-
-
                     var blob = new Blob([JSON.stringify(result2)], { type: 'application/json' });
                     var link = document.createElement("a");
                     var url = URL.createObjectURL(blob);
@@ -310,7 +300,6 @@ load_individual_hydroservers_group = function(group_name){
                  }
                });
                let extent = ol.extent.createEmpty()
-               // let id_group_separator = `${group_name}_list_separator`;
                let id_group_separator = `${group_name_e3}_list_separator`;
 
                if(servers.length <= 0){
@@ -331,9 +320,6 @@ load_individual_hydroservers_group = function(group_name){
                    information_model[`${group_name}`].push(title);
 
                    let new_title = unique_id_group;
-
-
-                    // title = title.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
 
                      let newHtml = html_for_servers(new_title,group_name_e3);
                      $(newHtml).appendTo(`#${id_group_separator}`);

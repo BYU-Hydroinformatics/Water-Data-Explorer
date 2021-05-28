@@ -368,7 +368,6 @@ activate_deactivate_graphs = function(){
 
   else{
 
-    ////console.log("off");
     $("#graph").hide();
     if(map !==undefined){
       map.updateSize();
@@ -594,7 +593,6 @@ function get_new_color(){
   var color_new = colors_unique[Math.floor(Math.random() * colors_unique.length)];
   if (!colors_used.includes(color_new)) {
     colors_used.push(color_new)
-    ////console.log(color_new)
     return color_new
   }
 
@@ -643,9 +641,6 @@ function html_for_groups(isAdmin, title, id_group_separator){
       </div>
       `
 
-      // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
-      //   <span class=" glyphicon glyphicon-filter"></span>
-      // </button>
       return newHtml
     }
     else{
@@ -673,9 +668,7 @@ function html_for_groups(isAdmin, title, id_group_separator){
         </div>
       </div>
       `
-      // <button id="btn-filter-group-f" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalFilterGroup">
-      //   <span class=" glyphicon glyphicon-filter"></span>
-      // </button>
+
       return newHtml
     }
   }
@@ -700,7 +693,6 @@ function change_effect_groups(element_to_check,id_group_separator){
        let checkbox = Array.from(servers_checks[i].children)
        for (var j = 0; j < checkbox.length; j++) {
            if (checkbox[j].className == "chkbx-layer") {
-             ////console.log(checkbox[j])
              checkbox[j].checked = element_to_check.checked;
            }
        }
@@ -720,7 +712,6 @@ function change_effect_groups(element_to_check,id_group_separator){
            }
          }
          else{
-           //console.log("true")
            if(layer instanceof ol.layer.Vector && layer == layer_object_filter[server_new_name]){
              if(element_to_check.checked){
 
