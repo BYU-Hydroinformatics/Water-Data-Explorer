@@ -50,9 +50,10 @@ logging.getLogger('suds.client').setLevel(logging.CRITICAL)
 def get_values_hs(request):
     list_catalog={}
     return_obj={}
-    hs_url = request.GET.get('hs_url')
-    site_code =  request.GET.get('code')
-    network = request.GET.get('network')
+    hs_url = request.POST.get('hs_url')
+    # print(hs_url)
+    site_code =  request.POST.get('code')
+    network = request.POST.get('network')
     site_desc = network + ':' + site_code
 
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
@@ -201,11 +202,11 @@ def get_values_graph_hs(request):
     # print("inside the get_values_graph_hs")
     list_catalog={}
     return_obj={}
-    hs_url = request.GET.get('hs_url')
-    site_code =  request.GET.get('code')
-    network = request.GET.get('network')
-    code_variable =request.GET.get ('code_variable')
-    dates_request = request.GET.getlist('timeFrame[]')
+    hs_url = request.POST.get('hs_url')
+    site_code =  request.POST.get('code')
+    network = request.POST.get('network')
+    code_variable =request.POST.get ('code_variable')
+    dates_request = request.POST.getlist('timeFrame[]')
     start_date = dates_request[0]
     end_date = dates_request[1];
     variable_desc = network + ':' + code_variable
@@ -268,12 +269,12 @@ def get_xml(request):
     return_obj={}
 
 
-    hs_url = request.GET.get('hs_url')
+    hs_url = request.POST.get('hs_url')
 
-    site_code =  request.GET.get('code')
-    network = request.GET.get('network')
-    code_variable =request.GET.get ('code_variable')
-    dates_request = request.GET.getlist('timeFrame[]')
+    site_code =  request.POST.get('code')
+    network = request.POST.get('network')
+    code_variable =request.POST.get ('code_variable')
+    dates_request = request.POST.getlist('timeFrame[]')
     start_date = dates_request[0]
     end_date = dates_request[1];
 

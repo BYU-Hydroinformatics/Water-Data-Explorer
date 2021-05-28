@@ -40,8 +40,8 @@ select_variable_change = function(){
 
         $("#graphAddLoading").removeClass("hidden");
         $.ajax({
-          type:"GET",
-          url: `get-values-graph-hs`,
+          type:"POST",
+          url: `get-values-graph-hs/`,
           dataType: "JSON",
           data: object_request_variable,
           success: function(result1){
@@ -193,8 +193,8 @@ select_variable_change = function(){
 
                              console
                              $.ajax({
-                               type:"GET",
-                               url: `get-xml`,
+                               type:"POST",
+                               url: `get-xml/`,
                                dataType: "JSON",
                                data: object_request_variable,
                                success: function(result1){

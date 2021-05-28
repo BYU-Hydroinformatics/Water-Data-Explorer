@@ -6,7 +6,7 @@ give_available_services = function(){
     let url_alone = form_elements[form_elements.length -1]
     $("#soapAddLoading-group").removeClass("hidden");
     $.ajax({
-      type: "GET",
+      type: "POST",
       url: `available-services/`,
       dataType: "HTML",
       data: url_alone,
@@ -126,7 +126,7 @@ $("#btn-check_all").on("click", function(){
 show_variables_groups = function(){
   $("#KeywordLoading").removeClass("hidden");
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: `available-variables/`,
     dataType: "JSON",
     success: function(data){
@@ -223,7 +223,7 @@ show_variables_groups = function(){
 available_regions = function(){
   $("#KeywordLoading").removeClass("hidden");
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: `available-regions/`,
     dataType: "JSON",
     success: function(data){
@@ -306,7 +306,7 @@ listener_checkbox = function(list_countries){
     $("#KeywordLoading").removeClass("hidden")
 
     $.ajax({
-      type: "GET",
+      type: "POST",
       url: `get-variables-for-country/`,
       dataType: "JSON",
       data: le_object,
@@ -501,7 +501,7 @@ available_regions_group = function(){
     };
     $("#KeywordLoading2").removeClass("hidden");
     $.ajax({
-      type: "GET",
+      type: "POST",
       url: `available-regions/`,
       dataType: "JSON",
       data: group_obj,
@@ -638,7 +638,7 @@ listener_checkbox_group = function(list_countries){
     $("#KeywordLoading2").removeClass("hidden")
 
     $.ajax({
-      type: "GET",
+      type: "POST",
       url: `get-variables-for-country/`,
       dataType: "JSON",
       data: le_object,
@@ -780,7 +780,7 @@ show_variables_group = function(){
     };
     $("#KeywordLoading2").removeClass("hidden");
     $.ajax({
-      type: "GET",
+      type: "POST",
       url: `available-variables/`,
       dataType: "JSON",
       data: group_obj,
@@ -1124,8 +1124,8 @@ $("#btn-add-addHydro").on("click", create_group_hydroservers);
 */
 load_group_hydroservers = function(){
    $.ajax({
-       type: "GET",
-       url: `load-groups`,
+       type: "POST",
+       url: `load-groups/`,
        dataType: "JSON",
        success: result => {
           try{
@@ -1251,8 +1251,8 @@ remove_individual_hydroservers_group = function(group_name){
       group: group_name
     };
     $.ajax({
-        type: "GET",
-        url: `catalog-group`,
+        type: "POST",
+        url: `catalog-group/`,
         dataType: "JSON",
         data: group_name_obj,
         success: result => {
@@ -1449,8 +1449,8 @@ get_hs_list_from_hydroserver = function(){
       // console.log(id_dictionary)
 
       $.ajax({
-          type: "GET",
-          url: `catalog-group`,
+          type: "POST",
+          url: `catalog-group/`,
           dataType: "JSON",
           data:group_name_obj,
           success: function(result) {
@@ -1789,7 +1789,7 @@ catalog_filter = function(){
     let datastring= elementForm.serialize();
     $("#KeywordLoading").removeClass("hidden");
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: `catalog-filter/`,
         dataType: "HTML",
         data: datastring,
@@ -2084,7 +2084,7 @@ catalog_filter_server = function(){
     $("#KeywordLoading2").removeClass("hidden");
 
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: `catalog-filter/`,
         dataType: "HTML",
         data: datastring,

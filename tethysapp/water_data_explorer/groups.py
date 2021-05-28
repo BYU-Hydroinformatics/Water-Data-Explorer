@@ -63,10 +63,10 @@ def available_regions(request):
     hydroserver_long_list = []
     hydroserver_name_list = []
 
-    if request.method == 'GET' and 'group' not in request.GET:
+    if request.method == 'POST' and 'group' not in request.POST:
         hydroservers_selected = session.query(HydroServer_Individual).all()
     else:
-        specific_group=request.GET.get('group')
+        specific_group=request.POST.get('group')
         hydroservers_selected = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
 
     for server in hydroservers_selected:
@@ -151,10 +151,10 @@ def available_variables(request):
         Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
 
-    if request.method == 'GET' and 'group' not in request.GET:
+    if request.method == 'POST' and 'group' not in request.POST:
         hydroservers_groups = session.query(HydroServer_Individual).all()
     else:
-        specific_group=request.GET.get('group')
+        specific_group=request.POST.get('group')
         hydroservers_groups = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
 
 
@@ -205,7 +205,7 @@ def available_variables(request):
     # return JsonResponse(varaibles_list)
 
 def available_services(request):
-    url_catalog = request.GET.get('url')
+    url_catalog = request.POST.get('url')
     hs_services = {}
     url_catalog = unquote(url_catalog)
 
@@ -402,7 +402,7 @@ def get_groups_list(request):
 ######*****************************************************************************************################
 def catalog_group(request):
 
-    specific_group=request.GET.get('group')
+    specific_group=request.POST.get('group')
 
     list_catalog = {}
 
@@ -469,17 +469,17 @@ def delete_group(request):
 def catalog_filter(request):
     ret_obj = {}
     actual_group = None
-    if request.method == 'GET' and 'actual-group' in request.GET:
+    if request.method == 'POST' and 'actual-group' in request.POST:
         # print("YEAH")
-        actual_group = request.GET.getlist('actual-group')[0]
-    countries = request.GET.getlist('countries')
+        actual_group = request.POST.getlist('actual-group')[0]
+    countries = request.POST.getlist('countries')
     count_new = []
     var_new = []
     for count in countries:
         count_new.append(count.replace("_"," "))
     countries = count_new
     # print(countries)
-    variables = request.GET.getlist('variables')
+    variables = request.POST.getlist('variables')
     for varia in variables:
         var_new.append(varia.replace("_"," "))
     variables = var_new
@@ -875,7 +875,7 @@ def filter_variable(variables_list, actual_group = None):
 
 def get_variables_for_country(request):
     response_obj = {}
-    countries = request.GET.getlist('countries[]')
+    countries = request.POST.getlist('countries[]')
     list_variables = []
     list_variables_codes = []
     # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries2.geojson')

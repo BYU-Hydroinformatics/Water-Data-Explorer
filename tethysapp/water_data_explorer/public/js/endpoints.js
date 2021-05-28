@@ -10,8 +10,8 @@ get_vars_from_site = function (resultList){
     var_select.selectpicker("refresh");
     $("#downloading_loading").removeClass("hidden");
       $.ajax({
-        type:"GET",
-        url: `get-values-hs`,
+        type:"POST",
+        url: `get-values-hs/`,
         dataType: "JSON",
         data: request_obj,
         success: function(result){
@@ -42,8 +42,8 @@ get_vars_from_site = function (resultList){
               $("#btn-add-download").on("click", function(){
                 $("#downloading_loading").removeClass("hidden");
                 $.ajax({
-                  type:"GET",
-                  url: `get-download-hs`,
+                  type:"POST",
+                  url: `get-download-hs/`,
                   dataType: "JSON",
                   data: reque_ob,
                   success: function(result2){
@@ -294,8 +294,8 @@ load_individual_hydroservers_group = function(group_name){
     });
    $("#GeneralLoading").removeClass("hidden");
        $.ajax({
-           type: "GET",
-           url: `catalog-group`,
+           type: "POST",
+           url: `catalog-group/`,
            dataType: "JSON",
            data: group_name_obj,
            success: result => {
@@ -1095,8 +1095,8 @@ showVariables = function(){
 
      let $modalVariables = $("#modalShowVariables")
        $.ajax({
-          type: "GET",
-          url: `get-variables-hs`,
+          type: "POST",
+          url: `get-variables-hs/`,
           dataType: "JSON",
           data: filterSites,
           success: result => {
@@ -1201,8 +1201,8 @@ showVariables2 = function(){
    $(`#hideScroll2`).empty();
    $("#variablesLoading2").removeClass("hidden");
    $.ajax({
-       type: "GET",
-       url: `get-variables-hs`,
+       type: "POST",
+       url: `get-variables-hs/`,
        dataType: "JSON",
        data: filterSites,
        success: result => {
@@ -1350,8 +1350,8 @@ showAvailableSites = function(){
     requestObject['variables'] = key_words_to_search;
     $("#variablesLoading").removeClass("hidden");
     $.ajax({
-        type: "GET",
-        url: `get-available-sites`,
+        type: "POST",
+        url: `get-available-sites/`,
         dataType: "JSON",
         data: requestObject,
         success: result => {
@@ -1503,8 +1503,8 @@ hydroserver_information = function(){
     filterSites['hs']=hsActual;
     $("#hydroserverTitle").html(`${filterSites['hs']} View`);
     $.ajax({
-      type:"GET",
-      url: `get-hydroserver-info`,
+      type:"POST",
+      url: `get-hydroserver-info/`,
       dataType: "JSON",
       data: filterSites,
       success: function(result1){

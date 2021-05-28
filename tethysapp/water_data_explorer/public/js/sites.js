@@ -66,8 +66,8 @@ activate_layer_values = function (){
         $("#GeneralLoading").removeClass("hidden");
         $('#sG').bootstrapToggle('on');
         $.ajax({
-          type:"GET",
-          url: `get-values-hs`,
+          type:"POST",
+          url: `get-values-hs/`,
           dataType: "JSON",
           data: object_request,
           success: function(result){
@@ -192,7 +192,7 @@ activate_layer_values = function (){
                 let variable_select = $("#variables_graph");
                 variable_select.empty();
                 variable_select.selectpicker("refresh");
-                
+
                 let i = 1;
                 let array_variables=[]
                 let option_variables;

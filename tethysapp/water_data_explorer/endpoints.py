@@ -54,10 +54,10 @@ logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
 
 def get_download_hs(request):
-    hs_name = request.GET.get('hs_name')
-    hs_url = request.GET.get('hs_url')
-    variable_hs = request.GET.get('variable_hs')
-    site_hs = request.GET.get('site_hs')
+    hs_name = request.POST.get('hs_name')
+    hs_url = request.POST.get('hs_url')
+    variable_hs = request.POST.get('variable_hs')
+    site_hs = request.POST.get('site_hs')
     url = ('https://gist.githubusercontent.com/romer8/89c851014afb276b0f20cb61c9c731f6/raw/a0ee55ca83e75f34f26eb94bd52941cc2a2199cd/pywaterml_template.ipynb')
     contents = requests.get(url).text
     #print(len(contents))
@@ -80,8 +80,8 @@ def get_download_hs(request):
 def get_variables_hs(request):
     list_catalog={}
     #print("get_variables_hs Function")
-    specific_group=request.GET.get('group')
-    hs_actual = request.GET.get('hs')
+    specific_group=request.POST.get('group')
+    hs_actual = request.POST.get('hs')
     hs_actual = hs_actual.replace('-', ' ')
     #print("HS", hs_actual)
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
@@ -128,10 +128,10 @@ def get_variables_hs(request):
     return JsonResponse(list_catalog)
 
 def get_available_sites(request):
-    if request.method=='GET':
-        specific_group=request.GET.get('group')
-        specific_hydroserver = request.GET.get('hs')
-        specific_variables = request.GET.getlist('variables[]')
+    if request.method=='POST':
+        specific_group=request.POST.get('group')
+        specific_hydroserver = request.POST.get('hs')
+        specific_variables = request.POST.getlist('variables[]')
         safety_check_limit = len(specific_variables)
         safety_check_intial = 0
         list_catalog = {}
@@ -389,8 +389,8 @@ def get_available_sites(request):
     return JsonResponse(list_catalog)
 
 def get_hydroserver_info(request):
-    specific_group = request.GET.get('group')
-    specific_hs = request.GET.get('hs')
+    specific_group = request.POST.get('group')
+    specific_hs = request.POST.get('hs')
     response_obj = {}
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()  # Initiate a session
@@ -426,31 +426,22 @@ def upload_hs(request):
             if name == specific_hs:
                 difference = len(json.loads(hydroservers.siteinfo))
                 # client = Client(url, timeout= 500)
-                water = pwml.WaterMLOperations(url = url)
-                sites_object = water.GetSites()
-                # print(type(sites))
-                # sites_json={}
-                # if isinstance(sites, str):
-                #     print("here")
-                #     sites_dict = xmltodict.parse(sites)
-                #     sites_json_object = json.dumps(sites_dict)
-                #     sites_json = json.loads(sites_json_object)
-                # else:
-                #     sites_json_object = suds_to_json(sites)
-                #     sites_json = json.loads(sites_json_object)
+                # water = pwml.WaterMLOperations(url = url)
+                # sites_object = water.GetSites()
 
-                # Parsing the sites and creating a sites object. See auxiliary.py
-                # print("-------------------------------------")
-                # print(sites_json)
-                # sites_object = parseJSON(sites_json)
-                # print(sites_object)
-                # converted_sites_object=[x['sitename'].decode("UTF-8") for x in sites_object]
+                sites = GetSites_WHOS(url)
+                sites_parsed_json = json.dumps(sites)
+                countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
+                # print(countries_json)
 
-                # sites_parsed_json = json.dumps(converted_sites_object)
-                # sites_parsed_json = json.dumps(sites_object)
-                sites_parsed_json = json.dumps(sites_object)
-                difference = len(sites_object) - difference
+                variable_json = json.dumps(available_variables_2(url))
+
                 hydroservers.siteinfo = sites_parsed_json
+                hydroservers.variables = variable_json
+                hydroservers.countries = countries_json
+
+                # sites_parsed_json = json.dumps(sites_object)
+                difference = len(sites) - difference
                 return_obj["siteInfo"] = json.loads(sites_parsed_json)
                 return_obj["sitesAdded"]= difference
                 return_obj["url"] = hydroservers.url
@@ -605,6 +596,7 @@ def soap_group(request):
             # sites = water.GetSites()
 
             sites = GetSites_WHOS(url)
+            print(sites)
             sites_parsed_json = json.dumps(sites)
             countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
             # print(countries_json)
