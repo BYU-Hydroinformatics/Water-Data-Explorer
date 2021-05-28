@@ -930,7 +930,7 @@ def get_variables_for_country(request):
 ######*****************************************************************************************################
 def keyWordsForGroup(request):
     list_catalog={}
-    specific_group=request.GET.get('group')
+    specific_group=request.POST.get('group')
 
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
 

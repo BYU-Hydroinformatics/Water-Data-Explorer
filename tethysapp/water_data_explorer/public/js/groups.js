@@ -21,7 +21,7 @@ give_available_services = function(){
             var title_new = serv['title'].replace(/ /g,"_");
             row += `<tr>
                       <th scope="row">${i}</th>
-                      <td><input type="checkbox" name="server_${i}" id="server" value=${title_new}></td>
+                      <td><input type="checkbox" name="server_${i}" value=${title_new}></td>
                       <td>${serv['title']}</td>
                     </tr>`
             i += 1;
@@ -155,7 +155,7 @@ show_variables_groups = function(){
               let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
               let new_codei = arr2[z][j].replace(/ /g,"_");
 
-              HSTableHtml +=  `<td id =${new_i2}_td ><input type="checkbox" id="server" name="variables" value=${new_codei} /> ${i}</td>`;
+              HSTableHtml +=  `<td id =${new_i2}_td ><input type="checkbox" name="variables" value=${new_codei} /> ${i}</td>`;
 
               j = j +1;
             })
@@ -241,7 +241,7 @@ available_regions = function(){
             HSTableHtml +=  '<tr class="odd gradeX">'
             l_arr.forEach(i =>{
               let new_i = i.replace(/ /g,"_");
-              HSTableHtml +=  `<td><input type="checkbox" id= "server" name="countries" value=${new_i} /> ${i}</td>`;
+              HSTableHtml +=  `<td><input type="checkbox" name="countries" value=${new_i} /> ${i}</td>`;
             })
 
                 HSTableHtml += '</tr>';
@@ -337,7 +337,7 @@ listener_checkbox = function(list_countries){
                 let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
                 let new_codei = arr2[z][j].replace(/ /g,"_");
 
-                HSTableHtml +=  `<td id =${new_i2}_td ><input type="checkbox" id="server" name="variables" value=${new_codei} /> ${i}</td>`;
+                HSTableHtml +=  `<td id =${new_i2}_td ><input type="checkbox" name="variables" value=${new_codei} /> ${i}</td>`;
 
                 j = j +1;
               })
@@ -522,7 +522,7 @@ available_regions_group = function(){
               HSTableHtml +=  '<tr class="odd gradeX">'
               l_arr.forEach(i =>{
                 let new_i = i.replace(/ /g,"_");
-                HSTableHtml +=  `<td><input type="checkbox" id= "server" name="countries" value=${new_i} /> ${i}</td>`;
+                HSTableHtml +=  `<td><input type="checkbox" name="countries" value=${new_i} /> ${i}</td>`;
               })
 
                   HSTableHtml += '</tr>';
@@ -659,7 +659,7 @@ listener_checkbox_group = function(list_countries){
           //     HSTableHtml +=  '<tr class="odd gradeX">'
           //     l_arr.forEach(i =>{
           //       let new_i = i.replace(/ /g,"_");
-          //       HSTableHtml +=  `<td><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+          //       HSTableHtml +=  `<td><input type="checkbox" name="variables" value=${new_i} /> ${i}</td>`;
           //     })
           //
           //         HSTableHtml += '</tr>';
@@ -687,7 +687,7 @@ listener_checkbox_group = function(list_countries){
                 let new_i = i.replace(/ /g,"_");
                 let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
 
-                HSTableHtml +=  `<td id =${new_i2}_td2 ><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+                HSTableHtml +=  `<td id =${new_i2}_td2 ><input type="checkbox" name="variables" value=${new_i} /> ${i}</td>`;
 
               })
 
@@ -802,7 +802,7 @@ show_variables_group = function(){
                 let new_i = i.replace(/ /g,"_");
                 let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
 
-                HSTableHtml +=  `<td id =${new_i2}_td2 ><input type="checkbox" id="server" name="variables" value=${new_i} /> ${i}</td>`;
+                HSTableHtml +=  `<td id =${new_i2}_td2 ><input type="checkbox" name="variables" value=${new_i} /> ${i}</td>`;
 
               })
 
@@ -1477,7 +1477,7 @@ get_hs_list_from_hydroserver = function(){
                       var url = server[i].url
                       HSTableHtml +=
                           `<tr id="${new_title}deleteID">` +
-                          '<td><input class = "check_hs_delete" type="checkbox" name="server" id="server" value="' +
+                          '<td><input class = "check_hs_delete" type="checkbox" name="server"  value="' +
                           title +
                           '"></td>' +
                           '<td class="hs_title">' +
