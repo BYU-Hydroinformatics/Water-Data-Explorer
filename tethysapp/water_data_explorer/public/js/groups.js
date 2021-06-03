@@ -311,6 +311,7 @@ listener_checkbox = function(list_countries){
       dataType: "JSON",
       data: le_object,
       success: function(data){
+        console.log(data);
         try{
           $("#modalKeyWordSearch").find("#groups_variables").empty();
 
@@ -467,6 +468,7 @@ $(document).on("click", "#btn-key-update-variables", function(){
         return this.value.replace(/_/g, ' ');
       }).get() // Get array.
 
+    console.log(countries_selected);
     if (countries_selected.length > 0){
       ////console.log(countries_selected);
       listener_checkbox(countries_selected)

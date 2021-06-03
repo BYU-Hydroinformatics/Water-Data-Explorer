@@ -818,7 +818,12 @@ def get_variables_for_country(request):
         set_contries_final = set(list_contries_final)
         # print(set_contries_final)
         set_request_final = set(countries)
+        print(set_contries_final,"hs")
+        print(set_request_final,"js")
         if (set_contries_final & set_request_final):
+            print((set_contries_final & set_request_final), "mix")
+
+
             hs_variables_json  = json.loads(hs_selected.variables)
             list_variables = list_variables + hs_variables_json['variables']
             list_variables_codes = list_variables_codes +hs_variables_json['variables_codes']
