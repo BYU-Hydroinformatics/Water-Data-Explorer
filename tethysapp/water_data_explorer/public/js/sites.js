@@ -2,6 +2,448 @@
 ************ FUNCTION NAME: ACTIVATE_LAYER_VALUES **********************
 ************ PURPOSE: THE FUNCTIONS RETRIEVES THE DATA FROM THE LAYERS WHEN ONE MAKES A CLICK ***********
 */
+
+var getSiteInfoHelperJS = function(object_siteInfo,object_methods){
+  /*
+  Helper function to parse and store the content of two dictionaries:
+
+      - object_methods = GetSiteInfoResponse ['sitesResponse']['site']['seriesCatalog']['series']
+      - object_siteInfo = GetSiteInfoResponse ['sitesResponse']['site']['siteInfo']
+
+  Both dictionaries containing the response from the GetSiteInfo at store the following content into a new dictionary:
+
+      - siteName: Name of the site.
+      - siteCode: Code of the site.
+      - network: observation network that the site belongs to
+      - fullVariableCode: The full variable code, for example: SNOTEL:SNWD.Use this value as the variableCode parameter in GetValues().
+      - siteID: ID of the site
+      - latitude: latitude of the site
+      - longitude: longitude of the site
+      - variableName: Name of the variable
+      - unitName: Name of the units of the values associated to the given variable and site
+      - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
+      - dataType: Type of data
+      - noDataValue: value associated to lack of data.
+      - isRegular: Boolean to indicate whether the observation measurements and collections regular
+      - timeSupport: Boolean to indicate whether the values support time
+      - timeUnitName: Time Units associated to the observation
+      - timeUnitAbbreviation: Time units abbreviation
+      - sampleMedium: the sample medium, for example water, atmosphere, soil.
+      - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
+      - beginningDateTimeUTC: The UTC date and time of the first available
+      - EndDateTimeUTC: The UTC date and time of the last available
+      - beginningDateTime: The local date and time of the first available
+      - EndDateTime: The local date and time of the last available
+      - censorCode: The code for censored observations.  Possible values are nc (not censored), gt(greater than), lt (less than), nd (non-detect), pnq (present but not quantified)
+      - methodCode: The code of the method or instrument used for the observation
+      - methodID: The ID of the sensor or measurement method
+      - qualityControlLevelCode: The code of the quality control level.  Possible values are -9999(Unknown), 0 (Raw data), 1 (Quality controlled data), 2 (Derived products), 3 (Interpretedproducts), 4 (Knowledge products)
+      - qualityControlLevelID: The ID of the quality control level. Usually 0 means raw data and 1 means quality controlled data.
+      - sourceCode: The code of the data source.
+      - timeOffSet: The difference between local time and UTC time in hours.
+
+  Args:
+      object_siteInfo: Contains metadata associated to the site.
+      object_methods: Contains a list of <series>, which are unique combinations of site, variable and time intervals that specify a sequence of observations.
+  Returns:
+      return_obj: python dictionary containing data from the GetSiteInfo response.
+  */
+  let return_obj = {}
+
+  try{
+    sitePorperty_Info = object_siteInfo['siteProperty']
+    return_obj['country'] = "No Data was Provided"
+    if (Array.isArray(sitePorperty_Info)){
+      sitePorperty_Info.forEach(function(props){
+        if (props['attr']['@name'] == 'Country'){
+          return_obj['country'] = props['#text'];
+        }
+      })
+    }
+
+    else{
+      if (sitePorperty_Info['@name'] == 'Country'){
+        return_obj['country'] = sitePorperty_Info['#text'];
+      }
+    }
+
+  }
+  catch(e){
+    console.log(e);
+    return_obj['country'] = "No Data was Provided";
+  }
+
+
+  try{
+    siteName = object_siteInfo['siteName']
+    return_obj['siteName'] = siteName
+  }
+
+  catch(e){
+    console.log(e);
+    return_obj['siteName'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['latitude'] = object_siteInfo['geoLocation']['geogLocation']['latitude'];
+  }
+  catch(e){
+    console.log(e);
+    return_obj['latitude'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['longitude'] = object_siteInfo['geoLocation']['geogLocation']['longitude'];
+
+  }
+  catch(e){
+    console.log(e);
+    return_obj['longitude'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['geolocation'] = object_siteInfo['geoLocation']['geogLocation'];
+
+  }
+  catch(e){
+    console.log(e);
+    return_obj['geolocation'] = "No Data was Provided";
+  }
+
+  try{
+      return_obj['network'] = object_siteInfo['siteCode']['attr']['@network'];
+
+  }
+  catch(e){
+    console.log(e);
+     return_obj['network'] = "No Data was Provided";
+  }
+  try{
+    return_obj['siteCode'] = object_siteInfo['siteCode']['#text'];
+  }
+  catch(e){
+    console.log(e);
+    return_obj['siteCode'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['fullSiteCode'] = return_obj['network'] + ":" + return_obj['siteCode'];
+  }
+  catch(e){
+    return_obj['fullSiteCode'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['variableName'] = object_methods['variable']['variableName'];
+  }
+  catch(e){
+    return_obj['variableName'] = "No Data was Provided";
+
+  }
+  try{
+    return_obj['variableCode'] = object_methods['variable']['variableCode']['#text'];
+  }
+  catch(e){
+    return_obj['variableCode'] = "No Data was Provided";
+  }
+  try{
+    return_obj['fullVariableCode'] = return_obj['network'] + ":" + return_obj['variableCode'];
+  }
+  catch(e){
+    return_obj['fullVariableCode'] = "No Data was Provided";
+  }
+  try{
+    return_obj['variableCount'] = object_methods['valueCount'];
+  }
+  catch(e){
+    return_obj['variableCount'] = "No Data was Provided";
+  }
+  try{
+    return_obj['dataType'] = object_methods['variable']['dataType'];
+  }
+  catch(e){
+    return_obj['dataType'] = "No Data was Provided";
+  }
+  try{
+    return_obj['valueType'] = object_methods['variable']['valueType'];
+  }
+  catch(e){
+    return_obj['valueType'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['generalCategory'] = object_methods['variable']['generalCategory'];
+  }
+  catch(e){
+    return_obj['generalCategory'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['noDataValue'] = object_methods['variable']['noDataValue'];
+  }
+  catch(e){
+    return_obj['noDataValue'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['sampleMedium'] = object_methods['variable']['sampleMedium'];
+  }
+  catch(e){
+    return_obj['sampleMedium'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['speciation'] = object_methods['variable']['speciation'];
+  }
+  catch(e){
+    return_obj['speciation'] = "No Data was Provided";
+  }
+  try{
+    return_obj['timeUnitAbbreviation'] = object_methods['variable']['timeScale']['unit']['unitAbbreviation'];
+  }
+  catch(e){
+    return_obj['timeUnitAbbreviation'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['timeUnitName'] = object_methods['variable']['timeScale']['unit']['unitName'];
+
+  }
+  catch(e){
+    return_obj['timeUnitName'] = "No Data was Provided";
+
+  }
+
+  try{
+    return_obj['timeUnitType'] = object_methods['variable']['timeScale']['unit']['unitType'];
+  }
+  catch(e){
+    return_obj['timeUnitType'] = "No Data was Provided";
+
+  }
+
+  try{
+    return_obj['timeSupport'] = object_methods['variable']['timeScale']['timeSupport'];
+  }
+  catch(e){
+    return_obj['timeSupport'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['isRegular'] = object_methods['variable']['timeScale']['attr']['@isRegular'];
+  }
+  catch(e){
+    return_obj['isRegular'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['unitAbbreviation'] = object_methods['variable']['unit']['unitAbbreviation'];
+  }
+  catch(e){
+    return_obj['unitAbbreviation'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['unitName'] = object_methods['variable']['unit']['unitName'];
+  }
+  catch(e){
+    return_obj['unitName'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['unitType'] = object_methods['variable']['unit']['unitType'];
+  }
+  catch(e){
+    return_obj['unitType'] = "No Data was Provided"
+  }
+
+  if ('method' in object_methods){
+    return_obj['methodID'] = object_methods['method']['@methodID']
+    return_obj['methodDescription'] = object_methods['method']['methodDescription']
+  }
+
+  else{
+    return_obj['methodID'] = "No Method Id was provided";
+    return_obj['methodDescription'] = "No Method Description was provided";
+  }
+
+  try{
+    return_obj['qualityControlLevelID'] = object_methods['qualityControlLevel']['@qualityControlLevelID'];
+  }
+  catch(e){
+    return_obj['qualityControlLevelID'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['definition'] = object_methods['qualityControlLevel']['definition'];
+  }
+  catch(e){
+    return_obj['definition'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['qualityControlLevelCode'] = object_methods['qualityControlLevel']['qualityControlLevelCode'];
+  }
+  catch(e){
+    return_obj['qualityControlLevelCode'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['citation'] = object_methods['source']['citation'];
+
+  }
+  catch(e){
+    return_obj['citation'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['organization'] = object_methods['source']['organization'];
+  }
+  catch(e){
+    return_obj['organization'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['description'] = object_methods['source']['sourceDescription'];
+  }
+  catch(e){
+    return_obj['description'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['beginDateTime'] = object_methods['variableTimeInterval']['beginDateTime'];
+  }
+  catch(e){
+    return_obj['beginDateTime'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['endDateTime'] = object_methods['variableTimeInterval']['endDateTime'];
+  }
+  catch(e){
+    return_obj['endDateTime'] = "No Data was Provided";
+  }
+
+  try{
+    return_obj['beginDateTimeUTC'] = object_methods['variableTimeInterval']['beginDateTimeUTC'];
+  }
+  catch(e){
+  }
+  return_obj['beginDateTimeUTC'] = "No Data was Provided";
+
+  try{
+    return_obj['endDateTimeUTC'] = object_methods['variableTimeInterval']['endDateTimeUTC'];
+  }
+  catch(e){
+    return_obj['endDateTimeUTC'] = "No Data was Provided";
+  }
+  try{
+    return_obj['variableTimeInterval'] = object_methods['variableTimeInterval'];
+  }
+  catch(e){
+    return_obj['variableTimeInterval'] = "No Data was Provided";
+  }
+
+  return return_obj
+
+
+}
+
+
+var getSitesInfoJS = function(xmlData){
+  // console.log(xmlData);
+  let return_obj;
+  let return_array = []
+  var options = {
+      attributeNamePrefix : "@",
+      attrNodeName: "attr", //default is 'false'
+      textNodeName : "#text",
+      ignoreAttributes : false,
+      ignoreNameSpace : false,
+      allowBooleanAttributes : true,
+      parseNodeValue : true,
+      parseAttributeValue : true,
+      trimValues: true,
+      cdataTagName: "__cdata", //default is 'false'
+      cdataPositionChar: "\\c",
+      parseTrueNumberOnly: false,
+      arrayMode: false, //"strict"
+      attrValueProcessor: (val, attrName) => he.decode(val, {isAttributeValue: true}),//default is a=>a
+      tagValueProcessor : (val, tagName) => he.decode(val), //default is a=>a
+      stopNodes: ["parse-me-as-string"]
+  };
+  var result = parser.validate(xmlData);
+  if (result !== true) console.log(result.err);
+  var jsonObj = parser.parse(xmlData,options);
+  // console.log(jsonObj);
+  try{
+    let firstObject = jsonObj['soap:Envelope']['soap:Body']['GetSiteInfoObjectResponse']['sitesResponse'];
+    // console.log(firstObject);
+    let object_methods = firstObject['site']['seriesCatalog']['series'];
+    let object_siteInfo = firstObject['site']['siteInfo'];
+    if (object_methods.constructor == Object) {
+      return_obj = getSiteInfoHelperJS(object_siteInfo,object_methods);
+    }
+    if(Array.isArray(object_methods)){
+      object_methods.forEach(function(object_method){
+        return_obj = getSiteInfoHelperJS(object_siteInfo,object_method);
+        return_array.push(return_obj);
+      })
+    }
+    return return_array
+
+  }
+  catch(e){
+    return_array = []
+    return return_array
+  }
+}
+
+var getSiteInfoObjectParsableJS = function(getSiteInfoObjectParse){
+  let return_obj = {}
+  try{
+
+    if (getSiteInfoObjectParse.length == 0){
+      return_obj['country'] = [];
+      return_obj['variables'] =[];
+      return_obj['units'] = [];
+      return_obj['codes'] = [];
+      return_obj['organization'] = [];
+      return_obj['times_series'] = [];
+      return_obj['geolo'] = [];
+      return_obj['timeUnitName'] = [];
+      return_obj['TimeSupport'] = [];
+      return_obj['dataType'] = [];
+      return return_obj
+    }
+    df = new dfd.DataFrame(getSiteInfoObjectParse);
+    console.log(df['geolocation']);
+
+    return_obj['country'] = df['country']['data'][0]
+    return_obj['variables'] = df['variableName']['data']
+    return_obj['units'] = df['unitAbbreviation']['data']
+    return_obj['codes'] = df['variableCode']['data']
+    return_obj['timeUnitName'] = df['timeUnitName']['data']
+    return_obj['timeSupport'] = df['timeSupport']['data']
+    return_obj['dataType'] = df['dataType']['data']
+
+    let obj_var_desc = {}
+    let obj_var_times_s = {}
+    for (let i =0; i<df['variableName']['data'].length; ++i ){
+      obj_var_desc[df['variableName']['data'][i]] = df['organization']['data'][i];
+      obj_var_times_s[df['variableName']['data'][i]]  = JSON.parse(df['variableTimeInterval']['data'][i]);
+    }
+    return_obj['organization'] = obj_var_desc;
+    return_obj['times_series'] = obj_var_times_s;
+    return_obj['geolo'] = JSON.parse(df['geolocation']['data'][0]);
+    return return_obj
+  }
+  catch(e){
+    console.log(e);
+    return return_obj
+  }
+}
+
 activate_layer_values = function (){
   try{
     map.on('singleclick', function(evt) {
@@ -60,16 +502,27 @@ activate_layer_values = function (){
         object_request['hs_url']=feature_single.values_['hs_url'];
         object_request['code']=feature_single.values_['code'];
         object_request['network']=feature_single.values_['network'];
+        console.log(object_request['hs_url']);
 
+        let url_base = feature_single.values_['hs_url'].split("?")[0];
+        let SITE = feature_single.values_['code'];
+        // SITE = 'B6940B585CE66AD1D5E33075197668BE487A1CDB';
+        let url_request = `${url_base}?request=GetSiteInfoObject&site=${SITE}`;
+        console.log(url_request);
         $("#GeneralLoading").removeClass("hidden");
         $('#sG').bootstrapToggle('on');
         $.ajax({
-          type:"POST",
-          url: `get-values-hs/`,
-          dataType: "JSON",
-          data: object_request,
-          success: function(result){
-            // console.log(result)
+          type:"GET",
+          url:url_request,
+    // url: `https://gs-service-production.geodab.eu/gs-service/services/essi/view/whos-arctic/cuahsi_1_1.asmx?request=GetSiteInfoObject&site=B6940B585CE66AD1D5E33075197668BE487A1CDB`
+          dataType: "text",
+          // data: object_request,
+          success: function(xmlData){
+            console.log(xmlData);
+            let getSiteInfoObjectParse = getSitesInfoJS(xmlData);
+            console.log(getSiteInfoObjectParse);
+            let result =getSiteInfoObjectParsableJS(getSiteInfoObjectParse);
+            // console.log(result);
             try{
               let description_site = document.getElementById('siteDes')
               if (result.hasOwnProperty('codes') && result['codes'].length > 0){
@@ -353,6 +806,7 @@ activate_layer_values = function (){
 
           },
           error: function(xhr, status, error){
+            console.log(error);
             $("#GeneralLoading").addClass("hidden");
 
             $.notify(
