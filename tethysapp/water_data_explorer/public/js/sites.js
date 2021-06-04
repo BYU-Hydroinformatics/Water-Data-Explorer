@@ -383,6 +383,7 @@ var getSitesInfoJS = function(xmlData){
     let object_siteInfo = firstObject['site']['siteInfo'];
     if (object_methods.constructor == Object) {
       return_obj = getSiteInfoHelperJS(object_siteInfo,object_methods);
+      return_array.push(return_obj);
     }
     if(Array.isArray(object_methods)){
       object_methods.forEach(function(object_method){
@@ -394,6 +395,7 @@ var getSitesInfoJS = function(xmlData){
 
   }
   catch(e){
+    // console.log(e);
     return_array = []
     return return_array
   }
@@ -417,7 +419,7 @@ var getSiteInfoObjectParsableJS = function(getSiteInfoObjectParse){
       return return_obj
     }
     df = new dfd.DataFrame(getSiteInfoObjectParse);
-    console.log(df['geolocation']);
+    // console.log(df['geolocation']);
 
     return_obj['country'] = df['country']['data'][0]
     return_obj['variables'] = df['variableName']['data']
@@ -502,13 +504,11 @@ activate_layer_values = function (){
         object_request['hs_url']=feature_single.values_['hs_url'];
         object_request['code']=feature_single.values_['code'];
         object_request['network']=feature_single.values_['network'];
-        console.log(object_request['hs_url']);
-
         let url_base = feature_single.values_['hs_url'].split("?")[0];
         let SITE = feature_single.values_['code'];
         // SITE = 'B6940B585CE66AD1D5E33075197668BE487A1CDB';
         let url_request = `${url_base}?request=GetSiteInfoObject&site=${SITE}`;
-        console.log(url_request);
+        // console.log(url_request);
         $("#GeneralLoading").removeClass("hidden");
         $('#sG').bootstrapToggle('on');
         $.ajax({
@@ -518,9 +518,9 @@ activate_layer_values = function (){
           dataType: "text",
           // data: object_request,
           success: function(xmlData){
-            console.log(xmlData);
+            // console.log(xmlData);
             let getSiteInfoObjectParse = getSitesInfoJS(xmlData);
-            console.log(getSiteInfoObjectParse);
+            // console.log(getSiteInfoObjectParse);
             let result =getSiteInfoObjectParsableJS(getSiteInfoObjectParse);
             // console.log(result);
             try{
