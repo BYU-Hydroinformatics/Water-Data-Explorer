@@ -48,7 +48,9 @@ RUN mkdir -p $HOME/.config/pip && echo "[global]\nquiet = True" > $HOME/.config/
 RUN mkdir /tethys_apps && cd /tethys_apps && git clone https://github.com/BYU-Hydroinformatics/Water-Data-Explorer.git
 
 ## UNCOMMENT TO USE THE VERSION FOR INMET ##
-RUN git checkout inmet-WDE
+
+RUN git init && git fetch
+RUN git checkout -b inmet-WDE
 
 RUN mkdir -p ${TETHYS_PERSIST}/keys
 ###########
