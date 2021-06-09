@@ -26,12 +26,15 @@ ENV APP_DB_PORT ${TETHYS_DB_PORT}
 ENV APP_DB_USERNAME ${TETHYS_DB_SUPERUSER}
 ENV APP_DB_PASSWORD ${TETHYS_DB_SUPERUSER_PASS}
 
+
 ##################################
 # PRODUCTION ENVIRONMENT VARIABLES
 ##################################
 ENV ASGI_PROCESSES 1
 ENV CHANNEL_LAYERS_BACKEND "channels_redis.core.RedisChannelLayer"
 ENV CHANNEL_LAYERS_CONFIG "\"{\"hosts\": [[127.0.0.1, 6379]]}\""
+
+
 
 #########
 # SETUP #
@@ -48,7 +51,9 @@ RUN mkdir -p $HOME/.config/pip && echo "[global]\nquiet = True" > $HOME/.config/
 RUN mkdir /tethys_apps && cd /tethys_apps && git clone https://github.com/BYU-Hydroinformatics/Water-Data-Explorer.git
 
 ## UNCOMMENT TO USE THE VERSION FOR INMET ##
-# RUN git checkout inmet-WDE
+
+RUN git init && git fetch
+RUN git checkout -b inmet-WDE
 
 RUN mkdir -p ${TETHYS_PERSIST}/keys
 ###########
@@ -58,6 +63,23 @@ RUN mkdir -p ${TETHYS_PERSIST}/keys
 RUN /bin/bash -c ". ${CONDA_HOME}/bin/activate tethys \
   ; cd /tethys_apps/Water-Data-Explorer \
   ; tethys install -N"
+
+
+
+######################################################
+# CHANGE THE PROXY TIME REPLACING THE NGINX TEMPLATE #
+######################################################
+
+ADD nginx /usr/lib/tethys/tethys/tethys_cli/gen_templates/
+
+############################################
+# ADD SPECIAL CONFIGURATIONS TO THE PORTAL #
+############################################
+
+RUN /bin/bash -c ". ${CONDA_HOME}/bin/activate tethys \
+  ; tethys settings -s TETHYS_PORTAL_CONFIG.ENABLE_OPEN_PORTAL ${ENABLE_OPEN_PORTAL} \
+  ; tethys settings -s TETHYS_PORTAL_CONFIG.BYPASS_TETHYS_HOME_PAGE ${BYPASS_TETHYS_HOME_PAGE} \
+  ; tethys settings -s LOCKOUT_CONFIG.AXES_FAILURE_LIMIT ${AXES_FAILURE_LIMIT}"
 
 #########
 # CHOWN #
