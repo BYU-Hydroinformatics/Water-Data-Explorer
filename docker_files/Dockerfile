@@ -33,6 +33,8 @@ ENV ASGI_PROCESSES 1
 ENV CHANNEL_LAYERS_BACKEND "channels_redis.core.RedisChannelLayer"
 ENV CHANNEL_LAYERS_CONFIG "\"{\"hosts\": [[127.0.0.1, 6379]]}\""
 
+
+
 #########
 # SETUP #
 #########
@@ -60,6 +62,16 @@ RUN mkdir -p ${TETHYS_PERSIST}/keys
 RUN /bin/bash -c ". ${CONDA_HOME}/bin/activate tethys \
   ; cd /tethys_apps/Water-Data-Explorer \
   ; tethys install -N"
+
+
+
+######################################################
+# CHANGE THE PROXY TIME REPLACING THE NGINX TEMPLATE #
+######################################################
+
+ADD nginx /usr/lib/tethys/tethys/tethys_cli/gen_templates/
+
+
 
 #########
 # CHOWN #
