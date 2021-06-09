@@ -1,0 +1,34 @@
+version: "3.2"
+services:
+  tethys:
+    build: .
+    ports:
+      - "80:80"
+    environment:
+
+      TETHYS_DB_SUPERUSER: "tethys_super"
+      TETHYS_DB_SUPERUSER_PASS: "pass"
+      TETHYS_SUPERUSER: "admin"
+      TETHYS_SUPERUSER_PASS: "cnr123"
+      CLIENT_MAX_BODY_SIZE: "100M"
+      PORTAL_SUPERUSER_NAME: "admin"
+      PORTAL_SUPERUSER_PASSWORD: "pass"
+      TETHYS_DB_NAME: "tethys_default"
+      TETHYS_DB_USERNAME: "tethys_default"
+      TETHYS_DB_PASSWORD: "pass"
+      TETHYS_DB_PORT: "5432"
+      # CONDA_HOME: "/opt/conda"
+      # CONDA_ENV_NAME: "tethys"
+      # TETHYS_DB_HOST: "db"
+      # TETHYS_HOME: "/usr/lib/tethys"
+      # TETHYS_PERSIST: "/var/lib/tethys_persist"
+
+    links:
+      - db
+    depends_on:
+      - db
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: pass
