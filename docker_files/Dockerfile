@@ -51,8 +51,6 @@ RUN mkdir /tethys_apps && cd /tethys_apps && git clone https://github.com/BYU-Hy
 
 ## UNCOMMENT TO USE THE VERSION FOR INMET ##
 
-RUN git init && git fetch
-RUN git checkout -b inmet-WDE
 
 RUN mkdir -p ${TETHYS_PERSIST}/keys
 ###########
@@ -61,6 +59,8 @@ RUN mkdir -p ${TETHYS_PERSIST}/keys
 
 RUN /bin/bash -c ". ${CONDA_HOME}/bin/activate tethys \
   ; cd /tethys_apps/Water-Data-Explorer \
+  ; git init && git fetch
+  ; git checkout -b inmet-WDE
   ; tethys install -N"
 
 
