@@ -64,6 +64,7 @@ RUN /bin/bash -c ". ${CONDA_HOME}/bin/activate tethys \
   ; cd /tethys_apps/Water-Data-Explorer \
   ; tethys install -N"
 
+# ENV POSTGRES_PASSWORD "gio"
 
 
 ######################################################
@@ -72,14 +73,12 @@ RUN /bin/bash -c ". ${CONDA_HOME}/bin/activate tethys \
 
 ADD nginx /usr/lib/tethys/tethys/tethys_cli/gen_templates/
 
-############################################
-# ADD SPECIAL CONFIGURATIONS TO THE PORTAL #
-############################################
+######################################################
+# CHANGE THE SETTINGS.PY OF THE TETHYS_PORTAL #
+######################################################
 
-RUN /bin/bash -c ". ${CONDA_HOME}/bin/activate tethys \
-  ; tethys settings -s TETHYS_PORTAL_CONFIG.ENABLE_OPEN_PORTAL ${ENABLE_OPEN_PORTAL} \
-  ; tethys settings -s TETHYS_PORTAL_CONFIG.BYPASS_TETHYS_HOME_PAGE ${BYPASS_TETHYS_HOME_PAGE} \
-  ; tethys settings -s LOCKOUT_CONFIG.AXES_FAILURE_LIMIT ${AXES_FAILURE_LIMIT}"
+ADD settings.py /usr/lib/tethys/tethys/tethys_portal/
+
 
 #########
 # CHOWN #
@@ -104,6 +103,7 @@ EXPOSE 80
 
 ## Be sure to be inside the docker_files folder ##
 ADD /salt/ /srv/salt/
+
 
 #######
 # RUN #
