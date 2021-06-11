@@ -50,6 +50,6 @@ services:
     image: postgres
     restart: always
     volumes:
-      - /home/gio/tethysdev/postgres-data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: pass
