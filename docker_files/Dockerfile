@@ -47,7 +47,9 @@ RUN apt-get update -qq && apt-get -yqq install gcc libgdal-dev g++ libhdf5-dev >
 # Quiet pip installs
 RUN mkdir -p $HOME/.config/pip && echo "[global]\nquiet = True" > $HOME/.config/pip/pip.conf
 
-RUN mkdir /tethys_apps && cd /tethys_apps && git clone https://github.com/BYU-Hydroinformatics/Water-Data-Explorer.git
+# RUN mkdir /tethys_apps && cd /tethys_apps && git clone https://github.com/BYU-Hydroinformatics/Water-Data-Explorer.git
+RUN mkdir /tethys_apps && cd /tethys_apps && git clone --single-branch --branch inmet-WDE https://github.com/BYU-Hydroinformatics/Water-Data-Explorer.git
+
 
 ## UNCOMMENT TO USE THE VERSION FOR INMET ##
 
@@ -59,10 +61,9 @@ RUN mkdir -p ${TETHYS_PERSIST}/keys
 
 RUN /bin/bash -c ". ${CONDA_HOME}/bin/activate tethys \
   ; cd /tethys_apps/Water-Data-Explorer \
-  ; git init && git fetch
-  ; git checkout -b inmet-WDE
   ; tethys install -N"
-
+  # ; git init && git fetch \
+  # ; git checkout -b inmet-WDE \
 
 
 ######################################################
