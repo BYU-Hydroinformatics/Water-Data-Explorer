@@ -316,7 +316,8 @@ load_individual_hydroservers_group = function(group_name){
                        siteInfo
                    } = server
                    let unique_id_group = uuidv4()
-                   id_dictionary[unique_id_group] = title
+                   id_dictionary[unique_id_group] = title;
+                   urls_servers[unique_id_group] = url;
                    information_model[`${group_name}`].push(title);
 
                    let new_title = unique_id_group;
@@ -1736,77 +1737,44 @@ searchSites = function() {
 document.getElementById('myInput').addEventListener("keyup", searchSites);
 
 
-update_hydroserver = function(){
+var getVariablesJS = function(url,hsActual,group_name){
+  console.log("getvat");
+  let url_decons = url.split("?");
+
+  let url_request = url_decons[0] + "?request=GetVariablesObject&format=WML1";
+  $("#GeneralLoading").removeClass("hidden");
+
   try{
-    let hsActual = this.id.split("_")[0];
-    let group_name = this.id.split("_")[1]
-    let requestObject = {
-      hs: id_dictionary[hsActual],
-      group: id_dictionary[group_name]
-    }
-    $("#GeneralLoading").css({
-       position:'fixed',
-       "z-index": 9999,
-       top: '50%',
-       left: '50%',
-       transform: 'translate(-50%, -50%)'
-     });
-    $("#GeneralLoading").removeClass("hidden");
     $.ajax({
-        type: "POST",
-        url: `soap-update/`,
-        dataType: "JSON",
-        data: requestObject,
-        success: function(result) {
-          try{
-            let {siteInfo,sitesAdded,url} = result
-            if(layersDict.hasOwnProperty(hsActual)){
-              map.removeLayer(layersDict[hsActual])
-            }
-
-            let sites = siteInfo
-            const vectorLayer = map_layers(sites,hsActual,url)[0]
-            const vectorSource = map_layers(sites,hsActual,url)[1]
-
-
-            map.addLayer(vectorLayer)
-            ol.extent.extend(extent, vectorSource.getExtent())
-            vectorLayer.set("selectable", true)
-            layersDict[hsActual] = vectorLayer;
-
-            map.getView().fit(vectorSource.getExtent());
-            map.updateSize();
-
-            layersDict[hsActual] = vectorLayer;
-
-              $.notify(
-                  {
-                      message: `Successfully updated the Web Service , ${sitesAdded} have been added to the Map.`
-                  },
-                  {
-                      type: "success",
-                      allow_dismiss: true,
-                      z_index: 20000,
-                      delay: 5000,
-                      animate: {
-                        enter: 'animated fadeInRight',
-                        exit: 'animated fadeOutRight'
-                      },
-                      onShow: function() {
-                          this.css({'width':'auto','height':'auto'});
-                      }
-                  }
-              )
+      type:"GET",
+      url:url_request,
+      dataType: "text",
+      success: function(xmlData){
+        console.log(xmlData);
+        let parsedObject = getVariablesHelperJS(xmlData);
+        let requestObject = {
+          hs: id_dictionary[hsActual],
+          group: id_dictionary[group_name],
+          variables: JSON.stringify(parsedObject)
+        }
+        $.ajax({
+          type:"POST",
+          url: "save-variables/",
+          dataType: "JSON",
+          data: requestObject,
+          success:function(data){
+            console.log(data);
+            return data
+          },
+          error: function(error){
             $("#GeneralLoading").addClass("hidden");
-          }
-          catch(e){
-            $("#GeneralLoading").addClass("hidden");
+            console.log(error);
             $.notify(
                 {
-                    message: `There was an error updating the Web Service 1`
+                    message: `There was an error updating the Web Service`
                 },
                 {
-                    type: "success",
+                    type: "danger",
                     allow_dismiss: true,
                     z_index: 20000,
                     delay: 5000,
@@ -1820,36 +1788,38 @@ update_hydroserver = function(){
                 }
             )
           }
-        },
-        error: function(error) {
-          $("#GeneralLoading").addClass("hidden");
-          $.notify(
-              {
-                  message: `There was an error updating the Web Service.`
-              },
-              {
-                  type: "danger",
-                  allow_dismiss: true,
-                  z_index: 20000,
-                  delay: 5000,
-                  animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-                  },
-                  onShow: function() {
-                      this.css({'width':'auto','height':'auto'});
-                  }
-              }
-          )
+        })
 
-        }
+      },
+      error: function(error){
+        $("#GeneralLoading").addClass("hidden");
+        console.log(error);
+        $.notify(
+            {
+                message: `There was an error updating the Web Service`
+            },
+            {
+                type: "danger",
+                allow_dismiss: true,
+                z_index: 20000,
+                delay: 5000,
+                animate: {
+                  enter: 'animated fadeInRight',
+                  exit: 'animated fadeOutRight'
+                },
+                onShow: function() {
+                    this.css({'width':'auto','height':'auto'});
+                }
+            }
+        )
+      }
     })
   }
-  catch (e){
+  catch(e){
     $("#GeneralLoading").addClass("hidden");
     $.notify(
         {
-            message: `There was an error Updating the selected Web Service.`
+            message: `There was an error updating the Web Service`
         },
         {
             type: "danger",
@@ -1865,8 +1835,670 @@ update_hydroserver = function(){
             }
         }
     )
-
+    console.log(e);
   }
 
+}
+
+var getVariablesHelperJS = function(xmlData){
+  let return_obj;
+  let return_array = [];
+  var options = {
+      attributeNamePrefix : "@",
+      attrNodeName: "attr", //default is 'false'
+      textNodeName : "#text",
+      ignoreAttributes : false,
+      ignoreNameSpace : false,
+      allowBooleanAttributes : true,
+      parseNodeValue : true,
+      parseAttributeValue : true,
+      trimValues: true,
+      cdataTagName: "__cdata", //default is 'false'
+      cdataPositionChar: "\\c",
+      parseTrueNumberOnly: false,
+      arrayMode: false, //"strict"
+      attrValueProcessor: (val, attrName) => he.decode(val, {isAttributeValue: true}),//default is a=>a
+      tagValueProcessor : (val, tagName) => he.decode(val), //default is a=>a
+      stopNodes: ["parse-me-as-string"]
+  };
+  var result = parser.validate(xmlData);
+  if (result !== true) console.log(result.err);
+  var jsonObj = parser.parse(xmlData,options);
+  let firstObject = jsonObj['soap:Envelope']['soap:Body']['GetVariablesObjectResponse'];
+
+  let array_variables = firstObject['variablesResponse']['variables']['variable'];
+  if(Array.isArray(array_variables)){
+    for(let i=0; i< array_variables.length; ++i){
+      let one_variable = array_variables[i];
+      let return_object = {};
+      return_object = getVariablesHelperJS2(one_variable, return_object);
+      return_array.push(return_object);
+    }
+  }
+  else{
+    let return_object = {};
+    return_object = getVariablesHelperJS2(array_variables, return_object);
+    return_array.push(return_object);
+  }
+
+  return return_array
+}
+
+var getVariablesHelperJS2 = function(one_variable, return_object){
+  /*
+  Helper function to parse and store the content of the GetValues response dictionary at the level:
+      - one_variable = GetVariablesResponse ['variablesResponse']['variables']['variable']
+  The dictionary containing the response from the GetValues method stores the following content into a new dictionary:
+      - variableName: Name of the variable
+      - unitName: Name of the units of the values associated to the given variable and site
+      - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
+      - noDataValue: value associated to lack of data.
+      - isRegular: Boolean to indicate whether the observation measurements and collections regular
+      - timeSupport: Boolean to indicate whether the values support time
+      - timeUnitName: Time Units associated to the observation
+      - timeUnitAbbreviation: Time units abbreviation
+      - sampleMedium: the sample medium, for example water, atmosphere, soil.
+      - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
+  Args:
+      one_variable: Contains metadata associated to the different variables of the site.
+      return_object: python dictionary that will store the data from the GetVariables response.
+  Returns:
+      return_object: python dictionary containing data from the GetVariables response.
+
+  */
+
+  try{
+    return_object['variableName'] = one_variable['variableName'];
+  }
+  catch(e){
+      return_object['variableName'] = "No Data Provided";
+  }
+  try{
+      return_object['variableCode'] = one_variable['variableCode']['#text'];
+  }
+  catch(e){
+    return_object['variableCode'] = "No Data Provided";
+  }
+  try{
+    return_object['valueType']= one_variable['valueType'];
+  }
+  catch(e){
+    return_object['valueType'] = "No Data Provided";
+  }
+  try{
+    return_object['dataType']= one_variable['dataType'];
+  }
+  catch(e){
+    return_object['dataType'] = "No Data Provided";
+  }
+  try{
+    return_object['generalCategory'] = one_variable['generalCategory'];
+  }
+  catch(e){
+    return_object['generalCategory'] = "No Data Provided";
+  }
+  try{
+    return_object['sampleMedium'] = one_variable['sampleMedium'];
+  }
+  catch(e){
+    return_object['sampleMedium'] = "No Data Provided";
+  }
+  try{
+    return_object['unitName'] = one_variable['unit']['unitName'];
+  }
+  catch(e){
+    return_object['unitName'] = "No Data Provided";
+  }
+  try{
+    return_object['unitType'] = one_variable['unit']['unitType'];
+  }
+  catch(e){
+    return_object['unitType'] = "No Data Provided";
+  }
+  try{
+    return_object['unitAbbreviation'] = one_variable['unit']['unitAbbreviation'];
+  }
+  catch(e){
+    return_object['unitAbbreviation'] = "No Data Provided";
+  }
+  try{
+    return_object['noDataValue'] = one_variable['noDataValue'];
+  }
+  catch(e){
+    return_object['noDataValue'] = "No Data Provided";
+  }
+  try{
+    return_object['isRegular'] = one_variable['variableCode']['attr']['@default'];
+  }
+  catch(e){
+    return_object['isRegular'] = "No Data Provided";
+  }
+  try{
+    return_object['timeUnitAbbreviation'] = one_variable['timeScale']['unit']['unitAbbreviation'];
+  }
+  catch(e){
+    return_object['timeUnitAbbreviation'] = "No Data Provided";
+  }
+  try{
+    return_object['timeSupport'] = one_variable['timeScale']['timeSupport'];
+  }
+  catch(e){
+    return_object['timeSupport'] = "No Data Provided";
+  }
+  try{
+    return_object['speciation'] = one_variable['speciation'];
+  }
+  catch(e){
+    return_object['speciation'] = "No Data Provided";
+  }
+
+  return return_object
 
 }
+var getSitesHelper = function (xmlData){
+  let return_obj;
+  let return_array = []
+  var options = {
+      attributeNamePrefix : "@",
+      attrNodeName: "attr", //default is 'false'
+      textNodeName : "#text",
+      ignoreAttributes : false,
+      ignoreNameSpace : false,
+      allowBooleanAttributes : true,
+      parseNodeValue : true,
+      parseAttributeValue : true,
+      trimValues: true,
+      cdataTagName: "__cdata", //default is 'false'
+      cdataPositionChar: "\\c",
+      parseTrueNumberOnly: false,
+      arrayMode: false, //"strict"
+      attrValueProcessor: (val, attrName) => he.decode(val, {isAttributeValue: true}),//default is a=>a
+      tagValueProcessor : (val, tagName) => he.decode(val), //default is a=>a
+      stopNodes: ["parse-me-as-string"]
+  };
+  var result = parser.validate(xmlData);
+  if (result !== true) console.log(result.err);
+  var jsonObj = parser.parse(xmlData,options);
+  let firstObject = jsonObj['soap:Envelope']['soap:Body']['GetSitesObjectResponse'];
+  console.log(firstObject);
+
+  let hs_sites = []
+  try{
+    if (firstObject.hasOwnProperty('sitesResponse')){
+      if(!firstObject['sitesResponse'].hasOwnProperty('site')){
+        return hs_sites;
+      }
+      let sites_object = firstObject['sitesResponse']['site'];
+      // # If statement is executed for multiple sites within the HydroServer, if there is a single site then it goes to the else statement
+      // # Parse through the HydroServer and each site with its metadata as a
+      // # dictionary object to the hs_sites list
+      if(Array.isArray(sites_object)){
+        for(let i=0; i< sites_object.length; ++i){
+          let site = sites_object[i]
+          let hs_json = {};
+          let latitude = site['siteInfo']['geoLocation']['geogLocation']['latitude'];
+          let longitude = site['siteInfo']['geoLocation']['geogLocation']['longitude'];
+          let site_name = site['siteInfo']['siteName'];
+          let network = site['siteInfo']['siteCode']['attr']["@network"];
+          let sitecode = site['siteInfo']['siteCode']["#text"];
+          let siteID = site['siteInfo']['siteCode']['attr']["@siteID"];
+          hs_json['country'] = "No Data was Provided";
+          try{
+            let sitePorperty_Info = site['siteInfo']['siteProperty'];
+            if (Array.isArray(sitePorperty_Info)){
+              for(let j = 0; j < sitePorperty_Info.length; ++j){
+                let props = sitePorperty_Info[j];
+                  if (props['attr']['@name'] == 'Country'){
+                    hs_json['country'] = props['#text'];
+                  }
+              }
+
+            }
+            else{
+              if(sitePorperty_Info['attr']['@name'] == 'Country'){
+                hs_json['country'] = sitePorperty_Info['#text']
+              }
+            }
+          }
+          catch(e){
+            hs_json['country'] = "No Data was Provided";
+          }
+          hs_json["sitename"] = site_name;
+          hs_json["latitude"] = latitude;
+          hs_json["longitude"] = longitude;
+          hs_json["sitecode"] = sitecode;
+          hs_json["network"] = network;
+          hs_json["fullSiteCode"] = network + ":" + sitecode;
+          hs_json["siteID"] = siteID;
+          hs_json["service"] = "SOAP";
+          hs_sites.push(hs_json);
+        }
+
+      }
+
+      else{
+        let hs_json = {}
+        let latitude = sites_object['siteInfo']['geoLocation']['geogLocation']['latitude'];
+        let longitude = sites_object['siteInfo']['geoLocation']['geogLocation']['longitude'];
+        let site_name = sites_object['siteInfo']['siteName'];
+        let network = sites_object['siteInfo']['siteCode']['attr']["@network"];
+        let sitecode = sites_object['siteInfo']['siteCode']["#text"];
+        let siteID = sites_object['siteInfo']['siteCode']['attr']["@siteID"];
+
+        hs_json['country'] = "No Data was Provided";
+        try{
+          let sitePorperty_Info = sites_object['siteInfo']['siteProperty'];
+
+          if(Array.isArray(sitePorperty_Info)){
+            for(let z = 0; z < sitePorperty_Info.length; ++z){
+              let props = sitePorperty_Info[j];
+              if (props['attr']['@name'] == 'Country'){
+                hs_json['country'] = props['#text'];
+              }
+            }
+          }
+          else{
+            if(sitePorperty_Info['attr']['@name'] == 'Country'){
+              hs_json['country'] = sitePorperty_Info['#text']
+            }
+          }
+        }
+        catch(e){
+          hs_json['country'] = "No Data was Provided";
+        }
+        hs_json["sitename"] = site_name;
+        hs_json["latitude"] = latitude;
+        hs_json["longitude"] = longitude;
+        hs_json["sitecode"] = sitecode;
+        hs_json["network"] = network;
+        hs_json["fullSiteCode"] = network + ":" + sitecode;
+        hs_json["siteID"] = siteID;
+        hs_json["service"] = "SOAP";
+        hs_sites.push(hs_json);
+      }
+
+    }
+  }
+  catch(e){
+    console.log(e);
+    console.log("There is a discrepancy in the structure of the response. It is possible that the respond object does not contain the sitesResponse attribute")
+  }
+
+  return hs_sites
+
+}
+
+var getSitesJS = function(url,hsActual,group_name){
+  console.log(url);
+  let url_decons = url.split("?");
+  let url_request;
+  if(url_decons.length > 0){
+    $("#GeneralLoading").css({
+       position:'fixed',
+       "z-index": 9999,
+       top: '50%',
+       left: '50%',
+       transform: 'translate(-50%, -50%)'
+     });
+    $("#GeneralLoading").removeClass("hidden");
+    url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
+    try{
+      $.ajax({
+        type:"GET",
+        url:url_request,
+        dataType: "text",
+        success: function(xmlData){
+          // console.log(xmlData);
+          try{
+            let parsedObject = getSitesHelper(xmlData);
+            console.log(parsedObject);
+            // let variablesObject = getVariablesJS(url_decons[0]);
+            // console.log(variablesObject);
+            let requestObject = {
+              hs: id_dictionary[hsActual],
+              group: id_dictionary[group_name],
+              sites: JSON.stringify(parsedObject),
+              // variables: JSON.stringify(variablesObject)
+            }
+            $.ajax({
+              type:"POST",
+              url: "save-sites/",
+              dataType: "JSON",
+              data: requestObject,
+              success:function(data){
+                console.log(data);
+                try{
+                  let {siteInfo,sitesAdded,url} = data
+                  if(layersDict.hasOwnProperty(hsActual)){
+                    map.removeLayer(layersDict[hsActual])
+                  }
+
+                  let sites = siteInfo
+                  if(sites.length > 0 ){
+                    const vectorLayer = map_layers(sites,hsActual,url)[0]
+                    const vectorSource = map_layers(sites,hsActual,url)[1]
+
+
+                    map.addLayer(vectorLayer)
+                    ol.extent.extend(extent, vectorSource.getExtent())
+                    vectorLayer.set("selectable", true)
+                    layersDict[hsActual] = vectorLayer;
+
+                    map.getView().fit(vectorSource.getExtent());
+                    map.updateSize();
+
+                    layersDict[hsActual] = vectorLayer;
+                  }
+
+
+                    $.notify(
+                        {
+                            message: `Successfully updated the Web Service , ${sitesAdded} have been added to the Map.`
+                        },
+                        {
+                            type: "success",
+                            allow_dismiss: true,
+                            z_index: 20000,
+                            delay: 5000,
+                            animate: {
+                              enter: 'animated fadeInRight',
+                              exit: 'animated fadeOutRight'
+                            },
+                            onShow: function() {
+                                this.css({'width':'auto','height':'auto'});
+                            }
+                        }
+                    )
+                  $("#GeneralLoading").addClass("hidden");
+                }
+                catch(e){
+                  console.log(e);
+                  $("#GeneralLoading").addClass("hidden");
+                  $.notify(
+                      {
+                          message: `There was an error updating the Web Service`
+                      },
+                      {
+                          type: "danger",
+                          allow_dismiss: true,
+                          z_index: 20000,
+                          delay: 5000,
+                          animate: {
+                            enter: 'animated fadeInRight',
+                            exit: 'animated fadeOutRight'
+                          },
+                          onShow: function() {
+                              this.css({'width':'auto','height':'auto'});
+                          }
+                      }
+                  )
+                }
+              },
+              error:function(error){
+                console.log(error);
+                $("#GeneralLoading").addClass("hidden");
+                $.notify(
+                    {
+                        message: `There was an error updating the Web Service.`
+                    },
+                    {
+                        type: "danger",
+                        allow_dismiss: true,
+                        z_index: 20000,
+                        delay: 5000,
+                        animate: {
+                          enter: 'animated fadeInRight',
+                          exit: 'animated fadeOutRight'
+                        },
+                        onShow: function() {
+                            this.css({'width':'auto','height':'auto'});
+                        }
+                    }
+                )
+              }
+            })
+          }
+          catch(e){
+            console.log(e);
+            $("#GeneralLoading").addClass("hidden");
+            $.notify(
+                {
+                    message: `There was an error Updating the selected Web Service.`
+                },
+                {
+                    type: "danger",
+                    allow_dismiss: true,
+                    z_index: 20000,
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
+                }
+            )
+          }
+
+
+        },
+        error:function(error){
+          console.log(error);
+          $("#GeneralLoading").addClass("hidden");
+          $.notify(
+              {
+                  message: `There was an error Updating the selected Web Service.`
+              },
+              {
+                  type: "danger",
+                  allow_dismiss: true,
+                  z_index: 20000,
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
+              }
+          )
+        }
+      })
+    }
+    catch(e){
+      console.log(e);
+      $("#GeneralLoading").addClass("hidden");
+      $.notify(
+          {
+              message: `There was an error Updating the selected Web Service.`
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000,
+              animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+              },
+              onShow: function() {
+                  this.css({'width':'auto','height':'auto'});
+              }
+          }
+      )
+    }
+  }
+
+}
+
+update_hydroserver = function(){
+  try{
+    let hsActual = this.id.split("_")[0];
+    let group_name = this.id.split("_")[1];
+    console.log(hsActual);
+    console.log(group_name);
+    console.log(id_dictionary);
+    getSitesJS(urls_servers[hsActual], hsActual, group_name);
+
+    getVariablesJS(urls_servers[hsActual], hsActual, group_name);
+  }
+  catch(e){
+    console.log(e);
+    $.notify(
+        {
+            message: `There was an error updating the Web Service 1`
+        },
+        {
+            type: "success",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
+        }
+    )
+  }
+}
+
+// update_hydroserver = function(){
+//   try{
+//     let hsActual = this.id.split("_")[0];
+//     let group_name = this.id.split("_")[1];
+//
+//     let requestObject = {
+//       hs: id_dictionary[hsActual],
+//       group: id_dictionary[group_name]
+//     }
+//     $("#GeneralLoading").css({
+//        position:'fixed',
+//        "z-index": 9999,
+//        top: '50%',
+//        left: '50%',
+//        transform: 'translate(-50%, -50%)'
+//      });
+//     $("#GeneralLoading").removeClass("hidden");
+//     $.ajax({
+//         type: "POST",
+//         url: `soap-update/`,
+//         dataType: "JSON",
+//         data: requestObject,
+//         success: function(result) {
+//           try{
+//             let {siteInfo,sitesAdded,url} = result
+//             if(layersDict.hasOwnProperty(hsActual)){
+//               map.removeLayer(layersDict[hsActual])
+//             }
+//
+//             let sites = siteInfo
+//             const vectorLayer = map_layers(sites,hsActual,url)[0]
+//             const vectorSource = map_layers(sites,hsActual,url)[1]
+//
+//
+//             map.addLayer(vectorLayer)
+//             ol.extent.extend(extent, vectorSource.getExtent())
+//             vectorLayer.set("selectable", true)
+//             layersDict[hsActual] = vectorLayer;
+//
+//             map.getView().fit(vectorSource.getExtent());
+//             map.updateSize();
+//
+//             layersDict[hsActual] = vectorLayer;
+//
+//               $.notify(
+//                   {
+//                       message: `Successfully updated the Web Service , ${sitesAdded} have been added to the Map.`
+//                   },
+//                   {
+//                       type: "success",
+//                       allow_dismiss: true,
+//                       z_index: 20000,
+//                       delay: 5000,
+//                       animate: {
+//                         enter: 'animated fadeInRight',
+//                         exit: 'animated fadeOutRight'
+//                       },
+//                       onShow: function() {
+//                           this.css({'width':'auto','height':'auto'});
+//                       }
+//                   }
+//               )
+//             $("#GeneralLoading").addClass("hidden");
+//           }
+//           catch(e){
+//             $("#GeneralLoading").addClass("hidden");
+//             $.notify(
+//                 {
+//                     message: `There was an error updating the Web Service 1`
+//                 },
+//                 {
+//                     type: "success",
+//                     allow_dismiss: true,
+//                     z_index: 20000,
+//                     delay: 5000,
+//                     animate: {
+//                       enter: 'animated fadeInRight',
+//                       exit: 'animated fadeOutRight'
+//                     },
+//                     onShow: function() {
+//                         this.css({'width':'auto','height':'auto'});
+//                     }
+//                 }
+//             )
+//           }
+//         },
+//         error: function(error) {
+//           $("#GeneralLoading").addClass("hidden");
+//           $.notify(
+//               {
+//                   message: `There was an error updating the Web Service.`
+//               },
+//               {
+//                   type: "danger",
+//                   allow_dismiss: true,
+//                   z_index: 20000,
+//                   delay: 5000,
+//                   animate: {
+//                     enter: 'animated fadeInRight',
+//                     exit: 'animated fadeOutRight'
+//                   },
+//                   onShow: function() {
+//                       this.css({'width':'auto','height':'auto'});
+//                   }
+//               }
+//           )
+//
+//         }
+//     })
+//   }
+//   catch (e){
+//     $("#GeneralLoading").addClass("hidden");
+//     $.notify(
+//         {
+//             message: `There was an error Updating the selected Web Service.`
+//         },
+//         {
+//             type: "danger",
+//             allow_dismiss: true,
+//             z_index: 20000,
+//             delay: 5000,
+//             animate: {
+//               enter: 'animated fadeInRight',
+//               exit: 'animated fadeOutRight'
+//             },
+//             onShow: function() {
+//                 this.css({'width':'auto','height':'auto'});
+//             }
+//         }
+//     )
+//
+//   }
+//
+//
+// }

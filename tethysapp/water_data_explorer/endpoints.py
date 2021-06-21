@@ -400,6 +400,111 @@ def get_hydroserver_info(request):
 
     return JsonResponse(response_obj)
 
+
+def save_variables_data(request):
+    return_obj = {}
+    if request.is_ajax() and request.method == 'POST':
+        # print(request.POST)
+        specific_group = request.POST.get('group')
+        specific_hs = request.POST.get('hs')
+        variables = request.POST.get('variables')
+        print(variables)
+        response_obj = {}
+        SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
+        session = SessionMaker()  # Initiate a session
+        hydroservers_group = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
+        h1=session.query(Groups).join("hydroserver")
+        hs_list = []
+        for hydroservers in hydroservers_group:
+            name = hydroservers.title
+            url = hydroservers.url
+            if name == specific_hs:
+
+                varaibles_list = {}
+                hydroserver_variable_list = []
+                hydroserver_variable_code_list = []
+                for hs_variable in json.loads(variables):
+                    hydroserver_variable_list.append(hs_variable['variableName'])
+                    hydroserver_variable_code_list.append(hs_variable['variableCode'])
+
+                varaibles_list["variables"] = hydroserver_variable_list
+                varaibles_list["variables_codes"] = hydroserver_variable_code_list
+
+                # variable_json = varaibles_list
+                variable_json = json.dumps(varaibles_list)
+                return_obj['variables'] = variable_json
+                hydroservers.variables = variable_json
+
+
+        session.commit()
+        session.close()
+
+    else:
+        return_obj['message'] = 'This request can only be made through a "POST" AJAX call.'
+
+    return JsonResponse(return_obj)
+
+def save_sites_data(request):
+    return_obj = {}
+    difference = 0
+
+    if request.is_ajax() and request.method == 'POST':
+        # print(request.POST)
+        specific_group = request.POST.get('group')
+        specific_hs = request.POST.get('hs')
+        sites = request.POST.get('sites')
+        # print(sites)
+        # variables = request.POST.get('variables')
+        # print(variables)
+        response_obj = {}
+        SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
+        session = SessionMaker()  # Initiate a session
+        hydroservers_group = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
+        h1=session.query(Groups).join("hydroserver")
+        hs_list = []
+        for hydroservers in hydroservers_group:
+            name = hydroservers.title
+            url = hydroservers.url
+            if name == specific_hs:
+                difference = len(json.loads(hydroservers.siteinfo))
+
+                sites_parsed_json = sites
+                # sites_parsed_json = json.dumps(sites)
+                countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
+                # print(countries_json)
+
+                # varaibles_list = {}
+                # hydroserver_variable_list = []
+                # hydroserver_variable_code_list = []
+                # for hs_variable in json.loads(variables):
+                #     hydroserver_variable_list.append(hs_variable['variableName'])
+                #     hydroserver_variable_code_list.append(hs_variable['variableCode'])
+                #
+                # varaibles_list["variables"] = hydroserver_variable_list
+                # varaibles_list["variables_codes"] = hydroserver_variable_code_list
+
+                # variable_json = varaibles_list
+                # variable_json = json.dumps(varaibles_list)
+
+                hydroservers.siteinfo = sites_parsed_json
+                # hydroservers.variables = variable_json
+                hydroservers.countries = countries_json
+
+                # sites_parsed_json = json.dumps(sites_object)
+                difference = len(json.loads(sites)) - difference
+                # print(json.loads(sites_parsed_json))
+                return_obj["siteInfo"] = json.loads(sites_parsed_json)
+                return_obj["sitesAdded"]= difference
+                return_obj["url"] = hydroservers.url
+
+        session.commit()
+        session.close()
+
+    else:
+        return_obj['message'] = 'This request can only be made through a "POST" AJAX call.'
+
+    return JsonResponse(return_obj)
+
 def upload_hs(request):
     return_obj = {}
     difference = 0

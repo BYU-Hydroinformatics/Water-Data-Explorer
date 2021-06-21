@@ -45,6 +45,14 @@ class WaterDataExplorer(TethysAppBase):
                    url='soap-update/',
                    controller='water_data_explorer.endpoints.upload_hs'),
 
+            UrlMap(name='save-sites',
+                   url='save-sites/',
+                   controller='water_data_explorer.endpoints.save_sites_data'),
+                   
+            UrlMap(name='save-variables',
+                   url='save-variables/',
+                   controller='water_data_explorer.endpoints.save_variables_data'),
+
             UrlMap(name='load-hydroserver-of-groups',
                    url='catalog-group/',
                    controller='water_data_explorer.groups.catalog_group'),
