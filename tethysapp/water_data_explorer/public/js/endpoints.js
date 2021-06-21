@@ -1,21 +1,52 @@
+
+
+
+var get_download_hs = function(nb, hs_name, hs_url, variable_hs, site_hs){
+  nb['cells'][1]['source'][0] = `# ${hs_name} \n`;
+  nb['cells'][5]['source'][0] = `WOF_URL = ${hs_url} \n`;
+  nb['cells'][5]['source'][1] = `VARIABLE = ${variable_hs} \n`;
+  nb['cells'][5]['source'][2] = `SITE = ${site_hs} \n`;
+
+  return nb
+}
+
+
+
 get_vars_from_site = function (resultList){
   try{
     let indexs= $("#site_choose")['0'].value;
     request_obj = {}
-    request_obj['hs_url'] = $("#url_WOF").text()
-    request_obj['network'] = resultList[indexs]['network']
-    request_obj['code'] = resultList[indexs]['sitecode']
+    request_obj['hs_url'] = $("#url_WOF").text();
+    request_obj['network'] = resultList[indexs]['network'];
+    request_obj['code'] = resultList[indexs]['sitecode'];
     let var_select = $("#variable_choose");
     var_select.empty();
     var_select.selectpicker("refresh");
     $("#downloading_loading").removeClass("hidden");
+
+    let url_base = $("#url_WOF").text().split("?")[0];
+    let SITE = resultList[indexs]['sitecode'];
+    // SITE = 'B6940B585CE66AD1D5E33075197668BE487A1CDB';
+    let url_request = `${url_base}?request=GetSiteInfoObject&site=${SITE}`;
+    // console.log(url_request);
+
       $.ajax({
-        type:"POST",
-        url: `get-values-hs/`,
-        dataType: "JSON",
-        data: request_obj,
-        success: function(result){
+        // type:"POST",
+        type:"GET",
+        url:url_request,
+        // url: `get-values-hs/`,
+        // dataType: "JSON",
+        dataType: "text",
+
+        // data: request_obj,
+        success: function(result8){
           try{
+            console.log(result8);
+            let getSiteInfoObjectParse = getSitesInfoJS(result8);
+            // console.log(getSiteInfoObjectParse);
+            let result =getSiteInfoObjectParsableJS(getSiteInfoObjectParse);
+
+
             if (result.hasOwnProperty("variables")){
               let variables_ = result['variables'];
               for(let i=0; i< variables_.length; ++i){
@@ -41,28 +72,54 @@ get_vars_from_site = function (resultList){
               $("#btn-add-download").on("click", function(){
                 $("#downloading_loading").removeClass("hidden");
                 $.ajax({
-                  type:"POST",
-                  url: `get-download-hs/`,
-                  dataType: "JSON",
-                  data: reque_ob,
-                  success: function(result2){
-                    var name_together =reque_ob['hs_name'].replace(/(?!\w|\s)./g, '_').replace(/\s+/g, '_').replace(/^(\s*)([\W\w]*)(\b\s*$)/g, '$2');
-                    var blob = new Blob([JSON.stringify(result2)], { type: 'application/json' });
-                    var link = document.createElement("a");
-                    var url = URL.createObjectURL(blob);
-                    link.setAttribute("href", url);
-                    link.setAttribute("download", name_together.replace(/[^a-z0-9_.-]/gi,'_') + ".ipynb");
-                    link.style.visibility = 'hidden';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                  type:"GET",
+                  // type:"POST",
+                  url: `https://gist.githubusercontent.com/romer8/89c851014afb276b0f20cb61c9c731f6/raw/a0ee55ca83e75f34f26eb94bd52941cc2a2199cd/pywaterml_template.ipynb`,
+                  // url: `get-download-hs/`,
+                  // dataType: "JSON",
+                  dataType: "text",
+                  // data: reque_ob,
+                  success: function(result2_){
+                    try{
+                      console.log(result2_);
+                      let result2 = get_download_hs(JSON.parse(result2_),$("#site_choose option:selected").html(),$("#url_WOF").text(),$("#variable_choose")['0'].value,$("#site_choose")['0'].value );
+                      var name_together =reque_ob['hs_name'].replace(/(?!\w|\s)./g, '_').replace(/\s+/g, '_').replace(/^(\s*)([\W\w]*)(\b\s*$)/g, '$2');
+                      var blob = new Blob([JSON.stringify(result2)], { type: 'application/json' });
+                      var link = document.createElement("a");
+                      var url = URL.createObjectURL(blob);
+                      link.setAttribute("href", url);
+                      link.setAttribute("download", name_together.replace(/[^a-z0-9_.-]/gi,'_') + ".ipynb");
+                      link.style.visibility = 'hidden';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      $("#downloading_loading").addClass("hidden");
+                    }
+                    catch(e){
+                      $("#downloading_loading").addClass("hidden");
+                      $.notify(
+                          {
+                              message: `Something went wrong when downloading a python notebook for the site`
+                          },
+                          {
+                              type: "danger",
+                              allow_dismiss: true,
+                              z_index: 20000,
+                              delay: 5000,
+                              animate: {
+                                enter: 'animated fadeInRight',
+                                exit: 'animated fadeOutRight'
+                              },
+                              onShow: function() {
+                                  this.css({'width':'auto','height':'auto'});
+                              }
+                          }
+                      )
+                    }
 
-
-
-
-                    $("#downloading_loading").addClass("hidden");
                   },
-                  error:function(){
+                  error:function(error){
+                    console.log(error);
                     $("#downloading_loading").addClass("hidden");
 
                     $.notify(
