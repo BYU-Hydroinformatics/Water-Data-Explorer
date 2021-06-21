@@ -1,6 +1,4 @@
 
-
-
 var get_download_hs = function(nb, hs_name, hs_url, variable_hs, site_hs){
   nb['cells'][1]['source'][0] = `# ${hs_name} \n`;
   nb['cells'][5]['source'][0] = `WOF_URL = ${hs_url} \n`;
@@ -41,7 +39,7 @@ get_vars_from_site = function (resultList){
         // data: request_obj,
         success: function(result8){
           try{
-            console.log(result8);
+            // console.log(result8);
             let getSiteInfoObjectParse = getSitesInfoJS(result8);
             // console.log(getSiteInfoObjectParse);
             let result =getSiteInfoObjectParsableJS(getSiteInfoObjectParse);
@@ -81,7 +79,7 @@ get_vars_from_site = function (resultList){
                   // data: reque_ob,
                   success: function(result2_){
                     try{
-                      console.log(result2_);
+                      // console.log(result2_);
                       let result2 = get_download_hs(JSON.parse(result2_),$("#site_choose option:selected").html(),$("#url_WOF").text(),$("#variable_choose")['0'].value,$("#site_choose")['0'].value );
                       var name_together =reque_ob['hs_name'].replace(/(?!\w|\s)./g, '_').replace(/\s+/g, '_').replace(/^(\s*)([\W\w]*)(\b\s*$)/g, '$2');
                       var blob = new Blob([JSON.stringify(result2)], { type: 'application/json' });

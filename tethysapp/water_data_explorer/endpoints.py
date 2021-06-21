@@ -70,6 +70,55 @@ def get_download_hs(request):
 
 
 
+# def get_variables_hs(request):
+#     list_catalog={}
+#     #print("get_variables_hs Function")
+#     specific_group=request.POST.get('group')
+#     hs_actual = request.POST.get('hs')
+#     hs_actual = hs_actual.replace('-', ' ')
+#     #print("HS", hs_actual)
+#     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
+#
+#     session = SessionMaker()  # Initiate a session
+#     hydroservers_group = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
+#
+#     for hydroservers in hydroservers_group:
+#         name = hydroservers.title
+#         if hs_actual == name:
+#             # print(hydroservers.url)
+#             # layer_obj = {}
+#             # layer_obj["title"] = hydroservers.title
+#             # layer_obj["url"] = hydroservers.url.strip()
+#             # print(layer_obj["url"])
+#             # layer_obj["siteInfo"] = hydroservers.siteinfo
+#             # client = Client(url = hydroservers.url.strip(), timeout= 500)
+#             # keywords = client.service.GetVariables('[:]')
+#             water = pwml.WaterMLOperations(url = hydroservers.url.strip())
+#             keywords_response = water.GetVariables()['variables']
+#             keywords = []
+#             keywords_name = []
+#             keywords_abbr_unit = []
+#             key_timeSupport = []
+#             timeUnitName = []
+#             for kyword in keywords_response:
+#                 #print(kyword)
+#                 keywords.append(kyword['variableCode'])
+#                 keywords_name.append(kyword['variableName'])
+#                 keywords_abbr_unit.append(kyword['unitAbbreviation'])
+#                 key_timeSupport.append(kyword['timeSupport'])
+#                 timeUnitName.append(kyword['timeUnitAbbreviation'])
+#             variables_show = keywords
+#
+#     list_catalog["variables_code"] = variables_show
+#     list_catalog["variables_name"] = keywords_name
+#     list_catalog["variables_unit_abr"] = keywords_abbr_unit
+#     list_catalog["variables_timesupport"] = key_timeSupport
+#     list_catalog["variables_time_abr"] = timeUnitName
+#
+#     #print("Finished get_variables_hs Function")
+#
+#
+#     return JsonResponse(list_catalog)
 def get_variables_hs(request):
     list_catalog={}
     #print("get_variables_hs Function")
@@ -85,36 +134,32 @@ def get_variables_hs(request):
     for hydroservers in hydroservers_group:
         name = hydroservers.title
         if hs_actual == name:
-            # print(hydroservers.url)
-            # layer_obj = {}
-            # layer_obj["title"] = hydroservers.title
-            # layer_obj["url"] = hydroservers.url.strip()
-            # print(layer_obj["url"])
-            # layer_obj["siteInfo"] = hydroservers.siteinfo
-            # client = Client(url = hydroservers.url.strip(), timeout= 500)
-            # keywords = client.service.GetVariables('[:]')
-            water = pwml.WaterMLOperations(url = hydroservers.url.strip())
-            keywords_response = water.GetVariables()['variables']
-            keywords = []
-            keywords_name = []
-            keywords_abbr_unit = []
-            key_timeSupport = []
-            timeUnitName = []
-            for kyword in keywords_response:
-                #print(kyword)
-                keywords.append(kyword['variableCode'])
-                keywords_name.append(kyword['variableName'])
-                keywords_abbr_unit.append(kyword['unitAbbreviation'])
-                key_timeSupport.append(kyword['timeSupport'])
-                timeUnitName.append(kyword['timeUnitAbbreviation'])
-            variables_show = keywords
+            keywords_response = json.loads(hydroservers.variables)
+            # keywords = []
+            # keywords_name = []
+            # keywords_abbr_unit = []
+            # key_timeSupport = []
+            # timeUnitName = []
+            # for kyword in keywords_response:
 
-    list_catalog["variables_code"] = variables_show
-    list_catalog["variables_name"] = keywords_name
-    list_catalog["variables_unit_abr"] = keywords_abbr_unit
-    list_catalog["variables_timesupport"] = key_timeSupport
-    list_catalog["variables_time_abr"] = timeUnitName
+            # keywords.append(keywords_response['variables_codes'])
+            # keywords_name.append(keywords_response['variables'])
+            # keywords_abbr_unit.append(keywords_response['variables_unit_abr'])
+            # key_timeSupport.append(keywords_response['variables_timesupport'])
+            # timeUnitName.append(keywords_response['variables_time_abr'])
+                # keywords.append(kyword['variables_codes'])
+                # keywords_name.append(kyword['variables'])
+                # keywords_abbr_unit.append(kyword['variables_unit_abr'])
+                # key_timeSupport.append(kyword['variables_timesupport'])
+                # timeUnitName.append(kyword['variables_time_abr'])
+            # variables_show = keywords
 
+    list_catalog["variables_code"] = keywords_response['variables_codes']
+    list_catalog["variables_name"] = keywords_response['variables']
+    list_catalog["variables_unit_abr"] = keywords_response['variables_unit_abr']
+    list_catalog["variables_timesupport"] = keywords_response['variables_timesupport']
+    list_catalog["variables_time_abr"] = keywords_response['variables_time_abr']
+    print(list_catalog)
     #print("Finished get_variables_hs Function")
 
 
@@ -423,13 +468,21 @@ def save_variables_data(request):
                 varaibles_list = {}
                 hydroserver_variable_list = []
                 hydroserver_variable_code_list = []
+                hydroserver_variable_abbr_list = []
+                hydroserver_variable_timeSupport_list = []
+                hydroserver_variable_timeUnit_list = []
                 for hs_variable in json.loads(variables):
                     hydroserver_variable_list.append(hs_variable['variableName'])
                     hydroserver_variable_code_list.append(hs_variable['variableCode'])
+                    hydroserver_variable_abbr_list.append(hs_variable['unitAbbreviation'])
+                    hydroserver_variable_timeSupport_list.append(hs_variable['timeSupport'])
+                    hydroserver_variable_timeUnit_list.append(hs_variable['timeUnitAbbreviation'])
 
                 varaibles_list["variables"] = hydroserver_variable_list
                 varaibles_list["variables_codes"] = hydroserver_variable_code_list
-
+                varaibles_list["variables_unit_abr"] = hydroserver_variable_abbr_list
+                varaibles_list["variables_timesupport"] = hydroserver_variable_timeSupport_list
+                varaibles_list["variables_time_abr"] = hydroserver_variable_timeUnit_list
                 # variable_json = varaibles_list
                 variable_json = json.dumps(varaibles_list)
                 return_obj['variables'] = variable_json
