@@ -558,6 +558,49 @@ def save_sites_data(request):
 
     return JsonResponse(return_obj)
 
+
+def save_new_sites_data(request):
+    return_obj = {}
+    if request.is_ajax() and request.method == 'POST':
+        # print(request.POST)
+        specific_group = request.POST.get('group')
+        specific_hs = request.POST.get('hs')
+        sites = request.POST.get('sites')
+        url_service =request.POST.get('url')
+        description = request.POST.get('description')
+        # print(sites)
+        # variables = request.POST.get('variables')
+        # print(variables)
+        response_obj = {}
+        SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
+        session = SessionMaker()  # Initiate a session
+        hydroservers_group = session.query(Groups).filter(Groups.title == specific_group).first()
+
+        return_obj['title'] = specific_hs
+        return_obj['url'] = url_service
+        return_obj['description'] = description
+        return_obj['siteInfo'] = sites
+        return_obj['group'] = specific_group
+        countries_json = json.dumps(available_regions_2(request,siteinfo = sites))
+
+        hs_one = HydroServer_Individual(title=specific_hs,
+                         url=url_service,
+                         description = description,
+                         siteinfo=sites,
+                         variables = "{}",
+                         countries = countries_json )
+
+        hydroservers_group.hydroserver.append(hs_one)
+        session.add(hydroservers_group)
+        session.commit()
+        session.close()
+
+    else:
+        return_obj['message'] = 'This request can only be made through a "POST" AJAX call.'
+
+    return JsonResponse(return_obj)
+
+
 def upload_hs(request):
     return_obj = {}
     difference = 0
