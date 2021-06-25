@@ -41,6 +41,8 @@ services:
       BYPASS_TETHYS_HOME_PAGE: "True"
       ENABLE_OPEN_PORTAL: "True"
       AXES_FAILURE_LIMIT: 10
+      #Please change the ALLOWED HOST to anything that is needed following this example #
+      ALLOWED_HOSTS: "\"[localhost, 127.0.0.1, 97.67.251.194, 62.245.16.117]\""
 
     links:
       - db
