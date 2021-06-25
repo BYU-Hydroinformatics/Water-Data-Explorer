@@ -453,7 +453,9 @@ def save_variables_data(request):
         specific_group = request.POST.get('group')
         specific_hs = request.POST.get('hs')
         variables = request.POST.get('variables')
-        print(variables)
+        # print(variables)
+        # print(specific_group)
+        # print(specific_hs)
         response_obj = {}
         SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
         session = SessionMaker()  # Initiate a session

@@ -780,6 +780,8 @@ add_hydroserver = function(){
                                   input_check.checked = true;
 
                                 });
+                                urls_servers[$("#soap-title").val()] =  url_to_sent
+                                getVariablesJS(url_to_sent,new_title , group_name_e3);
 
                                 $.notify(
                                     {
@@ -806,6 +808,7 @@ add_hydroserver = function(){
                                 $("#modalAddSoap").each(function() {
                                     this.reset()
                                 })
+
                     }
                     catch(err){
                       console.log(err);
@@ -2078,7 +2081,7 @@ var getVariablesJS = function(url,hsActual,group_name){
       url:url_request,
       dataType: "text",
       success: function(xmlData){
-        console.log(xmlData);
+        // console.log(xmlData);
         let parsedObject = getVariablesHelperJS(xmlData);
         let requestObject = {
           hs: id_dictionary[hsActual],
@@ -2091,7 +2094,7 @@ var getVariablesJS = function(url,hsActual,group_name){
           dataType: "JSON",
           data: requestObject,
           success:function(data){
-            console.log(data);
+            $("#GeneralLoading").addClass("hidden");
             return data
           },
           error: function(error){
@@ -2694,8 +2697,6 @@ update_hydroserver = function(){
     )
   }
 }
-
-
 
 
 // update_hydroserver = function(){
