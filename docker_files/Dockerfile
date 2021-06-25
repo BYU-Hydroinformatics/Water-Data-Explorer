@@ -35,7 +35,6 @@ ENV CHANNEL_LAYERS_BACKEND "channels_redis.core.RedisChannelLayer"
 ENV CHANNEL_LAYERS_CONFIG "\"{\"hosts\": [[127.0.0.1, 6379]]}\""
 
 
-
 #########
 # SETUP #
 #########
@@ -50,10 +49,6 @@ RUN mkdir -p $HOME/.config/pip && echo "[global]\nquiet = True" > $HOME/.config/
 
 RUN mkdir /tethys_apps && cd /tethys_apps && git clone https://github.com/BYU-Hydroinformatics/Water-Data-Explorer.git
 
-## UNCOMMENT TO USE THE VERSION FOR INMET ##
-
-RUN git init && git fetch
-RUN git checkout -b inmet-WDE
 
 RUN mkdir -p ${TETHYS_PERSIST}/keys
 ###########
