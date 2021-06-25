@@ -489,6 +489,8 @@ def catalog_filter(request):
     if df_countries.empty and not df_vars.empty:
         df_final = df_vars
     if not df_countries.empty and not df_vars.empty:
+        df_countries = df_countries.astype('str')
+        df_vars = df_vars.astype('str')
         df_final = df_countries.merge(df_vars)
 
     final_obj_regions_vars = {}

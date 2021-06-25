@@ -1716,6 +1716,7 @@ catalog_filter = function(){
   try{
     let elementForm= $("#modalKeyWordSearch");
     let datastring= elementForm.serialize();
+    console.log(datastring);
     $("#KeywordLoading").removeClass("hidden");
     $.ajax({
         type: "POST",
