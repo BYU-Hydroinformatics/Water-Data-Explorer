@@ -185,6 +185,8 @@ var filter_words,
     time_series_cache = {},
     layer_selected_countries = {},
     urls_servers = {},
+    catalog_filter_vars,
+    catalog_filter_regions,
     generateListServices;
   /************************************************************************
  *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that

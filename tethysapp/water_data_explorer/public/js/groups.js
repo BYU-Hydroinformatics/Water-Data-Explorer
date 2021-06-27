@@ -1690,7 +1690,7 @@ $("#btn-del-hydro-groups").on("click", delete_group_of_hydroservers);
 */
 
 
-catalog_filter = function(){
+catalog_filter_regions = function(){
   var styles = {
     'MultiPolygon': [new ol.style.Style({
       stroke: new ol.style.Stroke({
@@ -1997,7 +1997,318 @@ catalog_filter = function(){
     )
   }
 }
-$("#btn-key-search").on("click", catalog_filter);
+$("#btn-key-filter-only-country").on("click", catalog_filter_regions);
+
+//UNCOMMENT WHEN NEEDED LAS CATALOG_FILTER FUNCTIONS //
+
+// catalog_filter = function(){
+//   var styles = {
+//     'MultiPolygon': [new ol.style.Style({
+//       stroke: new ol.style.Stroke({
+//         color: 'rgb(128,128,128)',
+//         lineDash: [4],
+//         width: 3
+//       }),
+//       fill: new ol.style.Fill({
+//         color: 'rgba(119,136,153, 0.05)'
+//       })
+//     })],
+//     'Polygon': [new ol.style.Style({
+//         stroke: new ol.style.Stroke({
+//           color: 'rgb(128,128,128)',
+//           lineDash: [4],
+//           width: 3
+//         }),
+//         fill: new ol.style.Fill({
+//           color: 'rgba(119,136,153, 0.05)'
+//         })
+//       })],
+//   };
+//
+//   var styleFunction = function(feature, resolution) {
+//     return styles[feature.getGeometry().getType()];
+//   };
+//
+//
+//   try{
+//     let elementForm= $("#modalKeyWordSearch");
+//     let datastring= elementForm.serialize();
+//     $("#KeywordLoading").removeClass("hidden");
+//     $.ajax({
+//         type: "POST",
+//         url: `catalog-filter/`,
+//         dataType: "HTML",
+//         data: datastring,
+//         success: function(result) {
+//           try{
+//             let jeojson = JSON.parse(JSON.parse(result)['geojson']);
+//             map.removeLayer(layer_selected_countries['countries']);
+//
+//             if(jeojson['features'].length > 0){
+//               for(let z = 0; z < jeojson['features'].length; ++z){
+//                 if(jeojson['features'][z]['geometry']['type'] == "Polygon"){
+//                   for (let i = 0; i < jeojson['features'][z]['geometry']['coordinates'][0].length; ++i){
+//                     jeojson['features'][z]['geometry']['coordinates'][0][i] = ol.proj.transform(jeojson['features'][z]['geometry']['coordinates'][0][i],
+//                         "EPSG:4326",
+//                         "EPSG:3857"
+//                     )
+//                   }
+//                 }
+//                 if(jeojson['features'][z]['geometry']['type'] == "MultiPolygon"){
+//                   for (let i = 0; i < jeojson['features'][z]['geometry']['coordinates'].length; ++i){
+//                     for(let j= 0; j < jeojson['features'][z]['geometry']['coordinates'][i][0].length; ++j){
+//
+//                       jeojson['features'][z]['geometry']['coordinates'][i][0][j] = ol.proj.transform(jeojson['features'][z]['geometry']['coordinates'][i][0][j],
+//                           "EPSG:4326",
+//                           "EPSG:3857"
+//                       )
+//                     }
+//                   }
+//                 }
+//               }
+//
+//               var vectorSource = new ol.source.Vector({
+//                 features: (new ol.format.GeoJSON()).readFeatures(jeojson)
+//               });
+//
+//               var vectorLayer2 = new ol.layer.Vector({
+//                 source: vectorSource,
+//                 style: styleFunction
+//
+//               });
+//               map.removeLayer(layer_selected_countries['countries']);
+//               layer_selected_countries['countries'] = vectorLayer2
+//             }
+//
+//
+//             let hs_available = JSON.parse(result)['hs'];
+//             let new_hs_available = []
+//             hs_available.forEach(function(hs){
+//               let hs_new2;
+//               Object.keys(id_dictionary).forEach(function(key) {
+//                 if(id_dictionary[key] == hs ){
+//                   hs_new2 = key;
+//                   // console.log(hs_available);
+//                   new_hs_available.push(hs_new2);
+//
+//                 }
+//               });
+//             })
+//             // console.log(new_hs_available);
+//             let sitesObj =  JSON.parse(result)['stations'];
+//             map.getLayers().forEach(function(layer) {
+//               if(layer instanceof ol.layer.Vector){
+//                 layer.setStyle(new ol.style.Style({}));
+//               }
+//             });
+//
+//             // if(jeojson['features'].length > 0){
+//             //   map.addLayer(layer_selected_countries['countries']);
+//             //   map.getView().fit(layer_selected_countries['countries'].getSource().getExtent());
+//             //   map.updateSize();
+//             // }
+//
+//
+//             for(let i = 0;  i< sitesObj.length; ++i){
+//               let title = sitesObj[i]['title']
+//               let url = sitesObj[i]['url']
+//               let sites = sitesObj[i]['sites'];
+//               var vectorLayer = map_layers(sites,title,url)[0]
+//               var vectorSource = map_layers(sites,title,url)[1]
+//               map.getLayers().forEach(function(layer) {
+//                 // if(layer instanceof ol.layer.Vector){
+//                 //   layer.setStyle(new ol.style.Style({}));
+//                 // }
+//                 //
+//                    if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+//                        layer.setStyle(new ol.style.Style({}));
+//                      }
+//                });
+//
+//
+//               map.addLayer(vectorLayer)
+//               vectorLayer.set("selectable", true)
+//               layer_object_filter[title] = vectorLayer;
+//
+//               if(layersDict['selectedPointModal']){
+//                 map.removeLayer(layersDict['selectedPointModal'])
+//                 map.updateSize()
+//               }
+//               if(layersDict['selectedPoint']){
+//                 map.removeLayer(layersDict['selectedPoint'])
+//                 map.updateSize()
+//               }
+//
+//             }
+//             $("#btn-r-reset").show()
+//             $("#btn-r-reset").on("click", reset_keywords);
+//             $("#current-Groupservers").find("li").each(function()
+//                {
+//                  var $li=$(this)['0'];
+//                  let id_li = $li['id'];
+//                  $(`#${id_li} input[type=checkbox]`).each(function() {
+//                    this.checked = false;
+//                  });
+//                });
+//             $("#current-Groupservers").find("li").each(function()
+//                {
+//                   var $li=$(this)['0'];
+//                   let id_li = $li['id'];
+//
+//                   if(new_hs_available.includes(id_li)){
+//
+//                     $(`#${id_li}`).css({"opacity": "1",
+//                                         "border-color": "#ac2925",
+//                                         "border-width": "2px",
+//                                         "border-style": "solid",
+//                                         "color": "black",
+//                                         "font-weight": "bold"});
+//                     $(`#${id_li} input[type=checkbox]`).each(function() {
+//                       this.checked = true;
+//                     });
+//
+//                   }
+//                   else{
+//                     let groups_divs = Object.keys(information_model);
+//                     let groups_divs_3e = []
+//                     groups_divs.forEach(function(g3){
+//                       let g_new2;
+//                       Object.keys(id_dictionary).forEach(function(key) {
+//                         if(id_dictionary[key] == g3 ){
+//                           g_new2 = key;
+//                         }
+//                       });
+//                       groups_divs_3e.push(g_new2);
+//                     })
+//                     groups_divs = groups_divs_3e
+//                     if (!groups_divs.includes(id_li)){
+//                       $(`#${id_li}`).css({"opacity": "0.5",
+//                                            "border-color": "#d3d3d3",
+//                                            "border-width":"1px",
+//                                            "border-style":"solid",
+//                                            "color":"#555555",
+//                                            "font-weight": "normal"});
+//                     }
+//                   }
+//                });
+//                let groups_divs = Object.keys(information_model);
+//
+//                for(let i=0; i< groups_divs.length; ++i){
+//                  let check_all = []
+//                  for(let j=0; j< information_model[groups_divs[i]].length; ++j){
+//
+//                    let service_div = information_model[groups_divs[i]][j];
+//                    let new_service_div;
+//                    Object.keys(id_dictionary).forEach(function(key) {
+//                      if(id_dictionary[key] == service_div ){
+//                        new_service_div = key;
+//                      }
+//                    });
+//                    $(`#${new_service_div} input[type=checkbox]`).each(function(){
+//                      if(this.checked){
+//                        check_all.push(true);
+//                      }
+//                      else{
+//                        check_all.push(false);
+//                      }
+//                    });
+//                  }
+//                  if(!check_all.includes(false) && check_all.length > 0){
+//                    let groups_divs_3e = []
+//                    groups_divs.forEach(function(g3){
+//                      let g_new2;
+//                      Object.keys(id_dictionary).forEach(function(key) {
+//                        if(id_dictionary[key] == g3 ){
+//                          g_new2 = key;
+//                        }
+//                      });
+//                      groups_divs_3e.push(g_new2);
+//                    })
+//
+//                    $(`#${groups_divs_3e[i]} input[type=checkbox]`).each(function() {
+//                      this.checked = true;
+//                    });
+//                  }
+//                }
+//
+//
+//             $("#KeywordLoading").addClass("hidden");
+//
+//           }
+//           catch(e){
+//             console.log(e);
+//             $("#KeywordLoading").addClass("hidden");
+//
+//             $.notify(
+//                 {
+//                     message: `Something were wrong when filtering the web services by region`
+//                 },
+//                 {
+//                     type: "danger",
+//                     allow_dismiss: true,
+//                     z_index: 20000,
+//                     delay: 5000,
+//                     animate: {
+//                       enter: 'animated fadeInRight',
+//                       exit: 'animated fadeOutRight'
+//                     },
+//                     onShow: function() {
+//                         this.css({'width':'auto','height':'auto'});
+//                     }
+//                 }
+//             )
+//           }
+//
+//         },
+//         error: function(error) {
+//           console.log(error);
+//           $("#KeywordLoading").addClass("hidden");
+//
+//           $.notify(
+//               {
+//                   message: `Something were wrong when filtering the web services by region`
+//               },
+//               {
+//                   type: "danger",
+//                   allow_dismiss: true,
+//                   z_index: 20000,
+//                   delay: 5000,
+//                   animate: {
+//                     enter: 'animated fadeInRight',
+//                     exit: 'animated fadeOutRight'
+//                   },
+//                   onShow: function() {
+//                       this.css({'width':'auto','height':'auto'});
+//                   }
+//               }
+//           )
+//         }
+//
+//       })
+//   }
+//   catch(error){
+//     $("#KeywordLoading").addClass("hidden");
+//     $.notify(
+//         {
+//             message: `We are having a problem trying to retrieve the regions to filter the groups`
+//         },
+//         {
+//             type: "danger",
+//             allow_dismiss: true,
+//             z_index: 20000,
+//             delay: 5000,
+//             animate: {
+//               enter: 'animated fadeInRight',
+//               exit: 'animated fadeOutRight'
+//             },
+//             onShow: function() {
+//                 this.css({'width':'auto','height':'auto'});
+//             }
+//         }
+//     )
+//   }
+// }
+// $("#btn-key-search").on("click", catalog_filter);
 
 catalog_filter_vars = function(){
 

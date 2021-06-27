@@ -460,13 +460,14 @@ def catalog_filter(request):
     for count in countries:
         count_new.append(count.replace("_"," "))
     countries = count_new
-    # print(countries)
-    variables = request.POST.getlist('variables')
+
+    #PLEASE UNCOMMENT IN THE FUTURE##
+    # variables = request.POST.getlist('variables')
+
+
     # for varia in variables:
     #     var_new.append(varia.replace("_"," "))
     # variables = var_new
-
-
 
     countries_geojson_file_path = os.path.join(app.get_app_workspace().path, 'countries3.geojson')
     countries_gdf = gpd.read_file(countries_geojson_file_path)
@@ -475,7 +476,9 @@ def catalog_filter(request):
 
 
     hs_filtered_region = filter_region(countries_geojson_file_path,countries, actual_group= actual_group)
-    hs_filtered_variable = filter_variable(variables, actual_group=actual_group)
+    hs_filtered_variable = []
+    #PLEASE UNCOMMENT IN THE FUTURE##
+    # hs_filtered_variable = filter_variable(variables, actual_group=actual_group)
     list_columns_porsi = ["sitename", "latitude", "longitude", "sitecode", "url", "title"]
     array_sites_region = []
     array_sites_variables = []
