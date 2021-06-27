@@ -2326,6 +2326,148 @@ var getVariablesHelperJS2 = function(one_variable, return_object){
   return return_object
 
 }
+
+
+var getSitesFilterHelper = function (xmlData){
+  let return_obj;
+  let return_array = []
+  var options = {
+      attributeNamePrefix : "@",
+      attrNodeName: "attr", //default is 'false'
+      textNodeName : "#text",
+      ignoreAttributes : false,
+      ignoreNameSpace : false,
+      allowBooleanAttributes : true,
+      parseNodeValue : true,
+      parseAttributeValue : true,
+      trimValues: true,
+      cdataTagName: "__cdata", //default is 'false'
+      cdataPositionChar: "\\c",
+      parseTrueNumberOnly: false,
+      arrayMode: false, //"strict"
+      attrValueProcessor: (val, attrName) => he.decode(val, {isAttributeValue: true}),//default is a=>a
+      tagValueProcessor : (val, tagName) => he.decode(val), //default is a=>a
+      stopNodes: ["parse-me-as-string"]
+  };
+  var result = parser.validate(xmlData);
+  if (result !== true) console.log(result.err);
+  var jsonObj = parser.parse(xmlData,options);
+  //console.log(jsonObj);
+  let firstObject = jsonObj['soap:Envelope']['soap:Body']['GetSitesResponse']['GetSitesResult'];
+  // console.log(firstObject);
+
+  var result2 = parser.validate(firstObject);
+  if (result2 !== true) console.log(result2.err);
+  var jsonObj2 = parser.parse(firstObject,options);
+  firstObject = jsonObj2;
+  //console.log(jsonObj2);
+
+  let hs_sites = []
+  try{
+    if (firstObject.hasOwnProperty('sitesResponse')){
+      if(!firstObject['sitesResponse'].hasOwnProperty('site')){
+        return hs_sites;
+      }
+      let sites_object = firstObject['sitesResponse']['site'];
+      // # If statement is executed for multiple sites within the HydroServer, if there is a single site then it goes to the else statement
+      // # Parse through the HydroServer and each site with its metadata as a
+      // # dictionary object to the hs_sites list
+      if(Array.isArray(sites_object)){
+        for(let i=0; i< sites_object.length; ++i){
+          let site = sites_object[i]
+          let hs_json = {};
+          let latitude = site['siteInfo']['geoLocation']['geogLocation']['latitude'];
+          let longitude = site['siteInfo']['geoLocation']['geogLocation']['longitude'];
+          let site_name = site['siteInfo']['siteName'];
+          let network = site['siteInfo']['siteCode']['attr']["@network"];
+          let sitecode = site['siteInfo']['siteCode']["#text"];
+          let siteID = site['siteInfo']['siteCode']['attr']["@siteID"];
+          hs_json['country'] = "No Data was Provided";
+          try{
+            let sitePorperty_Info = site['siteInfo']['siteProperty'];
+            if (Array.isArray(sitePorperty_Info)){
+              for(let j = 0; j < sitePorperty_Info.length; ++j){
+                let props = sitePorperty_Info[j];
+                  if (props['attr']['@name'] == 'Country'){
+                    hs_json['country'] = props['#text'];
+                  }
+              }
+
+            }
+            else{
+              if(sitePorperty_Info['attr']['@name'] == 'Country'){
+                hs_json['country'] = sitePorperty_Info['#text']
+              }
+            }
+          }
+          catch(e){
+            hs_json['country'] = "No Data was Provided";
+          }
+          hs_json["sitename"] = site_name;
+          hs_json["latitude"] = latitude;
+          hs_json["longitude"] = longitude;
+          hs_json["sitecode"] = sitecode;
+          hs_json["network"] = network;
+          hs_json["fullSiteCode"] = network + ":" + sitecode;
+          hs_json["siteID"] = siteID;
+          hs_json["service"] = "SOAP";
+          hs_sites.push(hs_json);
+        }
+
+      }
+
+      else{
+        let hs_json = {}
+        let latitude = sites_object['siteInfo']['geoLocation']['geogLocation']['latitude'];
+        let longitude = sites_object['siteInfo']['geoLocation']['geogLocation']['longitude'];
+        let site_name = sites_object['siteInfo']['siteName'];
+        let network = sites_object['siteInfo']['siteCode']['attr']["@network"];
+        let sitecode = sites_object['siteInfo']['siteCode']["#text"];
+        let siteID = sites_object['siteInfo']['siteCode']['attr']["@siteID"];
+
+        hs_json['country'] = "No Data was Provided";
+        try{
+          let sitePorperty_Info = sites_object['siteInfo']['siteProperty'];
+
+          if(Array.isArray(sitePorperty_Info)){
+            for(let z = 0; z < sitePorperty_Info.length; ++z){
+              let props = sitePorperty_Info[j];
+              if (props['attr']['@name'] == 'Country'){
+                hs_json['country'] = props['#text'];
+              }
+            }
+          }
+          else{
+            if(sitePorperty_Info['attr']['@name'] == 'Country'){
+              hs_json['country'] = sitePorperty_Info['#text']
+            }
+          }
+        }
+        catch(e){
+          hs_json['country'] = "No Data was Provided";
+        }
+        hs_json["sitename"] = site_name;
+        hs_json["latitude"] = latitude;
+        hs_json["longitude"] = longitude;
+        hs_json["sitecode"] = sitecode;
+        hs_json["network"] = network;
+        hs_json["fullSiteCode"] = network + ":" + sitecode;
+        hs_json["siteID"] = siteID;
+        hs_json["service"] = "SOAP";
+        hs_sites.push(hs_json);
+      }
+
+    }
+  }
+  catch(e){
+    console.log(e);
+    console.log("There is a discrepancy in the structure of the response. It is possible that the respond object does not contain the sitesResponse attribute")
+  }
+
+  return hs_sites
+
+}
+
 var getSitesHelper = function (xmlData){
   let return_obj;
   let return_array = []
@@ -2350,6 +2492,7 @@ var getSitesHelper = function (xmlData){
   var result = parser.validate(xmlData);
   if (result !== true) console.log(result.err);
   var jsonObj = parser.parse(xmlData,options);
+  console.log(jsonObj);
   let firstObject = jsonObj['soap:Envelope']['soap:Body']['GetSitesObjectResponse'];
   console.log(firstObject);
 

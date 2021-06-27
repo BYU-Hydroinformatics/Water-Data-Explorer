@@ -134,6 +134,8 @@ show_variables_groups = function(){
         // console.log(data);
         variables_list = data['variables'];
         variables_codes_list = data['variables_codes'];
+        let variables_urls_list = data['urls'];
+        let variables_names_list = data['names'];
         // console.log(variables_codes_list);
         const chunk = (arr, size) =>
           Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -141,6 +143,8 @@ show_variables_groups = function(){
           );
         let arr=chunk(variables_list, 2);
         let arr2=chunk(variables_codes_list, 2);
+        let arr3=chunk(variables_urls_list, 2);
+        let arr4=chunk(variables_names_list, 2);
         // console.log(arr2);
 
 
@@ -151,9 +155,10 @@ show_variables_groups = function(){
             HSTableHtml +=  '<tr class="odd gradeX">'
             let j = 0;
             l_arr.forEach(i =>{
-              let new_i = i.replace(/ /g,"_");
+              // let new_i = i.replace(/ /g,"_");
               let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
-              let new_codei = arr2[z][j].replace(/ /g,"_");
+              let new_codei = arr2[z][j] +"join"+ arr3[z][j]+"join"+arr4[z][j];
+              // let new_codei = arr2[z][j].replace(/ /g,"_");
 
               HSTableHtml +=  `<td id =${new_i2}_td ><input type="checkbox" class="filter_check" name="variables" value=${new_codei} /> ${i}</td>`;
 
@@ -1682,8 +1687,9 @@ $("#btn-del-hydro-groups").on("click", delete_group_of_hydroservers);
 /*
 ************ FUNCTION NAME : GET_KEYWORDS_FROM_GROUPS
 ************ PURPOSE : THE FUNCTION LETS YOU FILTER THE HYDROSERVERS LIST FROM THE SELECTED GROUPS OF HYDROSERVERS
-
 */
+
+
 catalog_filter = function(){
   var styles = {
     'MultiPolygon': [new ol.style.Style({
@@ -1716,7 +1722,6 @@ catalog_filter = function(){
   try{
     let elementForm= $("#modalKeyWordSearch");
     let datastring= elementForm.serialize();
-    console.log(datastring);
     $("#KeywordLoading").removeClass("hidden");
     $.ajax({
         type: "POST",
@@ -1993,6 +1998,216 @@ catalog_filter = function(){
   }
 }
 $("#btn-key-search").on("click", catalog_filter);
+
+catalog_filter_vars = function(){
+
+  try{
+    let elementForm= $("#modalKeyWordSearch");
+    let datastring= elementForm.serialize();
+    console.log(datastring);
+    let vars_request = datastring.split("&variables=").slice(1);
+    console.log(vars_request);
+    $("#KeywordLoading").removeClass("hidden");
+    let array_for_sale = [];
+
+    //erase all the layers //
+    map.getLayers().forEach(function(layer) {
+      if(layer instanceof ol.layer.Vector){
+        layer.setStyle(new ol.style.Style({}));
+      }
+    });
+    if(layersDict['selectedPointModal']){
+      map.removeLayer(layersDict['selectedPointModal'])
+      map.updateSize()
+    }
+    if(layersDict['selectedPoint']){
+      map.removeLayer(layersDict['selectedPoint'])
+      map.updateSize()
+    }
+
+    // UNCHECK ALL THE LAYERS //
+    $("#current-Groupservers").find("li").each(function(){
+         var $li=$(this)['0'];
+         let id_li = $li['id'];
+         $(`#${id_li} input[type=checkbox]`).each(function() {
+           this.checked = false;
+         });
+    });
+    // MAKE THE BUTTON TO APPEAR //
+    $("#btn-r-reset").show()
+    $("#btn-r-reset").on("click", reset_keywords);
+    for(let i = 0; i< vars_request.length; ++i){
+      let url_temp = decodeURIComponent(vars_request[i].split('join')[1]);
+      let var_temp = vars_request[i].split('join')[0];
+      let server_name = vars_request[i].split('join')[2];
+
+      Object.keys(urls_servers).forEach(function(key) {
+        let url_testing = urls_servers[key];
+        let url2_request = `${url_testing.split("?")[0]}/GetSites?variableCode=${var_temp}`
+        $.ajax({
+            type: "GET",
+            url: url2_request,
+            dataType: "text",
+            success:function(xmlData){
+              $("#KeywordLoading").removeClass("hidden");
+              // console.log(xmlData);
+              array_for_sale.push(xmlData);
+              // console.log(array_for_sale);
+              let sites = getSitesFilterHelper(xmlData);
+              console.log(sites);
+                let title = server_name;
+                let url = url_temp;
+
+                //ADD LAYERS
+                var vectorLayer = map_layers(sites,title,url)[0]
+                var vectorSource = map_layers(sites,title,url)[1]
+                map.addLayer(vectorLayer)
+                vectorLayer.set("selectable", true)
+                layer_object_filter[title] = vectorLayer;
+
+                $("#current-Groupservers").find("li").each(function(){
+                      var $li=$(this)['0'];
+                      let id_li = $li['id'];
+                      // console.log(id_li)
+                      // console.log(server_name)
+                      let hs_new2;
+                      Object.keys(id_dictionary).forEach(function(key) {
+                        if(id_dictionary[key] == server_name ){
+                          hs_new2 = key;
+                        }
+                      });
+                      if(hs_new2 == id_li){
+                        $(`#${id_li}`).css({"opacity": "1",
+                                            "border-color": "#ac2925",
+                                            "border-width": "2px",
+                                            "border-style": "solid",
+                                            "color": "black",
+                                            "font-weight": "bold"});
+                        $(`#${id_li} input[type=checkbox]`).each(function() {
+                          this.checked = true;
+                        });
+
+                      }
+                      else{
+                        let groups_divs = Object.keys(information_model);
+                        let groups_divs_3e = []
+                        groups_divs.forEach(function(g3){
+                          let g_new2;
+                          Object.keys(id_dictionary).forEach(function(key) {
+                            if(id_dictionary[key] == g3 ){
+                              g_new2 = key;
+                            }
+                          });
+                          groups_divs_3e.push(g_new2);
+                        })
+                        groups_divs = groups_divs_3e
+                        if (!groups_divs.includes(id_li)){
+                          $(`#${id_li}`).css({"opacity": "0.5",
+                                               "border-color": "#d3d3d3",
+                                               "border-width":"1px",
+                                               "border-style":"solid",
+                                               "color":"#555555",
+                                               "font-weight": "normal"});
+                        }
+                      }
+                   });
+
+                   let groups_divs = Object.keys(information_model);
+
+                   for(let i=0; i< groups_divs.length; ++i){
+                     let check_all = []
+                     for(let j=0; j< information_model[groups_divs[i]].length; ++j){
+
+                       let service_div = information_model[groups_divs[i]][j];
+                       let new_service_div;
+                       Object.keys(id_dictionary).forEach(function(key) {
+                         if(id_dictionary[key] == service_div ){
+                           new_service_div = key;
+                         }
+                       });
+                       $(`#${new_service_div} input[type=checkbox]`).each(function(){
+                         if(this.checked){
+                           check_all.push(true);
+                         }
+                         else{
+                           check_all.push(false);
+                         }
+                       });
+                     }
+                     if(!check_all.includes(false) && check_all.length > 0){
+                       let groups_divs_3e = []
+                       groups_divs.forEach(function(g3){
+                         let g_new2;
+                         Object.keys(id_dictionary).forEach(function(key) {
+                           if(id_dictionary[key] == g3 ){
+                             g_new2 = key;
+                           }
+                         });
+                         groups_divs_3e.push(g_new2);
+                       })
+
+                       $(`#${groups_divs_3e[i]} input[type=checkbox]`).each(function() {
+                         this.checked = true;
+                       });
+                     }
+                   }
+                   $("#KeywordLoading").addClass("hidden");
+
+            },
+            error: function(error) {
+              console.log(error);
+              $("#KeywordLoading").addClass("hidden");
+
+              $.notify(
+                  {
+                      message: `Something were wrong when filtering the web services by variable`
+                  },
+                  {
+                      type: "danger",
+                      allow_dismiss: true,
+                      z_index: 20000,
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
+                  }
+              )
+            }
+          })
+
+      });
+
+    }
+
+  }
+  catch(error){
+    console.log(error);
+    $("#KeywordLoading").addClass("hidden");
+    $.notify(
+        {
+            message: `We are having a problem trying to retrieve the regions to filter the groups`
+        },
+        {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
+        }
+    )
+  }
+}
+$("#btn-key-filter-only-variables").on("click", catalog_filter_vars);
 
 catalog_filter_server = function(){
   try{

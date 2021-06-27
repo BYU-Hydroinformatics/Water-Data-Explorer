@@ -159,6 +159,8 @@ def available_variables(request):
     varaibles_list = {}
     hydroserver_variable_list = []
     hydroserver_variable_code_list = []
+    hydroserver_urls_list = []
+    hydroserver_server_list = []
 
     for server in hydroservers_groups:
         variables_server = json.loads(server.variables)
@@ -167,8 +169,15 @@ def available_variables(request):
 
         hydroserver_variable_list = hydroserver_variable_list + variables_server['variables']
 
+        hydroserver_urls_list = hydroserver_urls_list + [server.url] * len(variables_server['variables'])
+        hydroserver_server_list = hydroserver_server_list + [server.title] * len(variables_server['variables'])
+
     varaibles_list["variables"] = hydroserver_variable_list
     varaibles_list["variables_codes"] = hydroserver_variable_code_list
+    varaibles_list['urls'] = hydroserver_urls_list
+    varaibles_list['names'] = hydroserver_server_list
+
+    print(len(hydroserver_urls_list), len(hydroserver_variable_code_list))
     return JsonResponse(varaibles_list)
 
 
@@ -453,9 +462,12 @@ def catalog_filter(request):
     countries = count_new
     # print(countries)
     variables = request.POST.getlist('variables')
-    for varia in variables:
-        var_new.append(varia.replace("_"," "))
-    variables = var_new
+    # for varia in variables:
+    #     var_new.append(varia.replace("_"," "))
+    # variables = var_new
+
+
+
     countries_geojson_file_path = os.path.join(app.get_app_workspace().path, 'countries3.geojson')
     countries_gdf = gpd.read_file(countries_geojson_file_path)
     selected_countries_plot = countries_gdf[countries_gdf['name_long'].isin(countries)].reset_index(drop=True)
@@ -696,6 +708,7 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
 
 
 def filter_variable(variables_list, actual_group = None):
+
     hs_list = []
     if len(variables_list) > 0:
         list_catalog={}
