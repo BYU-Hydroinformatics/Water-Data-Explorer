@@ -1,3 +1,15 @@
+/*****************************************************************************
+ * FILE:                utilitiesGraphs.js
+ * BEGGINING DATE:      16 August 2019
+ * ENDING DATE:         ---------------
+ * AUTHOR:              Giovanni Romero Bustamante
+ * COPYRIGHT:           (c) Brigham Young University 2020
+ * LICENSE:             MIT
+ *
+ *****************************************************************************/
+/*****************************************************************************
+ *                      LIBRARY WRAPPER
+ *****************************************************************************/
 
 /*
 ************ FUNCTION NAME: SELECT_VARIABLE_CHANGE **********************
@@ -6,40 +18,35 @@
 
 select_variable_change = function(){
   try{
+    // ARRAY CREATION FOR END AND START TIME //
     let arrayTime = [];
-    let object_request_variable={};
     let start_date_object =  $('#datetimepicker6').datepicker('getDates')[0];
-
     let start_date_string = start_date_object.toISOString().split("T")[0];
-    let end_date_object = $('#datetimepicker7').datepicker('getDates')[0];
 
+    let end_date_object = $('#datetimepicker7').datepicker('getDates')[0];
     let end_date_string = end_date_object.toISOString().split("T")[0];
 
-
-    let chart_type= $("#type_graph_select2")['0'].value;
-    // let selectedItem = $('#variables_graph')['0'].value;
+    let chart_type= $("#type_graph_select2").val();
     let selectedItem = $('#variables_graph').val();
-    console.log(selectedItem);
-    // let selectedItemText = $('#variables_graph')['0'].text;
     let selectedItemText = $('#variables_graph option:selected').text();
-    console.log(selectedItemText);
+
     arrayTime.push(start_date_string);
     arrayTime.push(end_date_string);
+
+    // REQUEST OBJECT CREATION FOR THE FUNCTION //
+
+    let object_request_variable={};
     object_request_variable['timeFrame'] = arrayTime;
+    object_request_variable['code_variable']= object_request_graphs['code_variable'];
+    object_request_variable['hs_url'] =  object_request_graphs['hs_url'];
+    object_request_variable['code'] =  object_request_graphs['code'];
+    object_request_variable['network'] =  object_request_graphs['network'];
 
-    if(chart_type == "Scatter" || chart_type =="Whisker and Box"){
-
-      // object_request_graphs['variable']=selectedItem;
-      object_request_variable['code_variable']= object_request_graphs['code_variable'];
-      object_request_variable['hs_url'] =  object_request_graphs['hs_url'];
-      object_request_variable['code'] =  object_request_graphs['code'];
-      object_request_variable['network'] =  object_request_graphs['network'];
-      console.log(object_request_variable);
-      if(selectedItem !== "0"){
-
+    // CHECK TO NOT SELECT THE FIRST DROPDOWN OPTION "SELECT VARIABLE"//
+    if(selectedItem !== "0"){
         $("#graphAddLoading").css({left:'0',bottom:"0",right:"0",top:"0", margin:"auto", position:'fixed',"z-index": 9999});
-
         $("#graphAddLoading").removeClass("hidden");
+
         $.ajax({
           type:"POST",
           url: `get-values-graph-hs/`,
@@ -47,14 +54,21 @@ select_variable_change = function(){
           data: object_request_variable,
           success: function(result1){
             try{
+              // CHECK TO NOT SELECT THE FIRST DROPDOWN OPTION "SELECT VARIABLE"//
               if(result1.graphs.length > 0){
+
+                //GRAPHS VALUES//
                 let time_series_array = result1['graphs'];
+                //INTERPOLATION VALUES//
                 let time_series_array_interpolation = result1['interpolation'];
 
+                // MAKE THE ARRAY FOR X VALUES
                 let x_array = [];
                 time_series_array.forEach(function(x){
                   x_array.push(x[0]);
                 })
+
+                // MAKE THE ARRAY FOR Y VALUES
                 let y_array=[]
                 time_series_array.forEach(function(y){
                   if(y[1]===-9999){
@@ -65,26 +79,42 @@ select_variable_change = function(){
                   }
 
                 })
+
+                // MAKE THE ARRAY FOR X INTERPOLATION VALUES //
                 let x_array_interpolation = [];
                 time_series_array_interpolation.forEach(function(x){
                   x_array_interpolation.push(x[0]);
                 })
+
+                // MAKE THE ARRAY FOR X INTERPOLATION VALUES //
                 let y_array_interpolation=[]
                 time_series_array_interpolation.forEach(function(y){
                   y_array_interpolation.push(y[1]);
                 })
+
+                // NAME TITLE //
                 let title_graph = `${result1['variablename']} vs ${result1['timeUnitName']}`;
+
+                // UNITS X AXIS //
                 let units_x = `${result1['variablename']} (${result1['unit_name']})` ;
                 if (result1['unit_name'] == "No Data was provided"){
                   units_x = " ";
                 }
 
+                // UNITS Y AXIS //
                 let units_y = `${result1['timeUnitName']}`;
                 if (result1['timeUnitName'] == "No Data was provided"){
                   units_y = "Time";
                 }
+
+                // VARIABLE NAME //
                 let variable_name_legend = `${result1['variablename']}`;
+
+                // TYPE CHART //
                 let type= "scatter";
+
+                // MAKING THE REQUEST OBJECT FOR DOWNLOAD CALLED "active_map_feature_graphs" //
+
                 active_map_feature_graphs['scatter']['x_array'] = x_array;
                 active_map_feature_graphs['scatter']['y_array'] = y_array;
                 active_map_feature_graphs['scatter']['x_array_interpolation'] = x_array_interpolation;
@@ -100,15 +130,17 @@ select_variable_change = function(){
                 active_map_feature_graphs['whisker']['title_graph'] = title_graph;
                 active_map_feature_graphs['whisker']['type'] = "whisker";
 
+                // IF FOR TYPE OF PLOT//
                 if(chart_type ==="Scatter"){
                   initialize_graphs(x_array,y_array,title_graph,units_y, units_x,variable_name_legend,type,x_array_interpolation,y_array_interpolation);
-
                   $("#download_dropdown").unbind('change');
                   let funcDown = function(){
                     try{
-                      let selectedDownloadType = $('#download_dropdown')['0'].value;
-                      let selectedDownloadTypeText = $('#download_dropdown')['0'];
+                      let selectedDownloadType = $('#download_dropdown').val();
+                      let selectedDownloadTypeText = $('#download_dropdown option:selected').text();
+                      // IF TO AVOID 'DONWLOAD' VALUE IN THE DROPDOWN//
                       if(selectedDownloadType != "Download"){
+                        // IF TO AVOID 'CSV' VALUE IN THE DROPDOWN//
                         if(selectedDownloadType == "CSV" ){
                           var csvData = [];
                           var header = [units_y,units_x] //main header.
@@ -146,6 +178,7 @@ select_variable_change = function(){
                               }
                           )
                         }
+                        // IF TO AVOID 'WaterML1.0' VALUE IN THE DROPDOWN//
                         else if(selectedDownloadType == "WaterML1.0" ){
                           $("#graphAddLoading").removeClass("hidden");
                           let url_base = object_request_variable['hs_url'].split("?")[0];
@@ -262,6 +295,7 @@ select_variable_change = function(){
                           });
 
                         }
+                        // IF TO AVOID 'WaterML2.0' VALUE IN THE DROPDOWN//
                         else if(selectedDownloadType == "WaterML2.0" ){
                           $("#graphAddLoading").removeClass("hidden");
                           let url_base = object_request_variable['hs_url'].split("?")[0];
@@ -363,6 +397,7 @@ select_variable_change = function(){
 
                           });
                         }
+                        // IF TO AVOID 'NetCDF' VALUE IN THE DROPDOWN//
                         else if(selectedDownloadType == "NetCDF" ){
                           $("#graphAddLoading").removeClass("hidden");
                           let url_base = object_request_variable['hs_url'].split("?")[0];
@@ -543,7 +578,6 @@ select_variable_change = function(){
         })
 
       }
-    }
   }
   catch(e){
     console.log(e);
