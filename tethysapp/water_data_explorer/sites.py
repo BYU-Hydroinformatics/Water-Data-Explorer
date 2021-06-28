@@ -89,7 +89,7 @@ def get_values_hs(request):
         obj_var_desc = {}
         obj_var_times_s = {}
         # print(df['description'].tolist())
-        for vari, desc, times_s in zip(df['variableName'].tolist(),df['organization'].tolist(),df['variableTimeInterval'].tolist()):
+        for vari, desc, times_s in zip(df['variableCode'].tolist(),df['organization'].tolist(),df['variableTimeInterval'].tolist()):
             obj_var_desc[vari] = desc
             obj_var_times_s[vari]  = times_s
         return_obj['organization'] = obj_var_desc
@@ -371,6 +371,7 @@ def GetSiteInfo(client,site_full_code, format ="json"):
                 json_response = {
                     'siteInfo':return_array
                 }
+                print(return_array)
                 return json_response
             elif format is "csv":
                 df = pd.DataFrame.from_dict(return_array)

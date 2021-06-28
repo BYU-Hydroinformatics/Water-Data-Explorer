@@ -1,3 +1,16 @@
+/*****************************************************************************
+ * FILE:                sites.js
+ * BEGGINING DATE:      16 August 2019
+ * ENDING DATE:         ---------------
+ * AUTHOR:              Giovanni Romero Bustamante
+ * COPYRIGHT:           (c) Brigham Young University 2020
+ * LICENSE:             MIT
+ *
+ *****************************************************************************/
+/*****************************************************************************
+ *                      LIBRARY WRAPPER
+ *****************************************************************************/
+
 /*
 ************ FUNCTION NAME: ACTIVATE_LAYER_VALUES **********************
 ************ PURPOSE: THE FUNCTIONS RETRIEVES THE DATA FROM THE LAYERS WHEN ONE MAKES A CLICK ***********
@@ -6,12 +19,11 @@ activate_layer_values = function (){
   try{
     map.on('singleclick', function(evt) {
       $('#variables_graph').selectpicker('setStyle', 'btn-primary');
-
       evt.stopPropagation();
       $("#graphs").empty();
       let object_request={};
+      // MAKE THE POINT LAYER FOR THE MAP //
       var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature2, layer) {
-          //you can add a condition on layer to restrict the listener
           if(feature2){
 
             if(layersDict['selectedPointModal']){
@@ -46,9 +58,10 @@ activate_layer_values = function (){
             map.addLayer(vectorLayer);
           }
           return feature2;
-          });
-      if (feature) {
+      });
+      // IF THE FEATURE EXTITS THEN DO THE FOLLOWING//
 
+      if (feature) {
         initialize_graphs([],[],"No Variable was Selected","","","","scatter");
         active_map_feature_graphs={
           'scatter':{},
@@ -69,9 +82,9 @@ activate_layer_values = function (){
           dataType: "JSON",
           data: object_request,
           success: function(result){
-            // console.log(result)
             try{
-              let description_site = document.getElementById('siteDes')
+              // MAKE THE METADATA OF THE SITE TO LOAD IN THE FIRST SLIDE //
+              let description_site = document.getElementById('siteDes');
               if (result.hasOwnProperty('codes') && result['codes'].length > 0){
                 let geolocations = result['geolo'];
                 let country_name = result['country'];
@@ -105,6 +118,8 @@ activate_layer_values = function (){
                     <p> <span> Supervising Organization:</span> ${organization_name} <p>
                     <p> <span> Geospatial Location:</span> lat: ${new_lat} lon: ${new_lon} <p>`
 
+                // MAKE THE TABLE METADATA OF THE SITE TO LOAD IN THE FIRST SLIDE //
+
                 let table_begin =
                   `<br>
                   <p><i>Table of Variables</i></p>
@@ -114,39 +129,55 @@ activate_layer_values = function (){
                         <th>Unit</th>
                         <th>Interpolation Type</th>
                       </tr>`;
-                  //1) combine the arrays:
+
+                //SORT THERESULT FROM THE AJAX RESPONSE FOR SOME ATTRIBUTES //
+
+                //1) combine the arrays:
                  var list_e = [];
                  for (var j = 0; j <result['variables'].length; j++)
-                     list_e.push({'variables_name': result['variables'][j], 'units': result['units'][j],'interpolation': result['dataType'][j] ,'timeSupport':result['timeSupport'][j],'timeUnits':result['timeUnitName'][j]});
+                     list_e.push({'variables_name': result['variables'][j], 'units': result['units'][j],'interpolation': result['dataType'][j] ,'timeSupport':result['timeSupport'][j],'timeUnits':result['timeUnitName'][j],'codes':result['codes'][j]});
 
                  //2) sort:
                  list_e.sort(function(a, b) {
                      return ((a.variables_name < b.variables_name) ? -1 : ((a.variables_name == b.variables_name) ? 0 : 1));
 
                  });
-
                  //3) separate them back out:
+                 let parsed_table = {
+                   variables:[],
+                   units:[],
+                   dataType:[],
+                   timeUnitName:[],
+                   timeSupport:[],
+                   codes:[]
+                 };
+
                  for (var k = 0; k < list_e.length; k++) {
-                     result['variables'][k] = list_e[k].variables_name;
-                     result['units'][k] = list_e[k].units;
-                     result['dataType'][k] = list_e[k].interpolation;
-                     result['timeUnitName'][k] = list_e[k].timeUnits;
-                     result['timeSupport'][k] = list_e[k].timeSupport;
+                     parsed_table['variables'].push(list_e[k].variables_name);
+                     parsed_table['units'].push(list_e[k].units);
+                     parsed_table['dataType'].push(list_e[k].interpolation);
+                     parsed_table['timeUnitName'].push(list_e[k].timeUnits);
+                     parsed_table['timeSupport'].push(list_e[k].timeSupport);
+                     parsed_table['codes'].push(list_e[k].codes);
                  }
-                for(let i=0; i<result['variables'].length ; ++i){
-                  let variable_new = result['variables'][i];
+
+                //WRITTING TO TABLE IN THE SLIDE //
+
+                for(let i=0; i<parsed_table['variables'].length ; ++i){
+                  let variable_new = parsed_table['variables'][i];
+                  let variable_code_new = parsed_table['codes'][i];
                   if(variable_new == null){
                     variable_new = "No Data Provided"
                   }
-                  let variable_unit = result['units'][i];
+                  let variable_unit = parsed_table['units'][i];
                   if(variable_unit == null){
                     variable_unit = "No Data Provided"
                   }
-                  let aggregation_dur = `${result['timeSupport'][i]} ${result['timeUnitName'][i]}`;
+                  let aggregation_dur = `${parsed_table['timeSupport'][i]} ${parsed_table['timeUnitName'][i]}`;
                   if(aggregation_dur == null){
                     aggregation_dur = "No Data Provided"
                   }
-                  let time_serie_range = result['times_series'][variable_new];
+                  let time_serie_range = result['times_series'][variable_code_new];
 
                   let begin_date = time_serie_range['beginDateTime'].split('T')[0];
                   if(begin_date == null){
@@ -170,27 +201,20 @@ activate_layer_values = function (){
                   `
                   table_begin = table_begin + newRow;
                 }
+
                 table_begin = table_begin + `</table>`;
                 $("#table_div").html(table_begin);
 
-                active_map_feature_graphs['bar']['x_array']=[];
-                active_map_feature_graphs['pie']['x_array']=[];
-
-                let title_info = `${feature.values_['name']} Variables Distribution`;
-
-
+                //  MAKE THE SECOND SLIDE TO MAKE THE DROPDOWN MENU AND ALSO DATES//
+                // 1 empty the dropdown for variables//
                 evt.stopPropagation();
-                let object_code_and_variable = {};
+                $("#variables_graph").empty();
+                $("#variables_graph").selectpicker("refresh");
+
+                // 2 make the dropdown with the variables //
                 let variables = result['variables'];
                 let code_variable =result['codes'];
-                codes_variables_array = JSON.parse(JSON.stringify(code_variable));
-                for(let i=0; i< variables.length ; ++i){
-                  object_code_and_variable[`${variables[i]}`]=code_variable[i];
-                }
                 let variable_select = $("#variables_graph");
-                variable_select.empty();
-                variable_select.selectpicker("refresh");
-
                 let i = 1;
                 let array_variables=[]
                 let option_variables;
@@ -217,27 +241,29 @@ activate_layer_values = function (){
                     i = i+1;
                 });
 
-                let object_request2 = {};
-                object_request2['hs_name']=feature_single.values_['hs_name'];
-                object_request2['site_name']=feature_single.values_['name'];
-                object_request2['hs_url']=feature_single.values_['hs_url'];
-                object_request2['code']=feature_single.values_['code'];
-                object_request2['network']=feature_single.values_['network'];
-                //CONTINUE HERE // AND TRY TO SEE HOW IT GOES //
-                var selectedItem = $('#variables_graph')['0'].value;
-                var selectedItemText = $('#variables_graph')['0'].text;
+                //3. Bind the events to the dropdown //
+                $("#variables_graph").unbind('change');
 
-                object_request2['variable']=selectedItem;
-                object_request2['code_variable']= code_variable[`${selectedItem}` -1];
-                object_request2['times_series'] = result['times_series'];
-                time_series_cache = result['times_series'];
-                object_request2['variables_array']=result['variables'];
-                object_request_graphs = JSON.parse(JSON.stringify(object_request2));
-
-                $('#variables_graph').on('change', function(e){
+                $('#variables_graph').bind('change', function(e){
                   try{
+                    variable_select.selectpicker("refresh");
                     $("#GeneralLoading").removeClass("hidden");
-                    let selectedItem = this.value - 1;
+                    let object_request2 = {};
+                    object_request2['hs_name']=feature_single.values_['hs_name'];
+                    object_request2['site_name']=feature_single.values_['name'];
+                    object_request2['hs_url']=feature_single.values_['hs_url'];
+                    object_request2['code']=feature_single.values_['code'];
+                    object_request2['network']=feature_single.values_['network'];
+                    object_request2['variable']=selectedItem;
+                    object_request2['code_variable']= code_variable[`${selectedItem}`];
+                    object_request2['times_series'] = result['times_series'];
+                    time_series_cache = result['times_series'];
+                    object_request2['variables_array']=result['variables'];
+
+                    object_request_graphs = JSON.parse(JSON.stringify(object_request2));
+
+                    var selectedItem = $('#variables_graph').val() -1;
+                    var selectedItemText = $('#variables_graph option:selected').text();
 
                     let start_dateUTC = result['times_series'][Object.keys(result['times_series'])[selectedItem]]['beginDateTimeUTC']
                     let dateUTC_start = new Date(start_dateUTC)
@@ -270,29 +296,11 @@ activate_layer_values = function (){
                     // $('#datetimepicker7').datepicker('setStartDate',dateUTC_end);
                     $('#datetimepicker7').datepicker('setEndDate',dateUTC_end);
                     $("#GeneralLoading").addClass("hidden");
+
                   }
                   catch(e){
                     console.log(e);
                     $("#GeneralLoading").addClass("hidden");
-
-                    $.notify(
-                        {
-                            message: `Please select a variable`
-                        },
-                        {
-                            type: "info",
-                            allow_dismiss: true,
-                            z_index: 20000,
-                            delay: 5000,
-                            animate: {
-                              enter: 'animated fadeInRight',
-                              exit: 'animated fadeOutRight'
-                            },
-                            onShow: function() {
-                                this.css({'width':'auto','height':'auto'});
-                            }
-                        }
-                    )
                   }
 
                 });

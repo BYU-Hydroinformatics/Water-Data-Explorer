@@ -10,28 +10,31 @@ select_variable_change = function(){
     let object_request_variable={};
     let start_date_object =  $('#datetimepicker6').datepicker('getDates')[0];
 
-    let start_date_string = start_date_object.toISOString().split("T")[0]
+    let start_date_string = start_date_object.toISOString().split("T")[0];
     let end_date_object = $('#datetimepicker7').datepicker('getDates')[0];
 
-    let end_date_string = end_date_object.toISOString().split("T")[0]
+    let end_date_string = end_date_object.toISOString().split("T")[0];
 
 
     let chart_type= $("#type_graph_select2")['0'].value;
-    let selectedItem = $('#variables_graph')['0'].value;
-    let selectedItemText = $('#variables_graph')['0'].text;
-
+    // let selectedItem = $('#variables_graph')['0'].value;
+    let selectedItem = $('#variables_graph').val();
+    console.log(selectedItem);
+    // let selectedItemText = $('#variables_graph')['0'].text;
+    let selectedItemText = $('#variables_graph option:selected').text();
+    console.log(selectedItemText);
     arrayTime.push(start_date_string);
     arrayTime.push(end_date_string);
     object_request_variable['timeFrame'] = arrayTime;
 
     if(chart_type == "Scatter" || chart_type =="Whisker and Box"){
 
-      object_request_graphs['variable']=selectedItem;
-      object_request_variable['code_variable']= codes_variables_array[`${selectedItem}`-1];
+      // object_request_graphs['variable']=selectedItem;
+      object_request_variable['code_variable']= object_request_graphs['code_variable'];
       object_request_variable['hs_url'] =  object_request_graphs['hs_url'];
       object_request_variable['code'] =  object_request_graphs['code'];
       object_request_variable['network'] =  object_request_graphs['network'];
-
+      console.log(object_request_variable);
       if(selectedItem !== "0"){
 
         $("#graphAddLoading").css({left:'0',bottom:"0",right:"0",top:"0", margin:"auto", position:'fixed',"z-index": 9999});
@@ -566,110 +569,3 @@ select_variable_change = function(){
 }
 
 $("#update_graphs").on("click",select_variable_change);
-/*
-************ FUNCTION NAME: CHANGE_TYPE_GRAPHS_GROUP **********************
-************ PURPOSE: CHANGE THE GRAPHS THAT ARE PART OF THE ***********
-*/
-change_type_graphs_group = function(){
-  try{
-
-    if(chart_type === "Bar"){
-      $('#variables_graph').selectpicker('setStyle', 'btn-info');
-
-
-      if(active_map_feature_graphs['bar'].hasOwnProperty('y_array')){
-        if(active_map_feature_graphs['bar']['y_array'].length > 0){
-
-          initialize_graphs(active_map_feature_graphs['bar']['x_array'],active_map_feature_graphs['bar']['y_array'],active_map_feature_graphs['bar']['title_graph'],undefined,undefined,undefined,active_map_feature_graphs['bar']['type']);
-        }
-      }
-
-      else{
-        $.notify(
-            {
-                message: `Click on one of the hydroserver data points to retrieve a Bar plot`
-            },
-            {
-                type: "danger",
-                allow_dismiss: true,
-                z_index: 20000,
-                delay: 5000,
-                animate: {
-                  enter: 'animated fadeInRight',
-                  exit: 'animated fadeOutRight'
-                },
-                onShow: function() {
-                    this.css({'width':'auto','height':'auto'});
-                }
-            }
-        )
-
-
-      }
-
-    }
-
-    if(chart_type === "Pie"){
-      $('#variables_graph').selectpicker('setStyle', 'btn-info');
-
-      if(active_map_feature_graphs['pie'].hasOwnProperty('y_array')){
-        if(active_map_feature_graphs['pie']['y_array'].length > 0){
-
-          if (active_map_feature_graphs['pie']['check_none'].includes(true)){
-            initialize_graphs(active_map_feature_graphs['pie']['x_array'],active_map_feature_graphs['pie']['y_array'],active_map_feature_graphs['pie']['title_graph'], undefined, undefined, undefined,active_map_feature_graphs['pie']['type']);
-
-          }
-          else{
-            initialize_graphs(['no variable has data'],[1],active_map_feature_graphs['pie']['title_graph'], undefined, undefined, undefined,active_map_feature_graphs['pie']['type']);
-
-          }
-        }
-      }
-
-      else{
-        $.notify(
-            {
-                message: `Click on one of the hydroserver data points to retrieve a Pie plot`
-            },
-            {
-                type: "danger",
-                allow_dismiss: true,
-                z_index: 20000,
-                delay: 5000,
-                animate: {
-                  enter: 'animated fadeInRight',
-                  exit: 'animated fadeOutRight'
-                },
-                onShow: function() {
-                    this.css({'width':'auto','height':'auto'});
-                }
-            }
-        )
-
-
-      }
-
-    }
-  }
-  catch(e){
-    console.log(e)
-    $.notify(
-        {
-            message: `Unable to change the type of plot`
-        },
-        {
-            type: "info",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-}
