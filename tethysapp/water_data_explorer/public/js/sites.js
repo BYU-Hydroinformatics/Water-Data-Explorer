@@ -247,6 +247,8 @@ activate_layer_values = function (){
                 $('#variables_graph').bind('change', function(e){
                   try{
                     variable_select.selectpicker("refresh");
+                    var selectedItem = $('#variables_graph').val() -1;
+                    var selectedItemText = $('#variables_graph option:selected').text();
                     $("#GeneralLoading").removeClass("hidden");
                     let object_request2 = {};
                     object_request2['hs_name']=feature_single.values_['hs_name'];
@@ -259,11 +261,8 @@ activate_layer_values = function (){
                     object_request2['times_series'] = result['times_series'];
                     time_series_cache = result['times_series'];
                     object_request2['variables_array']=result['variables'];
-
                     object_request_graphs = JSON.parse(JSON.stringify(object_request2));
 
-                    var selectedItem = $('#variables_graph').val() -1;
-                    var selectedItemText = $('#variables_graph option:selected').text();
 
                     let start_dateUTC = result['times_series'][Object.keys(result['times_series'])[selectedItem]]['beginDateTimeUTC']
                     let dateUTC_start = new Date(start_dateUTC)
