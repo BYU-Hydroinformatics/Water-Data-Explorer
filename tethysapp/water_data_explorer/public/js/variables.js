@@ -1,3 +1,15 @@
+/*****************************************************************************
+ * FILE:                variables.js
+ * BEGGINING DATE:      16 Jun 2021
+ * ENDING DATE:         ---------------
+ * AUTHOR:              Giovanni Romero Bustamante
+ * COPYRIGHT:           (c) Brigham Young University 2020
+ * LICENSE:             MIT
+ *
+ *****************************************************************************/
+
+
+
 /************************************************************************
  *                     GLOBAL VARIABLES
  *************************************************************************/
@@ -124,7 +136,6 @@ var filter_words,
     select_variable_change,
     select_variable_change2,
     codes_variables_array={},
-    change_type_graphs_group,
     change_type_graphs_individual,
     add_boundary_map,
     disable_map,
@@ -187,9 +198,17 @@ var filter_words,
     urls_servers = {},
     catalog_filter_vars,
     catalog_filter_regions,
+    getSiteInfoHelperJS,
+    getSitesInfoJS,
+    getSiteInfoObjectParsableJS,
+    getValuesHelperJS2,
+    getValuesHelperJS,
+    getValuesJS,
+    get_values_graph_hs,
     generateListServices;
-  /************************************************************************
- *                    PRIVATE FUNCTION IMPLEMENTATIONS : How are these private? JS has no concept of that
+
+/************************************************************************
+ *  PRIVATE FUNCTION IMPLEMENTATIONS
  *************************************************************************/
 colors = [
     "#ff0000",

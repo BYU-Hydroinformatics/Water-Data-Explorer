@@ -1,53 +1,55 @@
-/*
-************ FUNCTION NAME: ACTIVATE_LAYER_VALUES **********************
-************ PURPOSE: THE FUNCTIONS RETRIEVES THE DATA FROM THE LAYERS WHEN ONE MAKES A CLICK ***********
-*/
+/*****************************************************************************
+ * FILE:                sites.js
+ * BEGGINING DATE:      16 Jun 2021
+ * ENDING DATE:         ---------------
+ * AUTHOR:              Giovanni Romero Bustamante
+ * COPYRIGHT:           (c) Brigham Young University 2020
+ * LICENSE:             MIT
+ *
+ *****************************************************************************/
 
-var getSiteInfoHelperJS = function(object_siteInfo,object_methods){
-  /*
-  Helper function to parse and store the content of two dictionaries:
+/**
+* getSiteInfoHelperJS function.
+* Helper function to parse and store the content of two dictionaries:
+*    - object_methods = GetSiteInfoResponse ['sitesResponse']['site']['seriesCatalog']['series']
+*    - object_siteInfo = GetSiteInfoResponse ['sitesResponse']['site']['siteInfo']
+* Both dictionaries containing the response from the GetSiteInfo at store the following content into a new dictionary:
+*    - siteName: Name of the site.
+*    - siteCode: Code of the site.
+*    - network: observation network that the site belongs to
+*    - fullVariableCode: The full variable code, for example: SNOTEL:SNWD.Use this value as the variableCode parameter in GetValues().
+*    - siteID: ID of the site
+*    - latitude: latitude of the site
+*    - longitude: longitude of the site
+*    - variableName: Name of the variable
+*    - unitName: Name of the units of the values associated to the given variable and site
+*    - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
+*    - dataType: Type of data
+*    - noDataValue: value associated to lack of data.
+*    - isRegular: Boolean to indicate whether the observation measurements and collections regular
+*    - timeSupport: Boolean to indicate whether the values support time
+*    - timeUnitName: Time Units associated to the observation
+*    - timeUnitAbbreviation: Time units abbreviation
+*    - sampleMedium: the sample medium, for example water, atmosphere, soil.
+*    - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
+*    - beginningDateTimeUTC: The UTC date and time of the first available
+*    - EndDateTimeUTC: The UTC date and time of the last available
+*    - beginningDateTime: The local date and time of the first available
+*    - EndDateTime: The local date and time of the last available
+*    - censorCode: The code for censored observations.  Possible values are nc (not censored), gt(greater than), lt (less than), nd (non-detect), pnq (present but not quantified)
+*    - methodCode: The code of the method or instrument used for the observation
+*    - methodID: The ID of the sensor or measurement method
+*    - qualityControlLevelCode: The code of the quality control level.  Possible values are -9999(Unknown), 0 (Raw data), 1 (Quality controlled data), 2 (Derived products), 3 (Interpretedproducts), 4 (Knowledge products)
+*    - qualityControlLevelID: The ID of the quality control level. Usually 0 means raw data and 1 means quality controlled data.
+*    - sourceCode: The code of the data source.
+*    - timeOffSet: The difference between local time and UTC time in hours.
+* @param {object} object_siteInfo - Contains metadata associated to the site.
+* @param {object} object_methods - Contains a list of <series>, which are unique combinations of site, variable and time intervals that specify a sequence of observations.
+* @return {object} return_obj: python dictionary containing data from the GetSiteInfo response.
+*
+* */
+getSiteInfoHelperJS = function(object_siteInfo,object_methods){
 
-      - object_methods = GetSiteInfoResponse ['sitesResponse']['site']['seriesCatalog']['series']
-      - object_siteInfo = GetSiteInfoResponse ['sitesResponse']['site']['siteInfo']
-
-  Both dictionaries containing the response from the GetSiteInfo at store the following content into a new dictionary:
-
-      - siteName: Name of the site.
-      - siteCode: Code of the site.
-      - network: observation network that the site belongs to
-      - fullVariableCode: The full variable code, for example: SNOTEL:SNWD.Use this value as the variableCode parameter in GetValues().
-      - siteID: ID of the site
-      - latitude: latitude of the site
-      - longitude: longitude of the site
-      - variableName: Name of the variable
-      - unitName: Name of the units of the values associated to the given variable and site
-      - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
-      - dataType: Type of data
-      - noDataValue: value associated to lack of data.
-      - isRegular: Boolean to indicate whether the observation measurements and collections regular
-      - timeSupport: Boolean to indicate whether the values support time
-      - timeUnitName: Time Units associated to the observation
-      - timeUnitAbbreviation: Time units abbreviation
-      - sampleMedium: the sample medium, for example water, atmosphere, soil.
-      - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
-      - beginningDateTimeUTC: The UTC date and time of the first available
-      - EndDateTimeUTC: The UTC date and time of the last available
-      - beginningDateTime: The local date and time of the first available
-      - EndDateTime: The local date and time of the last available
-      - censorCode: The code for censored observations.  Possible values are nc (not censored), gt(greater than), lt (less than), nd (non-detect), pnq (present but not quantified)
-      - methodCode: The code of the method or instrument used for the observation
-      - methodID: The ID of the sensor or measurement method
-      - qualityControlLevelCode: The code of the quality control level.  Possible values are -9999(Unknown), 0 (Raw data), 1 (Quality controlled data), 2 (Derived products), 3 (Interpretedproducts), 4 (Knowledge products)
-      - qualityControlLevelID: The ID of the quality control level. Usually 0 means raw data and 1 means quality controlled data.
-      - sourceCode: The code of the data source.
-      - timeOffSet: The difference between local time and UTC time in hours.
-
-  Args:
-      object_siteInfo: Contains metadata associated to the site.
-      object_methods: Contains a list of <series>, which are unique combinations of site, variable and time intervals that specify a sequence of observations.
-  Returns:
-      return_obj: python dictionary containing data from the GetSiteInfo response.
-  */
   let return_obj = {}
 
   try{
@@ -349,9 +351,14 @@ var getSiteInfoHelperJS = function(object_siteInfo,object_methods){
 
 }
 
-
-var getSitesInfoJS = function(xmlData){
-  // console.log(xmlData);
+/**
+ * getSitesInfoJS function.
+ * Function to retrieve metadata for a specific site using the xml response from the GetSiteInfo function
+ * @param {string} xmlData - xml string from the Getavalues response
+ * @return {object} return_array: array containing data from the GetSite Method response.
+ *
+ * */
+getSitesInfoJS = function(xmlData){
   let return_obj;
   let return_array = []
   var options = {
@@ -401,7 +408,14 @@ var getSitesInfoJS = function(xmlData){
   }
 }
 
-var getSiteInfoObjectParsableJS = function(getSiteInfoObjectParse){
+/**
+ * getSiteInfoObjectParsableJS function.
+ * Function to parse the metadata for a specific site using the response from the getSitesInfoJS function.
+ * @param {object} getSiteInfoObjectParse - array containing data from the GetSite Method response.
+ * @return {object} return_obj: object that has the different metadata for the given site.
+ *
+ * */
+getSiteInfoObjectParsableJS = function(getSiteInfoObjectParse){
   let return_obj = {}
   try{
 
@@ -433,7 +447,7 @@ var getSiteInfoObjectParsableJS = function(getSiteInfoObjectParse){
     let obj_var_times_s = {}
     for (let i =0; i<df['variableName']['data'].length; ++i ){
       obj_var_desc[df['variableName']['data'][i]] = df['organization']['data'][i];
-      obj_var_times_s[df['variableName']['data'][i]]  = JSON.parse(df['variableTimeInterval']['data'][i]);
+      obj_var_times_s[df['variableCode']['data'][i]]  = JSON.parse(df['variableTimeInterval']['data'][i]);
     }
     return_obj['organization'] = obj_var_desc;
     return_obj['times_series'] = obj_var_times_s;
@@ -446,51 +460,57 @@ var getSiteInfoObjectParsableJS = function(getSiteInfoObjectParse){
   }
 }
 
+/**
+ * activate_layer_values function.
+ * Function to get metadata from a site after clicking on a site.
+ * @return {void}
+ *
+ * */
 activate_layer_values = function (){
   try{
     map.on('singleclick', function(evt) {
-      $('#variables_graph').selectpicker('setStyle', 'btn-primary');
+       $('#variables_graph').selectpicker('setStyle', 'btn-primary');
+       evt.stopPropagation();
+       $("#graphs").empty();
+       let object_request={};
+       // MAKE THE POINT LAYER FOR THE MAP //
+       var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature2, layer) {
+           if(feature2){
 
-      evt.stopPropagation();
-      $("#graphs").empty();
-      let object_request={};
-      var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature2, layer) {
-          //you can add a condition on layer to restrict the listener
-          if(feature2){
+             if(layersDict['selectedPointModal']){
+               map.removeLayer(layersDict['selectedPointModal'])
+               map.updateSize()
+             }
 
-            if(layersDict['selectedPointModal']){
-              map.removeLayer(layersDict['selectedPointModal'])
-              map.updateSize()
-            }
+             if(layersDict['selectedPoint']){
+               map.removeLayer(layersDict['selectedPoint'])
+               map.updateSize()
+             }
 
-            if(layersDict['selectedPoint']){
-              map.removeLayer(layersDict['selectedPoint'])
-              map.updateSize()
-            }
+             let actual_Source = new ol.source.Vector({})
+             actual_Source.addFeature(feature2);
+             let vectorLayer = new ol.layer.Vector({
+                 source: actual_Source,
+                 style:  new ol.style.Style({
+                     image: new ol.style.Circle({
+                         radius: 6,
+                         stroke: new ol.style.Stroke({
+                             color: "black",
+                             width: 4
+                         }),
+                         fill: new ol.style.Fill({
+                             color: `#FF0000`
+                         })
+                     })
+                 })
+             })
+             layersDict['selectedPoint'] = vectorLayer;
 
-            let actual_Source = new ol.source.Vector({})
-            actual_Source.addFeature(feature2);
-            let vectorLayer = new ol.layer.Vector({
-                source: actual_Source,
-                style:  new ol.style.Style({
-                    image: new ol.style.Circle({
-                        radius: 6,
-                        stroke: new ol.style.Stroke({
-                            color: "black",
-                            width: 4
-                        }),
-                        fill: new ol.style.Fill({
-                            color: `#FF0000`
-                        })
-                    })
-                })
-            })
-            layersDict['selectedPoint'] = vectorLayer;
-
-            map.addLayer(vectorLayer);
-          }
-          return feature2;
-          });
+             map.addLayer(vectorLayer);
+           }
+           return feature2;
+       });
+       // IF THE FEATURE EXTITS THEN DO THE FOLLOWING//
       if (feature) {
 
         initialize_graphs([],[],"No Variable was Selected","","","","scatter");
@@ -514,17 +534,16 @@ activate_layer_values = function (){
         $.ajax({
           type:"GET",
           url:url_request,
-    // url: `https://gs-service-production.geodab.eu/gs-service/services/essi/view/whos-arctic/cuahsi_1_1.asmx?request=GetSiteInfoObject&site=B6940B585CE66AD1D5E33075197668BE487A1CDB`
           dataType: "text",
-          // data: object_request,
           success: function(xmlData){
             // console.log(xmlData);
             let getSiteInfoObjectParse = getSitesInfoJS(xmlData);
             // console.log(getSiteInfoObjectParse);
             let result =getSiteInfoObjectParsableJS(getSiteInfoObjectParse);
-            // console.log(result);
+            console.log(result);
             try{
-              let description_site = document.getElementById('siteDes')
+              // MAKE THE METADATA OF THE SITE TO LOAD IN THE FIRST SLIDE //
+              let description_site = document.getElementById('siteDes');
               if (result.hasOwnProperty('codes') && result['codes'].length > 0){
                 let geolocations = result['geolo'];
                 let country_name = result['country'];
@@ -558,6 +577,8 @@ activate_layer_values = function (){
                     <p> <span> Supervising Organization:</span> ${organization_name} <p>
                     <p> <span> Geospatial Location:</span> lat: ${new_lat} lon: ${new_lon} <p>`
 
+                // MAKE THE TABLE METADATA OF THE SITE TO LOAD IN THE FIRST SLIDE //
+
                 let table_begin =
                   `<br>
                   <p><i>Table of Variables</i></p>
@@ -567,39 +588,56 @@ activate_layer_values = function (){
                         <th>Unit</th>
                         <th>Interpolation Type</th>
                       </tr>`;
-                  //1) combine the arrays:
+
+                //SORT THERESULT FROM THE AJAX RESPONSE FOR SOME ATTRIBUTES //
+
+                //1) combine the arrays:
                  var list_e = [];
                  for (var j = 0; j <result['variables'].length; j++)
-                     list_e.push({'variables_name': result['variables'][j], 'units': result['units'][j],'interpolation': result['dataType'][j] ,'timeSupport':result['timeSupport'][j],'timeUnits':result['timeUnitName'][j]});
+                     list_e.push({'variables_name': result['variables'][j], 'units': result['units'][j],'interpolation': result['dataType'][j] ,'timeSupport':result['timeSupport'][j],'timeUnits':result['timeUnitName'][j],'codes':result['codes'][j]});
 
                  //2) sort:
                  list_e.sort(function(a, b) {
                      return ((a.variables_name < b.variables_name) ? -1 : ((a.variables_name == b.variables_name) ? 0 : 1));
 
                  });
-
                  //3) separate them back out:
+                 let parsed_table = {
+                   variables:[],
+                   units:[],
+                   dataType:[],
+                   timeUnitName:[],
+                   timeSupport:[],
+                   codes:[]
+                 };
+
                  for (var k = 0; k < list_e.length; k++) {
-                     result['variables'][k] = list_e[k].variables_name;
-                     result['units'][k] = list_e[k].units;
-                     result['dataType'][k] = list_e[k].interpolation;
-                     result['timeUnitName'][k] = list_e[k].timeUnits;
-                     result['timeSupport'][k] = list_e[k].timeSupport;
+                     parsed_table['variables'].push(list_e[k].variables_name);
+                     parsed_table['units'].push(list_e[k].units);
+                     parsed_table['dataType'].push(list_e[k].interpolation);
+                     parsed_table['timeUnitName'].push(list_e[k].timeUnits);
+                     parsed_table['timeSupport'].push(list_e[k].timeSupport);
+                     parsed_table['codes'].push(list_e[k].codes);
                  }
-                for(let i=0; i<result['variables'].length ; ++i){
-                  let variable_new = result['variables'][i];
+                 console.log(parsed_table['codes']);
+                //WRITTING TO TABLE IN THE SLIDE //
+
+                for(let i=0; i<parsed_table['variables'].length ; ++i){
+                  let variable_new = parsed_table['variables'][i];
+                  let variable_code_new = parsed_table['codes'][i];
                   if(variable_new == null){
                     variable_new = "No Data Provided"
                   }
-                  let variable_unit = result['units'][i];
+                  let variable_unit = parsed_table['units'][i];
                   if(variable_unit == null){
                     variable_unit = "No Data Provided"
                   }
-                  let aggregation_dur = `${result['timeSupport'][i]} ${result['timeUnitName'][i]}`;
+                  let aggregation_dur = `${parsed_table['timeSupport'][i]} ${parsed_table['timeUnitName'][i]}`;
                   if(aggregation_dur == null){
                     aggregation_dur = "No Data Provided"
                   }
-                  let time_serie_range = result['times_series'][variable_new];
+                  let time_serie_range = result['times_series'][variable_code_new];
+                  console.log(time_serie_range);
 
                   let begin_date = time_serie_range['beginDateTime'].split('T')[0];
                   if(begin_date == null){
@@ -623,27 +661,20 @@ activate_layer_values = function (){
                   `
                   table_begin = table_begin + newRow;
                 }
+
                 table_begin = table_begin + `</table>`;
                 $("#table_div").html(table_begin);
 
-                active_map_feature_graphs['bar']['x_array']=[];
-                active_map_feature_graphs['pie']['x_array']=[];
-
-                let title_info = `${feature.values_['name']} Variables Distribution`;
-
-
+                //  MAKE THE SECOND SLIDE TO MAKE THE DROPDOWN MENU AND ALSO DATES//
+                // 1 empty the dropdown for variables//
                 evt.stopPropagation();
-                let object_code_and_variable = {};
+                $("#variables_graph").empty();
+                $("#variables_graph").selectpicker("refresh");
+
+                // 2 make the dropdown with the variables //
                 let variables = result['variables'];
                 let code_variable =result['codes'];
-                codes_variables_array = JSON.parse(JSON.stringify(code_variable));
-                for(let i=0; i< variables.length ; ++i){
-                  object_code_and_variable[`${variables[i]}`]=code_variable[i];
-                }
                 let variable_select = $("#variables_graph");
-                variable_select.empty();
-                variable_select.selectpicker("refresh");
-
                 let i = 1;
                 let array_variables=[]
                 let option_variables;
@@ -670,27 +701,28 @@ activate_layer_values = function (){
                     i = i+1;
                 });
 
-                let object_request2 = {};
-                object_request2['hs_name']=feature_single.values_['hs_name'];
-                object_request2['site_name']=feature_single.values_['name'];
-                object_request2['hs_url']=feature_single.values_['hs_url'];
-                object_request2['code']=feature_single.values_['code'];
-                object_request2['network']=feature_single.values_['network'];
-                //CONTINUE HERE // AND TRY TO SEE HOW IT GOES //
-                var selectedItem = $('#variables_graph')['0'].value;
-                var selectedItemText = $('#variables_graph')['0'].text;
+                //3. Bind the events to the dropdown //
+                $("#variables_graph").unbind('change');
 
-                object_request2['variable']=selectedItem;
-                object_request2['code_variable']= code_variable[`${selectedItem}` -1];
-                object_request2['times_series'] = result['times_series'];
-                time_series_cache = result['times_series'];
-                object_request2['variables_array']=result['variables'];
-                object_request_graphs = JSON.parse(JSON.stringify(object_request2));
-
-                $('#variables_graph').on('change', function(e){
+                $('#variables_graph').bind('change', function(e){
                   try{
+                    variable_select.selectpicker("refresh");
+                    var selectedItem = $('#variables_graph').val() -1;
+                    var selectedItemText = $('#variables_graph option:selected').text();
                     $("#GeneralLoading").removeClass("hidden");
-                    let selectedItem = this.value - 1;
+                    let object_request2 = {};
+                    object_request2['hs_name']=feature_single.values_['hs_name'];
+                    object_request2['site_name']=feature_single.values_['name'];
+                    object_request2['hs_url']=feature_single.values_['hs_url'];
+                    object_request2['code']=feature_single.values_['code'];
+                    object_request2['network']=feature_single.values_['network'];
+                    object_request2['variable']=selectedItem;
+                    object_request2['code_variable']= code_variable[`${selectedItem}`];
+                    object_request2['times_series'] = result['times_series'];
+                    time_series_cache = result['times_series'];
+                    object_request2['variables_array']=result['variables'];
+                    object_request_graphs = JSON.parse(JSON.stringify(object_request2));
+
 
                     let start_dateUTC = result['times_series'][Object.keys(result['times_series'])[selectedItem]]['beginDateTimeUTC']
                     let dateUTC_start = new Date(start_dateUTC)
@@ -723,29 +755,11 @@ activate_layer_values = function (){
                     // $('#datetimepicker7').datepicker('setStartDate',dateUTC_end);
                     $('#datetimepicker7').datepicker('setEndDate',dateUTC_end);
                     $("#GeneralLoading").addClass("hidden");
+
                   }
                   catch(e){
                     console.log(e);
                     $("#GeneralLoading").addClass("hidden");
-
-                    $.notify(
-                        {
-                            message: `Please select a variable`
-                        },
-                        {
-                            type: "info",
-                            allow_dismiss: true,
-                            z_index: 20000,
-                            delay: 5000,
-                            animate: {
-                              enter: 'animated fadeInRight',
-                              exit: 'animated fadeOutRight'
-                            },
-                            onShow: function() {
-                                this.css({'width':'auto','height':'auto'});
-                            }
-                        }
-                    )
                   }
 
                 });
@@ -806,7 +820,6 @@ activate_layer_values = function (){
 
           },
           error: function(xhr, status, error){
-            console.log(error);
             $("#GeneralLoading").addClass("hidden");
 
             $.notify(

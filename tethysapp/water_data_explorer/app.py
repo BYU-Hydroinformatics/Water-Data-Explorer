@@ -73,14 +73,6 @@ class WaterDataExplorer(TethysAppBase):
                    url='keyword-group',
                    controller='water_data_explorer.groups.keyWordsForGroup'),
 
-            UrlMap(name='get-values-hs',
-                   url='get-values-hs/',
-                   controller='water_data_explorer.sites.get_values_hs'),
-
-            UrlMap(name='get-values-graph-hs',
-                   url='get-values-graph-hs/',
-                   controller='water_data_explorer.sites.get_values_graph_hs'),
-
             UrlMap(name='get-variables-hs',
                    url='get-variables-hs/',
                    controller='water_data_explorer.endpoints.get_variables_hs'),
@@ -117,9 +109,6 @@ class WaterDataExplorer(TethysAppBase):
                    url='get-download-hs/',
                    controller='water_data_explorer.endpoints.get_download_hs'),
 
-            UrlMap(name='get-xml',
-                   url='get-xml/',
-                   controller='water_data_explorer.sites.get_xml'),
         )
 
         return url_maps

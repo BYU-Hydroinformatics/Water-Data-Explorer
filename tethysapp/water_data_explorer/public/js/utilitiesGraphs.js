@@ -34,7 +34,7 @@
  * @return {object} return_object: JS dictionary containing data from the GetValues response.
  *
  * */
-var getValuesHelperJS2 = function (times_series,return_object){
+getValuesHelperJS2 = function (times_series,return_object){
 
   try{
       try{
@@ -200,7 +200,7 @@ var getValuesHelperJS2 = function (times_series,return_object){
  * @return {object} return_obj: JS dictionary containing data from the GetValues response.
  *
  * */
-var getValuesHelperJS = function(k,return_obj){
+getValuesHelperJS = function(k,return_obj){
 
   // #UTC TIME
   try{
@@ -318,7 +318,7 @@ var getValuesHelperJS = function(k,return_obj){
  * @return {object} return_array: array containing data from the GetValues response.
  *
  * */
-var getValuesJS = function(xmlData, methodCode, qualityControlLevelCode){
+getValuesJS = function(xmlData, methodCode, qualityControlLevelCode){
   let return_obj;
   let return_array = []
   var options = {
@@ -348,12 +348,10 @@ var getValuesJS = function(xmlData, methodCode, qualityControlLevelCode){
     if(values_json.hasOwnProperty("TimeSeriesResponse")){
       let times_series = values_json["TimeSeriesResponse"]['timeSeriesResponse']['timeSeries'];
       if (times_series['values']){
-        console.log(times_series['values']);
         let keys_values = Object.keys(times_series['values']);
 
         for(let i = 0; i < keys_values.length; ++i){
           let j = keys_values[i];
-          console.log(j);
           if (j == "value"){
             if(Array.isArray(times_series['values']['value'])){
               let json_response = {};
@@ -448,7 +446,7 @@ var getValuesJS = function(xmlData, methodCode, qualityControlLevelCode){
   }
 }
 
-var get_values_graph_hs = function(values){
+get_values_graph_hs = function(values){
   let list_catalog = {}
   let return_obj = {}
   if(values.length == 0 ){
@@ -533,12 +531,9 @@ select_variable_change = function(){
                 let parseValuesData = getValuesJS(xmlData,null,null);
                 let result1 = {};
                 result1 = get_values_graph_hs(parseValuesData);
-                console.log(result1['graphs']);
                 if(result1['graphs'].length > 0){
                   //GRAPHS VALUES//
                 let time_series_array = result1['graphs'];
-                //INTERPOLATION VALUES//
-                let time_series_array_interpolation = result1['interpolation'];
 
                 // MAKE THE ARRAY FOR X VALUES
                 let x_array = [];
@@ -582,8 +577,6 @@ select_variable_change = function(){
                    // MAKING THE REQUEST OBJECT FOR DOWNLOAD CALLED "active_map_feature_graphs" //
                    active_map_feature_graphs['scatter']['x_array'] = x_array;
                    active_map_feature_graphs['scatter']['y_array'] = y_array;
-                   active_map_feature_graphs['scatter']['x_array_interpolation'] = x_array_interpolation;
-                   active_map_feature_graphs['scatter']['y_array_interpolation'] = y_array_interpolation;
                    active_map_feature_graphs['scatter']['title_graph'] = title_graph;
                    active_map_feature_graphs['scatter']['units_x'] = units_x;
                    active_map_feature_graphs['scatter']['units_y'] = units_y;
