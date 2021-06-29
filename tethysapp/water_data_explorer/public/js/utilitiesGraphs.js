@@ -1,30 +1,40 @@
+/*****************************************************************************
+ * FILE:                utilitiesGraphs.js
+ * BEGGINING DATE:      16 Jun 2021
+ * ENDING DATE:         ---------------
+ * AUTHOR:              Giovanni Romero Bustamante
+ * COPYRIGHT:           (c) Brigham Young University 2020
+ * LICENSE:             MIT
+ *
+ *****************************************************************************/
+
+
+/**
+ * getValuesHelperJS2 function.
+ *  Helper function to parse and store the content of the dictionary response from the GetValues at the level (['timeSeriesResponse']['timeSeries']['values']['value']) into a new dictionary. The data stored into this dictionary from the GetValues response is the following:
+ *     - siteName: Name of the site.
+ *     - siteCode: Code of the site.
+ *     - network: observation network that the site belongs to
+ *     - siteID: ID of the site
+ *     - latitude: latitude of the site
+ *     - longitude: longitude of the site
+ *     - variableName: Name of the variable
+ *     - unitName: Name of the units of the values associated to the given variable and site
+ *     - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
+ *     - dataType: Type of data
+ *     - noDataValue: value associated to lack of data.
+ *     - isRegular: Boolean to indicate whether the observation measurements and collections regular
+ *     - timeSupport: Boolean to indicate whether the values support time
+ *     - timeUnitName: Time Units associated to the observation
+ *     - timeUnitAbbreviation: Time units abbreviation
+ *     - sampleMedium: the sample medium, for example water, atmosphere, soil.
+ *     - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
+ * @param {object} times_series - A string param
+ * @param {object} return_object - JS dictionary that will store the data from teh GetValues response.
+ * @return {object} return_object: JS dictionary containing data from the GetValues response.
+ *
+ * */
 var getValuesHelperJS2 = function (times_series,return_object){
-  /*
-  Helper function to parse and store the content of the dictionary response from the GetValues at the level (['timeSeriesResponse']['timeSeries']['values']['value']) into a new dictionary. The data stored into this dictionary from the GetValues response is the following:
-      - siteName: Name of the site.
-      - siteCode: Code of the site.
-      - network: observation network that the site belongs to
-      - siteID: ID of the site
-      - latitude: latitude of the site
-      - longitude: longitude of the site
-      - variableName: Name of the variable
-      - unitName: Name of the units of the values associated to the given variable and site
-      - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
-      - dataType: Type of data
-      - noDataValue: value associated to lack of data.
-      - isRegular: Boolean to indicate whether the observation measurements and collections regular
-      - timeSupport: Boolean to indicate whether the values support time
-      - timeUnitName: Time Units associated to the observation
-      - timeUnitAbbreviation: Time units abbreviation
-      - sampleMedium: the sample medium, for example water, atmosphere, soil.
-      - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
-  This function is only stores half of the reponse from the GetValues method, and it is usually used with the _getValuesHelper function that stores the other half of the function.
-  Args:
-      times_series: GetValues response dictionary at level -> (['timeSeriesResponse']['timeSeries']['values']['value'])
-      return_object: python dictionary that will store the data from teh GetValues response.
-  Returns:
-      return_object: python dictionary containing data from the GetValues response.
-  */
 
   try{
       try{
@@ -174,26 +184,23 @@ var getValuesHelperJS2 = function (times_series,return_object){
 
   return return_object
 }
-
+/**
+ * getValuesHelperJS function.
+ *  Helper function to parse and store the content of the dictionary response from the GetValues at the level (['timeSeriesResponse']['timeSeries']['values']['value']) into a new dictionary. The data stored into this dictionary from the GetValues response is the following:
+ *   - dateTimeUTC: The UTC time of the observation.
+ *   - dateTime: The local date/time of the observation.
+ *   - dataValue: Data value from the observation.
+ *   - censorCode: The code for censored observations.  Possible values are nc (not censored), gt(greater than), lt (less than), nd (non-detect), pnq (present but not quantified)
+ *   - methodCode: The code of the method or instrument used for the observation
+ *   - qualityControlLevelCode: The code of the quality control level.  Possible values are -9999(Unknown), 0 (Raw data), 1 (Quality controlled data), 2 (Derived products), 3 (Interpretedproducts), 4 (Knowledge products)
+ *   - sourceCode: The code of the data source
+ *   - timeOffSet: The difference between local time and UTC time in hours.
+ * @param {object} object - GetValues response dictionary at level -> (['timeSeriesResponse']['timeSeries']['values']['value'])
+ * @param {object} return_obJ - JS dictionary that will store the data from teh GetValues response.
+ * @return {object} return_obj: JS dictionary containing data from the GetValues response.
+ *
+ * */
 var getValuesHelperJS = function(k,return_obj){
-  /*
-  Helper function to parse and store the content of the dictionary response from the GetValues at the level (['timeSeriesResponse']['timeSeries']['values']['value'])
-  into a new dictionary. The data stored into this dictionary from the GetValues response is the following:
-      - dateTimeUTC: The UTC time of the observation.
-      - dateTime: The local date/time of the observation.
-      - dataValue: Data value from the observation.
-      - censorCode: The code for censored observations.  Possible values are nc (not censored), gt(greater than), lt (less than), nd (non-detect), pnq (present but not quantified)
-      - methodCode: The code of the method or instrument used for the observation
-      - qualityControlLevelCode: The code of the quality control level.  Possible values are -9999(Unknown), 0 (Raw data), 1 (Quality controlled data), 2 (Derived products), 3 (Interpretedproducts), 4 (Knowledge products)
-      - sourceCode: The code of the data source
-      - timeOffSet: The difference between local time and UTC time in hours.
-  This function is only stores half of the reponse from the GetValues method, and it is usually used with the _getValuesHelper2 function that stores the other half of the function.
-  Args:
-      k: GetValues response dictionary at level -> (['timeSeriesResponse']['timeSeries']['values']['value'])
-      return_obj: python dictionary that will store the data from teh GetValues response.
-  Returns:
-      return_obj: python dictionary containing data from the GetValues response.
-  */
 
   // #UTC TIME
   try{
@@ -302,7 +309,15 @@ var getValuesHelperJS = function(k,return_obj){
   return return_obj
 
 }
-
+/**
+ * getValuesJS function.
+ *  Function to retrieve time series for a specific variable for a given site suing the xml response from the GetValues function
+ * @param {string} xmlData - xml string from the Getavalues response
+ * @param {string} methodCode - methodcode used in the Getvalues function
+ * @param {string} qualityControlLevelCode - qualityControlLevel used in the Getvalues function
+ * @return {object} return_array: array containing data from the GetValues response.
+ *
+ * */
 var getValuesJS = function(xmlData, methodCode, qualityControlLevelCode){
   let return_obj;
   let return_array = []
@@ -328,7 +343,6 @@ var getValuesJS = function(xmlData, methodCode, qualityControlLevelCode){
   if (result !== true) console.log(result.err);
   var jsonObj = parser.parse(xmlData,options);
   var times_series = {};
-  console.log(jsonObj);
   try{
     let values_json = jsonObj['soap:Envelope']['soap:Body'];
     if(values_json.hasOwnProperty("TimeSeriesResponse")){
@@ -463,48 +477,42 @@ var get_values_graph_hs = function(values){
   return return_obj
 };
 
-
-
-
-
-/*
-************ FUNCTION NAME: SELECT_VARIABLE_CHANGE **********************
-************ PURPOSE: SELECT A VARIABLE FROM A DROPDOWN AND CHANGE THE GRAPH ***********
-*/
-
+/**
+ * Function select_variable_change:
+ * plots time series of a given variable and site.
+ * @return {void} A good string
+ *
+ */
 select_variable_change = function(){
   try{
+    // ARRAY CREATION FOR END AND START TIME //
     let arrayTime = [];
-    let object_request_variable={};
     let start_date_object =  $('#datetimepicker6').datepicker('getDates')[0];
+    let start_date_string = start_date_object.toISOString().split("T")[0];
 
-    let start_date_string = start_date_object.toISOString().split("T")[0]
     let end_date_object = $('#datetimepicker7').datepicker('getDates')[0];
+    let end_date_string = end_date_object.toISOString().split("T")[0];
 
-    console.log(end_date_object);
-    let end_date_string = end_date_object.toISOString().split("T")[0]
-
-
-    let chart_type= $("#type_graph_select2")['0'].value;
-    let selectedItem = $('#variables_graph')['0'].value;
-    let selectedItemText = $('#variables_graph')['0'].text;
+    let chart_type= $("#type_graph_select2").val();
+    let selectedItem = $('#variables_graph').val();
+    let selectedItemText = $('#variables_graph option:selected').text();
 
     arrayTime.push(start_date_string);
     arrayTime.push(end_date_string);
+
+    // REQUEST OBJECT CREATION FOR THE FUNCTION //
+
+    let object_request_variable={};
     object_request_variable['timeFrame'] = arrayTime;
+    object_request_variable['code_variable']= object_request_graphs['code_variable'];
+    object_request_variable['hs_url'] =  object_request_graphs['hs_url'];
+    object_request_variable['code'] =  object_request_graphs['code'];
+    object_request_variable['network'] =  object_request_graphs['network'];
 
-    if(chart_type == "Scatter" || chart_type =="Whisker and Box"){
-
-      object_request_graphs['variable']=selectedItem;
-      object_request_variable['code_variable']= codes_variables_array[`${selectedItem}`-1];
-      object_request_variable['hs_url'] =  object_request_graphs['hs_url'];
-      object_request_variable['code'] =  object_request_graphs['code'];
-      object_request_variable['network'] =  object_request_graphs['network'];
-
+    // CHECK TO NOT SELECT THE FIRST DROPDOWN OPTION "SELECT VARIABLE"//
       if(selectedItem !== "0"){
 
         $("#graphAddLoading").css({left:'0',bottom:"0",right:"0",top:"0", margin:"auto", position:'fixed',"z-index": 9999});
-
         $("#graphAddLoading").removeClass("hidden");
 
 
@@ -527,15 +535,20 @@ select_variable_change = function(){
                 result1 = get_values_graph_hs(parseValuesData);
                 console.log(result1['graphs']);
                 if(result1['graphs'].length > 0){
-                  let time_series_array = result1['graphs'];
-                  // let time_series_array_interpolation = result1['interpolation'];
+                  //GRAPHS VALUES//
+                let time_series_array = result1['graphs'];
+                //INTERPOLATION VALUES//
+                let time_series_array_interpolation = result1['interpolation'];
 
-                  let x_array = [];
-                  time_series_array.forEach(function(x){
+                // MAKE THE ARRAY FOR X VALUES
+                let x_array = [];
+                time_series_array.forEach(function(x){
                     x_array.push(x[0]);
                   })
-                  let y_array=[]
-                  time_series_array.forEach(function(y){
+
+                // MAKE THE ARRAY FOR Y VALUES
+                let y_array=[]
+                time_series_array.forEach(function(y){
                     if(y[1]===-9999){
                       y_array.push(null)
                     }
@@ -544,50 +557,56 @@ select_variable_change = function(){
                     }
 
                   })
-                  // let x_array_interpolation = [];
-                  // time_series_array_interpolation.forEach(function(x){
-                  //   x_array_interpolation.push(x[0]);
-                  // })
-                  // let y_array_interpolation=[]
-                  // time_series_array_interpolation.forEach(function(y){
-                  //   y_array_interpolation.push(y[1]);
-                  // })
-                  let title_graph = `${result1['variablename']} vs ${result1['timeUnitName']}`;
-                  let units_x = `${result1['variablename']} (${result1['unit_name']})` ;
-                  if (result1['unit_name'] == "No Data was provided"){
-                    units_x = " ";
-                  }
 
-                  let units_y = `${result1['timeUnitName']}`;
-                  if (result1['timeUnitName'] == "No Data was provided"){
-                    units_y = "Time";
-                  }
-                  let variable_name_legend = `${result1['variablename']}`;
-                  let type= "scatter";
-                  active_map_feature_graphs['scatter']['x_array'] = x_array;
-                  active_map_feature_graphs['scatter']['y_array'] = y_array;
-                  // active_map_feature_graphs['scatter']['x_array_interpolation'] = x_array_interpolation;
-                  // active_map_feature_graphs['scatter']['y_array_interpolation'] = y_array_interpolation;
-                  active_map_feature_graphs['scatter']['title_graph'] = title_graph;
-                  active_map_feature_graphs['scatter']['units_x'] = units_x;
-                  active_map_feature_graphs['scatter']['units_y'] = units_y;
-                  active_map_feature_graphs['scatter']['variable_name_legend'] = variable_name_legend;
-                  active_map_feature_graphs['scatter']['type'] = type;
+                  // NAME TITLE //
+                   let title_graph = `${result1['variablename']}`;
 
-                  // defining the Whiskers and plot //
-                  active_map_feature_graphs['whisker']['y_array'] = y_array;
-                  active_map_feature_graphs['whisker']['title_graph'] = title_graph;
-                  active_map_feature_graphs['whisker']['type'] = "whisker";
+                   // UNITS X AXIS //
+                   let units_x = `${result1['variablename']} (${result1['unit_name']})` ;
+                   if (result1['unit_name'] == "No Data was provided"){
+                     units_x = " ";
+                   }
+
+                   // UNITS Y AXIS //
+                   let units_y = `${result1['timeUnitName']}`;
+                   if (result1['timeUnitName'] == "No Data was provided"){
+                     units_y = "Time";
+                   }
+
+                   // VARIABLE NAME //
+                   let variable_name_legend = `${result1['variablename']}`;
+
+                   // TYPE CHART //
+                   let type= "scatter";
+
+                   // MAKING THE REQUEST OBJECT FOR DOWNLOAD CALLED "active_map_feature_graphs" //
+                   active_map_feature_graphs['scatter']['x_array'] = x_array;
+                   active_map_feature_graphs['scatter']['y_array'] = y_array;
+                   active_map_feature_graphs['scatter']['x_array_interpolation'] = x_array_interpolation;
+                   active_map_feature_graphs['scatter']['y_array_interpolation'] = y_array_interpolation;
+                   active_map_feature_graphs['scatter']['title_graph'] = title_graph;
+                   active_map_feature_graphs['scatter']['units_x'] = units_x;
+                   active_map_feature_graphs['scatter']['units_y'] = units_y;
+                   active_map_feature_graphs['scatter']['variable_name_legend'] = variable_name_legend;
+                   active_map_feature_graphs['scatter']['type'] = type;
+
+                   // defining the Whiskers and plot //
+                   active_map_feature_graphs['whisker']['y_array'] = y_array;
+                   active_map_feature_graphs['whisker']['title_graph'] = title_graph;
+                   active_map_feature_graphs['whisker']['type'] = "whisker";
 
                   if(chart_type ==="Scatter"){
                     initialize_graphs(x_array,y_array,title_graph,units_y, units_x,variable_name_legend,type);
 
                     $("#download_dropdown").unbind('change');
+                    $("#download_dropdown").unbind('change');
                     let funcDown = function(){
                       try{
-                        let selectedDownloadType = $('#download_dropdown')['0'].value;
-                        let selectedDownloadTypeText = $('#download_dropdown')['0'];
+                        let selectedDownloadType = $('#download_dropdown').val();
+                        let selectedDownloadTypeText = $('#download_dropdown option:selected').text();
+                        // IF TO AVOID 'DONWLOAD' VALUE IN THE DROPDOWN//
                         if(selectedDownloadType != "Download"){
+                          // IF TO AVOID 'CSV' VALUE IN THE DROPDOWN//
                           if(selectedDownloadType == "CSV" ){
                             var csvData = [];
                             var header = [units_y,units_x] //main header.
@@ -596,12 +615,13 @@ select_variable_change = function(){
                               var line = [x_array[i],y_array[i]];
                               csvData.push(line);
                             }
-                            var csvFile = csvData.map(e=>e.map(a=>'"'+((a||"").toString().replace(/"/gi,'""'))+'"').join(",")).join("\r\n"); //quote all fields, escape quotes by doubling them.
+                            // var csvFile = csvData.map(e=>e.map(a=>'"'+((a||"").toString().replace(/"/gi,'""'))+'"').join(",")).join("\r\n"); //quote all fields, escape quotes by doubling them.
+                            var csvFile = csvData.map(e => e.join(",")).join("\n"); //quote all fields, escape quotes by doubling them.
                             var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
                             var link = document.createElement("a");
                             var url = URL.createObjectURL(blob);
                             link.setAttribute("href", url);
-                            link.setAttribute("download", title_graph.replace(/[^a-z0-9_.-]/gi,'_') + ".csv");
+                            link.setAttribute("download", `${object_request_variable['code_variable']}_${object_request_graphs['variable']}` + ".csv");
                             link.style.visibility = 'hidden';
                             document.body.appendChild(link);
                             link.click();
@@ -625,6 +645,7 @@ select_variable_change = function(){
                                 }
                             )
                           }
+                          // IF TO AVOID 'WaterML1.0' VALUE IN THE DROPDOWN//
                           else if(selectedDownloadType == "WaterML1.0" ){
                             $("#graphAddLoading").removeClass("hidden");
                             let url_base = object_request_variable['hs_url'].split("?")[0];
@@ -741,6 +762,7 @@ select_variable_change = function(){
                             });
 
                           }
+                          // IF TO AVOID 'WaterML2.0' VALUE IN THE DROPDOWN//
                           else if(selectedDownloadType == "WaterML2.0" ){
                             $("#graphAddLoading").removeClass("hidden");
                             let url_base = object_request_variable['hs_url'].split("?")[0];
@@ -842,6 +864,7 @@ select_variable_change = function(){
 
                             });
                           }
+                          // IF TO AVOID 'NetCDF' VALUE IN THE DROPDOWN//
                           else if(selectedDownloadType == "NetCDF" ){
                             $("#graphAddLoading").removeClass("hidden");
                             let url_base = object_request_variable['hs_url'].split("?")[0];
@@ -909,6 +932,7 @@ select_variable_change = function(){
                         }
                       }
                       catch(e){
+                        console.log(e);
                         $("#graphAddLoading").addClass("hidden");
 
                         $.notify(
@@ -932,6 +956,7 @@ select_variable_change = function(){
                       }
 
                     }
+
 
                     $("#download_dropdown").change(funcDown);
                   }
@@ -971,6 +996,7 @@ select_variable_change = function(){
                }
               }
               catch(e){
+                console.log(e);
                 $("#graphAddLoading").addClass("hidden")
                 $.notify(
                     {
@@ -992,163 +1018,58 @@ select_variable_change = function(){
                 )
               }
 
-            },
-             error: function(xhr, status, error){
-               let title_graph=  `${object_request_graphs['site_name']} - ${selectedItemText}
-               No Data Available`
-               initialize_graphs([],[],title_graph,"","","","scatter");
-               $("#graphAddLoading").addClass("hidden")
-               $.notify(
-                   {
-                       message: `There is an error retrieving the values for the ${selectedItem} variable `
-                   },
-                   {
-                       type: "danger",
-                       allow_dismiss: true,
-                       z_index: 20000,
-                       delay: 5000,
-                       animate: {
-                         enter: 'animated fadeInRight',
-                         exit: 'animated fadeOutRight'
-                       },
-                       onShow: function() {
-                           this.css({'width':'auto','height':'auto'});
-                       }
-                   }
-               )
-             }
+           },
+           error: function(xhr, status, error){
+             console.log(error);
+             let title_graph=  `${object_request_graphs['site_name']} - ${selectedItemText}
+             No Data Available`
+             initialize_graphs([],[],title_graph,"","","","scatter");
+             $("#graphAddLoading").addClass("hidden")
+             $.notify(
+                 {
+                     message: `There is an error retrieving the values for the ${selectedItem} variable `
+                 },
+                 {
+                     type: "danger",
+                     allow_dismiss: true,
+                     z_index: 20000,
+                     delay: 5000,
+                     animate: {
+                       enter: 'animated fadeInRight',
+                       exit: 'animated fadeOutRight'
+                     },
+                     onShow: function() {
+                         this.css({'width':'auto','height':'auto'});
+                     }
+                 }
+             )
+           }
+
           })
-      }
+
+        }
+    }
+    catch(e){
+      console.log(e);
+      $.notify(
+          {
+              message: `Unable to retrieve the data for the selected variable`
+          },
+          {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 20000,
+              delay: 5000,
+              animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+              },
+              onShow: function() {
+                  this.css({'width':'auto','height':'auto'});
+              }
+          }
+      )
     }
   }
-  catch(e){
-    console.log(e);
-    $.notify(
-        {
-            message: `Unable to retrieve the data for the selected variable`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-}
 
 $("#update_graphs").on("click",select_variable_change);
-/*
-************ FUNCTION NAME: CHANGE_TYPE_GRAPHS_GROUP **********************
-************ PURPOSE: CHANGE THE GRAPHS THAT ARE PART OF THE ***********
-*/
-change_type_graphs_group = function(){
-  try{
-
-    if(chart_type === "Bar"){
-      $('#variables_graph').selectpicker('setStyle', 'btn-info');
-
-
-      if(active_map_feature_graphs['bar'].hasOwnProperty('y_array')){
-        if(active_map_feature_graphs['bar']['y_array'].length > 0){
-
-          initialize_graphs(active_map_feature_graphs['bar']['x_array'],active_map_feature_graphs['bar']['y_array'],active_map_feature_graphs['bar']['title_graph'],undefined,undefined,undefined,active_map_feature_graphs['bar']['type']);
-        }
-      }
-
-      else{
-        $.notify(
-            {
-                message: `Click on one of the hydroserver data points to retrieve a Bar plot`
-            },
-            {
-                type: "danger",
-                allow_dismiss: true,
-                z_index: 20000,
-                delay: 5000,
-                animate: {
-                  enter: 'animated fadeInRight',
-                  exit: 'animated fadeOutRight'
-                },
-                onShow: function() {
-                    this.css({'width':'auto','height':'auto'});
-                }
-            }
-        )
-
-
-      }
-
-    }
-
-    if(chart_type === "Pie"){
-      $('#variables_graph').selectpicker('setStyle', 'btn-info');
-
-      if(active_map_feature_graphs['pie'].hasOwnProperty('y_array')){
-        if(active_map_feature_graphs['pie']['y_array'].length > 0){
-
-          if (active_map_feature_graphs['pie']['check_none'].includes(true)){
-            initialize_graphs(active_map_feature_graphs['pie']['x_array'],active_map_feature_graphs['pie']['y_array'],active_map_feature_graphs['pie']['title_graph'], undefined, undefined, undefined,active_map_feature_graphs['pie']['type']);
-
-          }
-          else{
-            initialize_graphs(['no variable has data'],[1],active_map_feature_graphs['pie']['title_graph'], undefined, undefined, undefined,active_map_feature_graphs['pie']['type']);
-
-          }
-        }
-      }
-
-      else{
-        $.notify(
-            {
-                message: `Click on one of the hydroserver data points to retrieve a Pie plot`
-            },
-            {
-                type: "danger",
-                allow_dismiss: true,
-                z_index: 20000,
-                delay: 5000,
-                animate: {
-                  enter: 'animated fadeInRight',
-                  exit: 'animated fadeOutRight'
-                },
-                onShow: function() {
-                    this.css({'width':'auto','height':'auto'});
-                }
-            }
-        )
-
-
-      }
-
-    }
-  }
-  catch(e){
-    console.log(e)
-    $.notify(
-        {
-            message: `Unable to change the type of plot`
-        },
-        {
-            type: "info",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-}
