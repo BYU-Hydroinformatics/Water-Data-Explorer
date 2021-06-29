@@ -129,8 +129,6 @@ select_variable_change = function(){
                 active_map_feature_graphs['whisker']['y_array'] = y_array;
                 active_map_feature_graphs['whisker']['title_graph'] = title_graph;
                 active_map_feature_graphs['whisker']['type'] = "whisker";
-                console.log(x_array);
-                console.log(y_array);
                 // IF FOR TYPE OF PLOT//
                 if(chart_type ==="Scatter"){
                   initialize_graphs(x_array,y_array,title_graph,units_y, units_x,variable_name_legend,type,x_array_interpolation,y_array_interpolation);
@@ -150,10 +148,8 @@ select_variable_change = function(){
                             var line = [x_array[i],y_array[i]];
                             csvData.push(line);
                           }
-                          console.log(csvData);
                           // var csvFile = csvData.map(e=>e.map(a=>'"'+((a||"").toString().replace(/"/gi,'""'))+'"').join(",")).join("\r\n"); //quote all fields, escape quotes by doubling them.
                           var csvFile = csvData.map(e => e.join(",")).join("\n"); //quote all fields, escape quotes by doubling them.
-                          console.log(csvFile);
                           var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
                           var link = document.createElement("a");
                           var url = URL.createObjectURL(blob);
@@ -469,6 +465,7 @@ select_variable_change = function(){
                       }
                     }
                     catch(e){
+                      console.log(e);
                       $("#graphAddLoading").addClass("hidden");
 
                       $.notify(
@@ -532,6 +529,7 @@ select_variable_change = function(){
              }
             }
             catch(e){
+              console.log(e);
               $("#graphAddLoading").addClass("hidden")
               $.notify(
                   {
@@ -555,6 +553,7 @@ select_variable_change = function(){
 
          },
          error: function(xhr, status, error){
+           console.log(error);
            let title_graph=  `${object_request_graphs['site_name']} - ${selectedItemText}
            No Data Available`
            initialize_graphs([],[],title_graph,"","","","scatter");
