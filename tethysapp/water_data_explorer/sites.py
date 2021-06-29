@@ -3,7 +3,6 @@ import logging
 import itertools
 import sys
 
-
 import os
 import json
 import pandas as pd
@@ -34,7 +33,6 @@ import psycopg2
 from owslib.waterml.wml11 import WaterML_1_1 as wml11
 from suds.client import Client  # For parsing WaterML/XML
 from suds.xsd.doctor import Import, ImportDoctor
-# from suds.sudsobject import SudObject
 from json import dumps, loads
 from pyproj import Proj, transform  # Reprojecting/Transforming coordinates
 from datetime import datetime
@@ -48,6 +46,37 @@ Persistent_Store_Name = 'catalog_db'
 logging.getLogger('suds.client').setLevel(logging.CRITICAL)
 
 def get_values_hs(request):
+    """
+    Get metadata of a given site using the WaterOneFlow GetSiteInfo function .
+
+    Args:
+        request object containing
+            - service url from site
+            - network from site
+            - site code
+                        return_obj['country'] = []
+                        return_obj['variables'] =[]
+                        return_obj['units'] = []
+                        return_obj['codes'] = []
+                        return_obj['organization'] = []
+                        return_obj['times_series'] = []
+                        return_obj['geolo'] = []
+                        return_obj['timeUnitName'] = []
+                        return_obj['TimeSupport'] = []
+                        return_obj['dataType'] = []
+
+    Returns:
+        json object containing the following information:
+            - country: array containing country of origin of site.
+            - variables: array containing variables names of site.
+            - units: array containing unit names.
+            - codes: array containing variable codes ofsite .
+            - organization: array containing the organization of the given sites.
+            - times_seris: array containing time series of a given site.
+            - geolo: array containing geolocation of the given site.
+            - timeUnitName: array containing time units used for the time series.
+            - timeSupport: array containing booleans that indicates if the variables support time.
+    """
     list_catalog={}
     return_obj={}
     hs_url = request.POST.get('hs_url')
@@ -77,7 +106,6 @@ def get_values_hs(request):
             return_obj['dataType'] = []
             return JsonResponse(return_obj)
         pd.set_option('display.max_columns', None)
-        # print(df)
         return_obj['country'] = df['country'].tolist()[0]
         return_obj['variables'] = df['variableName'].tolist()
         return_obj['units'] = df['unitAbbreviation'].tolist()
@@ -88,7 +116,6 @@ def get_values_hs(request):
 
         obj_var_desc = {}
         obj_var_times_s = {}
-        # print(df['description'].tolist())
         for vari, desc, times_s in zip(df['variableCode'].tolist(),df['organization'].tolist(),df['variableTimeInterval'].tolist()):
             obj_var_desc[vari] = desc
             obj_var_times_s[vari]  = times_s
@@ -97,109 +124,29 @@ def get_values_hs(request):
         return_obj['geolo'] = df['geolocation'].tolist()[0]
         return JsonResponse(return_obj)
     except Exception as e:
-        # return_obj = {}
         return JsonResponse(return_obj)
 
-    # keywords = client.service.GetVariables('[:]')
-    # keywords_dict = xmltodict.parse(keywords)
-    # keywords_dict_object = json.dumps(keywords_dict)
-    #
-    # keywords_json = json.loads(keywords_dict_object)
-
-    # site_info_Mc = client.service.GetSiteInfo(site_desc)
-    # site_info_Mc_dict = xmltodict.parse(site_info_Mc)
-    # site_info_Mc_json_object = json.dumps(site_info_Mc_dict)
-    # site_info_Mc_json = json.loads(site_info_Mc_json_object)
-    #
-    # print(site_info_Mc_json)
-    # try:
-    #     object_methods= site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
-    # except KeyError as ke:
-    #     print(ke)
-    #     return JsonResponse(return_obj)
-    #
-    # geolocation= site_info_Mc_json['sitesResponse']['site']['siteInfo']['geoLocation']['geogLocation']
-    # return_obj['geolo'] = geolocation
-    #
-    # try:
-    #     country_name = site_info_Mc_json['sitesResponse']['site']['siteInfo']['siteProperty']['#text']
-    #     print(country_name)
-    #     return_obj['country'] = country_name
-    #
-    # except KeyError as ke:
-    #     print(ke)
-    #     country_name = "No Data Provided"
-    #     return_obj['country'] = country_name
-    #
-    # # print("GETSITESINFO FUNCTION")
-    # # print(object_methods)
-    # object_with_methods_and_variables = {}
-    # object_with_descriptions_and_variables = {}
-    # object_with_time_and_variables = {}
-    # array_variables_codes = []
-    # array_variables_lengths = []
-    # array_keywords_hydroserver=[]
-    # array_units_variables = []
-    #
-    #
-    # if(isinstance(object_methods,(dict))):
-    #     print("adding to the methodID as a dict")
-    #     variable_name_ = object_methods['variable']['variableName']
-    #     variable_unit_ = object_methods['variable']['unit']['unitAbbreviation']
-    #     array_keywords_hydroserver.append(variable_name_)
-    #     array_units_variables.append(variable_unit_)
-    #     array_variables_codes.append(object_methods['variable']['variableCode']['#text'])
-    #     if object_methods['valueCount'] is not None:
-    #         array_variables_lengths.append(object_methods['valueCount'])
-    #     else:
-    #         array_variables_lengths.append("")
-    #
-    #     if 'method' in object_methods:
-    #         object_with_methods_and_variables[variable_name_]= object_methods['method']['@methodID']
-    #     else:
-    #         object_with_methods_and_variables[variable_name_]= None
-    #     ## end of the part for WHOS plata
-    #     object_with_descriptions_and_variables[variable_name_]= object_methods['source'];
-    #     object_with_time_and_variables[variable_name_]= object_methods['variableTimeInterval'];
-    #     print(object_with_methods_and_variables)
-    # else:
-    #     for object_method in object_methods:
-    #         print("adding to the methodID as an arraylist")
-    #         variable_name_ = object_method['variable']['variableName']
-    #         variable_unit_ = object_method['variable']['unit']['unitAbbreviation']
-    #         array_keywords_hydroserver.append(variable_name_)
-    #         array_units_variables.append(variable_unit_)
-    #         if object_method['valueCount'] is not None:
-    #             array_variables_lengths.append(object_method['valueCount'])
-    #         else:
-    #             array_variables_lengths.append("")
-    #         array_variables_codes.append(object_method['variable']['variableCode']['#text'])
-    #
-    #
-    #         if 'method' in object_method:
-    #             object_with_methods_and_variables[variable_name_]= object_method['method']['@methodID']
-    #         else:
-    #             object_with_methods_and_variables[variable_name_]= None
-    #         # print(object_method['source'])
-    #         object_with_descriptions_and_variables[variable_name_]= object_method['source'];
-    #         object_with_time_and_variables[variable_name_]= object_method['variableTimeInterval'];
-    #         print(object_with_methods_and_variables)
-
-
-    # return_obj['variables']=array_keywords_hydroserver
-    # return_obj['units'] = array_units_variables
-    # return_obj['codes']=array_variables_codes
-    # return_obj['counts'] = array_variables_lengths
-    # return_obj['methodsIDs']= object_with_methods_and_variables
-    # return_obj['description'] = object_with_descriptions_and_variables
-    # return_obj['times_series'] = object_with_time_and_variables
-    # ## SAFE GUARD TO SEE THE RESPONSE OF THE SITE INFO##
-    # return_obj['siteInfo']= site_info_Mc_json
-
-    # print("finished with the get_values_hs")
 
 def get_values_graph_hs(request):
-    # print("inside the get_values_graph_hs")
+    """
+    Get the time series of a given site using the WaterOneFlow GetValues function .
+
+    Args:
+        request object containing
+            - service url from site
+            - network from site
+            - variable code from site
+            - timeframe from site
+            - site code
+
+    Returns:
+        json object containing the following information:
+            - graphs: array containing time series values.
+            - interpolation: array containing interpolation timeseries.
+            - unit_name: array containing unit names.
+            - variablesname: array containing variable names.
+            - timeUnitName: array containing time unit names.
+    """
     list_catalog={}
     return_obj={}
     hs_url = request.POST.get('hs_url')
@@ -265,6 +212,20 @@ def get_values_graph_hs(request):
     return JsonResponse(return_obj)
 
 def get_xml(request):
+    """
+    Get the xml in WaterML.1.0 format of a given site.
+
+    Args:
+        request object containing
+            - service url from site
+            - network from site
+            - variable code from site
+            - timeframe from site
+
+    Returns:
+        waterML text containing the following data of the seleceted site from the WaterOneFlow web service
+
+    """
     list_catalog={}
     return_obj={}
 
@@ -344,7 +305,6 @@ def GetSiteInfo(client,site_full_code, format ="json"):
     return_array = []
     try:
         site_info_Mc = client.service.GetSiteInfo(site_full_code)
-        # print(site_info_Mc)
         if format is 'waterml':
             return site_info_Mc
         site_info_Mc_dict = xmltodict.parse(site_info_Mc)
@@ -354,10 +314,7 @@ def GetSiteInfo(client,site_full_code, format ="json"):
 
         try:
             object_methods = site_info_Mc_json['sitesResponse']['site']['seriesCatalog']['series']
-            # print(object_methods)
             object_siteInfo = site_info_Mc_json['sitesResponse']['site']['siteInfo']
-            # print(object_methods)
-            # print(object_siteInfo)
             return_array = []
             if(isinstance(object_methods,(dict))):
                 return_obj = _getSiteInfoHelper(object_siteInfo,object_methods)
@@ -371,7 +328,6 @@ def GetSiteInfo(client,site_full_code, format ="json"):
                 json_response = {
                     'siteInfo':return_array
                 }
-                print(return_array)
                 return json_response
             elif format is "csv":
                 df = pd.DataFrame.from_dict(return_array)
@@ -380,8 +336,6 @@ def GetSiteInfo(client,site_full_code, format ="json"):
             else:
                 return print("the only supported formats are json, csv, and waterml")
         except KeyError as ke:
-            # print(ke)
-            # print("No series for the site")
             return_array = []
             if format is "json":
                 json_response = {
