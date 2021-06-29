@@ -361,253 +361,253 @@ Extracted from the AuxiliaryMod in the pywaterML package.
 """
 
 def _getSiteInfoHelper(object_siteInfo,object_methods):
-        """
-        Helper function to parse and store the content of two dictionaries:
+    """
+    Helper function to parse and store the content of two dictionaries:
 
-            - object_methods = GetSiteInfoResponse ['sitesResponse']['site']['seriesCatalog']['series']
-            - object_siteInfo = GetSiteInfoResponse ['sitesResponse']['site']['siteInfo']
+        - object_methods = GetSiteInfoResponse ['sitesResponse']['site']['seriesCatalog']['series']
+        - object_siteInfo = GetSiteInfoResponse ['sitesResponse']['site']['siteInfo']
 
-        Both dictionaries containing the response from the GetSiteInfo at store the following content into a new dictionary:
+    Both dictionaries containing the response from the GetSiteInfo at store the following content into a new dictionary:
 
-            - siteName: Name of the site.
-            - siteCode: Code of the site.
-            - network: observation network that the site belongs to
-            - fullVariableCode: The full variable code, for example: SNOTEL:SNWD.Use this value as the variableCode parameter in GetValues().
-            - siteID: ID of the site
-            - latitude: latitude of the site
-            - longitude: longitude of the site
-            - variableName: Name of the variable
-            - unitName: Name of the units of the values associated to the given variable and site
-            - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
-            - dataType: Type of data
-            - noDataValue: value associated to lack of data.
-            - isRegular: Boolean to indicate whether the observation measurements and collections regular
-            - timeSupport: Boolean to indicate whether the values support time
-            - timeUnitName: Time Units associated to the observation
-            - timeUnitAbbreviation: Time units abbreviation
-            - sampleMedium: the sample medium, for example water, atmosphere, soil.
-            - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
-            - beginningDateTimeUTC: The UTC date and time of the first available
-            - EndDateTimeUTC: The UTC date and time of the last available
-            - beginningDateTime: The local date and time of the first available
-            - EndDateTime: The local date and time of the last available
-            - censorCode: The code for censored observations.  Possible values are nc (not censored), gt(greater than), lt (less than), nd (non-detect), pnq (present but not quantified)
-            - methodCode: The code of the method or instrument used for the observation
-            - methodID: The ID of the sensor or measurement method
-            - qualityControlLevelCode: The code of the quality control level.  Possible values are -9999(Unknown), 0 (Raw data), 1 (Quality controlled data), 2 (Derived products), 3 (Interpretedproducts), 4 (Knowledge products)
-            - qualityControlLevelID: The ID of the quality control level. Usually 0 means raw data and 1 means quality controlled data.
-            - sourceCode: The code of the data source.
-            - timeOffSet: The difference between local time and UTC time in hours.
+        - siteName: Name of the site.
+        - siteCode: Code of the site.
+        - network: observation network that the site belongs to
+        - fullVariableCode: The full variable code, for example: SNOTEL:SNWD.Use this value as the variableCode parameter in GetValues().
+        - siteID: ID of the site
+        - latitude: latitude of the site
+        - longitude: longitude of the site
+        - variableName: Name of the variable
+        - unitName: Name of the units of the values associated to the given variable and site
+        - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
+        - dataType: Type of data
+        - noDataValue: value associated to lack of data.
+        - isRegular: Boolean to indicate whether the observation measurements and collections regular
+        - timeSupport: Boolean to indicate whether the values support time
+        - timeUnitName: Time Units associated to the observation
+        - timeUnitAbbreviation: Time units abbreviation
+        - sampleMedium: the sample medium, for example water, atmosphere, soil.
+        - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
+        - beginningDateTimeUTC: The UTC date and time of the first available
+        - EndDateTimeUTC: The UTC date and time of the last available
+        - beginningDateTime: The local date and time of the first available
+        - EndDateTime: The local date and time of the last available
+        - censorCode: The code for censored observations.  Possible values are nc (not censored), gt(greater than), lt (less than), nd (non-detect), pnq (present but not quantified)
+        - methodCode: The code of the method or instrument used for the observation
+        - methodID: The ID of the sensor or measurement method
+        - qualityControlLevelCode: The code of the quality control level.  Possible values are -9999(Unknown), 0 (Raw data), 1 (Quality controlled data), 2 (Derived products), 3 (Interpretedproducts), 4 (Knowledge products)
+        - qualityControlLevelID: The ID of the quality control level. Usually 0 means raw data and 1 means quality controlled data.
+        - sourceCode: The code of the data source.
+        - timeOffSet: The difference between local time and UTC time in hours.
 
-        Args:
-            object_siteInfo: Contains metadata associated to the site.
-            object_methods: Contains a list of <series>, which are unique combinations of site, variable and time intervals that specify a sequence of observations.
-        Returns:
-            return_obj: python dictionary containing data from the GetSiteInfo response.
-        """
-        return_obj = {}
+    Args:
+        object_siteInfo: Contains metadata associated to the site.
+        object_methods: Contains a list of <series>, which are unique combinations of site, variable and time intervals that specify a sequence of observations.
+    Returns:
+        return_obj: python dictionary containing data from the GetSiteInfo response.
+    """
+    return_obj = {}
 
-        try:
-            sitePorperty_Info = object_siteInfo['siteProperty']
-            return_obj['country'] = "No Data was Provided"
-            if type(sitePorperty_Info) is list:
-                for props in sitePorperty_Info:
-                    if props['@name'] == 'Country':
-                        return_obj['country'] = props['#text']
-            else:
-                if str(sitePorperty_Info['@name']) == 'Country':
-                    return_obj['country'] = str(sitePorperty_Info['#text'])
-                    # print(return_obj['country'])
-        except Exception as e:
-            print(e)
-            return_obj['country'] = "No Data was Provided"
-        try:
-            # return_obj['siteName'] = object_siteInfo['siteName']
-            siteName = object_siteInfo['siteName'].encode("utf-8")
-            # return_object['siteName'] = siteName
-            return_obj['siteName'] = siteName.decode("utf-8")
-        except KeyError as ke:
-            return_obj['siteName'] = "No Data was Provided"
-
-        try:
-            return_obj['latitude'] = object_siteInfo['geoLocation']['geogLocation']['latitude']
-        except KeyError as ke:
-            return_obj['latitude'] = "No Data was Provided"
-
-        try:
-            return_obj['longitude'] = object_siteInfo['geoLocation']['geogLocation']['longitude']
-        except KeyError as ke:
-            return_obj['longitude'] = "No Data was Provided"
-
-        try:
-            return_obj['geolocation'] = object_siteInfo['geoLocation']['geogLocation']
-        except KeyError as ke:
-            return_obj['geolocation'] = "No Data was Provided"
-
-        try:
-            return_obj['network'] = object_siteInfo['siteCode']['@network']
-        except KeyError as ke:
-            return_obj['network'] = "No Data was Provided"
-
-        try:
-            return_obj['siteCode'] = object_siteInfo['siteCode']['#text']
-        except KeyError as ke:
-            return_obj['siteCode'] = "No Data was Provided"
-
-        try:
-            return_obj['fullSiteCode'] = return_obj['network'] + ":" + return_obj['siteCode']
-        except KeyError as ke:
-            return_obj['fullSiteCode'] = "No Data was Provided"
-
-        try:
-            return_obj['variableName'] = object_methods['variable']['variableName']
-        except KeyError as ke:
-            return_obj['variableName'] = "No Data was Provided"
-
-        try:
-            return_obj['variableCode'] = object_methods['variable']['variableCode']['#text']
-        except KeyError as ke:
-            return_obj['variableCode'] = "No Data was Provided"
-
-        try:
-            return_obj['fullVariableCode'] = return_obj['network'] + ":" + return_obj['variableCode']
-        except KeyError as ke:
-            return_obj['fullVariableCode'] = "No Data was Provided"
-
-        try:
-            return_obj['variableCount'] = object_methods['valueCount']
-        except KeyError as ke:
-            return_obj['variableCount'] = "No Data was Provided"
-
-        try:
-            return_obj['dataType'] = object_methods['variable']['dataType']
-        except KeyError as ke:
-            return_obj['dataType'] = "No Data was Provided"
-
-        try:
-            return_obj['valueType'] = object_methods['variable']['valueType']
-        except KeyError as ke:
-            return_obj['valueType'] = "No Data was Provided"
-
-        try:
-            return_obj['generalCategory'] = object_methods['variable']['generalCategory']
-        except KeyError as ke:
-            return_obj['generalCategory'] = "No Data was Provided"
-
-        try:
-            return_obj['noDataValue'] = object_methods['variable']['noDataValue']
-        except KeyError as ke:
-            return_obj['noDataValue'] = "No Data was Provided"
-
-        try:
-            return_obj['sampleMedium'] = object_methods['variable']['sampleMedium']
-        except KeyError as ke:
-            return_obj['sampleMedium'] = "No Data was Provided"
-
-        try:
-            return_obj['speciation'] = object_methods['variable']['speciation']
-        except KeyError as ke:
-            return_obj['speciation'] = "No Data was Provided"
-        try:
-            return_obj['timeUnitAbbreviation'] = object_methods['variable']['timeScale']['unit']['unitAbbreviation']
-        except KeyError as ke:
-            return_obj['timeUnitAbbreviation'] = "No Data was Provided"
-
-        try:
-            return_obj['timeUnitName'] = object_methods['variable']['timeScale']['unit']['unitName']
-        except KeyError as ke:
-            return_obj['timeUnitName'] = "No Data was Provided"
-
-        try:
-            return_obj['timeUnitType'] = object_methods['variable']['timeScale']['unit']['unitType']
-        except KeyError as ke:
-            return_obj['timeUnitType'] = "No Data was Provided"
-
-        try:
-            return_obj['timeSupport'] = object_methods['variable']['timeScale']['timeSupport']
-        except KeyError as ke:
-            return_obj['timeSupport'] = "No Data was Provided"
-
-        try:
-            return_obj['isRegular'] = object_methods['variable']['timeScale']['@isRegular']
-        except KeyError as ke:
-            return_obj['isRegular'] = "No Data was Provided"
-
-        try:
-            return_obj['unitAbbreviation'] = object_methods['variable']['unit']['unitAbbreviation']
-        except KeyError as ke:
-            return_obj['unitAbbreviation'] = "No Data was Provided"
-
-        try:
-            return_obj['unitName'] = object_methods['variable']['unit']['unitName']
-        except KeyError as ke:
-            return_obj['unitName'] = "No Data was Provided"
-
-        try:
-            return_obj['unitType'] = object_methods['variable']['unit']['unitType']
-        except KeyError as ke:
-            return_obj['unitType'] = "No Data was Provided"
-
-        if 'method' in object_methods:
-            return_obj['methodID'] = object_methods['method']['@methodID']
-            return_obj['methodDescription'] = object_methods['method']['methodDescription']
+    try:
+        sitePorperty_Info = object_siteInfo['siteProperty']
+        return_obj['country'] = "No Data was Provided"
+        if type(sitePorperty_Info) is list:
+            for props in sitePorperty_Info:
+                if props['@name'] == 'Country':
+                    return_obj['country'] = props['#text']
         else:
-            return_obj['methodID'] = "No Method Id was provided"
-            return_obj['methodDescription'] = "No Method Description was provided"
+            if str(sitePorperty_Info['@name']) == 'Country':
+                return_obj['country'] = str(sitePorperty_Info['#text'])
+                # print(return_obj['country'])
+    except Exception as e:
+        print(e)
+        return_obj['country'] = "No Data was Provided"
+    try:
+        # return_obj['siteName'] = object_siteInfo['siteName']
+        siteName = object_siteInfo['siteName'].encode("utf-8")
+        # return_object['siteName'] = siteName
+        return_obj['siteName'] = siteName.decode("utf-8")
+    except KeyError as ke:
+        return_obj['siteName'] = "No Data was Provided"
+
+    try:
+        return_obj['latitude'] = object_siteInfo['geoLocation']['geogLocation']['latitude']
+    except KeyError as ke:
+        return_obj['latitude'] = "No Data was Provided"
+
+    try:
+        return_obj['longitude'] = object_siteInfo['geoLocation']['geogLocation']['longitude']
+    except KeyError as ke:
+        return_obj['longitude'] = "No Data was Provided"
+
+    try:
+        return_obj['geolocation'] = object_siteInfo['geoLocation']['geogLocation']
+    except KeyError as ke:
+        return_obj['geolocation'] = "No Data was Provided"
+
+    try:
+        return_obj['network'] = object_siteInfo['siteCode']['@network']
+    except KeyError as ke:
+        return_obj['network'] = "No Data was Provided"
+
+    try:
+        return_obj['siteCode'] = object_siteInfo['siteCode']['#text']
+    except KeyError as ke:
+        return_obj['siteCode'] = "No Data was Provided"
+
+    try:
+        return_obj['fullSiteCode'] = return_obj['network'] + ":" + return_obj['siteCode']
+    except KeyError as ke:
+        return_obj['fullSiteCode'] = "No Data was Provided"
+
+    try:
+        return_obj['variableName'] = object_methods['variable']['variableName']
+    except KeyError as ke:
+        return_obj['variableName'] = "No Data was Provided"
+
+    try:
+        return_obj['variableCode'] = object_methods['variable']['variableCode']['#text']
+    except KeyError as ke:
+        return_obj['variableCode'] = "No Data was Provided"
+
+    try:
+        return_obj['fullVariableCode'] = return_obj['network'] + ":" + return_obj['variableCode']
+    except KeyError as ke:
+        return_obj['fullVariableCode'] = "No Data was Provided"
+
+    try:
+        return_obj['variableCount'] = object_methods['valueCount']
+    except KeyError as ke:
+        return_obj['variableCount'] = "No Data was Provided"
+
+    try:
+        return_obj['dataType'] = object_methods['variable']['dataType']
+    except KeyError as ke:
+        return_obj['dataType'] = "No Data was Provided"
+
+    try:
+        return_obj['valueType'] = object_methods['variable']['valueType']
+    except KeyError as ke:
+        return_obj['valueType'] = "No Data was Provided"
+
+    try:
+        return_obj['generalCategory'] = object_methods['variable']['generalCategory']
+    except KeyError as ke:
+        return_obj['generalCategory'] = "No Data was Provided"
+
+    try:
+        return_obj['noDataValue'] = object_methods['variable']['noDataValue']
+    except KeyError as ke:
+        return_obj['noDataValue'] = "No Data was Provided"
+
+    try:
+        return_obj['sampleMedium'] = object_methods['variable']['sampleMedium']
+    except KeyError as ke:
+        return_obj['sampleMedium'] = "No Data was Provided"
+
+    try:
+        return_obj['speciation'] = object_methods['variable']['speciation']
+    except KeyError as ke:
+        return_obj['speciation'] = "No Data was Provided"
+    try:
+        return_obj['timeUnitAbbreviation'] = object_methods['variable']['timeScale']['unit']['unitAbbreviation']
+    except KeyError as ke:
+        return_obj['timeUnitAbbreviation'] = "No Data was Provided"
+
+    try:
+        return_obj['timeUnitName'] = object_methods['variable']['timeScale']['unit']['unitName']
+    except KeyError as ke:
+        return_obj['timeUnitName'] = "No Data was Provided"
+
+    try:
+        return_obj['timeUnitType'] = object_methods['variable']['timeScale']['unit']['unitType']
+    except KeyError as ke:
+        return_obj['timeUnitType'] = "No Data was Provided"
+
+    try:
+        return_obj['timeSupport'] = object_methods['variable']['timeScale']['timeSupport']
+    except KeyError as ke:
+        return_obj['timeSupport'] = "No Data was Provided"
+
+    try:
+        return_obj['isRegular'] = object_methods['variable']['timeScale']['@isRegular']
+    except KeyError as ke:
+        return_obj['isRegular'] = "No Data was Provided"
+
+    try:
+        return_obj['unitAbbreviation'] = object_methods['variable']['unit']['unitAbbreviation']
+    except KeyError as ke:
+        return_obj['unitAbbreviation'] = "No Data was Provided"
+
+    try:
+        return_obj['unitName'] = object_methods['variable']['unit']['unitName']
+    except KeyError as ke:
+        return_obj['unitName'] = "No Data was Provided"
+
+    try:
+        return_obj['unitType'] = object_methods['variable']['unit']['unitType']
+    except KeyError as ke:
+        return_obj['unitType'] = "No Data was Provided"
+
+    if 'method' in object_methods:
+        return_obj['methodID'] = object_methods['method']['@methodID']
+        return_obj['methodDescription'] = object_methods['method']['methodDescription']
+    else:
+        return_obj['methodID'] = "No Method Id was provided"
+        return_obj['methodDescription'] = "No Method Description was provided"
 
 
-        try:
-            return_obj['qualityControlLevelID'] = object_methods['qualityControlLevel']['@qualityControlLevelID']
-        except KeyError as ke:
-            return_obj['qualityControlLevelID'] = "No Data was Provided"
+    try:
+        return_obj['qualityControlLevelID'] = object_methods['qualityControlLevel']['@qualityControlLevelID']
+    except KeyError as ke:
+        return_obj['qualityControlLevelID'] = "No Data was Provided"
 
-        try:
-            return_obj['definition'] = object_methods['qualityControlLevel']['definition']
-        except KeyError as ke:
-            return_obj['definition'] = "No Data was Provided"
+    try:
+        return_obj['definition'] = object_methods['qualityControlLevel']['definition']
+    except KeyError as ke:
+        return_obj['definition'] = "No Data was Provided"
 
-        try:
-            return_obj['qualityControlLevelCode'] = object_methods['qualityControlLevel']['qualityControlLevelCode']
-        except KeyError as ke:
-            return_obj['qualityControlLevelCode'] = "No Data was Provided"
+    try:
+        return_obj['qualityControlLevelCode'] = object_methods['qualityControlLevel']['qualityControlLevelCode']
+    except KeyError as ke:
+        return_obj['qualityControlLevelCode'] = "No Data was Provided"
 
-        try:
-            return_obj['citation'] = object_methods['source']['citation']
-        except KeyError as ke:
-            return_obj['citation'] = "No Data was Provided"
+    try:
+        return_obj['citation'] = object_methods['source']['citation']
+    except KeyError as ke:
+        return_obj['citation'] = "No Data was Provided"
 
-        try:
-            return_obj['organization'] = object_methods['source']['organization']
-        except KeyError as ke:
-            return_obj['organization'] = "No Data was Provided"
+    try:
+        return_obj['organization'] = object_methods['source']['organization']
+    except KeyError as ke:
+        return_obj['organization'] = "No Data was Provided"
 
-        try:
-            return_obj['description'] = object_methods['source']['sourceDescription']
-        except KeyError as ke:
-            return_obj['description'] = "No Data was Provided"
+    try:
+        return_obj['description'] = object_methods['source']['sourceDescription']
+    except KeyError as ke:
+        return_obj['description'] = "No Data was Provided"
 
-        try:
-            return_obj['beginDateTime'] = object_methods['variableTimeInterval']['beginDateTime']
-        except KeyError as ke:
-            return_obj['beginDateTime'] = "No Data was Provided"
+    try:
+        return_obj['beginDateTime'] = object_methods['variableTimeInterval']['beginDateTime']
+    except KeyError as ke:
+        return_obj['beginDateTime'] = "No Data was Provided"
 
-        try:
-            return_obj['endDateTime'] = object_methods['variableTimeInterval']['endDateTime']
-        except KeyError as ke:
-            return_obj['endDateTime'] = "No Data was Provided"
+    try:
+        return_obj['endDateTime'] = object_methods['variableTimeInterval']['endDateTime']
+    except KeyError as ke:
+        return_obj['endDateTime'] = "No Data was Provided"
 
-        try:
-            return_obj['beginDateTimeUTC'] = object_methods['variableTimeInterval']['beginDateTimeUTC']
-        except KeyError as ke:
-            return_obj['beginDateTimeUTC'] = "No Data was Provided"
+    try:
+        return_obj['beginDateTimeUTC'] = object_methods['variableTimeInterval']['beginDateTimeUTC']
+    except KeyError as ke:
+        return_obj['beginDateTimeUTC'] = "No Data was Provided"
 
-        try:
-            return_obj['endDateTimeUTC'] = object_methods['variableTimeInterval']['endDateTimeUTC']
-        except KeyError as ke:
-            return_obj['endDateTimeUTC'] = "No Data was Provided"
-        try:
-            return_obj['variableTimeInterval'] = object_methods['variableTimeInterval']
-        except KeyError as ke:
-            return_obj['variableTimeInterval'] = "No Data was Provided"
+    try:
+        return_obj['endDateTimeUTC'] = object_methods['variableTimeInterval']['endDateTimeUTC']
+    except KeyError as ke:
+        return_obj['endDateTimeUTC'] = "No Data was Provided"
+    try:
+        return_obj['variableTimeInterval'] = object_methods['variableTimeInterval']
+    except KeyError as ke:
+        return_obj['variableTimeInterval'] = "No Data was Provided"
 
-        return return_obj
+    return return_obj
