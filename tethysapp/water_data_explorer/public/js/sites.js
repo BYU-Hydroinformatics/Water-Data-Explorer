@@ -7,14 +7,13 @@
  * LICENSE:             MIT
  *
  *****************************************************************************/
-/*****************************************************************************
- *                      LIBRARY WRAPPER
- *****************************************************************************/
 
-/*
-************ FUNCTION NAME: ACTIVATE_LAYER_VALUES **********************
-************ PURPOSE: THE FUNCTIONS RETRIEVES THE DATA FROM THE LAYERS WHEN ONE MAKES A CLICK ***********
-*/
+/**
+ * Function activate_layer_values:
+ * retrieves the data from the layers when one makes a click
+ * @return {void} A good string
+ *
+ */
 activate_layer_values = function (){
   try{
     map.on('singleclick', function(evt) {
