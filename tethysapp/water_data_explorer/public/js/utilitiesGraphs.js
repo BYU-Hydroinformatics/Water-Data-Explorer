@@ -7,14 +7,13 @@
  * LICENSE:             MIT
  *
  *****************************************************************************/
-/*****************************************************************************
- *                      LIBRARY WRAPPER
- *****************************************************************************/
 
-/*
-************ FUNCTION NAME: SELECT_VARIABLE_CHANGE **********************
-************ PURPOSE: SELECT A VARIABLE FROM A DROPDOWN AND CHANGE THE GRAPH ***********
-*/
+/**
+ * Function select_variable_change:
+ * plots time series of a given variable and site.
+ * @return {void} A good string
+ *
+ */
 
 select_variable_change = function(){
   try{
