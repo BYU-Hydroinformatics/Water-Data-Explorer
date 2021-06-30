@@ -901,9 +901,6 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
     let url_single = hs_object['url'];
     let title_server = hs_object['title'];
     let description = hs_object['description'];
-      // var datastring = $modalAddSOAP.serialize();
-      // datastring += actual_group;
-
       $("#soapAddLoading-group").removeClass("hidden");
 
       let unique_id_group = uuidv4();
@@ -924,15 +921,12 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
             try{
               let parsedObject = getSitesHelper(xmlData);
               console.log(parsedObject);
-              // let variablesObject = getVariablesJS(url_decons[0]);
-              // console.log(variablesObject);
               let requestObject = {
                 hs: title_server,
                 group: actual_group_name,
                 sites: JSON.stringify(parsedObject),
                 url: url_to_sent,
                 description:description
-                // variables: JSON.stringify(variablesObject)
               }
 
               console.log(requestObject);
@@ -960,141 +954,141 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
 
                     let new_title = unique_id_group;
 
-                          // put the ajax call and also the filter //
-                          let servers_with_keywords = [];
-                          let key_words_to_search = get_all_the_checked_keywords();
+                    // put the ajax call and also the filter //
+                    let servers_with_keywords = [];
+                    let key_words_to_search = get_all_the_checked_keywords();
 
-                          $(`#${group_name_e3}-noGroups`).hide();
+                    $(`#${group_name_e3}-noGroups`).hide();
 
-                            let {title, siteInfo, url, group} = json_response
-
-
-                              let sites = siteInfo
-
-                              if (typeof(sites) == "string"){
-                                sites = JSON.parse(siteInfo);
-                              }
-                              var vectorLayer = map_layers(sites,title,url)[0]
-                              var vectorSource = map_layers(sites,title,url)[1]
-
-                              let test_style = new ol.style.Style({
-                                image: new ol.style.Circle({
-                                  radius: 10,
-                                  stroke: new ol.style.Stroke({
-                                    color: "white",
-                                  }),
-                                  fill: new ol.style.Fill({
-                                    color: layerColorDict[title],
-                                  }),
-                                })
-                              });
-                              let rowHTML= `<tr id= ${new_title}-row-complete>
-                                             <th id="${new_title}-row-legend"></th>
-                                             <th>${title}</th>
-                                           </tr>`
-                             if(!document.getElementById(`${new_title}-row-complete`)){
-                               $(rowHTML).appendTo('#tableLegend');
-                             }
-                             $(`#${new_title}-row-legend`).prepend($(getIconLegend(test_style,title)));
+                      let {title, siteInfo, url, group} = json_response
 
 
-                              map.addLayer(vectorLayer);
+                        let sites = siteInfo
 
-                              vectorLayer.set("selectable", true)
-                              map.getView().fit(vectorSource.getExtent());
+                        if (typeof(sites) == "string"){
+                          sites = JSON.parse(siteInfo);
+                        }
+                        var vectorLayer = map_layers(sites,title,url)[0]
+                        var vectorSource = map_layers(sites,title,url)[1]
+
+                        let test_style = new ol.style.Style({
+                          image: new ol.style.Circle({
+                            radius: 10,
+                            stroke: new ol.style.Stroke({
+                              color: "white",
+                            }),
+                            fill: new ol.style.Fill({
+                              color: layerColorDict[title],
+                            }),
+                          })
+                        });
+                        let rowHTML= `<tr id= ${new_title}-row-complete>
+                                       <th id="${new_title}-row-legend"></th>
+                                       <th>${title}</th>
+                                     </tr>`
+                       if(!document.getElementById(`${new_title}-row-complete`)){
+                         $(rowHTML).appendTo('#tableLegend');
+                       }
+                       $(`#${new_title}-row-legend`).prepend($(getIconLegend(test_style,title)));
+
+
+                        map.addLayer(vectorLayer);
+
+                        vectorLayer.set("selectable", true)
+                        map.getView().fit(vectorSource.getExtent());
+                        map.updateSize();
+                        layersDict[title] = vectorLayer;
+
+
+                          let no_servers_tag = Array.from(document.getElementById(`${id_group_separator}`).getElementsByTagName("P"))[0];
+                          let newHtml = html_for_servers(new_title,group_name_e3)
+                           $(newHtml).appendTo(`#${id_group_separator}`);
+                           $(`#${new_title}_variables`).on("click",showVariables2);
+                           $(`#${new_title}_variables_info`).on("click",hydroserver_information);
+                           $(`#${new_title}_${group_name_e3}_reload`).on("click",update_hydroserver);
+
+                          // MAKES THE LAYER INVISIBLE
+
+                          let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
+                          let li_arrays = Array.from(lis);
+                          let input_check = li_arrays.filter(x => new_title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
+
+                          input_check.addEventListener("change", function(){
+                            if(layersDict['selectedPointModal']){
+                              map.removeLayer(layersDict['selectedPointModal'])
                               map.updateSize();
-                              layersDict[title] = vectorLayer;
+                            }
+                            if(layersDict['selectedPoint']){
+                              map.removeLayer(layersDict['selectedPoint'])
+                              map.updateSize();
+                            }
+                            if(this.checked){
+                              map.getLayers().forEach(function(layer) {
+                                   if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                     layer.setStyle(featureStyle(layerColorDict[title]));
+                                   }
+                               });
+                            }
+                            else{
+                              map.getLayers().forEach(function(layer) {
+                                   if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                     layer.setStyle(new ol.style.Style({}));
 
+                                   }
+                               });
 
-                                let no_servers_tag = Array.from(document.getElementById(`${id_group_separator}`).getElementsByTagName("P"))[0];
-                                let newHtml = html_for_servers(new_title,group_name_e3)
-                                 $(newHtml).appendTo(`#${id_group_separator}`);
-                                 $(`#${new_title}_variables`).on("click",showVariables2);
-                                 $(`#${new_title}_variables_info`).on("click",hydroserver_information);
-                                 $(`#${new_title}_${group_name_e3}_reload`).on("click",update_hydroserver);
+                            }
 
-                                // MAKES THE LAYER INVISIBLE
+                          });
+                          $(`#${new_title}_zoom`).on("click",function(){
+                            if(layersDict['selectedPointModal']){
+                              map.removeLayer(layersDict['selectedPointModal'])
+                              map.updateSize();
+                            }
+                            if(layersDict['selectedPoint']){
+                              map.removeLayer(layersDict['selectedPoint'])
+                              map.updateSize();
+                            }
+                            map.getView().fit(vectorSource.getExtent());
+                            map.updateSize();
+                            map.getLayers().forEach(function(layer) {
+                              if (!(title in layer_object_filter)){
+                                if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                  layer.setStyle(featureStyle(layerColorDict[title]));
+                                }
+                              }
+                              else{
+                                if(layer instanceof ol.layer.Vector && layer == layer_object_filter[title]){
+                                  layer.setStyle(featureStyle(layerColorDict[title]));
+                                }
+                              }
 
-                                let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
-                                let li_arrays = Array.from(lis);
-                                let input_check = li_arrays.filter(x => new_title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
+                             });
+                            input_check.checked = true;
 
-                                input_check.addEventListener("change", function(){
-                                  if(layersDict['selectedPointModal']){
-                                    map.removeLayer(layersDict['selectedPointModal'])
-                                    map.updateSize();
+                          });
+                          urls_servers[$("#soap-title").val()] =  url_to_sent
+                          getVariablesJS(url_to_sent,new_title , group_name_e3);
+
+                          $.notify(
+                              {
+                                  message: `Successfully Added the ${title_server} WaterOneFlow Service to the Map`
+                              },
+                              {
+                                  type: "success",
+                                  allow_dismiss: true,
+                                  z_index: 20000,
+                                  delay: 5000,
+                                  animate: {
+                                    enter: 'animated fadeInRight',
+                                    exit: 'animated fadeOutRight'
+                                  },
+                                  onShow: function() {
+                                      this.css({'width':'auto','height':'auto'});
                                   }
-                                  if(layersDict['selectedPoint']){
-                                    map.removeLayer(layersDict['selectedPoint'])
-                                    map.updateSize();
-                                  }
-                                  if(this.checked){
-                                    map.getLayers().forEach(function(layer) {
-                                         if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                           layer.setStyle(featureStyle(layerColorDict[title]));
-                                         }
-                                     });
-                                  }
-                                  else{
-                                    map.getLayers().forEach(function(layer) {
-                                         if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                           layer.setStyle(new ol.style.Style({}));
-
-                                         }
-                                     });
-
-                                  }
-
-                                });
-                                $(`#${new_title}_zoom`).on("click",function(){
-                                  if(layersDict['selectedPointModal']){
-                                    map.removeLayer(layersDict['selectedPointModal'])
-                                    map.updateSize();
-                                  }
-                                  if(layersDict['selectedPoint']){
-                                    map.removeLayer(layersDict['selectedPoint'])
-                                    map.updateSize();
-                                  }
-                                  map.getView().fit(vectorSource.getExtent());
-                                  map.updateSize();
-                                  map.getLayers().forEach(function(layer) {
-                                    if (!(title in layer_object_filter)){
-                                      if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                        layer.setStyle(featureStyle(layerColorDict[title]));
-                                      }
-                                    }
-                                    else{
-                                      if(layer instanceof ol.layer.Vector && layer == layer_object_filter[title]){
-                                        layer.setStyle(featureStyle(layerColorDict[title]));
-                                      }
-                                    }
-
-                                   });
-                                  input_check.checked = true;
-
-                                });
-                                urls_servers[$("#soap-title").val()] =  url_to_sent
-                                getVariablesJS(url_to_sent,new_title , group_name_e3);
-
-                                $.notify(
-                                    {
-                                        message: `Successfully Added the ${title_server} WaterOneFlow Service to the Map`
-                                    },
-                                    {
-                                        type: "success",
-                                        allow_dismiss: true,
-                                        z_index: 20000,
-                                        delay: 5000,
-                                        animate: {
-                                          enter: 'animated fadeInRight',
-                                          exit: 'animated fadeOutRight'
-                                        },
-                                        onShow: function() {
-                                            this.css({'width':'auto','height':'auto'});
-                                        }
-                                    }
-                                )
-                                $("#soapAddLoading-group").addClass("hidden");
+                              }
+                          )
+                          $("#soapAddLoading-group").addClass("hidden");
 
 
                     }
@@ -1241,7 +1235,7 @@ create_group_hydroservers = function(){
     //MAKE THE AJAX REQUEST///
     let elementForm= $("#modalAddGroupServerForm");
     let datastring= elementForm.serialize();
-    console.log(datastring);
+    // console.log(datastring);
     $("#soapAddLoading-group").removeClass("hidden");
     let unique_id_group = uuidv4()
     id_dictionary[unique_id_group] = $("#addGroup-title").val()
@@ -1251,7 +1245,7 @@ create_group_hydroservers = function(){
     let urls_array2 = urls_array.map(function(single_url){
       return decodeURIComponent(single_url);
     });
-    console.log(urls_array2);
+    // console.log(urls_array2);
     let tmp_hs_url_select = [];
 
     tmp_hs_url.forEach(function(single_hs){
@@ -1260,7 +1254,7 @@ create_group_hydroservers = function(){
         tmp_hs_url_select.push(single_hs);
       }
     });
-    console.log(tmp_hs_url_select);
+    // console.log(tmp_hs_url_select);
 
     let datastring_empty_group = datastring.split('&server=')[0];
     $.ajax({
@@ -1327,13 +1321,7 @@ create_group_hydroservers = function(){
                 add_hydroserver_for_groups(single_hs,title);
               })
 
-              // $("#soapAddLoading-group").addClass("hidden");
               $("#btn-add-addHydro").show()
-
-              // $("#modalAddGroupServer").modal("hide")
-              // $("#modalAddGroupServerForm").each(function() {
-              //     this.reset()
-              // })
 
               $.notify(
                   {
@@ -1353,12 +1341,15 @@ create_group_hydroservers = function(){
                       }
                   }
               )
+              $("#modalAddGroupServerForm").each(function() {
+                  this.reset()
+              })
               $("#modalAddGroupServer").modal("hide");
               $("#rows_servs").empty();
               $("#available_services").hide();
-
               $("#btn-check_all").addClass("hidden");
 
+              tmp_hs_url = [];
             }
             catch(e){
               $("soapAddLoading-group").addClass("hidden");
