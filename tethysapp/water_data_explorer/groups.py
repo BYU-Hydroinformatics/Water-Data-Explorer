@@ -181,65 +181,6 @@ def available_variables(request):
     return JsonResponse(varaibles_list)
 
 
-
-
-    # Query DB for hydroservers
-    # SessionMaker = app.get_persistent_store_database(
-    #     Persistent_Store_Name, as_sessionmaker=True)
-    # session = SessionMaker()
-    #
-    # if request.method == 'GET' and 'group' not in request.GET:
-    #     hydroservers_groups = session.query(HydroServer_Individual).all()
-    # else:
-    #     specific_group=request.GET.get('group')
-    #     hydroservers_groups = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
-    #
-    #
-    # varaibles_list = {}
-    # hydroserver_variable_list = []
-    # hydroserver_variable_code_list = []
-    #
-    # for server in hydroservers_groups:
-    #     water = pwml.WaterMLOperations(url = server.url.strip())
-    #     hs_variables = water.GetVariables()['variables']
-    #     for hs_variable in hs_variables:
-    #         if hs_variable['variableName'] not in hydroserver_variable_list:
-    #             hydroserver_variable_list.append(hs_variable['variableName'])
-    #             hydroserver_variable_code_list.append(hs_variable['variableCode'])
-    #
-    # varaibles_list["variables"] = hydroserver_variable_list
-    # varaibles_list["variables_codes"] = hydroserver_variable_code_list
-    # return JsonResponse(varaibles_list)
-
-def available_services(request):
-    url_catalog = request.POST.get('url')
-    hs_services = {}
-    url_catalog = unquote(url_catalog)
-
-    if url_catalog:
-        try:
-            # url_catalog = unquote(url_catalog)
-            # print("THIS ", url_catalog)
-            url_catalog2 = url_catalog + "?WSDL"
-            # client = Client(url_catalog2, timeout= 500)
-            # service_info = client.service.GetWaterOneFlowServiceInfo()
-            # services = service_info.ServiceInfo
-            # views = giveServices(services)
-            # hs_services['services'] = views
-            water = pwml.WaterMLOperations(url = url_catalog2)
-            hs_services['services'] = water.AvailableServices()['available']
-
-        except Exception as e:
-            print(e)
-            # print("I AM HERE OR NOT")
-            # services = parseService(url_catalog)
-            # views = giveServices(services)
-            # hs_services['services'] = views
-            hs_services['services'] = []
-    return JsonResponse(hs_services)
-
-
-
 ######*****************************************************************************************################
 ######***********************CREATE AN EMPTY GROUP OF HYDROSERVERS ****************************################
 ######*****************************************************************************************################

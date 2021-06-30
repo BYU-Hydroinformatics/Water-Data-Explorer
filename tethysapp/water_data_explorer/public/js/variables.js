@@ -205,11 +205,11 @@ var filter_words,
     getValuesHelperJS,
     getValuesJS,
     get_values_graph_hs,
-    available_services,
     parseService,
     giveServices,
-    availableServices,
     getWaterOneFlowServicesInfoHelperJS,
+    tmp_hs_url = [],
+    add_hydroserver_for_groups,
     generateListServices;
 
 /************************************************************************
