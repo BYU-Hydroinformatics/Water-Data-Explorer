@@ -1,40 +1,159 @@
-give_available_services = function(){
+
+
+
+available_services = function (url_catalog){
+
+  hs_services = {}
+  if(url_catalog){
+    try{
+      url_catalog2 = url_catalog + "?WSDL"
+      hs_services['services'] = availableServices(url_catalog);
+      // hs_services['services'] = availableServices(url_catalog)['available']
+    }
+    catch(e){
+      console.log(e)
+      hs_services['services'] = []
+    }
+  }
+  return hs_services
+}
+
+//
+availableServices = function(url){
+
+  // Give the WaterOneFlow web services that are available from a WaterOneFlow service containing a HIS catalog.
+  // Args:
+  //     url: WaterOneFlow web service that complies to the SOAP protocol
+  // Returns:
+  //     hs_services: available services in a given WaterOneFlow service containing a HIS catalog.
+
+
+  let hs_services = {}
+  if(url){
+    try{
+      service_info = getWaterOneFlowServicesInfo(url)
+      // services = service_info.ServiceInfo
+      // obj_services = self.aux._giveServices(services)
+      // hs_services['available'] = obj_services['working']
+      // hs_services['broken'] = obj_services['failed']
+    }
+
+    catch(e){
+      console.log(e);
+      // services = self.aux._parseService(self.url)
+      // views = self.aux._giveServices(services)
+      // hs_services['available'] = views['working']
+      // hs_services['broken'] = views['failed']
+    }
+
+  }
+
+  return hs_services
+
+}
+
+getWaterOneFlowServicesInfoHelperJS = function(xmlData){
+  let return_obj;
+  let return_array = []
+  var options = {
+      attributeNamePrefix : "@",
+      attrNodeName: "attr", //default is 'false'
+      textNodeName : "#text",
+      ignoreAttributes : false,
+      ignoreNameSpace : false,
+      allowBooleanAttributes : true,
+      parseNodeValue : true,
+      parseAttributeValue : true,
+      trimValues: true,
+      cdataTagName: "__cdata", //default is 'false'
+      cdataPositionChar: "\\c",
+      parseTrueNumberOnly: false,
+      arrayMode: false, //"strict"
+      attrValueProcessor: (val, attrName) => he.decode(val, {isAttributeValue: true}),//default is a=>a
+      tagValueProcessor : (val, tagName) => he.decode(val), //default is a=>a
+      stopNodes: ["parse-me-as-string"]
+  };
+  var result = parser.validate(xmlData);
+  if (result !== true) console.log(result.err);
+  var jsonObj = parser.parse(xmlData,options);
   try{
-    let elementForm= $("#modalAddGroupServerForm");
-    let datastring= elementForm.serialize();
-    let form_elements = datastring.split("&");
-    let url_alone = form_elements[form_elements.length -1]
-    $("#soapAddLoading-group").removeClass("hidden");
+    return_array = jsonObj['ArrayOfServiceInfo']['ServiceInfo'];
+    return return_array
+  }
+  catch(e){
+    console.log(e);
+    return_array = []
+    return return_array
+  }
+}
+
+
+
+giveServices = function(services){
+  let json_response = {}
+  let hs_list = []
+  services.forEach(function(i){
+    let hs = {}
+    let url = i['servURL'];
+    if(url.endsWith('?WSDL') == false){
+      url = url + "?WSDL";
+    }
+
+    let title = i['Title'];
+    let description = "None was provided by the organiation in charge of the Web Service";
+
+    if(i.hasOwnProperty('aabstract')){
+      description = i['aabstract'];
+    }
+
+    hs['url'] = url;
+    hs['title'] = title;
+    hs['description'] = description;
+    hs_list.push(hs);
+  });
+  json_response['services'] = hs_list;
+  return json_response
+}
+
+
+give_available_services = function(){
+  $("#soapAddLoading-group").removeClass("hidden");
+  try{
+    let url = $("#url").val()
+    let url_request = `${url}?request=GetWaterOneFlowServiceInfo`;
     $.ajax({
-      type: "POST",
-      url: `available-services/`,
-      dataType: "HTML",
-      data: url_alone,
-      success: function(data){
+      type:"GET",
+      url:url_request,
+      dataType: "text",
+      success: function(xmlData){
         try{
-          $("#rows_servs").empty();
-          var json_response = JSON.parse(data)
-          var services_ava = json_response['services']
-          var i = 1;
-          var row = ""
-          services_ava.forEach(function(serv){
-            var title_new = serv['title'].replace(/ /g,"_");
-            row += `<tr>
-                      <th scope="row">${i}</th>
-                      <td><input type="checkbox" class="filter_check" name="server_${i}" value=${title_new}></td>
-                      <td>${serv['title']}</td>
-                    </tr>`
-            i += 1;
-          })
-          $("#available_services").show();
-          $("#modalAddGroupServer").find("#rows_servs").html(row)
+          // console.log(xmlData);
+          let services = getWaterOneFlowServicesInfoHelperJS(xmlData);
+          console.log(services);
+          obj_services = giveServices(services)
+           $("#rows_servs").empty();
+           var services_ava = obj_services['services'];
+           var i = 1;
+           var row = "";
+           services_ava.forEach(function(serv){
+             var title_new = serv['title'].replace(/ /g,"_");
+             row += `<tr>
+                       <th scope="row">${i}</th>
+                       <td><input type="checkbox" class="filter_check" name="server_${i}" value=${title_new}></td>
+                       <td>${serv['title']}</td>
+                     </tr>`
+             i += 1;
+           })
+           $("#available_services").show();
+           $("#modalAddGroupServer").find("#rows_servs").html(row)
 
-          $("#available_services").removeClass("hidden");
-          $("#soapAddLoading-group").addClass("hidden")
+           $("#available_services").removeClass("hidden");
+           $("#soapAddLoading-group").addClass("hidden")
 
-          $("#btn-check_all").removeClass("hidden");
+           $("#btn-check_all").removeClass("hidden");
         }
         catch(e){
+          console.log(e);
           $("#soapAddLoading-group").addClass("hidden");
           $.notify(
               {
@@ -56,8 +175,10 @@ give_available_services = function(){
           )
         }
 
+
       },
       error: function(error){
+        console.log(error);
         $("#soapAddLoading-group").addClass("hidden");
         $.notify(
             {
@@ -77,11 +198,93 @@ give_available_services = function(){
                 }
             }
         )
+
       }
-
     })
-
   }
+
+    // let elementForm= $("#modalAddGroupServerForm");
+    // let datastring= elementForm.serialize();
+    // let form_elements = datastring.split("&");
+    // let url_alone = form_elements[form_elements.length -1]
+    // $("#soapAddLoading-group").removeClass("hidden");
+    // $.ajax({
+    //   type: "POST",
+    //   url: `available-services/`,
+    //   dataType: "HTML",
+    //   data: url_alone,
+    //   success: function(data){
+    //     try{
+    //       $("#rows_servs").empty();
+    //       var json_response = JSON.parse(data)
+    //       var services_ava = json_response['services']
+    //       var i = 1;
+    //       var row = ""
+    //       services_ava.forEach(function(serv){
+    //         var title_new = serv['title'].replace(/ /g,"_");
+    //         row += `<tr>
+    //                   <th scope="row">${i}</th>
+    //                   <td><input type="checkbox" class="filter_check" name="server_${i}" value=${title_new}></td>
+    //                   <td>${serv['title']}</td>
+    //                 </tr>`
+    //         i += 1;
+    //       })
+    //       $("#available_services").show();
+    //       $("#modalAddGroupServer").find("#rows_servs").html(row)
+    //
+    //       $("#available_services").removeClass("hidden");
+    //       $("#soapAddLoading-group").addClass("hidden")
+    //
+    //       $("#btn-check_all").removeClass("hidden");
+    //     }
+    //     catch(e){
+    //       $("#soapAddLoading-group").addClass("hidden");
+    //       $.notify(
+    //           {
+    //               message: `There was an error retrieving the different web services contained in the view`
+    //           },
+    //           {
+    //               type: "danger",
+    //               allow_dismiss: true,
+    //               z_index: 20000,
+    //               delay: 5000,
+    //               animate: {
+    //                 enter: 'animated fadeInRight',
+    //                 exit: 'animated fadeOutRight'
+    //               },
+    //               onShow: function() {
+    //                   this.css({'width':'auto','height':'auto'});
+    //               }
+    //           }
+    //       )
+    //     }
+    //
+    //   },
+    //   error: function(error){
+    //     $("#soapAddLoading-group").addClass("hidden");
+    //     $.notify(
+    //         {
+    //             message: `There was an error retrieving the different web services contained in the view`
+    //         },
+    //         {
+    //             type: "danger",
+    //             allow_dismiss: true,
+    //             z_index: 20000,
+    //             delay: 5000,
+    //             animate: {
+    //               enter: 'animated fadeInRight',
+    //               exit: 'animated fadeOutRight'
+    //             },
+    //             onShow: function() {
+    //                 this.css({'width':'auto','height':'auto'});
+    //             }
+    //         }
+    //     )
+    //   }
+    //
+    // })
+
+  // }
   catch(error){
     $("#soapAddLoading-group").addClass("hidden");
     $.notify(
@@ -105,6 +308,7 @@ give_available_services = function(){
   }
 }
 $("#btn-check_available_serv").on("click", give_available_services);
+
 $("#btn-check_all").on("click", function(){
 
   if($("#btn-check_all").html() == "Select All Views"){
