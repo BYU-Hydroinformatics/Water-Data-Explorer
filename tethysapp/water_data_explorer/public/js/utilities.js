@@ -1,3 +1,12 @@
+/*****************************************************************************
+ * FILE:                utilities.js
+ * BEGGINING DATE:      16 Jun 2021
+ * ENDING DATE:         ---------------
+ * AUTHOR:              Giovanni Romero Bustamante
+ * COPYRIGHT:           (c) Brigham Young University 2020
+ * LICENSE:             MIT
+ *
+ *****************************************************************************/
 responsive_graphs =  function(){
   let newHtml;
   if($( window ).width() > 1224){
@@ -159,17 +168,12 @@ responsive_graphs =  function(){
   $(newHtml).appendTo("#graph");
 }
 
-
-
-
 uuidv4 = function () {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
 }
-
-
 
 
 copyToClipboard = function(element) {

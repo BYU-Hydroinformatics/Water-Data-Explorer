@@ -116,6 +116,7 @@ var water_data_explorer_PACKAGE = (function() {
         }
       }
       catch(e) {
+        console.log(e);
         $.notify(
             {
                 message: `No boundary found for the Water Data Explorer`
@@ -141,7 +142,6 @@ var water_data_explorer_PACKAGE = (function() {
     ************ FUNCTION NAME: INIT_MAP**********************
     ************ PURPOSE:INIT MAP WITH THE OPENLAYERS BASE MAP AND THE OTHER ADDEDLAYERS OF HYDROSERVERS  ***********
     */
-
     init_map = function() {
       try{
         var url_UN = "https://geoservices.un.org/arcgis/rest/services/ClearMap_WebTopo/MapServer";
@@ -222,8 +222,6 @@ var water_data_explorer_PACKAGE = (function() {
               crossOrigin: "anonymous",
               // interactions: ol.interaction.defaults({ dragPan: false}),
           })
-
-
 
         var lastFeature, draw, featureType
         //Remove the last feature before drawing a new one
@@ -361,8 +359,6 @@ var water_data_explorer_PACKAGE = (function() {
       }
 
     }
-
-
     give_name = function(){
       try{
         if(views_names != "None"){

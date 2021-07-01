@@ -1,3 +1,12 @@
+/*****************************************************************************
+ * FILE:                groups.js
+ * BEGGINING DATE:      16 Jun 2021
+ * ENDING DATE:         ---------------
+ * AUTHOR:              Giovanni Romero Bustamante
+ * COPYRIGHT:           (c) Brigham Young University 2020
+ * LICENSE:             MIT
+ *
+ *****************************************************************************/
 getWaterOneFlowServicesInfoHelperJS = function(xmlData){
   let return_obj;
   let return_array = []
@@ -33,7 +42,6 @@ getWaterOneFlowServicesInfoHelperJS = function(xmlData){
   }
 }
 
-
 giveServices = function(services){
   let json_response = {}
   let hs_list = []
@@ -59,7 +67,6 @@ giveServices = function(services){
   json_response['services'] = hs_list;
   return json_response
 }
-
 
 give_available_services = function(){
   $("#soapAddLoading-group").removeClass("hidden");
@@ -196,12 +203,10 @@ show_variables_groups = function(){
     dataType: "JSON",
     success: function(data){
       try{
-        // console.log(data);
         variables_list = data['variables'];
         variables_codes_list = data['variables_codes'];
         let variables_urls_list = data['urls'];
         let variables_names_list = data['names'];
-        // console.log(variables_codes_list);
         const chunk = (arr, size) =>
           Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
             arr.slice(i * size, i * size + size)
@@ -210,8 +215,6 @@ show_variables_groups = function(){
         let arr2=chunk(variables_codes_list, 2);
         let arr3=chunk(variables_urls_list, 2);
         let arr4=chunk(variables_names_list, 2);
-        // console.log(arr2);
-
 
         var HSTableHtml =
             `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
@@ -236,7 +239,6 @@ show_variables_groups = function(){
 
 
           HSTableHtml += "</tbody></table>"
-        ////console.log(HSTableHtml)
         $("#modalKeyWordSearch").find("#groups_variables").html(HSTableHtml);
         $("#KeywordLoading").addClass("hidden");
       }
@@ -290,6 +292,7 @@ show_variables_groups = function(){
 
   })
 }
+
 available_regions = function(){
   $("#KeywordLoading").removeClass("hidden");
   $.ajax({
@@ -322,6 +325,7 @@ available_regions = function(){
         $("#KeywordLoading").addClass("hidden");
       }
       catch(e){
+        console.log(e);
         $("#KeywordLoading").addClass("hidden");
         $.notify(
             {
@@ -345,6 +349,7 @@ available_regions = function(){
 
     },
     error: function(error){
+      console.log(error);
       $("#KeywordLoading").addClass("hidden");
       $.notify(
           {
@@ -387,15 +392,12 @@ listener_checkbox = function(list_countries){
 
           variables_list = data['variables'];
           variables_codes_list = data['variables_codes'];
-          // console.log(variables_codes_list);
           const chunk = (arr, size) =>
             Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
               arr.slice(i * size, i * size + size)
             );
           let arr=chunk(variables_list, 2);
           let arr2=chunk(variables_codes_list, 2);
-          // console.log(arr2);
-
 
           var HSTableHtml =
               `<table id="data-table-var" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
@@ -496,7 +498,6 @@ listener_checkbox = function(list_countries){
 // $(document).on("click", "#btn-filter-group-f", load_search_group_modal);
 
 load_search_group_modal = function(){
-  // clean the modal //
   try{
     $("#modalFilterGroup").find("#groups_countries2").empty();
     $("#modalFilterGroup").find("#groups_variables2").empty();
@@ -504,6 +505,7 @@ load_search_group_modal = function(){
     available_regions_group();
   }
   catch(e){
+    console.log(e);
     $.notify(
         {
             message: `Problem loading the Filter for the groups of views`
@@ -549,353 +551,6 @@ $(document).on("click", "#btn-key-update-variables", function(){
 
 });
 
-available_regions_group = function(){
-  try{
-    let arrayActual_group=actual_group.split('=')[1];
-    let group_obj = {
-      'group': arrayActual_group
-    };
-    $("#KeywordLoading2").removeClass("hidden");
-    $.ajax({
-      type: "POST",
-      url: `available-regions/`,
-      dataType: "JSON",
-      data: group_obj,
-
-      success: function(data){
-        try{
-          countries_available = data['countries']
-          const chunk = (arr, size) =>
-            Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-              arr.slice(i * size, i * size + size)
-            );
-          let arr=chunk(countries_available, 2);
-
-          var HSTableHtml =
-              `<table id="data-table2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
-
-            arr.forEach(l_arr => {
-              HSTableHtml +=  '<tr class="odd gradeX">'
-              l_arr.forEach(i =>{
-                let new_i = i.replace(/ /g,"_");
-                HSTableHtml +=  `<td><input type="checkbox" class="filter_check" name="countries" value=${new_i} /> ${i}</td>`;
-              })
-
-                  HSTableHtml += '</tr>';
-            })
-
-
-            HSTableHtml += "</tbody></table>"
-          $("#modalFilterGroup").find("#groups_countries2").html(HSTableHtml);
-          $("#KeywordLoading2").addClass("hidden");
-
-        }
-        catch(e){
-          $("#KeywordLoading2").addClass("hidden");
-          $.notify(
-              {
-                message: `There was an retriving the regions available in the WaterOneFlow web service`
-
-              },
-              {
-                  type: "danger",
-                  allow_dismiss: true,
-                  z_index: 20000,
-                  delay: 5000,
-                  animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-                  },
-                  onShow: function() {
-                      this.css({'width':'auto','height':'auto'});
-                  }
-              }
-          )
-        }
-
-      },
-      error: function(error){
-        $("#KeywordLoading2").addClass("hidden");
-        $.notify(
-            {
-                message: `There was an retriving the regions available in the WaterOneFlow web service`
-
-            },
-            {
-                type: "danger",
-                allow_dismiss: true,
-                z_index: 20000,
-                delay: 5000,
-                animate: {
-                  enter: 'animated fadeInRight',
-                  exit: 'animated fadeOutRight'
-                },
-                onShow: function() {
-                    this.css({'width':'auto','height':'auto'});
-                }
-            }
-        )
-      }
-
-    })
-  }
-  catch (error){
-    $("#KeywordLoading2").addClass("hidden")
-
-    $.notify(
-        {
-          message: `We are having a problem to recognize the actual group for the request`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-
-}
-
-listener_checkbox_group = function(list_countries){
-  try{
-    let arrayActual_group=actual_group.split('=')[1];
-    let le_object = {
-      "countries": list_countries,
-      "group":arrayActual_group
-    };
-    $("#KeywordLoading2").removeClass("hidden")
-
-    $.ajax({
-      type: "POST",
-      url: `get-variables-for-country/`,
-      dataType: "JSON",
-      data: le_object,
-
-      success: function(data){
-        try{
-          $("#modalFilterGroup").find("#groups_variables2").empty();
-          variables_list = data['variables'];
-          const chunk = (arr, size) =>
-            Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-              arr.slice(i * size, i * size + size)
-            );
-          let arr=chunk(variables_list, 2);
-
-          var HSTableHtml =
-              `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
-
-            arr.forEach(l_arr => {
-              HSTableHtml +=  '<tr class="odd gradeX">'
-              l_arr.forEach(i =>{
-                let new_i = i.replace(/ /g,"_");
-                let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
-
-                HSTableHtml +=  `<td id =${new_i2}_td2 ><input type="checkbox" class="filter_check" name="variables" value=${new_i} /> ${i}</td>`;
-
-              })
-
-                  HSTableHtml += '</tr>';
-            })
-
-            HSTableHtml += "</tbody></table>"
-          $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
-
-          $("#KeywordLoading2").addClass("hidden");
-
-        }
-        catch(e){
-          $("#KeywordLoading2").addClass("hidden");
-          $.notify(
-              {
-                  message: `There was an error trying to find the variables for the selected country`
-              },
-              {
-                  type: "danger",
-                  allow_dismiss: true,
-                  z_index: 20000,
-                  delay: 5000,
-                  animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-                  },
-                  onShow: function() {
-                      this.css({'width':'auto','height':'auto'});
-                  }
-              }
-          )
-        }
-
-      },
-      error: function(error){
-        $("#KeywordLoading2").addClass("hidden");
-        $.notify(
-            {
-                message: `There was an error trying to find the variables for the selected country`
-            },
-            {
-                type: "danger",
-                allow_dismiss: true,
-                z_index: 20000,
-                delay: 5000,
-                animate: {
-                  enter: 'animated fadeInRight',
-                  exit: 'animated fadeOutRight'
-                },
-                onShow: function() {
-                    this.css({'width':'auto','height':'auto'});
-                }
-            }
-        )
-      }
-
-    })
-  }
-  catch (error){
-    $("#KeywordLoading2").addClass("hidden")
-
-    $.notify(
-        {
-            message: `There was an retriving the input data from the Web Service`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-
-}
-
-show_variables_group = function(){
-  try{
-    let arrayActual_group=actual_group.split('=')[1];
-    let group_obj = {
-      'group': arrayActual_group
-    };
-    $("#KeywordLoading2").removeClass("hidden");
-    $.ajax({
-      type: "POST",
-      url: `available-variables/`,
-      dataType: "JSON",
-      data: group_obj,
-      success: function(data){
-        try{
-          variables_list = data['variables'];
-          const chunk = (arr, size) =>
-            Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-              arr.slice(i * size, i * size + size)
-            );
-          let arr=chunk(variables_list, 2);
-
-          var HSTableHtml =
-              `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
-
-            arr.forEach(l_arr => {
-              HSTableHtml +=  '<tr class="odd gradeX">'
-              l_arr.forEach(i =>{
-                let new_i = i.replace(/ /g,"_");
-                let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
-
-                HSTableHtml +=  `<td id =${new_i2}_td2 ><input type="checkbox" class="filter_check" name="variables" value=${new_i} /> ${i}</td>`;
-
-              })
-
-                  HSTableHtml += '</tr>';
-            })
-
-            HSTableHtml += "</tbody></table>"
-          $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
-          $("#KeywordLoading2").addClass("hidden");
-        }
-        catch(e){
-          $("#KeywordLoading2").addClass("hidden");
-          $.notify(
-              {
-                  message: `There was an error retrieving the variables from the selected group Web Service`
-              },
-              {
-                  type: "danger",
-                  allow_dismiss: true,
-                  z_index: 20000,
-                  delay: 5000,
-                  animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-                  },
-                  onShow: function() {
-                      this.css({'width':'auto','height':'auto'});
-                  }
-              }
-          )
-        }
-
-
-      },
-      error: function(error){
-        $("#KeywordLoading2").addClass("hidden");
-        $.notify(
-            {
-                message: `There was an error retrieving the variables from the selected group Web Service`
-            },
-            {
-                type: "danger",
-                allow_dismiss: true,
-                z_index: 20000,
-                delay: 5000,
-                animate: {
-                  enter: 'animated fadeInRight',
-                  exit: 'animated fadeOutRight'
-                },
-                onShow: function() {
-                    this.css({'width':'auto','height':'auto'});
-                }
-            }
-        )
-      }
-
-    })
-  }
-  catch (error){
-    $("#KeywordLoading2").addClass("hidden")
-    $.notify(
-        {
-            message: `There was an retriving the input data from the Web Service`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-}
-
-
 add_hydroserver_for_groups= function(hs_object,actual_group_name){
   try{
     let url_single = hs_object['url'];
@@ -917,7 +572,6 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
           url:url_request,
           dataType: "text",
           success: function(xmlData){
-            // console.log(xmlData);
             try{
               let parsedObject = getSitesHelper(xmlData);
               console.log(parsedObject);
@@ -936,13 +590,10 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
                 dataType: "JSON",
                 data: requestObject,
                 success:function(result){
-                  console.log(result);
                   try{
                     //Returning the geoserver layer metadata from the controller
                     var json_response = result
                     let group_name = actual_group_name;
-                    // let id_group_separator = `${group_name}_list_separator`;
-
                     let group_name_e3;
                     Object.keys(id_dictionary).forEach(function(key) {
                       if(id_dictionary[key] == group_name ){
@@ -956,7 +607,6 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
 
                     // put the ajax call and also the filter //
                     let servers_with_keywords = [];
-                    let key_words_to_search = get_all_the_checked_keywords();
 
                     $(`#${group_name_e3}-noGroups`).hide();
 
@@ -1194,10 +844,6 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
 
 }
 
-/*
-************ FUNCTION NAME : CREATE_GROUP_HYDROSERVERS
-************ PURPOSE : CREATES A GROUP OF HYDRSOERVERS AND ADDS IT TO THE MENU
-*/
 create_group_hydroservers = function(){
   try{
     //CHECKS IF THE INPUT IS EMPTY ///
@@ -1265,11 +911,10 @@ create_group_hydroservers = function(){
         success: function(result) {
             //Returning the geoserver layer metadata from the controller
             try{
-              var json_response = JSON.parse(result)
-
-              let group=json_response
-              let title=group.title;
-              let description=group.description;
+              var json_response = JSON.parse(result);
+              let group = json_response;
+              let title = group.title;
+              let description = group.description;
               information_model[`${title}`] = [];
               let new_title = unique_id_group;
 
@@ -1352,6 +997,7 @@ create_group_hydroservers = function(){
               tmp_hs_url = [];
             }
             catch(e){
+              console.log(e);
               $("soapAddLoading-group").addClass("hidden");
               $("#btn-add-addHydro").show();
               $.notify(
@@ -1376,6 +1022,7 @@ create_group_hydroservers = function(){
 
         },
         error: function(error) {
+          console.log(error);
             $("soapAddLoading-group").addClass("hidden");
             $("#btn-add-addHydro").show();
             $.notify(
@@ -1425,10 +1072,7 @@ create_group_hydroservers = function(){
 };
 
 $("#btn-add-addHydro").on("click", create_group_hydroservers);
-/*
-****** FU1NCTION NAME : load_group_hydroservers*********
-****** FUNCTION PURPOSE: LOADS THE GROUPS OF HYDROSERVERS THAT ARE THERE *********
-*/
+
 load_group_hydroservers = function(){
    $.ajax({
        type: "POST",
@@ -1498,6 +1142,7 @@ load_group_hydroservers = function(){
             })
           }
           catch(e){
+            console.log(e);
             $("#GeneralLoading").addClass("hidden")
             $.notify(
                 {
@@ -1522,6 +1167,7 @@ load_group_hydroservers = function(){
 
    },
    error: function(error) {
+     console.log(error);
        $("#GeneralLoading").addClass("hidden")
 
        $.notify(
@@ -1547,10 +1193,10 @@ load_group_hydroservers = function(){
  })
 }
 
- /*
- ****** FU1NCTION NAME : REMOVE_INDIVIDUAL_HYDROSERVERS_GROUPS *********
- ****** FUNCTION PURPOSE: MAKES THE LAYERS OF HYDROSERVERS AND THE GROUP TAG TO DISSAPEAR WHEN THE GROUP NAME IS UNCHECK*********
- */
+/*
+****** FU1NCTION NAME : REMOVE_INDIVIDUAL_HYDROSERVERS_GROUPS *********
+****** FUNCTION PURPOSE: MAKES THE LAYERS OF HYDROSERVERS AND THE GROUP TAG TO DISSAPEAR WHEN THE GROUP NAME IS UNCHECK*********
+*/
 remove_individual_hydroservers_group = function(group_name){
   try{
     let group_name_obj={
@@ -1592,6 +1238,7 @@ remove_individual_hydroservers_group = function(group_name){
             })
           }
           catch(e){
+            console.log(e);
             $.notify(
                 {
                     message: `We are having an error updating the interface, please reload the page`
@@ -1615,6 +1262,7 @@ remove_individual_hydroservers_group = function(group_name){
 
         },
         error: function(error) {
+          console.log(error);
             $.notify(
                 {
                     message: `We are having an error trying to delete the selected servers from the groups`
@@ -1637,6 +1285,7 @@ remove_individual_hydroservers_group = function(group_name){
     })
   }
   catch(error){
+    console.log(error);
     $.notify(
         {
             message: `We are having an error trying to recognize the actual group`
@@ -1703,6 +1352,7 @@ make_list_groups = function(){
     }
   }
   catch(error){
+    console.log(error);
     $.notify(
         {
             message: `We are having an error trying to make the list of groups in the application`
@@ -1725,7 +1375,6 @@ make_list_groups = function(){
 
 }
 $("#btn-del-groups-f").on("click", make_list_groups);
-
 
 /*
 ****** FUNCTION NAME: GET_HS_LIST_FROM_HYDROSERVER *********
@@ -1783,6 +1432,7 @@ get_hs_list_from_hydroserver = function(){
               }
             }
             catch(e){
+              console.log(e);
               $.notify(
                   {
                       message: `We are having an error trying to get the list of servers that are in the group`
@@ -1828,6 +1478,7 @@ get_hs_list_from_hydroserver = function(){
       })
   }
   catch(error){
+    console.log(error);
     $.notify(
         {
             message: `We are having an error trying to recognize the actual group`
@@ -1851,6 +1502,7 @@ get_hs_list_from_hydroserver = function(){
 
 }
 $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
+
 /*
 ****** FU1NCTION NAME : delete_group_of_hydroservers *********
 ****** FUNCTION PURPOSE: DELETES THE HYDROSERVER GROUP AND THE HYDROSERVERS INSIDE THE GROUP*********
@@ -2019,6 +1671,7 @@ delete_group_of_hydroservers = function(){
 
   }
   catch(err){
+    console.log(err);
     $.notify(
         {
             message: `We are having problems tryingto recognize the actual group`
@@ -2042,11 +1695,11 @@ delete_group_of_hydroservers = function(){
 }
 
 $("#btn-del-hydro-groups").on("click", delete_group_of_hydroservers);
+
 /*
 ************ FUNCTION NAME : GET_KEYWORDS_FROM_GROUPS
 ************ PURPOSE : THE FUNCTION LETS YOU FILTER THE HYDROSERVERS LIST FROM THE SELECTED GROUPS OF HYDROSERVERS
 */
-
 
 catalog_filter_regions = function(){
   var styles = {
@@ -2334,6 +1987,7 @@ catalog_filter_regions = function(){
       })
   }
   catch(error){
+    console.log(error);
     $("#KeywordLoading").addClass("hidden");
     $.notify(
         {
@@ -2357,8 +2011,885 @@ catalog_filter_regions = function(){
 }
 $("#btn-key-filter-only-country").on("click", catalog_filter_regions);
 
-//UNCOMMENT WHEN NEEDED LAS CATALOG_FILTER FUNCTIONS //
 
+catalog_filter_vars = function(){
+
+  try{
+    let elementForm= $("#modalKeyWordSearch");
+    let datastring= elementForm.serialize();
+    let vars_request = datastring.split("&variables=").slice(1);
+    $("#KeywordLoading").removeClass("hidden");
+    let array_for_sale = [];
+
+    //erase all the layers //
+    map.getLayers().forEach(function(layer) {
+      if(layer instanceof ol.layer.Vector){
+        layer.setStyle(new ol.style.Style({}));
+      }
+    });
+    if(layersDict['selectedPointModal']){
+      map.removeLayer(layersDict['selectedPointModal'])
+      map.updateSize()
+    }
+    if(layersDict['selectedPoint']){
+      map.removeLayer(layersDict['selectedPoint'])
+      map.updateSize()
+    }
+
+    // UNCHECK ALL THE LAYERS //
+    $("#current-Groupservers").find("li").each(function(){
+         var $li=$(this)['0'];
+         let id_li = $li['id'];
+         $(`#${id_li} input[type=checkbox]`).each(function() {
+           this.checked = false;
+         });
+    });
+    // MAKE THE BUTTON TO APPEAR //
+    $("#btn-r-reset").show()
+    $("#btn-r-reset").on("click", reset_keywords);
+    for(let i = 0; i< vars_request.length; ++i){
+      let url_temp = decodeURIComponent(vars_request[i].split('join')[1]);
+      let var_temp = vars_request[i].split('join')[0];
+      let server_name = vars_request[i].split('join')[2];
+
+      Object.keys(urls_servers).forEach(function(key) {
+        let url_testing = urls_servers[key];
+        let url2_request = `${url_testing.split("?")[0]}/GetSites?variableCode=${var_temp}`
+        $.ajax({
+            type: "GET",
+            url: url2_request,
+            dataType: "text",
+            success:function(xmlData){
+              $("#KeywordLoading").removeClass("hidden");
+              array_for_sale.push(xmlData);
+              let sites = getSitesFilterHelper(xmlData);
+                let title = server_name;
+                let url = url_temp;
+
+                //ADD LAYERS
+                var vectorLayer = map_layers(sites,title,url)[0]
+                var vectorSource = map_layers(sites,title,url)[1]
+                map.addLayer(vectorLayer)
+                vectorLayer.set("selectable", true)
+                layer_object_filter[title] = vectorLayer;
+
+                $("#current-Groupservers").find("li").each(function(){
+                      var $li=$(this)['0'];
+                      let id_li = $li['id'];
+                      // console.log(id_li)
+                      // console.log(server_name)
+                      let hs_new2;
+                      Object.keys(id_dictionary).forEach(function(key) {
+                        if(id_dictionary[key] == server_name ){
+                          hs_new2 = key;
+                        }
+                      });
+                      if(hs_new2 == id_li){
+                        $(`#${id_li}`).css({"opacity": "1",
+                                            "border-color": "#ac2925",
+                                            "border-width": "2px",
+                                            "border-style": "solid",
+                                            "color": "black",
+                                            "font-weight": "bold"});
+                        $(`#${id_li} input[type=checkbox]`).each(function() {
+                          this.checked = true;
+                        });
+
+                      }
+                      else{
+                        let groups_divs = Object.keys(information_model);
+                        let groups_divs_3e = []
+                        groups_divs.forEach(function(g3){
+                          let g_new2;
+                          Object.keys(id_dictionary).forEach(function(key) {
+                            if(id_dictionary[key] == g3 ){
+                              g_new2 = key;
+                            }
+                          });
+                          groups_divs_3e.push(g_new2);
+                        })
+                        groups_divs = groups_divs_3e
+                        if (!groups_divs.includes(id_li)){
+                          $(`#${id_li}`).css({"opacity": "0.5",
+                                               "border-color": "#d3d3d3",
+                                               "border-width":"1px",
+                                               "border-style":"solid",
+                                               "color":"#555555",
+                                               "font-weight": "normal"});
+                        }
+                      }
+                   });
+
+                   let groups_divs = Object.keys(information_model);
+
+                   for(let i=0; i< groups_divs.length; ++i){
+                     let check_all = []
+                     for(let j=0; j< information_model[groups_divs[i]].length; ++j){
+
+                       let service_div = information_model[groups_divs[i]][j];
+                       let new_service_div;
+                       Object.keys(id_dictionary).forEach(function(key) {
+                         if(id_dictionary[key] == service_div ){
+                           new_service_div = key;
+                         }
+                       });
+                       $(`#${new_service_div} input[type=checkbox]`).each(function(){
+                         if(this.checked){
+                           check_all.push(true);
+                         }
+                         else{
+                           check_all.push(false);
+                         }
+                       });
+                     }
+                     if(!check_all.includes(false) && check_all.length > 0){
+                       let groups_divs_3e = []
+                       groups_divs.forEach(function(g3){
+                         let g_new2;
+                         Object.keys(id_dictionary).forEach(function(key) {
+                           if(id_dictionary[key] == g3 ){
+                             g_new2 = key;
+                           }
+                         });
+                         groups_divs_3e.push(g_new2);
+                       })
+
+                       $(`#${groups_divs_3e[i]} input[type=checkbox]`).each(function() {
+                         this.checked = true;
+                       });
+                     }
+                   }
+                   $("#KeywordLoading").addClass("hidden");
+
+            },
+            error: function(error) {
+              console.log(error);
+              $("#KeywordLoading").addClass("hidden");
+
+              $.notify(
+                  {
+                      message: `Something were wrong when filtering the web services by variable`
+                  },
+                  {
+                      type: "danger",
+                      allow_dismiss: true,
+                      z_index: 20000,
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
+                  }
+              )
+            }
+          })
+
+      });
+
+    }
+
+  }
+  catch(error){
+    console.log(error);
+    $("#KeywordLoading").addClass("hidden");
+    $.notify(
+        {
+            message: `We are having a problem trying to retrieve the regions to filter the groups`
+        },
+        {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
+        }
+    )
+  }
+}
+$("#btn-key-filter-only-variables").on("click", catalog_filter_vars);
+
+reset_keywords = function(){
+  try{
+    $('#btn-r-reset').hide();
+    Object.keys(information_model).forEach(function(key) {
+
+          for(let i = 0; i< information_model[key].length; ++i){
+            if (layer_object_filter.hasOwnProperty(information_model[key][i])){
+              map.removeLayer(layer_object_filter[information_model[key][i]])
+              if(layersDict.hasOwnProperty(information_model[key][i])){
+                map.getLayers().forEach(function(layer) {
+                     if(layer instanceof ol.layer.Vector && layer == layersDict[information_model[key][i]]){
+                       layer.setStyle(featureStyle(layerColorDict[information_model[key][i]]));
+                       }
+                 });
+              }
+            }
+          }
+
+
+    });
+    map.removeLayer(layer_selected_countries['countries']);
+
+    layer_object_filter={};
+
+
+    $("#current-Groupservers").find("li").each(function(){
+          var $li=$(this)['0'];
+          let id_li = $li['id'];
+
+          $(`#${id_li}`).css({"opacity": "1",
+                              "border-color": "#d3d3d3",
+                              "border-width":"1px",
+                              "border-style":"solid",
+                              "color":"#555555",
+                              "font-weight": "normal"});
+
+
+   });
+  }
+  catch(error){
+    $.notify(
+        {
+            message: `There is a problem reseting the fitler`
+        },
+        {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
+        }
+    )
+  }
+}
+
+$("#btn-r-reset").on("click", reset_keywords);
+$("#btn-r-reset-catalog").on("click", reset_keywords);
+
+load_info_model = function(){
+  try{
+    var HSTableHtml = ''
+      Object.keys(information_model).forEach(function(key) {
+      HSTableHtml +=
+        `<h4 id="titleSite">${key}</h4>`
+      information_model[key].forEach(function(serviceView){
+        HSTableHtml +=
+        `<p class= "fakeRow">${serviceView}</p>`
+      })
+    });
+
+    $("#modalKeyWordSearch").find("#groups_services").html(HSTableHtml);
+  }
+  catch(error){
+    console.log(error);
+  }
+
+}
+
+load_search_modal = function(){
+  try{
+    load_info_model();
+    show_variables_groups();
+    available_regions();
+  }
+  catch(error){
+    console.log(error);
+    $.notify(
+        {
+            message: `We are having an error trying to load the menu`
+        },
+        {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
+        }
+    )
+  }
+
+
+}
+$("#btn-filter-groups-f").on("click", load_search_modal);
+
+searchGroups = function() {
+  try{
+    general_search("myInputKeyword","data-table");
+  }
+  catch(error){
+    console.log(error);
+  }
+}
+document.getElementById('myInputKeyword').addEventListener("keyup", searchGroups);
+
+searchVariables = function() {
+  try{
+    general_search("myInputKeyword2","data-table-var");
+
+  }
+  catch(error){
+    console.log(error);
+  }
+}
+document.getElementById('myInputKeyword2').addEventListener("keyup", searchVariables);
+
+// for only one group
+searchGroups_group = function() {
+  try{
+    general_search("myInputKeywordGroup","data-table2");
+  }
+  catch(error){
+    console.log(error);
+  }
+}
+document.getElementById('myInputKeywordGroup').addEventListener("keyup", searchGroups_group);
+
+searchVariablesGroup = function() {
+  try{
+    general_search("myInputKeywordGroup2","data-table-var2");
+  }
+  catch(error){
+    console.log(error);
+  }
+}
+document.getElementById('myInputKeywordGroup2').addEventListener("keyup", searchVariablesGroup);
+
+general_search = function(id_search_input, id_table){
+  try{
+    input = document.getElementById(`${id_search_input}`);
+    filter = input.value.toUpperCase();
+    table = document.getElementById(`${id_table}`);
+
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+  catch(error){
+    console.log(error);
+    $.notify(
+        {
+            message: `We are having a problem trying doing the search `
+        },
+        {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 20000,
+            delay: 5000,
+            animate: {
+              enter: 'animated fadeInRight',
+              exit: 'animated fadeOutRight'
+            },
+            onShow: function() {
+                this.css({'width':'auto','height':'auto'});
+            }
+        }
+    )
+  }
+
+}
+// available_regions_group = function(){
+//   try{
+//     let arrayActual_group=actual_group.split('=')[1];
+//     let group_obj = {
+//       'group': arrayActual_group
+//     };
+//     $("#KeywordLoading2").removeClass("hidden");
+//     $.ajax({
+//       type: "POST",
+//       url: `available-regions/`,
+//       dataType: "JSON",
+//       data: group_obj,
+//
+//       success: function(data){
+//         try{
+//           countries_available = data['countries']
+//           const chunk = (arr, size) =>
+//             Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+//               arr.slice(i * size, i * size + size)
+//             );
+//           let arr=chunk(countries_available, 2);
+//
+//           var HSTableHtml =
+//               `<table id="data-table2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+//
+//             arr.forEach(l_arr => {
+//               HSTableHtml +=  '<tr class="odd gradeX">'
+//               l_arr.forEach(i =>{
+//                 let new_i = i.replace(/ /g,"_");
+//                 HSTableHtml +=  `<td><input type="checkbox" class="filter_check" name="countries" value=${new_i} /> ${i}</td>`;
+//               })
+//
+//                   HSTableHtml += '</tr>';
+//             })
+//
+//
+//             HSTableHtml += "</tbody></table>"
+//           $("#modalFilterGroup").find("#groups_countries2").html(HSTableHtml);
+//           $("#KeywordLoading2").addClass("hidden");
+//
+//         }
+//         catch(e){
+//           console.log(e);
+//           $("#KeywordLoading2").addClass("hidden");
+//           $.notify(
+//               {
+//                 message: `There was an retriving the regions available in the WaterOneFlow web service`
+//
+//               },
+//               {
+//                   type: "danger",
+//                   allow_dismiss: true,
+//                   z_index: 20000,
+//                   delay: 5000,
+//                   animate: {
+//                     enter: 'animated fadeInRight',
+//                     exit: 'animated fadeOutRight'
+//                   },
+//                   onShow: function() {
+//                       this.css({'width':'auto','height':'auto'});
+//                   }
+//               }
+//           )
+//         }
+//
+//       },
+//       error: function(error){
+//         console.log(error);
+//         $("#KeywordLoading2").addClass("hidden");
+//         $.notify(
+//             {
+//                 message: `There was an retriving the regions available in the WaterOneFlow web service`
+//
+//             },
+//             {
+//                 type: "danger",
+//                 allow_dismiss: true,
+//                 z_index: 20000,
+//                 delay: 5000,
+//                 animate: {
+//                   enter: 'animated fadeInRight',
+//                   exit: 'animated fadeOutRight'
+//                 },
+//                 onShow: function() {
+//                     this.css({'width':'auto','height':'auto'});
+//                 }
+//             }
+//         )
+//       }
+//
+//     })
+//   }
+//   catch (error){
+//     console.log(error);
+//     $("#KeywordLoading2").addClass("hidden")
+//     $.notify(
+//         {
+//           message: `We are having a problem to recognize the actual group for the request`
+//         },
+//         {
+//             type: "danger",
+//             allow_dismiss: true,
+//             z_index: 20000,
+//             delay: 5000,
+//             animate: {
+//               enter: 'animated fadeInRight',
+//               exit: 'animated fadeOutRight'
+//             },
+//             onShow: function() {
+//                 this.css({'width':'auto','height':'auto'});
+//             }
+//         }
+//     )
+//   }
+//
+// }
+//
+// listener_checkbox_group = function(list_countries){
+//   try{
+//     let arrayActual_group=actual_group.split('=')[1];
+//     let le_object = {
+//       "countries": list_countries,
+//       "group":arrayActual_group
+//     };
+//     $("#KeywordLoading2").removeClass("hidden")
+//
+//     $.ajax({
+//       type: "POST",
+//       url: `get-variables-for-country/`,
+//       dataType: "JSON",
+//       data: le_object,
+//
+//       success: function(data){
+//         try{
+//           $("#modalFilterGroup").find("#groups_variables2").empty();
+//           variables_list = data['variables'];
+//           const chunk = (arr, size) =>
+//             Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+//               arr.slice(i * size, i * size + size)
+//             );
+//           let arr=chunk(variables_list, 2);
+//
+//           var HSTableHtml =
+//               `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+//
+//             arr.forEach(l_arr => {
+//               HSTableHtml +=  '<tr class="odd gradeX">'
+//               l_arr.forEach(i =>{
+//                 let new_i = i.replace(/ /g,"_");
+//                 let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+//
+//                 HSTableHtml +=  `<td id =${new_i2}_td2 ><input type="checkbox" class="filter_check" name="variables" value=${new_i} /> ${i}</td>`;
+//
+//               })
+//
+//                   HSTableHtml += '</tr>';
+//             })
+//
+//             HSTableHtml += "</tbody></table>"
+//           $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
+//
+//           $("#KeywordLoading2").addClass("hidden");
+//
+//         }
+//         catch(e){
+//           console.log(e);
+//           $("#KeywordLoading2").addClass("hidden");
+//           $.notify(
+//               {
+//                   message: `There was an error trying to find the variables for the selected country`
+//               },
+//               {
+//                   type: "danger",
+//                   allow_dismiss: true,
+//                   z_index: 20000,
+//                   delay: 5000,
+//                   animate: {
+//                     enter: 'animated fadeInRight',
+//                     exit: 'animated fadeOutRight'
+//                   },
+//                   onShow: function() {
+//                       this.css({'width':'auto','height':'auto'});
+//                   }
+//               }
+//           )
+//         }
+//
+//       },
+//       error: function(error){
+//         console.log(error);
+//         $("#KeywordLoading2").addClass("hidden");
+//         $.notify(
+//             {
+//                 message: `There was an error trying to find the variables for the selected country`
+//             },
+//             {
+//                 type: "danger",
+//                 allow_dismiss: true,
+//                 z_index: 20000,
+//                 delay: 5000,
+//                 animate: {
+//                   enter: 'animated fadeInRight',
+//                   exit: 'animated fadeOutRight'
+//                 },
+//                 onShow: function() {
+//                     this.css({'width':'auto','height':'auto'});
+//                 }
+//             }
+//         )
+//       }
+//
+//     })
+//   }
+//   catch (error){
+//     console.log(error);
+//     $("#KeywordLoading2").addClass("hidden")
+//
+//     $.notify(
+//         {
+//             message: `There was an retriving the input data from the Web Service`
+//         },
+//         {
+//             type: "danger",
+//             allow_dismiss: true,
+//             z_index: 20000,
+//             delay: 5000,
+//             animate: {
+//               enter: 'animated fadeInRight',
+//               exit: 'animated fadeOutRight'
+//             },
+//             onShow: function() {
+//                 this.css({'width':'auto','height':'auto'});
+//             }
+//         }
+//     )
+//   }
+//
+// }
+//
+// show_variables_group = function(){
+//   try{
+//     let arrayActual_group=actual_group.split('=')[1];
+//     let group_obj = {
+//       'group': arrayActual_group
+//     };
+//     $("#KeywordLoading2").removeClass("hidden");
+//     $.ajax({
+//       type: "POST",
+//       url: `available-variables/`,
+//       dataType: "JSON",
+//       data: group_obj,
+//       success: function(data){
+//         try{
+//           variables_list = data['variables'];
+//           const chunk = (arr, size) =>
+//             Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+//               arr.slice(i * size, i * size + size)
+//             );
+//           let arr=chunk(variables_list, 2);
+//
+//           var HSTableHtml =
+//               `<table id="data-table-var2" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
+//
+//             arr.forEach(l_arr => {
+//               HSTableHtml +=  '<tr class="odd gradeX">'
+//               l_arr.forEach(i =>{
+//                 let new_i = i.replace(/ /g,"_");
+//                 let new_i2 = i.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+//
+//                 HSTableHtml +=  `<td id =${new_i2}_td2 ><input type="checkbox" class="filter_check" name="variables" value=${new_i} /> ${i}</td>`;
+//
+//               })
+//
+//                   HSTableHtml += '</tr>';
+//             })
+//
+//             HSTableHtml += "</tbody></table>"
+//           $("#modalFilterGroup").find("#groups_variables2").html(HSTableHtml);
+//           $("#KeywordLoading2").addClass("hidden");
+//         }
+//         catch(e){
+//           console.log(e);
+//           $("#KeywordLoading2").addClass("hidden");
+//           $.notify(
+//               {
+//                   message: `There was an error retrieving the variables from the selected group Web Service`
+//               },
+//               {
+//                   type: "danger",
+//                   allow_dismiss: true,
+//                   z_index: 20000,
+//                   delay: 5000,
+//                   animate: {
+//                     enter: 'animated fadeInRight',
+//                     exit: 'animated fadeOutRight'
+//                   },
+//                   onShow: function() {
+//                       this.css({'width':'auto','height':'auto'});
+//                   }
+//               }
+//           )
+//         }
+//
+//
+//       },
+//       error: function(error){
+//         console.log(error);
+//         $("#KeywordLoading2").addClass("hidden");
+//         $.notify(
+//             {
+//                 message: `There was an error retrieving the variables from the selected group Web Service`
+//             },
+//             {
+//                 type: "danger",
+//                 allow_dismiss: true,
+//                 z_index: 20000,
+//                 delay: 5000,
+//                 animate: {
+//                   enter: 'animated fadeInRight',
+//                   exit: 'animated fadeOutRight'
+//                 },
+//                 onShow: function() {
+//                     this.css({'width':'auto','height':'auto'});
+//                 }
+//             }
+//         )
+//       }
+//
+//     })
+//   }
+//   catch (error){
+//     console.log(error);
+//     $("#KeywordLoading2").addClass("hidden")
+//     $.notify(
+//         {
+//             message: `There was an retriving the input data from the Web Service`
+//         },
+//         {
+//             type: "danger",
+//             allow_dismiss: true,
+//             z_index: 20000,
+//             delay: 5000,
+//             animate: {
+//               enter: 'animated fadeInRight',
+//               exit: 'animated fadeOutRight'
+//             },
+//             onShow: function() {
+//                 this.css({'width':'auto','height':'auto'});
+//             }
+//         }
+//     )
+//   }
+// }
+
+// catalog_filter_server = function(){
+//   try{
+//     let elementForm= $("#modalFilterGroup");
+//     let datastring= elementForm.serialize();
+//     datastring += actual_group;
+//     $("#KeywordLoading2").removeClass("hidden");
+//
+//     $.ajax({
+//         type: "POST",
+//         url: `catalog-filter/`,
+//         dataType: "HTML",
+//         data: datastring,
+//         success: function(result) {
+//           try{
+//             let check_for_none = []
+//             let hs_available = JSON.parse(result)['hs'];
+//             let arrayActual_group=actual_group.split('=')[1];
+//             $(`#${arrayActual_group}_list_separator`).find("li").each(function()
+//                {
+//                   var $li=$(this)['0'];
+//                   let id_li = $li['id'];
+//                   if(hs_available.includes(id_li)){
+//                     $(`#${id_li}`).css({"opacity": "1",
+//                                         "border-color": "#ac2925",
+//                                         "border-width": "2px",
+//                                         "border-style": "solid",
+//                                         "color": "black",
+//                                         "font-weight": "bold"});
+//
+//                   }
+//                   else{
+//
+//                     $(`#${id_li}`).css({"opacity": "0.5",
+//                                         "border-color": "#d3d3d3",
+//                                         "border-width":"1px",
+//                                         "border-style":"solid",
+//                                         "color":"#555555",
+//                                         "font-weight": "normal"});
+//                   }
+//                });
+//
+//                $("#KeywordLoading2").addClass("hidden");
+//           }
+//           catch(e){
+//             $("#KeywordLoading2").addClass("hidden");
+//
+//             $.notify(
+//                 {
+//                     message: `Something were wrong when applying the filter with variables and regions`
+//                 },
+//                 {
+//                     type: "danger",
+//                     allow_dismiss: true,
+//                     z_index: 20000,
+//                     delay: 5000,
+//                     animate: {
+//                       enter: 'animated fadeInRight',
+//                       exit: 'animated fadeOutRight'
+//                     },
+//                     onShow: function() {
+//                         this.css({'width':'auto','height':'auto'});
+//                     }
+//                 }
+//             )
+//           }
+//
+//
+//         },
+//         error: function(error) {
+//           $("#KeywordLoading2").addClass("hidden");
+//
+//           $.notify(
+//               {
+//                   message: `Something were wrong when applying the filter with variables and regions`
+//               },
+//               {
+//                   type: "danger",
+//                   allow_dismiss: true,
+//                   z_index: 20000,
+//                   delay: 5000,
+//                   animate: {
+//                     enter: 'animated fadeInRight',
+//                     exit: 'animated fadeOutRight'
+//                   },
+//                   onShow: function() {
+//                       this.css({'width':'auto','height':'auto'});
+//                   }
+//               }
+//           )
+//
+//         }
+//
+//       })
+//   }
+//   catch(error){
+//     $("#KeywordLoading2").addClass("hidden");
+//     $.notify(
+//         {
+//             message: `We are having a problem trying to retrieve the regions to filter the groups`
+//         },
+//         {
+//             type: "danger",
+//             allow_dismiss: true,
+//             z_index: 20000,
+//             delay: 5000,
+//             animate: {
+//               enter: 'animated fadeInRight',
+//               exit: 'animated fadeOutRight'
+//             },
+//             onShow: function() {
+//                 this.css({'width':'auto','height':'auto'});
+//             }
+//         }
+//     )
+//   }
+// }
+// $("#btn-key-search-catalog").on("click", catalog_filter_server);
+
+//UNCOMMENT WHEN NEEDED LAS CATALOG_FILTER FUNCTIONS //
 // catalog_filter = function(){
 //   var styles = {
 //     'MultiPolygon': [new ol.style.Style({
@@ -2667,608 +3198,3 @@ $("#btn-key-filter-only-country").on("click", catalog_filter_regions);
 //   }
 // }
 // $("#btn-key-search").on("click", catalog_filter);
-
-catalog_filter_vars = function(){
-
-  try{
-    let elementForm= $("#modalKeyWordSearch");
-    let datastring= elementForm.serialize();
-    console.log(datastring);
-    let vars_request = datastring.split("&variables=").slice(1);
-    console.log(vars_request);
-    $("#KeywordLoading").removeClass("hidden");
-    let array_for_sale = [];
-
-    //erase all the layers //
-    map.getLayers().forEach(function(layer) {
-      if(layer instanceof ol.layer.Vector){
-        layer.setStyle(new ol.style.Style({}));
-      }
-    });
-    if(layersDict['selectedPointModal']){
-      map.removeLayer(layersDict['selectedPointModal'])
-      map.updateSize()
-    }
-    if(layersDict['selectedPoint']){
-      map.removeLayer(layersDict['selectedPoint'])
-      map.updateSize()
-    }
-
-    // UNCHECK ALL THE LAYERS //
-    $("#current-Groupservers").find("li").each(function(){
-         var $li=$(this)['0'];
-         let id_li = $li['id'];
-         $(`#${id_li} input[type=checkbox]`).each(function() {
-           this.checked = false;
-         });
-    });
-    // MAKE THE BUTTON TO APPEAR //
-    $("#btn-r-reset").show()
-    $("#btn-r-reset").on("click", reset_keywords);
-    for(let i = 0; i< vars_request.length; ++i){
-      let url_temp = decodeURIComponent(vars_request[i].split('join')[1]);
-      let var_temp = vars_request[i].split('join')[0];
-      let server_name = vars_request[i].split('join')[2];
-
-      Object.keys(urls_servers).forEach(function(key) {
-        let url_testing = urls_servers[key];
-        let url2_request = `${url_testing.split("?")[0]}/GetSites?variableCode=${var_temp}`
-        $.ajax({
-            type: "GET",
-            url: url2_request,
-            dataType: "text",
-            success:function(xmlData){
-              $("#KeywordLoading").removeClass("hidden");
-              // console.log(xmlData);
-              array_for_sale.push(xmlData);
-              // console.log(array_for_sale);
-              let sites = getSitesFilterHelper(xmlData);
-              console.log(sites);
-                let title = server_name;
-                let url = url_temp;
-
-                //ADD LAYERS
-                var vectorLayer = map_layers(sites,title,url)[0]
-                var vectorSource = map_layers(sites,title,url)[1]
-                map.addLayer(vectorLayer)
-                vectorLayer.set("selectable", true)
-                layer_object_filter[title] = vectorLayer;
-
-                $("#current-Groupservers").find("li").each(function(){
-                      var $li=$(this)['0'];
-                      let id_li = $li['id'];
-                      // console.log(id_li)
-                      // console.log(server_name)
-                      let hs_new2;
-                      Object.keys(id_dictionary).forEach(function(key) {
-                        if(id_dictionary[key] == server_name ){
-                          hs_new2 = key;
-                        }
-                      });
-                      if(hs_new2 == id_li){
-                        $(`#${id_li}`).css({"opacity": "1",
-                                            "border-color": "#ac2925",
-                                            "border-width": "2px",
-                                            "border-style": "solid",
-                                            "color": "black",
-                                            "font-weight": "bold"});
-                        $(`#${id_li} input[type=checkbox]`).each(function() {
-                          this.checked = true;
-                        });
-
-                      }
-                      else{
-                        let groups_divs = Object.keys(information_model);
-                        let groups_divs_3e = []
-                        groups_divs.forEach(function(g3){
-                          let g_new2;
-                          Object.keys(id_dictionary).forEach(function(key) {
-                            if(id_dictionary[key] == g3 ){
-                              g_new2 = key;
-                            }
-                          });
-                          groups_divs_3e.push(g_new2);
-                        })
-                        groups_divs = groups_divs_3e
-                        if (!groups_divs.includes(id_li)){
-                          $(`#${id_li}`).css({"opacity": "0.5",
-                                               "border-color": "#d3d3d3",
-                                               "border-width":"1px",
-                                               "border-style":"solid",
-                                               "color":"#555555",
-                                               "font-weight": "normal"});
-                        }
-                      }
-                   });
-
-                   let groups_divs = Object.keys(information_model);
-
-                   for(let i=0; i< groups_divs.length; ++i){
-                     let check_all = []
-                     for(let j=0; j< information_model[groups_divs[i]].length; ++j){
-
-                       let service_div = information_model[groups_divs[i]][j];
-                       let new_service_div;
-                       Object.keys(id_dictionary).forEach(function(key) {
-                         if(id_dictionary[key] == service_div ){
-                           new_service_div = key;
-                         }
-                       });
-                       $(`#${new_service_div} input[type=checkbox]`).each(function(){
-                         if(this.checked){
-                           check_all.push(true);
-                         }
-                         else{
-                           check_all.push(false);
-                         }
-                       });
-                     }
-                     if(!check_all.includes(false) && check_all.length > 0){
-                       let groups_divs_3e = []
-                       groups_divs.forEach(function(g3){
-                         let g_new2;
-                         Object.keys(id_dictionary).forEach(function(key) {
-                           if(id_dictionary[key] == g3 ){
-                             g_new2 = key;
-                           }
-                         });
-                         groups_divs_3e.push(g_new2);
-                       })
-
-                       $(`#${groups_divs_3e[i]} input[type=checkbox]`).each(function() {
-                         this.checked = true;
-                       });
-                     }
-                   }
-                   $("#KeywordLoading").addClass("hidden");
-
-            },
-            error: function(error) {
-              console.log(error);
-              $("#KeywordLoading").addClass("hidden");
-
-              $.notify(
-                  {
-                      message: `Something were wrong when filtering the web services by variable`
-                  },
-                  {
-                      type: "danger",
-                      allow_dismiss: true,
-                      z_index: 20000,
-                      delay: 5000,
-                      animate: {
-                        enter: 'animated fadeInRight',
-                        exit: 'animated fadeOutRight'
-                      },
-                      onShow: function() {
-                          this.css({'width':'auto','height':'auto'});
-                      }
-                  }
-              )
-            }
-          })
-
-      });
-
-    }
-
-  }
-  catch(error){
-    console.log(error);
-    $("#KeywordLoading").addClass("hidden");
-    $.notify(
-        {
-            message: `We are having a problem trying to retrieve the regions to filter the groups`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-}
-$("#btn-key-filter-only-variables").on("click", catalog_filter_vars);
-
-catalog_filter_server = function(){
-  try{
-    let elementForm= $("#modalFilterGroup");
-    let datastring= elementForm.serialize();
-    datastring += actual_group;
-    $("#KeywordLoading2").removeClass("hidden");
-
-    $.ajax({
-        type: "POST",
-        url: `catalog-filter/`,
-        dataType: "HTML",
-        data: datastring,
-        success: function(result) {
-          try{
-            let check_for_none = []
-            let hs_available = JSON.parse(result)['hs'];
-            let arrayActual_group=actual_group.split('=')[1];
-            $(`#${arrayActual_group}_list_separator`).find("li").each(function()
-               {
-                  var $li=$(this)['0'];
-                  let id_li = $li['id'];
-                  if(hs_available.includes(id_li)){
-                    $(`#${id_li}`).css({"opacity": "1",
-                                        "border-color": "#ac2925",
-                                        "border-width": "2px",
-                                        "border-style": "solid",
-                                        "color": "black",
-                                        "font-weight": "bold"});
-
-                  }
-                  else{
-
-                    $(`#${id_li}`).css({"opacity": "0.5",
-                                        "border-color": "#d3d3d3",
-                                        "border-width":"1px",
-                                        "border-style":"solid",
-                                        "color":"#555555",
-                                        "font-weight": "normal"});
-                  }
-               });
-
-               $("#KeywordLoading2").addClass("hidden");
-          }
-          catch(e){
-            $("#KeywordLoading2").addClass("hidden");
-
-            $.notify(
-                {
-                    message: `Something were wrong when applying the filter with variables and regions`
-                },
-                {
-                    type: "danger",
-                    allow_dismiss: true,
-                    z_index: 20000,
-                    delay: 5000,
-                    animate: {
-                      enter: 'animated fadeInRight',
-                      exit: 'animated fadeOutRight'
-                    },
-                    onShow: function() {
-                        this.css({'width':'auto','height':'auto'});
-                    }
-                }
-            )
-          }
-
-
-        },
-        error: function(error) {
-          $("#KeywordLoading2").addClass("hidden");
-
-          $.notify(
-              {
-                  message: `Something were wrong when applying the filter with variables and regions`
-              },
-              {
-                  type: "danger",
-                  allow_dismiss: true,
-                  z_index: 20000,
-                  delay: 5000,
-                  animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-                  },
-                  onShow: function() {
-                      this.css({'width':'auto','height':'auto'});
-                  }
-              }
-          )
-
-        }
-
-      })
-  }
-  catch(error){
-    $("#KeywordLoading2").addClass("hidden");
-    $.notify(
-        {
-            message: `We are having a problem trying to retrieve the regions to filter the groups`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-}
-$("#btn-key-search-catalog").on("click", catalog_filter_server);
-
-reset_keywords = function(){
-  try{
-    $('#btn-r-reset').hide();
-    Object.keys(information_model).forEach(function(key) {
-
-          for(let i = 0; i< information_model[key].length; ++i){
-            if (layer_object_filter.hasOwnProperty(information_model[key][i])){
-              map.removeLayer(layer_object_filter[information_model[key][i]])
-              if(layersDict.hasOwnProperty(information_model[key][i])){
-                map.getLayers().forEach(function(layer) {
-                     if(layer instanceof ol.layer.Vector && layer == layersDict[information_model[key][i]]){
-                       layer.setStyle(featureStyle(layerColorDict[information_model[key][i]]));
-                       }
-                 });
-              }
-            }
-          }
-
-
-    });
-    map.removeLayer(layer_selected_countries['countries']);
-
-    layer_object_filter={};
-
-
-    $("#current-Groupservers").find("li").each(function(){
-          var $li=$(this)['0'];
-          let id_li = $li['id'];
-
-          $(`#${id_li}`).css({"opacity": "1",
-                              "border-color": "#d3d3d3",
-                              "border-width":"1px",
-                              "border-style":"solid",
-                              "color":"#555555",
-                              "font-weight": "normal"});
-
-
-   });
-  }
-  catch(error){
-    $.notify(
-        {
-            message: `There is a problem reseting the fitler`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-}
-
-$("#btn-r-reset").on("click", reset_keywords);
-$("#btn-r-reset-catalog").on("click", reset_keywords);
-
-/*
-************ FUNCTION NAME : GET_ALL_THE_CHECKED_KEYWORDS
-************ PURPOSE : GET ALL THE CHECKED KEYWORDS FROM THE POP-UP MENU
-*/
-get_all_the_checked_keywords = function(){
-  try{
-    // ONLY THE KEY WORDS //
-    let datastring = Array.from(document.getElementsByClassName("odd gradeX"));
-    let key_words_to_search=[];
-    datastring.forEach(function(data){
-      Array.from(data.children).forEach(function(column){
-        if(Array.from(column.children)[0].checked ==true){
-          key_words_to_search.push(Array.from(column.children)[0].nextSibling.nodeValue.trim())
-        }
-      })
-    });
-    return key_words_to_search;
-  }
-  catch(err){
-    console.log(err);
-  }
-
-}
-
-generateListServices = function(){
-  try{
-    var HSTableHtml =
-        `<table id="infoModel-info-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
-    if (information_model.length === 0) {
-        $("#modalKeyWordSearch")
-            .find("#groups_services")
-            .html(
-                "<b>There are no data available, please add a group.</b>"
-            )
-    }
-    else {
-        for (var i = 0; i < result1['siteInfo'].length; i++) {
-            HSTableHtml +=
-           '<tr>'+
-                `<td> <p id="titleSite">${i+1}.- ${result1['siteInfo'][i]['sitename']}
-                <button type="button" class="btn btn-primary" id="${result1['siteInfo'][i]['sitecode']}_modal"><span class="glyphicon glyphicon-pushpin"></span></button></p>
-                  <p>Station/Platform Code: ${result1['siteInfo'][i]['sitecode']}</p>
-                  <p>Network: ${result1['siteInfo'][i]['network']}</p>
-                  <p>Latitude: ${result1['siteInfo'][i]['latitude']}</p>
-                  <p>Longitude: ${result1['siteInfo'][i]['longitude']}</p>
-                </td>`
-                +
-           '</tr>'
-
-        }
-        HSTableHtml += "</tbody></table>"
-        $("#modalHydroserInformation").find("#infoTable").html(HSTableHtml);
-    }
-  }
-  catch(error){
-    $.notify(
-        {
-            message: `There is a problem retrieving the list of services from the Web service Endpoint`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-
-}
-
-load_info_model = function(){
-  try{
-    var HSTableHtml = ''
-      Object.keys(information_model).forEach(function(key) {
-      HSTableHtml +=
-        `<h4 id="titleSite">${key}</h4>`
-      information_model[key].forEach(function(serviceView){
-        HSTableHtml +=
-        `<p class= "fakeRow">${serviceView}</p>`
-      })
-    });
-
-    $("#modalKeyWordSearch").find("#groups_services").html(HSTableHtml);
-  }
-  catch(error){
-    console.log(error);
-  }
-
-}
-
-load_search_modal = function(){
-  try{
-    load_info_model();
-    show_variables_groups();
-    available_regions();
-  }
-  catch(error){
-    console.log(error);
-    $.notify(
-        {
-            message: `We are having an error trying to load the menu`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-
-
-}
-$("#btn-filter-groups-f").on("click", load_search_modal);
-
-searchGroups = function() {
-  try{
-    general_search("myInputKeyword","data-table");
-  }
-  catch(error){
-    console.log(error);
-  }
-}
-document.getElementById('myInputKeyword').addEventListener("keyup", searchGroups);
-
-searchVariables = function() {
-  try{
-    general_search("myInputKeyword2","data-table-var");
-
-  }
-  catch(error){
-    console.log(error);
-  }
-}
-document.getElementById('myInputKeyword2').addEventListener("keyup", searchVariables);
-
-// for only one group
-searchGroups_group = function() {
-  try{
-    general_search("myInputKeywordGroup","data-table2");
-  }
-  catch(error){
-    console.log(error);
-  }
-}
-document.getElementById('myInputKeywordGroup').addEventListener("keyup", searchGroups_group);
-
-searchVariablesGroup = function() {
-  try{
-    general_search("myInputKeywordGroup2","data-table-var2");
-  }
-  catch(error){
-    console.log(error);
-  }
-}
-document.getElementById('myInputKeywordGroup2').addEventListener("keyup", searchVariablesGroup);
-
-general_search = function(id_search_input, id_table){
-  try{
-    input = document.getElementById(`${id_search_input}`);
-    filter = input.value.toUpperCase();
-    table = document.getElementById(`${id_table}`);
-
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td")[0];
-      if (td) {
-        txtValue = td.textContent || td.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
-        }
-      }
-    }
-  }
-  catch(error){
-    $.notify(
-        {
-            message: `We are having a problem trying doing the search `
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-
-}

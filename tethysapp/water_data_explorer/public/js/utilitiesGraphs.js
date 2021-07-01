@@ -7,8 +7,6 @@
  * LICENSE:             MIT
  *
  *****************************************************************************/
-
-
 /**
  * getValuesHelperJS2 function.
  *  Helper function to parse and store the content of the dictionary response from the GetValues at the level (['timeSeriesResponse']['timeSeries']['values']['value']) into a new dictionary. The data stored into this dictionary from the GetValues response is the following:

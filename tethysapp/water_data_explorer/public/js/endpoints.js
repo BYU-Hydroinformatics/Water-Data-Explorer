@@ -1,5 +1,13 @@
-
-var get_download_hs = function(nb, hs_name, hs_url, variable_hs, site_hs){
+/*****************************************************************************
+ * FILE:                endpoint.js
+ * BEGGINING DATE:      16 Jun 2021
+ * ENDING DATE:         ---------------
+ * AUTHOR:              Giovanni Romero Bustamante
+ * COPYRIGHT:           (c) Brigham Young University 2020
+ * LICENSE:             MIT
+ *
+ *****************************************************************************/
+get_download_hs = function(nb, hs_name, hs_url, variable_hs, site_hs){
   nb['cells'][1]['source'][0] = `# ${hs_name} \n`;
   nb['cells'][5]['source'][0] = `WOF_URL = ${hs_url} \n`;
   nb['cells'][5]['source'][1] = `VARIABLE = ${variable_hs} \n`;
@@ -19,30 +27,18 @@ get_vars_from_site = function (resultList){
     var_select.empty();
     var_select.selectpicker("refresh");
     $("#downloading_loading").removeClass("hidden");
-
     let url_base = $("#url_WOF").text().split("?")[0];
     let SITE = resultList[indexs]['sitecode'];
-    // SITE = 'B6940B585CE66AD1D5E33075197668BE487A1CDB';
     let url_request = `${url_base}?request=GetSiteInfoObject&site=${SITE}`;
-    // console.log(url_request);
 
       $.ajax({
-        // type:"POST",
         type:"GET",
         url:url_request,
-        // url: `get-values-hs/`,
-        // dataType: "JSON",
         dataType: "text",
-
-        // data: request_obj,
         success: function(result8){
           try{
-            // console.log(result8);
             let getSiteInfoObjectParse = getSitesInfoJS(result8);
-            // console.log(getSiteInfoObjectParse);
             let result =getSiteInfoObjectParsableJS(getSiteInfoObjectParse);
-
-
             if (result.hasOwnProperty("variables")){
               let variables_ = result['variables'];
               for(let i=0; i< variables_.length; ++i){
@@ -58,7 +54,6 @@ get_vars_from_site = function (resultList){
 
               reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
               $("#variable_choose").off("change.something2").on("change", function(){
-                // console.log("change unbind variable");
               });
               $("#variable_choose").on("change.something2").on("change", function(){
                 reque_ob['variable_hs'] = $("#variable_choose")['0'].value;
@@ -69,12 +64,8 @@ get_vars_from_site = function (resultList){
                 $("#downloading_loading").removeClass("hidden");
                 $.ajax({
                   type:"GET",
-                  // type:"POST",
                   url: `https://gist.githubusercontent.com/romer8/89c851014afb276b0f20cb61c9c731f6/raw/a0ee55ca83e75f34f26eb94bd52941cc2a2199cd/pywaterml_template.ipynb`,
-                  // url: `get-download-hs/`,
-                  // dataType: "JSON",
                   dataType: "text",
-                  // data: reque_ob,
                   success: function(result2_){
                     try{
                       // console.log(result2_);
@@ -591,12 +582,10 @@ add_hydroserver = function(){
         var specials=/[*|\":<>[\]{}`\\()';@&$]/;
 
         var title = $("#soap-title").val();
-        // if (!regex.test(title)) {
         if (specials.test(title)){
 
             $modalAddSOAP
                 .find(".warning")
-                // .html("<b>Please enter Letters only for the title.</b>");
                 .html("<b>The following characters are not permitted in the title [ * | \" : < > [ \ ] { } ` \ \ ( ) ' ; @ & $ ]</b>");
 
             return false
@@ -604,8 +593,6 @@ add_hydroserver = function(){
       } else {
           $modalAddSOAP.find(".warning").html("");
       }
-      // var datastring = $modalAddSOAP.serialize();
-      // datastring += actual_group;
 
       $("#soapAddLoading").removeClass("hidden");
       let unique_id_group = uuidv4();
@@ -627,35 +614,26 @@ add_hydroserver = function(){
           url:url_request,
           dataType: "text",
           success: function(xmlData){
-            // console.log(xmlData);
             try{
               let parsedObject = getSitesHelper(xmlData);
               console.log(parsedObject);
-              // let variablesObject = getVariablesJS(url_decons[0]);
-              // console.log(variablesObject);
               let requestObject = {
                 hs: $("#soap-title").val(),
                 group: actual_group.split('=')[1],
                 sites: JSON.stringify(parsedObject),
                 url: url_to_sent,
                 description:$("#hs-description").val()
-                // variables: JSON.stringify(variablesObject)
               }
-
-              console.log(requestObject);
               $.ajax({
                 type:"POST",
                 url: "save-new_sites/",
                 dataType: "JSON",
                 data: requestObject,
                 success:function(result){
-                  console.log(result);
                   try{
                     //Returning the geoserver layer metadata from the controller
                     var json_response = result
                     let group_name = actual_group.split('=')[1];
-                    // let id_group_separator = `${group_name}_list_separator`;
-
                     let group_name_e3;
                     Object.keys(id_dictionary).forEach(function(key) {
                       if(id_dictionary[key] == group_name ){
@@ -669,7 +647,6 @@ add_hydroserver = function(){
 
                           // put the ajax call and also the filter //
                           let servers_with_keywords = [];
-                          let key_words_to_search = get_all_the_checked_keywords();
 
                           $(`#${group_name_e3}-noGroups`).hide();
 
@@ -839,7 +816,6 @@ add_hydroserver = function(){
                   console.log(error);
                   $("#soapAddLoading").addClass("hidden");
                   $("#btn-add-soap").show();
-                  //console.log(error);
                   $.notify(
                       {
                           message: `Invalid WaterOneFlow web service Url. Please check and try again.`
@@ -891,7 +867,7 @@ add_hydroserver = function(){
   catch(e){
         $("#soapAddLoading").addClass("hidden");
         $("#btn-add-soap").show();
-        //console.log(error);
+        console.log(e);
         $.notify(
             {
                 message: `We are having problems adding the WaterOneFlow web service`
@@ -914,7 +890,6 @@ add_hydroserver = function(){
 
 
 }
-
 $("#btn-add-soap").on("click", add_hydroserver);
 
 
@@ -950,8 +925,7 @@ delete_hydroserver= function(){
             for(let i=0; i<Object.keys(json_response).length; ++i){
 
               let i_string=i.toString();
-              let title=json_response[i_string];
-              // title  = title.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-').replace(/^(-)+|(-)+$/g,'');
+              let title = json_response[i_string];
               let new_title;
               Object.keys(id_dictionary).forEach(function(key) {
                 if(id_dictionary[key] == title ){
@@ -998,6 +972,7 @@ delete_hydroserver= function(){
             }
           }
           catch(e){
+            console.log(e);
             $.notify(
                 {
                     message: `We got a problem updating the interface after deleting the Web Service, please reload your page `
@@ -1019,6 +994,7 @@ delete_hydroserver= function(){
           }
         },
         error: error => {
+          console.log(error);
             $.notify(
                 {
                     message: `Something went wrong while deleting the selected web services`
@@ -1041,6 +1017,7 @@ delete_hydroserver= function(){
     })
   }
   catch(e){
+    console.log(e);
     $.notify(
         {
             message: `We are having problems recognizing the actual group or groups to delete.`
@@ -1117,6 +1094,7 @@ delete_hydroserver_Individual= function(group,server){
             }
           }
           catch(e){
+            console.log(e);
             $.notify(
                 {
                     message: `We have a problem updating the interface, please reload the page`
@@ -1138,6 +1116,7 @@ delete_hydroserver_Individual= function(group,server){
           }
         },
         error: error => {
+          console.log(error);
             $.notify(
                 {
                     message: `Something went wrong while deleting the selected web services`
@@ -1160,6 +1139,7 @@ delete_hydroserver_Individual= function(group,server){
     })
   }
   catch(e){
+    console.log(e);
     $.notify(
         {
             message: `We are having problems recognizing the actual servers selected to delete`
@@ -1179,113 +1159,6 @@ delete_hydroserver_Individual= function(group,server){
         }
     )
   }
-}
-/*
-****** FU1NCTION NAME : showVariables*********
-****** FUNCTION PURPOSE: RETRIEVES THE DIFFERENT VARIABLES THAT A HYDROSERVER HAS*********
-*/
-showVariables = function(){
-   try{
-     let groupActual = this.parentElement.parentNode.id.split("_")[0];
-     groupActual = id_dictionary[groupActual];
-     let hsActual = this.id.split("_")[0];
-     hsActual = id_dictionary[hsActual];
-     filterSites['group']=groupActual;
-     filterSites['hs']=hsActual;
-
-     let $modalVariables = $("#modalShowVariables")
-       $.ajax({
-          type: "POST",
-          url: `get-variables-hs/`,
-          dataType: "JSON",
-          data: filterSites,
-          success: result => {
-            try{
-              var HSTableHtml =
-                  `<table id="${filterSites['hs']}-variable-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
-              if (result['variables_name'].length === 0) {
-                  $modalVariables
-                      .find(".modal-body")
-                      .html(
-                          "<b>There are no variables in the Hydroserver.</b>"
-                      )
-              }
-              else {
-                  for (var i = 0; i < result['variables_name'].length; i++) {
-                      HSTableHtml +=
-                     '<tr class="odd gradeX2">'+
-                          `<td><input type="checkbox" name="name1" value="${result['variables_code'][i]}" />${result['variables_name'][i]}</td>`
-                          +
-                     '</tr>'
-                  }
-                  HSTableHtml += "</tbody></table>"
-                  $modalVariables.find("#hideScroll2").html(HSTableHtml)
-              }
-            }
-            catch(e){
-              $.notify(
-                  {
-                      message: `Something went wrong retrieving the variables of the selected web services`
-                  },
-                  {
-                      type: "danger",
-                      allow_dismiss: true,
-                      z_index: 20000,
-                      delay: 5000,
-                      animate: {
-                        enter: 'animated fadeInRight',
-                        exit: 'animated fadeOutRight'
-                      },
-                      onShow: function() {
-                          this.css({'width':'auto','height':'auto'});
-                      }
-                  }
-              )
-            }
-         },
-         error: error => {
-             $.notify(
-                 {
-                     message: `Something went wrong retrieving the variables of the selected web services`
-                 },
-                 {
-                     type: "danger",
-                     allow_dismiss: true,
-                     z_index: 20000,
-                     delay: 5000,
-                     animate: {
-                       enter: 'animated fadeInRight',
-                       exit: 'animated fadeOutRight'
-                     },
-                     onShow: function() {
-                         this.css({'width':'auto','height':'auto'});
-                     }
-                 }
-             )
-         }
-
-       })
-   }
-   catch(e){
-     $.notify(
-         {
-             message: `We are having problems recognizing the actual group of Web services`
-         },
-         {
-             type: "danger",
-             allow_dismiss: true,
-             z_index: 20000,
-             delay: 5000,
-             animate: {
-               enter: 'animated fadeInRight',
-               exit: 'animated fadeOutRight'
-             },
-             onShow: function() {
-                 this.css({'width':'auto','height':'auto'});
-             }
-         }
-     )
-   }
 }
 
 showVariables2 = function(){
@@ -1334,7 +1207,7 @@ showVariables2 = function(){
                  $modalVariables
                      .find(".modal-body")
                      .html(
-                         "<b>There are no variables in the Hydroserver.</b>"
+                         "<b>There are no variables in the View.</b>"
                      )
              }
              else {
@@ -1424,153 +1297,7 @@ showVariables2 = function(){
    )
  }
 }
-/*
-****** FU1NCTION NAME : showAvailableSites*********
-****** FUNCTION PURPOSE: SHOW THE SITES THAT HAVE BEEN FILTERED REQURING SPECIFIC VARIABLES*********
-*/
-showAvailableSites = function(){
-  try{
-    let group = this.baseURI.split("/");
-    // ONLY THE KEY WORDS //
-    let datastring = Array.from(document.getElementsByClassName("odd gradeX2"));
-    let hs = datastring[0].offsetParent.id.split("-")[0];
 
-    let key_words_to_search=[];
-    datastring.forEach(function(data){
-      Array.from(data.children).forEach(function(column){
-        if(Array.from(column.children)[0].checked ==true){
-          key_words_to_search.push(Array.from(column.children)[0].value.trim())
-        }
-      })
-    });
-
-    let requestObject = {};
-    requestObject['hs'] = filterSites['hs'];
-    requestObject['group'] = filterSites['group'];
-    requestObject['variables'] = key_words_to_search;
-    $("#variablesLoading").removeClass("hidden");
-    $.ajax({
-        type: "POST",
-        url: `get-available-sites/`,
-        dataType: "JSON",
-        data: requestObject,
-        success: result => {
-          try{
-            let sites = result['hydroserver'];
-            let title = filterSites['hs'];
-            let url = layersDict[title].values_.source.features[0].values_.features[0].values_.hs_url
-            const vectorLayer =  map_layers(sites,title,url)[0]
-            const vectorSource =  map_layers(sites,title,url)[1]
-            map.getLayers().forEach(function(layer) {
-                 if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                     layer.setStyle(new ol.style.Style({}));
-                   }
-             });
-
-            map.addLayer(vectorLayer)
-            vectorLayer.set("selectable", true)
-            layer_object_filter[title] = vectorLayer;
-
-            $("#btn-var-reset-server").on("click", function(){
-              map.removeLayer(layer_object_filter[title])
-              layer_object_filter={};
-              if(layersDict.hasOwnProperty(title)){
-                map.getLayers().forEach(function(layer) {
-                     if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                       layer.setStyle(featureStyle(layerColorDict[title]));
-                       }
-                 });
-              }
-
-
-
-              $(`#${hs}`).css({"opacity": "1",
-                                   "border-color": "#d3d3d3",
-                                   "border-width":"1px",
-                                   "border-style":"solid",
-                                   "color":"#555555",
-                                   "font-weight": "normal"});
-            })
-            $("#variablesLoading").addClass("hidden");
-            $("#modalShowVariables").modal("hide")
-            $(`#${hs}`).css({"opacity": "1",
-                                "border-color": "#ac2925",
-                                "border-width": "2px",
-                                "border-style": "solid",
-                                "color": "black",
-                                "font-weight": "bold"});
-          }
-          catch(e){
-            $("#variablesLoading").removeClass("hidden");
-              $.notify(
-                  {
-                      message: `There is a problem showing the available sites in the web service/s`
-                  },
-                  {
-                      type: "danger",
-                      allow_dismiss: true,
-                      z_index: 20000,
-                      delay: 5000,
-                      animate: {
-                        enter: 'animated fadeInRight',
-                        exit: 'animated fadeOutRight'
-                      },
-                      onShow: function() {
-                          this.css({'width':'auto','height':'auto'});
-                      }
-                  }
-              )
-          }
-
-       },
-       error: function(error) {
-         $("#variablesLoading").removeClass("hidden");
-           $.notify(
-               {
-                   message: `There is a problem showing the available sites in the web service/s`
-               },
-               {
-                   type: "danger",
-                   allow_dismiss: true,
-                   z_index: 20000,
-                   delay: 5000,
-                   animate: {
-                     enter: 'animated fadeInRight',
-                     exit: 'animated fadeOutRight'
-                   },
-                   onShow: function() {
-                       this.css({'width':'auto','height':'auto'});
-                   }
-               }
-           )
-       }
-
-     })
-  }
-  catch(e){
-    $("#variablesLoading").addClass("hidden");
-
-    $.notify(
-        {
-            message: `We are having problems recognizing the web services selected`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-}
-$(`#btn-var-search-server`).on("click",showAvailableSites);
 /*
 ************ FUNCTION NAME: HYDROSERVER INFORMATION **********************
 ************ PURPOSE: THE HYDROSERVER INFORMATION LOOKS FOR THE INFORMATION OF THE SITE, SO IT GIVES METADATA ***********
@@ -1734,6 +1461,9 @@ hydroserver_information = function(){
           }
         }
         catch(e){
+          console.log(e);
+          $("#downloading_loading").addClass("hidden");
+
           $.notify(
               {
                   message: `There is a problem retriving information for the selected Web Service`
@@ -1756,6 +1486,9 @@ hydroserver_information = function(){
 
       },
       error: function(error) {
+        console.log(error);
+        $("#downloading_loading").addClass("hidden");
+
           $.notify(
               {
                   message: `There is a problem retriving information for the selected Web Service`
@@ -1780,6 +1513,7 @@ hydroserver_information = function(){
 
   }
   catch(e){
+    console.log(e);
     $("#downloading_loading").addClass("hidden");
 
     $.notify(
@@ -1826,6 +1560,7 @@ searchSites = function() {
     }
   }
   catch (e){
+    console.log(e);
     $.notify(
         {
             message: `Seems that we are having problems with the Search Bar, Please search manually for the site.`
@@ -1850,8 +1585,7 @@ searchSites = function() {
 document.getElementById('myInput').addEventListener("keyup", searchSites);
 
 
-var getVariablesJS = function(url,hsActual,group_name){
-  console.log("getvat");
+getVariablesJS = function(url,hsActual,group_name){
   let url_decons = url.split("?");
 
   let url_request = url_decons[0] + "?request=GetVariablesObject&format=WML1";
@@ -1863,7 +1597,6 @@ var getVariablesJS = function(url,hsActual,group_name){
       url:url_request,
       dataType: "text",
       success: function(xmlData){
-        // console.log(xmlData);
         let parsedObject = getVariablesHelperJS(xmlData);
         let requestObject = {
           hs: id_dictionary[hsActual],
@@ -1953,7 +1686,7 @@ var getVariablesJS = function(url,hsActual,group_name){
 
 }
 
-var getVariablesHelperJS = function(xmlData){
+getVariablesHelperJS = function(xmlData){
   let return_obj;
   let return_array = [];
   var options = {
@@ -1997,7 +1730,7 @@ var getVariablesHelperJS = function(xmlData){
   return return_array
 }
 
-var getVariablesHelperJS2 = function(one_variable, return_object){
+getVariablesHelperJS2 = function(one_variable, return_object){
   /*
   Helper function to parse and store the content of the GetValues response dictionary at the level:
       - one_variable = GetVariablesResponse ['variablesResponse']['variables']['variable']
@@ -2109,8 +1842,7 @@ var getVariablesHelperJS2 = function(one_variable, return_object){
 
 }
 
-
-var getSitesFilterHelper = function (xmlData){
+getSitesFilterHelper = function (xmlData){
   let return_obj;
   let return_array = []
   var options = {
@@ -2250,7 +1982,7 @@ var getSitesFilterHelper = function (xmlData){
 
 }
 
-var getSitesHelper = function (xmlData){
+getSitesHelper = function (xmlData){
   let return_obj;
   let return_array = []
   var options = {
@@ -2274,9 +2006,7 @@ var getSitesHelper = function (xmlData){
   var result = parser.validate(xmlData);
   if (result !== true) console.log(result.err);
   var jsonObj = parser.parse(xmlData,options);
-  console.log(jsonObj);
   let firstObject = jsonObj['soap:Envelope']['soap:Body']['GetSitesObjectResponse'];
-  console.log(firstObject);
 
   let hs_sites = []
   try{
@@ -2384,8 +2114,7 @@ var getSitesHelper = function (xmlData){
 
 }
 
-var getSitesJS = function(url,hsActual,group_name){
-  console.log(url);
+getSitesJS = function(url,hsActual,group_name){
   let url_decons = url.split("?");
   let url_request;
   if(url_decons.length > 0){
@@ -2407,14 +2136,11 @@ var getSitesJS = function(url,hsActual,group_name){
           // console.log(xmlData);
           try{
             let parsedObject = getSitesHelper(xmlData);
-            console.log(parsedObject);
-            // let variablesObject = getVariablesJS(url_decons[0]);
-            // console.log(variablesObject);
+
             let requestObject = {
               hs: id_dictionary[hsActual],
               group: id_dictionary[group_name],
               sites: JSON.stringify(parsedObject),
-              // variables: JSON.stringify(variablesObject)
             }
             $.ajax({
               type:"POST",
@@ -2422,7 +2148,6 @@ var getSitesJS = function(url,hsActual,group_name){
               dataType: "JSON",
               data: requestObject,
               success:function(data){
-                console.log(data);
                 try{
                   let {siteInfo,sitesAdded,url} = data
                   if(layersDict.hasOwnProperty(hsActual)){
@@ -2593,11 +2318,7 @@ update_hydroserver = function(){
   try{
     let hsActual = this.id.split("_")[0];
     let group_name = this.id.split("_")[1];
-    console.log(hsActual);
-    console.log(group_name);
-    console.log(id_dictionary);
     getSitesJS(urls_servers[hsActual], hsActual, group_name);
-
     getVariablesJS(urls_servers[hsActual], hsActual, group_name);
   }
   catch(e){
@@ -2624,56 +2345,86 @@ update_hydroserver = function(){
 }
 
 
-// update_hydroserver = function(){
+// showAvailableSites = function(){
 //   try{
-//     let hsActual = this.id.split("_")[0];
-//     let group_name = this.id.split("_")[1];
+//     let group = this.baseURI.split("/");
+//     // ONLY THE KEY WORDS //
+//     let datastring = Array.from(document.getElementsByClassName("odd gradeX2"));
+//     let hs = datastring[0].offsetParent.id.split("-")[0];
 //
-//     let requestObject = {
-//       hs: id_dictionary[hsActual],
-//       group: id_dictionary[group_name]
-//     }
-//     $("#GeneralLoading").css({
-//        position:'fixed',
-//        "z-index": 9999,
-//        top: '50%',
-//        left: '50%',
-//        transform: 'translate(-50%, -50%)'
-//      });
-//     $("#GeneralLoading").removeClass("hidden");
+//     let key_words_to_search=[];
+//     datastring.forEach(function(data){
+//       Array.from(data.children).forEach(function(column){
+//         if(Array.from(column.children)[0].checked ==true){
+//           key_words_to_search.push(Array.from(column.children)[0].value.trim())
+//         }
+//       })
+//     });
+//
+//     let requestObject = {};
+//     requestObject['hs'] = filterSites['hs'];
+//     requestObject['group'] = filterSites['group'];
+//     requestObject['variables'] = key_words_to_search;
+//     $("#variablesLoading").removeClass("hidden");
 //     $.ajax({
 //         type: "POST",
-//         url: `soap-update/`,
+//         url: `get-available-sites/`,
 //         dataType: "JSON",
 //         data: requestObject,
-//         success: function(result) {
+//         success: result => {
 //           try{
-//             let {siteInfo,sitesAdded,url} = result
-//             if(layersDict.hasOwnProperty(hsActual)){
-//               map.removeLayer(layersDict[hsActual])
-//             }
-//
-//             let sites = siteInfo
-//             const vectorLayer = map_layers(sites,hsActual,url)[0]
-//             const vectorSource = map_layers(sites,hsActual,url)[1]
-//
+//             let sites = result['hydroserver'];
+//             let title = filterSites['hs'];
+//             let url = layersDict[title].values_.source.features[0].values_.features[0].values_.hs_url
+//             const vectorLayer =  map_layers(sites,title,url)[0]
+//             const vectorSource =  map_layers(sites,title,url)[1]
+//             map.getLayers().forEach(function(layer) {
+//                  if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+//                      layer.setStyle(new ol.style.Style({}));
+//                    }
+//              });
 //
 //             map.addLayer(vectorLayer)
-//             ol.extent.extend(extent, vectorSource.getExtent())
 //             vectorLayer.set("selectable", true)
-//             layersDict[hsActual] = vectorLayer;
+//             layer_object_filter[title] = vectorLayer;
 //
-//             map.getView().fit(vectorSource.getExtent());
-//             map.updateSize();
+//             $("#btn-var-reset-server").on("click", function(){
+//               map.removeLayer(layer_object_filter[title])
+//               layer_object_filter={};
+//               if(layersDict.hasOwnProperty(title)){
+//                 map.getLayers().forEach(function(layer) {
+//                      if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+//                        layer.setStyle(featureStyle(layerColorDict[title]));
+//                        }
+//                  });
+//               }
 //
-//             layersDict[hsActual] = vectorLayer;
 //
+//
+//               $(`#${hs}`).css({"opacity": "1",
+//                                    "border-color": "#d3d3d3",
+//                                    "border-width":"1px",
+//                                    "border-style":"solid",
+//                                    "color":"#555555",
+//                                    "font-weight": "normal"});
+//             })
+//             $("#variablesLoading").addClass("hidden");
+//             $("#modalShowVariables").modal("hide")
+//             $(`#${hs}`).css({"opacity": "1",
+//                                 "border-color": "#ac2925",
+//                                 "border-width": "2px",
+//                                 "border-style": "solid",
+//                                 "color": "black",
+//                                 "font-weight": "bold"});
+//           }
+//           catch(e){
+//             $("#variablesLoading").removeClass("hidden");
 //               $.notify(
 //                   {
-//                       message: `Successfully updated the Web Service , ${sitesAdded} have been added to the Map.`
+//                       message: `There is a problem showing the available sites in the web service/s`
 //                   },
 //                   {
-//                       type: "success",
+//                       type: "danger",
 //                       allow_dismiss: true,
 //                       z_index: 20000,
 //                       delay: 5000,
@@ -2686,59 +2437,39 @@ update_hydroserver = function(){
 //                       }
 //                   }
 //               )
-//             $("#GeneralLoading").addClass("hidden");
 //           }
-//           catch(e){
-//             $("#GeneralLoading").addClass("hidden");
-//             $.notify(
-//                 {
-//                     message: `There was an error updating the Web Service 1`
-//                 },
-//                 {
-//                     type: "success",
-//                     allow_dismiss: true,
-//                     z_index: 20000,
-//                     delay: 5000,
-//                     animate: {
-//                       enter: 'animated fadeInRight',
-//                       exit: 'animated fadeOutRight'
-//                     },
-//                     onShow: function() {
-//                         this.css({'width':'auto','height':'auto'});
-//                     }
-//                 }
-//             )
-//           }
-//         },
-//         error: function(error) {
-//           $("#GeneralLoading").addClass("hidden");
-//           $.notify(
-//               {
-//                   message: `There was an error updating the Web Service.`
-//               },
-//               {
-//                   type: "danger",
-//                   allow_dismiss: true,
-//                   z_index: 20000,
-//                   delay: 5000,
-//                   animate: {
-//                     enter: 'animated fadeInRight',
-//                     exit: 'animated fadeOutRight'
-//                   },
-//                   onShow: function() {
-//                       this.css({'width':'auto','height':'auto'});
-//                   }
-//               }
-//           )
 //
-//         }
-//     })
+//        },
+//        error: function(error) {
+//          $("#variablesLoading").removeClass("hidden");
+//            $.notify(
+//                {
+//                    message: `There is a problem showing the available sites in the web service/s`
+//                },
+//                {
+//                    type: "danger",
+//                    allow_dismiss: true,
+//                    z_index: 20000,
+//                    delay: 5000,
+//                    animate: {
+//                      enter: 'animated fadeInRight',
+//                      exit: 'animated fadeOutRight'
+//                    },
+//                    onShow: function() {
+//                        this.css({'width':'auto','height':'auto'});
+//                    }
+//                }
+//            )
+//        }
+//
+//      })
 //   }
-//   catch (e){
-//     $("#GeneralLoading").addClass("hidden");
+//   catch(e){
+//     $("#variablesLoading").addClass("hidden");
+//
 //     $.notify(
 //         {
-//             message: `There was an error Updating the selected Web Service.`
+//             message: `We are having problems recognizing the web services selected`
 //         },
 //         {
 //             type: "danger",
@@ -2754,8 +2485,6 @@ update_hydroserver = function(){
 //             }
 //         }
 //     )
-//
 //   }
-//
-//
 // }
+// $(`#btn-var-search-server`).on("click",showAvailableSites);
