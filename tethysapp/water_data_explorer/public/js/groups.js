@@ -1276,7 +1276,6 @@ $("#btn-del-groups-f").on("click", make_list_groups);
 * get_hs_list_from_hydroserver function.
 * Function to get the list of all the services that a service contains contains
 * */
-
 get_hs_list_from_hydroserver = function(){
   try{
     if(actual_group == undefined){

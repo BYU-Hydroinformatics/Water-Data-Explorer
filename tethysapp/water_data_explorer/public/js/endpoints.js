@@ -1773,18 +1773,20 @@ getVariablesHelperJS = function(xmlData){
 
 /**
 * getVariablesHelperJS2 Helper function to parse and store the content of the GetValues response dictionary at the level:
-  * ``- one_variable = GetVariablesResponse ['variablesResponse']['variables']['variable']
-  * The dictionary containing the response from the GetValues method stores the following content into a new dictionary:
-  *   - variableName: Name of the variable
-  *   - unitName: Name of the units of the values associated to the given variable and site
-  *   - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
-  *   - noDataValue: value associated to lack of data.
-  *   - isRegular: Boolean to indicate whether the observation measurements and collections regular
-  *   - timeSupport: Boolean to indicate whether the values support time
-  *   - timeUnitName: Time Units associated to the observation
-  *   - timeUnitAbbreviation: Time units abbreviation
-  *   - sampleMedium: the sample medium, for example water, atmosphere, soil.
-  *   - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
+  * <p> one_variable = GetVariablesResponse ['variablesResponse']['variables']['variable'] </p>
+  * <p> The dictionary containing the response from the GetValues method stores the following content into a new dictionary: </p>
+  * <ol style="list-style: none;">
+  *  <li> variableName: Name of the variable </li>
+  *  <li> unitName: Name of the units of the values associated to the given variable and site </li>
+  *  <li> unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site </li>
+  *  <li> noDataValue: value associated to lack of data. </li>
+  *  <li> isRegular: Boolean to indicate whether the observation measurements and collections regular </li>
+  *  <li> timeSupport: Boolean to indicate whether the values support time </li>
+  *  <li> timeUnitName: Time Units associated to the observation </li>
+  *  <li> timeUnitAbbreviation: Time units abbreviation </li>
+  *  <li> sampleMedium: the sample medium, for example water, atmosphere, soil. </li>
+  *  <li> speciation: The chemical sample speciation (as nitrogen, as phosphorus..) </li>
+  * </ol>
   * @param {string} one_variable - object with structure GetVariablesResponse ['variablesResponse']['variables']['variable']
   * @param {string} return_object - response object
   * @return {object} return_array - array containing the response of the WaterOneFlow function GetVariables

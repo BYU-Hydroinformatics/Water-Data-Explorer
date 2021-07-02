@@ -11,38 +11,40 @@
 /**
 * getSiteInfoHelperJS function.
 * Helper function to parse and store the content of two dictionaries:
-*    - object_methods = GetSiteInfoResponse ['sitesResponse']['site']['seriesCatalog']['series']
-*    - object_siteInfo = GetSiteInfoResponse ['sitesResponse']['site']['siteInfo']
-* Both dictionaries containing the response from the GetSiteInfo at store the following content into a new dictionary:
-*    - siteName: Name of the site.
-*    - siteCode: Code of the site.
-*    - network: observation network that the site belongs to
-*    - fullVariableCode: The full variable code, for example: SNOTEL:SNWD.Use this value as the variableCode parameter in GetValues().
-*    - siteID: ID of the site
-*    - latitude: latitude of the site
-*    - longitude: longitude of the site
-*    - variableName: Name of the variable
-*    - unitName: Name of the units of the values associated to the given variable and site
-*    - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
-*    - dataType: Type of data
-*    - noDataValue: value associated to lack of data.
-*    - isRegular: Boolean to indicate whether the observation measurements and collections regular
-*    - timeSupport: Boolean to indicate whether the values support time
-*    - timeUnitName: Time Units associated to the observation
-*    - timeUnitAbbreviation: Time units abbreviation
-*    - sampleMedium: the sample medium, for example water, atmosphere, soil.
-*    - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
-*    - beginningDateTimeUTC: The UTC date and time of the first available
-*    - EndDateTimeUTC: The UTC date and time of the last available
-*    - beginningDateTime: The local date and time of the first available
-*    - EndDateTime: The local date and time of the last available
-*    - censorCode: The code for censored observations.  Possible values are nc (not censored), gt(greater than), lt (less than), nd (non-detect), pnq (present but not quantified)
-*    - methodCode: The code of the method or instrument used for the observation
-*    - methodID: The ID of the sensor or measurement method
-*    - qualityControlLevelCode: The code of the quality control level.  Possible values are -9999(Unknown), 0 (Raw data), 1 (Quality controlled data), 2 (Derived products), 3 (Interpretedproducts), 4 (Knowledge products)
-*    - qualityControlLevelID: The ID of the quality control level. Usually 0 means raw data and 1 means quality controlled data.
-*    - sourceCode: The code of the data source.
-*    - timeOffSet: The difference between local time and UTC time in hours.
+* <p> object_methods = GetSiteInfoResponse ['sitesResponse']['site']['seriesCatalog']['series'] </p>
+* <p> object_siteInfo = GetSiteInfoResponse ['sitesResponse']['site']['siteInfo'] </p>
+* <p> Both dictionaries containing the response from the GetSiteInfo at store the following content into a new dictionary: </p>
+* <ol style="list-style: none;">
+* <li> siteName: Name of the site. </li>
+* <li> siteCode: Code of the site. </li>
+* <li> network: observation network that the site belongs to </li>
+* <li> fullVariableCode: The full variable code, for example: SNOTEL:SNWD.Use this value as the variableCode parameter in GetValues(). </li>
+* <li> siteID: ID of the site </li>
+* <li> latitude: latitude of the site </li>
+* <li> longitude: longitude of the site </li>
+* <li> variableName: Name of the variable </li>
+* <li> unitName: Name of the units of the values associated to the given variable and site </li>
+* <li> unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site </li>
+* <li> dataType: Type of data </li>
+* <li> noDataValue: value associated to lack of data. </li>
+* <li> isRegular: Boolean to indicate whether the observation measurements and collections regular </li>
+* <li> timeSupport: Boolean to indicate whether the values support time </li>
+* <li> timeUnitName: Time Units associated to the observation </li>
+* <li> timeUnitAbbreviation: Time units abbreviation </li>
+* <li> sampleMedium: the sample medium, for example water, atmosphere, soil. </li>
+* <li> speciation: The chemical sample speciation (as nitrogen, as phosphorus..) </li>
+* <li> beginningDateTimeUTC: The UTC date and time of the first available </li>
+* <li> EndDateTimeUTC: The UTC date and time of the last available </li>
+* <li> beginningDateTime: The local date and time of the first available </li>
+* <li> EndDateTime: The local date and time of the last available </li>
+* <li> censorCode: The code for censored observations.  Possible values are nc (not censored), gt(greater than), lt (less than), nd (non-detect), pnq (present but not quantified) </li>
+* <li> methodCode: The code of the method or instrument used for the observation </li>
+* <li> methodID: The ID of the sensor or measurement method </li>
+* <li> qualityControlLevelCode: The code of the quality control level.  Possible values are -9999(Unknown), 0 (Raw data), 1 (Quality controlled data), 2 (Derived products), 3 (Interpretedproducts), 4 (Knowledge products) </li>
+* <li> qualityControlLevelID: The ID of the quality control level. Usually 0 means raw data and 1 means quality controlled data. </li>
+* <li> sourceCode: The code of the data source. </li>
+* <li> timeOffSet: The difference between local time and UTC time in hours. </li>
+* </ol>
 * @param {object} object_siteInfo - Contains metadata associated to the site.
 * @param {object} object_methods - Contains a list of <series>, which are unique combinations of site, variable and time intervals that specify a sequence of observations.
 * @return {object} return_obj: python dictionary containing data from the GetSiteInfo response.

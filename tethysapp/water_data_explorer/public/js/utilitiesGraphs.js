@@ -9,24 +9,26 @@
  *****************************************************************************/
 /**
  * getValuesHelperJS2 function.
- *  Helper function to parse and store the content of the dictionary response from the GetValues at the level (['timeSeriesResponse']['timeSeries']['values']['value']) into a new dictionary. The data stored into this dictionary from the GetValues response is the following:
- *     - siteName: Name of the site.
- *     - siteCode: Code of the site.
- *     - network: observation network that the site belongs to
- *     - siteID: ID of the site
- *     - latitude: latitude of the site
- *     - longitude: longitude of the site
- *     - variableName: Name of the variable
- *     - unitName: Name of the units of the values associated to the given variable and site
- *     - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
- *     - dataType: Type of data
- *     - noDataValue: value associated to lack of data.
- *     - isRegular: Boolean to indicate whether the observation measurements and collections regular
- *     - timeSupport: Boolean to indicate whether the values support time
- *     - timeUnitName: Time Units associated to the observation
- *     - timeUnitAbbreviation: Time units abbreviation
- *     - sampleMedium: the sample medium, for example water, atmosphere, soil.
- *     - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
+ * <p> Helper function to parse and store the content of the dictionary response from the GetValues at the level (['timeSeriesResponse']['timeSeries']['values']['value']) into a new dictionary. The data stored into this dictionary from the GetValues response is the following: </p>
+ * <ol style="list-style: none;">
+ * <li> siteName: Name of the site. </li>
+ * <li> siteCode: Code of the site. </li>
+ * <li> network: observation network that the site belongs to </li>
+ * <li> siteID: ID of the site </li>
+ * <li> latitude: latitude of the site </li>
+ * <li> longitude: longitude of the site </li>
+ * <li> variableName: Name of the variable </li>
+ * <li> unitName: Name of the units of the values associated to the given variable and site </li>
+ * <li> unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site </li>
+ * <li> dataType: Type of data </li>
+ * <li> noDataValue: value associated to lack of data. </li>
+ * <li> isRegular: Boolean to indicate whether the observation measurements and collections regular </li>
+ * <li> timeSupport: Boolean to indicate whether the values support time </li>
+ * <li> timeUnitName: Time Units associated to the observation </li>
+ * <li> timeUnitAbbreviation: Time units abbreviation </li>
+ * <li> sampleMedium: the sample medium, for example water, atmosphere, soil. </li>
+ * <li> speciation: The chemical sample speciation (as nitrogen, as phosphorus..) </li>
+ * </ol>
  * @param {object} times_series - A string param
  * @param {object} return_object - JS dictionary that will store the data from teh GetValues response.
  * @return {object} return_object: JS dictionary containing data from the GetValues response.
@@ -184,15 +186,17 @@ getValuesHelperJS2 = function (times_series,return_object){
 }
 /**
  * getValuesHelperJS function.
- *  Helper function to parse and store the content of the dictionary response from the GetValues at the level (['timeSeriesResponse']['timeSeries']['values']['value']) into a new dictionary. The data stored into this dictionary from the GetValues response is the following:
- *   - dateTimeUTC: The UTC time of the observation.
- *   - dateTime: The local date/time of the observation.
- *   - dataValue: Data value from the observation.
- *   - censorCode: The code for censored observations.  Possible values are nc (not censored), gt(greater than), lt (less than), nd (non-detect), pnq (present but not quantified)
- *   - methodCode: The code of the method or instrument used for the observation
- *   - qualityControlLevelCode: The code of the quality control level.  Possible values are -9999(Unknown), 0 (Raw data), 1 (Quality controlled data), 2 (Derived products), 3 (Interpretedproducts), 4 (Knowledge products)
- *   - sourceCode: The code of the data source
- *   - timeOffSet: The difference between local time and UTC time in hours.
+ * <p> Helper function to parse and store the content of the dictionary response from the GetValues at the level (['timeSeriesResponse']['timeSeries']['values']['value']) into a new dictionary. The data stored into this dictionary from the GetValues response is the following: </p>
+ * <ol style="list-style: none;">
+ * <li> dateTimeUTC: The UTC time of the observation. </li>
+ * <li> dateTime: The local date/time of the observation. </li>
+ * <li> dataValue: Data value from the observation. </li>
+ * <li> censorCode: The code for censored observations.  Possible values are nc (not censored), gt(greater than), lt (less than), nd (non-detect), pnq (present but not quantified) </li>
+ * <li> methodCode: The code of the method or instrument used for the observation </li>
+ * <li> qualityControlLevelCode: The code of the quality control level.  Possible values are -9999(Unknown), 0 (Raw data), 1 (Quality controlled data), 2 (Derived products), 3 (Interpretedproducts), 4 (Knowledge products) </li>
+ * <li> sourceCode: The code of the data source </li>
+ * <li> timeOffSet: The difference between local time and UTC time in hours. </li>
+ * </ol>
  * @param {object} object - GetValues response dictionary at level -> (['timeSeriesResponse']['timeSeries']['values']['value'])
  * @param {object} return_obJ - JS dictionary that will store the data from teh GetValues response.
  * @return {object} return_obj: JS dictionary containing data from the GetValues response.
