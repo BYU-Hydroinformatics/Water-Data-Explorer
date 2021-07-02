@@ -202,8 +202,6 @@ def suds_to_json(data):
 
 def parseWML(bbox):
     hs_sites = []
-    # print bbox
-
     bbox_json = recursive_asdict(bbox)  # Convert bounding box to json
 
     # If there are multiple sites, create a list of of dictionaries with
@@ -253,9 +251,6 @@ def parseWML(bbox):
 
 def parseJSON(json):
     hs_sites = []
-    #print("I am inside the parseJSON")
-    #print(json)
-    #print(json.keys())
     sites_object = None
     # This is to handle the WMO la Plata endpoints ##
     try:
@@ -292,7 +287,6 @@ def parseJSON(json):
                     except Exception as e:
                         print(e)
                         hs_json['country'] = "No Data was Provided"
-                        print(hs_json['country'])
                     hs_json["sitename"] = site_name.decode("UTF-8")
                     hs_json["latitude"] = latitude
                     hs_json["longitude"] = longitude
@@ -329,7 +323,6 @@ def parseJSON(json):
                 except Exception as e:
                     print(e)
                     hs_json['country'] = "No Data was Provided"
-                    print(hs_json['country'])
                 hs_json["sitename"] = site_name.decode("UTF-8")
                 hs_json["latitude"] = latitude
                 hs_json["longitude"] = longitude
