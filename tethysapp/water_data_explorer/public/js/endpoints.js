@@ -7,6 +7,17 @@
  * LICENSE:             MIT
  *
  *****************************************************************************/
+
+/**
+* get_download_hs function.
+* Function to overwrite the retrieved data from a python notebook.
+* @param {object} nb - object containing the content of a python notebook
+* @param {string} hs_name - name of the service
+* @param {string} hs_url - url of the service
+* @param {string} variable_hs - variable of the service
+* @param {string} site_hs - site of the service
+* @return {object} nb: overwritten content of a python notebook.
+* */
 get_download_hs = function(nb, hs_name, hs_url, variable_hs, site_hs){
   nb['cells'][1]['source'][0] = `# ${hs_name} \n`;
   nb['cells'][5]['source'][0] = `WOF_URL = ${hs_url} \n`;
@@ -16,6 +27,11 @@ get_download_hs = function(nb, hs_name, hs_url, variable_hs, site_hs){
   return nb
 }
 
+/**
+  * get_vars_from_site function.
+  * Function to get metadata from the WaterOneFow function GetSiteInfo
+  * @param {object} resultList - object containing the content of a python notebook
+* */
 get_vars_from_site = function (resultList){
   try{
     let indexs= $("#site_choose")['0'].value;
@@ -227,6 +243,12 @@ get_vars_from_site = function (resultList){
 
 }
 
+/**
+* map_layers function.
+  * Function to create the map vectorLayer and vectorSource for sites
+  * @param {object} resultList - object containing the sites
+  * @return {object} array containing the open layers vector Layer and vector Source
+* */
 map_layers = function(sites,title,url){
   try{
     sites = sites.map(site => {
@@ -311,10 +333,11 @@ map_layers = function(sites,title,url){
 
 }
 
-/*
-****** FU1NCTION NAME : load_individual_hydroservers_group*********
-****** FUNCTION PURPOSE: LOADS THE SERVERS OF A HYDROSERVER WHEN THE HYDROSERVER GROUPS IS CLICKED*********
-*/
+/**
+  * load_individual_hydroservers_group function.
+  * Function to load individual service in the group
+  * @param {string} group_name - name of the group to add service
+* */
 load_individual_hydroservers_group = function(group_name){
    let group_name_obj={
      group: group_name
@@ -532,12 +555,10 @@ load_individual_hydroservers_group = function(group_name){
        })
  };
 
-
-/*
-****** FU1NCTION NAME: add_hydroserver *********
-****** FUNCTION PURPOSE: ADD AN INDIVIDUAL HYDROSERVER TO A GROUP *********
-*/
-
+/**
+  * add_hydroserver function.
+  * Function to add an individual service in the group
+* */
 add_hydroserver = function(){
   try{
     if($("#extent").is(":checked")){
@@ -892,12 +913,10 @@ add_hydroserver = function(){
 }
 $("#btn-add-soap").on("click", add_hydroserver);
 
-
-/*
-****** FU1NCTION NAME: delete_hydroserver *********
-****** FUNCTION PURPOSE: DELETE THE SELECTED HYDROSERVERS OF A GROUP*********
-*/
-
+/**
+  * delete_hydroserver function.
+  * Function to delete an individual service in the group
+* */
 delete_hydroserver= function(){
   try{
     $modalInterface.find(".success").html("")
@@ -1038,11 +1057,13 @@ delete_hydroserver= function(){
     )
   }
 }
-$("#btn-del-server").on("click", delete_hydroserver)
-/*
-****** FU1NCTION NAME: delete_hydroserver *********
-****** FUNCTION PURPOSE: DELETE THE SELECTED HYDROSERVER OF A GROUP*********
-*/
+$("#btn-del-server").on("click", delete_hydroserver);
+
+
+/**
+  * delete_hydroserver_Individual function.
+  * Function to delete an individual service in the group
+* */
 delete_hydroserver_Individual= function(group,server){
   try{
     var datastring = `server=${server}&actual-group=${group}`
@@ -1161,6 +1182,10 @@ delete_hydroserver_Individual= function(group,server){
   }
 }
 
+/**
+  * showVariables2 function.
+  * Function to retrieve the variables of an individual service in the group
+* */
 showVariables2 = function(){
  try{
    let groupActual = this.parentElement.parentNode.id.split("_")[0];
@@ -1298,10 +1323,11 @@ showVariables2 = function(){
  }
 }
 
-/*
-************ FUNCTION NAME: HYDROSERVER INFORMATION **********************
-************ PURPOSE: THE HYDROSERVER INFORMATION LOOKS FOR THE INFORMATION OF THE SITE, SO IT GIVES METADATA ***********
-*/
+
+/**
+  * hydroserver_information function.
+  * Function to retrieve information of an individual service in the group
+* */
 hydroserver_information = function(){
   try{
     if(layersDict['selectedPointModal']){
@@ -1536,10 +1562,11 @@ hydroserver_information = function(){
     )
   }
 }
-/*
-************ FUNCTION NAME: SEARCH SITES **********************
-************ PURPOSE: MAKES THE TABLE SEARCHABLE ***********
-*/
+
+/**
+  * searchSites function.
+  * Function to search the table of sites in the service info modal
+* */
 searchSites = function() {
   try{
     var input, filter, table, tr, td, i, txtValue;
@@ -1584,7 +1611,13 @@ searchSites = function() {
 }
 document.getElementById('myInput').addEventListener("keyup", searchSites);
 
-
+/**
+* getVariablesJS function.
+  * Function to retrieve the metadata of the WaterOneFlow function GetVariables
+  * @param {string} url - url of the service
+  * @param {string} hsActual - name of the service
+  * @param {string} group_name - name of the catalog
+* */
 getVariablesJS = function(url,hsActual,group_name){
   let url_decons = url.split("?");
 
@@ -1686,6 +1719,14 @@ getVariablesJS = function(url,hsActual,group_name){
 
 }
 
+/**
+* getVariablesHelperJS function.
+  * Helper function to parse the xml metadata of the WaterOneFlow function GetVariables
+  * @param {string} url - url of the service
+  * @param {string} hsActual - name of the service
+  * @param {string} group_name - name of the catalog
+  * @return {object} return_array - array containing the response of the WaterOneFlow function GetVariables
+* */
 getVariablesHelperJS = function(xmlData){
   let return_obj;
   let return_array = [];
@@ -1730,28 +1771,25 @@ getVariablesHelperJS = function(xmlData){
   return return_array
 }
 
+/**
+* getVariablesHelperJS2 Helper function to parse and store the content of the GetValues response dictionary at the level:
+  * ``- one_variable = GetVariablesResponse ['variablesResponse']['variables']['variable']
+  * The dictionary containing the response from the GetValues method stores the following content into a new dictionary:
+  *   - variableName: Name of the variable
+  *   - unitName: Name of the units of the values associated to the given variable and site
+  *   - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
+  *   - noDataValue: value associated to lack of data.
+  *   - isRegular: Boolean to indicate whether the observation measurements and collections regular
+  *   - timeSupport: Boolean to indicate whether the values support time
+  *   - timeUnitName: Time Units associated to the observation
+  *   - timeUnitAbbreviation: Time units abbreviation
+  *   - sampleMedium: the sample medium, for example water, atmosphere, soil.
+  *   - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
+  * @param {string} one_variable - object with structure GetVariablesResponse ['variablesResponse']['variables']['variable']
+  * @param {string} return_object - response object
+  * @return {object} return_array - array containing the response of the WaterOneFlow function GetVariables
+* */
 getVariablesHelperJS2 = function(one_variable, return_object){
-  /*
-  Helper function to parse and store the content of the GetValues response dictionary at the level:
-      - one_variable = GetVariablesResponse ['variablesResponse']['variables']['variable']
-  The dictionary containing the response from the GetValues method stores the following content into a new dictionary:
-      - variableName: Name of the variable
-      - unitName: Name of the units of the values associated to the given variable and site
-      - unitAbbreviation: unit abbreviation of the units from the values associated to the given variable and site
-      - noDataValue: value associated to lack of data.
-      - isRegular: Boolean to indicate whether the observation measurements and collections regular
-      - timeSupport: Boolean to indicate whether the values support time
-      - timeUnitName: Time Units associated to the observation
-      - timeUnitAbbreviation: Time units abbreviation
-      - sampleMedium: the sample medium, for example water, atmosphere, soil.
-      - speciation: The chemical sample speciation (as nitrogen, as phosphorus..)
-  Args:
-      one_variable: Contains metadata associated to the different variables of the site.
-      return_object: python dictionary that will store the data from the GetVariables response.
-  Returns:
-      return_object: python dictionary containing data from the GetVariables response.
-
-  */
 
   try{
     return_object['variableName'] = one_variable['variableName'];
@@ -1842,6 +1880,12 @@ getVariablesHelperJS2 = function(one_variable, return_object){
 
 }
 
+/**
+* getSitesFilterHelper function.
+  * Helper function to parse the xml metadata of the WaterOneFlow function GetSites with variable filter
+  * @param {string} xmlData - xmlData string
+  * @return {object} return_array - array containing the response of the WaterOneFlow function GetSites with variable filter
+* */
 getSitesFilterHelper = function (xmlData){
   let return_obj;
   let return_array = []
@@ -1982,6 +2026,13 @@ getSitesFilterHelper = function (xmlData){
 
 }
 
+
+/**
+* getSitesFilterHelper function.
+  * Helper function to parse the xml metadata of the WaterOneFlow function GetSites
+  * @param {string} xmlData - xmlData string
+  * @return {object} return_array - array containing the response of the WaterOneFlow function GetSites
+* */
 getSitesHelper = function (xmlData){
   let return_obj;
   let return_array = []
@@ -2114,6 +2165,13 @@ getSitesHelper = function (xmlData){
 
 }
 
+/**
+* getSitesJS function.
+  * Function to get the sites of the function GetSites
+  * @param {string} url - url of the service
+  * @param {string} hsActual - name of the service
+  * @param {string} group_name - name of the catalog
+* */
 getSitesJS = function(url,hsActual,group_name){
   let url_decons = url.split("?");
   let url_request;
@@ -2314,6 +2372,10 @@ getSitesJS = function(url,hsActual,group_name){
 
 }
 
+/**
+* getSitesJS function.
+  * Function to get the update the sites of a selected service.
+* */
 update_hydroserver = function(){
   try{
     let hsActual = this.id.split("_")[0];

@@ -444,6 +444,13 @@ getValuesJS = function(xmlData, methodCode, qualityControlLevelCode){
   }
 }
 
+/**
+ * Function get_values_graph_hs:
+ * plots time series of a given variable and site.
+ * @param {object} values - array containing the different values and metadata from the GetValues function
+ * @return {object} return_obj: object after being converted to a dataframe for the GetValues function
+ *
+ */
 get_values_graph_hs = function(values){
   let list_catalog = {}
   let return_obj = {}

@@ -89,7 +89,6 @@ var colors,
     make_list_groups,
     get_hs_list_from_hydroserver,
     delete_group_of_hydroservers,
-    remove_individual_hydroservers_group,
     remove_list_and_layers_from_hydroservers,
     reset_keywords,
     activate_deactivate_graphs,
@@ -105,7 +104,6 @@ var colors,
       'pie':{},
       'whisker':{}
     },
-    cleanGraphs,
     showVariables,
     showAvailableSites,
     filterSites={
@@ -172,6 +170,11 @@ var colors,
     getVariablesHelperJS2,
     getSitesFilterHelper,
     getSitesHelper,
+    featureStyle,
+    get_new_color,
+    change_effect_groups,
+    html_for_groups,
+    toDegreesMinutesAndSeconds,
     getSitesJS;
 
 /************************************************************************

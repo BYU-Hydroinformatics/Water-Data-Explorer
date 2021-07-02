@@ -7,9 +7,6 @@
  * LICENSE:             MIT
  *
  *****************************************************************************/
-/*****************************************************************************
- *                      LIBRARY WRAPPER
- *****************************************************************************/
  var staticPath = baseStatic;
  var apiServer = "";
  window.onbeforeunload = null
@@ -44,18 +41,20 @@
 
 
 var water_data_explorer_PACKAGE = (function() {
-    // Wrap the library in a package function
     "use strict" // And enable strict mode for this library
 
-    /*
-    ************ FUNCTION NAME: ADD_BOUNDARY_MAP **********************
-    ************ PURPOSE: ADD THE BOUNDARY LAYER TO THE MAP TAKING INTO ACCCOUNT THE CUSTOM SETTINGS***********
-    */
+    /**
+    * add_boundary_map function.
+      * Function to add a wms boundary layer
+      * @param {string} color - hexcode string color
+      * @param {number} width - number representing the width of the boundary
+      * @param {object} map - base map
+    * */
     add_boundary_map = function(color, width, map){
       try{
         if(color === "None"){
           color = "#000000";
-        }
+        }service
         if(width === "None"){
           width = 3;
         }
@@ -138,10 +137,10 @@ var water_data_explorer_PACKAGE = (function() {
       }
     }
 
-    /*
-    ************ FUNCTION NAME: INIT_MAP**********************
-    ************ PURPOSE:INIT MAP WITH THE OPENLAYERS BASE MAP AND THE OTHER ADDEDLAYERS OF HYDROSERVERS  ***********
-    */
+    /**
+    * init_map function.
+      * Function to initialize the map in the app
+    * */
     init_map = function() {
       try{
         var url_UN = "https://geoservices.un.org/arcgis/rest/services/ClearMap_WebTopo/MapServer";
@@ -359,6 +358,11 @@ var water_data_explorer_PACKAGE = (function() {
       }
 
     }
+
+    /**
+    * give_name function.
+      * Function to give a name to the views in the WDE
+    * */
     give_name = function(){
       try{
         if(views_names != "None"){
@@ -413,10 +417,10 @@ var water_data_explorer_PACKAGE = (function() {
 
     }
 
-    /*
-    ************ FUNCTION NAME: INIT_JEQUERY_VAR**********************
-    ************ PURPOSE: INITIALIZE ALL THE JQUERY VARIABLES USED***********
-    */
+    /**
+    * init_jquery_var function.
+      * Function to initialize jquery variables
+    * */
     init_jquery_var = function(){
       try{
         $modalAddGroupHydro= $("#modalAddGroupServer");
@@ -430,6 +434,11 @@ var water_data_explorer_PACKAGE = (function() {
       }
 
     }
+
+    /**
+    * addLegendMap function.
+      * Function to add a legend to the map.
+    * */
     addLegendMap = function(map){
       try{
         let element = document.getElementById("tableLegend");
@@ -449,8 +458,6 @@ var water_data_explorer_PACKAGE = (function() {
    *************************************************************************/
   $(function() {
     try{
-      // responsive_graphs();
-
       init_jquery_var();
       addDefaultBehaviorToAjax();
       init_map();

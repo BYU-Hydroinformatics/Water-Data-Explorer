@@ -7,167 +7,12 @@
  * LICENSE:             MIT
  *
  *****************************************************************************/
-responsive_graphs =  function(){
-  let newHtml;
-  if($( window ).width() > 1224){
-    $("#graph").empty()
-    newHtml = `
-    <div id="options">
-      <h3 id= "siteName_title"> Select a Station</h3>
-        <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
-          in this part such as a name and a description.
-        </p>
-      <div id="table_div"></div>
-    </div>
-    <div id="plots2">
-      <h3></h3>
-      <div id= "ipad_lay_contr">
-      <div id= "firstContainer" class="controlGraphs2">
-        <div id= "select-graphs">
-          <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="100%" >
-            <option > Variables</option>
-          </select>
-          <select id="type_graph_select2" class="selectpicker" data-width="100%">
 
-            <optgroup label="Individual Variable Plots">
-              <option> Scatter </option>
-              <option> Whisker and Box </option>
-          </optgroup>
-          </select>
-        </div>
-        <div id= "timeControllers" class="containerTime">
-            <div class='col-md-5'>
-                <div class="form-group">
-                    <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
-                        <input type='text' class="form-control" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class='col-md-5'>
-                <div class="form-group">
-                    <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
-                        <input type='text' class="form-control" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </div>
-      <div id= "secondContainer" class="controlGraphs2">
-          <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
-          <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit" data-size="mini">
-              <option value="Download">Download</option>
-              <option value="CSV" >CSV</option>
-              <option value = "WaterML1.0">WaterML 1.0</option>
-              <option value = "WaterML2.0">WaterML 2.0</option>
-          </select>
-      </div>
-      </div>
-
-
-      <div id="plots"></div>
-    </div>
-    `
-  }
-  if($( window ).width() >= 768 && $( window ).width() <= 1224){
-
-    $("#graph").empty()
-    newHtml = `
-    <div id="carouselExampleIndicators" class="carousel slide" data-interval="false" >
-      <ol class="carousel-indicators">
-        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
-        </li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-      </ol>
-      <div class="carousel-inner">
-        <div class="item active">
-            <div id="options">
-              <h3 id= "siteName_title"> Select a Station</h3>
-                <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
-                  in this part such as a name and a description.
-                </p>
-              <div id="table_div"></div>
-            </div>
-        </div>
-        <div class="item">
-          <div id="plots2">
-            <h3></h3>
-            <div id= "ipad_lay_contr">
-            <div id= "firstContainer" class="controlGraphs2">
-              <div id= "select-graphs">
-                <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="100%" >
-                  <option > Variables</option>
-                </select>
-                <select id="type_graph_select2" class="selectpicker" data-width="100%">
-
-                  <optgroup label="Individual Variable Plots">
-                    <option> Scatter </option>
-                    <option> Whisker and Box </option>
-                </optgroup>
-                </select>
-              </div>
-              <div id= "timeControllers" class="containerTime">
-                  <div class='col-md-5'>
-                      <div class="form-group">
-                          <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
-                              <input type='text' class="form-control" />
-                              <span class="input-group-addon">
-                                  <span class="glyphicon glyphicon-calendar"></span>
-                              </span>
-                          </div>
-                      </div>
-                  </div>
-                  <div class='col-md-5'>
-                      <div class="form-group">
-                          <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
-                              <input type='text' class="form-control" />
-                              <span class="input-group-addon">
-                                  <span class="glyphicon glyphicon-calendar"></span>
-                              </span>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-            </div>
-            <div id= "secondContainer" class="controlGraphs2">
-                <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
-                <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit" data-size="mini">
-                    <option value="Download">Download</option>
-                    <option value="CSV" >CSV</option>
-                    <option value = "WaterML1.0">WaterML 1.0</option>
-                    <option value = "WaterML2.0">WaterML 2.0</option>
-                </select>
-            </div>
-            </div>
-
-
-            <div id="plots"></div>
-          </div>
-
-
-        </div>
-      </div>
-      <a class="left carousel-control" href="#carouselExampleIndicators" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="right carousel-control" href="#carouselExampleIndicators" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right"></span>
-        <span class="sr-only">Next</span>
-      </a>
-
-    </div>
-    `
-  }
-
-  $(newHtml).appendTo("#graph");
-}
-
+ /**
+ * uuidv4 function.
+   * Function to get a uuidv for a group or server
+   * @return {string} uuid - uuid indetifier
+ * */
 uuidv4 = function () {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -175,7 +20,11 @@ uuidv4 = function () {
   });
 }
 
-
+/**
+* copyToClipboard function.
+  * Function to copy to a clipboard
+  * @param {string} element - string to be copied to the clipboard
+* */
 copyToClipboard = function(element) {
   var $temp = $("<input>");
   $("body").append($temp);
@@ -214,11 +63,10 @@ copyToClipboard = function(element) {
   )
 }
 
-
-/*
-************ FUNCTION NAME: DISABLE MAP **********************
-************ PURPOSE: DISABLES OR ENABLES THE ZOOM OUT AND DRAGGING OF THE MAP ***********
-*/
+/**
+* disable_map function.
+  * Function to disable the movement of the map
+* */
 disable_map =  function (){
   try{
     let map_block=document.getElementById("blockPosition");
@@ -263,14 +111,12 @@ disable_map =  function (){
   }
 
 }
-
 $('#blockPosition').change(disable_map)
 
-
-/*
-****** FU1NCTION NAME: addDefaultBehaviorToAjax *********
-****** FUNCTION PURPOSE: make dynamic ajax requests *********
-*/
+/**
+* addDefaultBehaviorToAjax function.
+  * Function to extent the functionality of the ajax request
+* */
 addDefaultBehaviorToAjax = function() {
     // Add CSRF token to appropriate ajax requests
     $.ajaxSetup({
@@ -281,18 +127,24 @@ addDefaultBehaviorToAjax = function() {
         }
     })
 }
-/*
-****** FU1NCTION NAME: checkCsrfSafe *********
-****** FUNCTION PURPOSE: CHECK THE OPERATIONS THAT DOES NOT NEED A CSRF VERIFICATION *********
-*/
+
+/**
+* checkCsrfSafe function.
+  * Function that states HTTP methods that do not require CSRF protection
+  * @param {string} method - string to be copied to the clipboard
+  * @return {string} string - string containing the HTTP methods that do not require CSRF protection
+* */
 checkCsrfSafe = function(method) {
     // these HTTP methods do not require CSRF protection
     return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method)
 }
-/*
-****** FU1NCTION NAME: getCookie *********
-****** FUNCTION PURPOSE: Retrieve a cookie value from the csrf token *********
-*/
+
+/**
+* getCookie function.
+  * Function to generate a cookie
+  * @param {string} name - string representing a name
+  * @return {string} cookieValue - string representing a cookie
+* */
 getCookie = function(name) {
     var cookie
     var cookies
@@ -314,32 +166,29 @@ getCookie = function(name) {
     return cookieValue
 }
 
-
-/*
-************ FUNCTION NAME: SET_COLOR **********************
-************ PURPOSE:RETURN A RANDOM COLOR FROM THE LIST OF COLORS  ***********
-*/
-
+/**
+* set_color function.
+  * Function to generate a hexcolor from a list of colors
+  * @return {string} color - string representing a hexcode color
+* */
 set_color = function() {
     var color = colors[Math.floor(Math.random() * colors.length)]
     return color
 }
-/*
-************ FUNCTION NAME: CLEA_COORDS**********************
-************ PURPOSE: Clear the point/polygon coordinates so that its easier for the post request to process the form ***********
-*/
 
+/**
+* clear_coords function.
+  * Clear the point/polygon coordinates so that its easier for the post request to process the form
+* */
 clear_coords = function() {
     $("#poly-lat-lon").val("")
     $("#point-lat-lon").val("")
 }
 
-
-
-/*
-************ FUNCTION NAME: ACTIVATE_DEACTIVATE_GRAPHS **********************
-************ PURPOSE: THE FUNCTIONS SHOWS THE GRAPHS IN THE LOWER PORTION OF THE MAP ***********
-*/
+/**
+* activate_deactivate_graphs function.
+  * Function to hide or show the graphs panel
+* */
 activate_deactivate_graphs = function(){
   ////console.log("we ACTIVATEEAAGAG");
   let actual_state=$(this).prop('checked');
@@ -383,6 +232,10 @@ activate_deactivate_graphs = function(){
 };
 $('#sG').change(activate_deactivate_graphs)
 
+/**
+* legend_change function.
+  * Function to hide or show the legend of the map
+* */
 legend_change = function(){
   let actual_state=$(this).prop('checked');
   if(actual_state){
@@ -393,28 +246,21 @@ legend_change = function(){
   }
 }
 $('#sG-legend').change(legend_change)
-/*
-************ FUNCTION NAME: CLEANGRAPH **********************
-************ PURPOSE: RESET THE GRAPHS PORTION ***********
-*/
-cleanGraphs = function(){
-  //RESET THE GRAPHS PORTION //
-  $( "#table_div" ).empty();
-  initialize_graphs([],[],"No data Available","","","","scatter");
-  $("#siteName_title").html("Select a Station");
-  $("#siteDes").html("No Site Selected, when a site is 'clicked' metadata of the site will display in this part such as a name and a description.");
-  $('#variables_graph option').remove();
-  $('#variables_graph').selectpicker('refresh');
-  // $('#variables_graph').empty();
-  $("#variables_graph").html(`<option > No Variables Available . . .</option>`);
-  $('#datetimepicker6').datepicker('update', '');
-  $('#datetimepicker7').datepicker('update', '');
 
-}
-/*
-************ FUNCTION NAME: INITIALIZE_GRAPHS **********************
-************ PURPOSE: INITIALIZES ANY GRAH IN THE TIME SERIE OR BEGINNING ***********
-*/
+
+/**
+* checkCsrfSafe function.
+  * Function that states HTTP methods that do not require CSRF protection
+  * @param {object} xArray - Array containing the dates for the x axis
+  * @param {object} yArray - Array containing the values for the y axis
+  * @param {string} title_graph - string repreenting the title of the graph
+  * @param {string} xTitle - string representing the x axis title
+  * @param {string} yTitle - string representing the y axis title
+  * @param {string} legend1 - string representing the name of the variable in the legend
+  * @param {string} type - string representing the type of graphs: "scatter" or "whisker"
+  * @param {object} xArrayIn - Array containing the dates for the x axis for the interpolation values
+  * @param {object} yArrayIn - Array containing the interpolation values for the y axis
+* */
 initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,type,xArrayIn,yArrayIn){
   try{
     let element_graphs=document.getElementById("graph");
@@ -558,8 +404,14 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
   }
 
 }
-function featureStyle(myColor) {
-    ////console.log("ahuringa")
+
+/**
+* featureStyle function.
+  * Function to create a feature style for the sites.
+  * @param {string} myColor - string representing a hexcolor
+  * @return {object} style - Open layers style ;
+* */
+featureStyle = function (myColor) {
     var styleCache = {};
     var style2 =
     function (feature) {
@@ -591,9 +443,12 @@ function featureStyle(myColor) {
     return style2
 }
 
-
-
-function get_new_color(){
+/**
+* set_color function.
+  * Function to generate a new hexcolor
+  * @return {string} color_new - string representing a hexcode color
+* */
+get_new_color = function (){
   var color_new = colors_unique[Math.floor(Math.random() * colors_unique.length)];
   if (!colors_used.includes(color_new)) {
     colors_used.push(color_new)
@@ -602,7 +457,15 @@ function get_new_color(){
 
 }
 
-function html_for_groups(isAdmin, title, id_group_separator){
+/**
+* html_for_groups function.
+  * Function that creates the html string for the groups in the left pannel of the app
+  * @param {boolean} isAdmin - boolean representing if it is an admin.
+  * @param {string} title - string representing the name of the catalog
+  * @param {string} id_group_separator - string repreenting the id of the catalog separator
+  * @return {string} newHtml - html string containing the catalogs structure.
+* */
+html_for_groups = function(isAdmin, title, id_group_separator){
   try{
     let newHtml;
     if (isAdmin){
@@ -681,7 +544,15 @@ function html_for_groups(isAdmin, title, id_group_separator){
   }
 }
 
-function change_effect_groups(element_to_check,id_group_separator){
+/**
+* change_effect_groups function.
+  * Function that makes the sites to be visible or hidden
+  * @param {boolean} isAdmin - boolean representing if it is an admin.
+  * @param {string} title - string representing the name of the catalog
+  * @param {string} id_group_separator - string representing the id of the catalog separator
+  * @return {string} newHtml - html string containing the catalogs structure.
+* */
+change_effect_groups = function(element_to_check,id_group_separator){
   try{
     if(layersDict['selectedPointModal']){
       map.removeLayer(layersDict['selectedPointModal'])
@@ -735,7 +606,15 @@ function change_effect_groups(element_to_check,id_group_separator){
   }
 }
 
-function html_for_servers(title,group_name,isNew){
+/**
+* html_for_servers function.
+* Function that creates the html string for the servers in the left pannel of the app
+  * @param {string} title - string representing the name of the catalog
+  * @param {string} group_name - string representing the id of the catalog
+  * @param {boolean} isNew - boolean representing if the server is newly added
+  * @return {string} newHtml - html string containing the catalogs structure.
+* */
+html_for_servers = function(title,group_name,isNew){
   try{
     let check_var = (( isNew == true ) ? 'checked' : '');
     let newHtml = `
@@ -768,7 +647,13 @@ function html_for_servers(title,group_name,isNew){
 
 }
 
-function toDegreesMinutesAndSeconds(coordinate) {
+/**
+* toDegreesMinutesAndSeconds function.
+* Function to format the lat and lon coordinates into degrees , minutes, seconds
+  * @param {number} coordinate - number representing a latitude or longitude
+  * @return {string} degrees - string for coordinates of the format : degrees , minutes, seconds
+* */
+toDegreesMinutesAndSeconds = function(coordinate) {
     try{
       var absolute = Math.abs(coordinate);
       var degrees = Math.floor(absolute);
@@ -784,6 +669,13 @@ function toDegreesMinutesAndSeconds(coordinate) {
 
 }
 
+/**
+* getIconLegend function.
+* Function to create icon for each view
+  * @param {object} style - Open layers style
+  * @param {string} server - string representing a view
+  * @return {string} svgElem - HTML string containing the icon.
+* */
 getIconLegend = function(style,server) {
   try{
     style = style.getImage();

@@ -619,7 +619,6 @@ activate_layer_values = function (){
                      parsed_table['timeSupport'].push(list_e[k].timeSupport);
                      parsed_table['codes'].push(list_e[k].codes);
                  }
-                 console.log(parsed_table['codes']);
                 //WRITTING TO TABLE IN THE SLIDE //
 
                 for(let i=0; i<parsed_table['variables'].length ; ++i){
@@ -637,7 +636,6 @@ activate_layer_values = function (){
                     aggregation_dur = "No Data Provided"
                   }
                   let time_serie_range = result['times_series'][variable_code_new];
-                  console.log(time_serie_range);
 
                   let begin_date = time_serie_range['beginDateTime'].split('T')[0];
                   if(begin_date == null){

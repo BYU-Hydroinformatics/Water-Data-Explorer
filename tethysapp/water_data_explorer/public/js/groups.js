@@ -7,6 +7,15 @@
  * LICENSE:             MIT
  *
  *****************************************************************************/
+
+
+/**
+* getWaterOneFlowServicesInfoHelperJS function.
+* Helper function to retrieve metadata for the GetWaterOneFlowServiceInfo WaterOneFLow function
+* @param {string} xmlData - xml string from the Getavalues response
+* @return {object} return_array: array containing data from the GetWaterOneFlowServiceInfo Method response.
+*
+* */
 getWaterOneFlowServicesInfoHelperJS = function(xmlData){
   let return_obj;
   let return_array = []
@@ -42,6 +51,13 @@ getWaterOneFlowServicesInfoHelperJS = function(xmlData){
   }
 }
 
+/**
+* giveServices function.
+* Helper function to retrieve metadata from the GetWaterOneFlowServiceInfo
+* @param {array} services - array containing the GetWaterOneFlowServiceInfo response
+* @return {object} json_response: containing the services available in the online catalog
+*
+* */
 giveServices = function(services){
   let json_response = {}
   let hs_list = []
@@ -68,6 +84,10 @@ giveServices = function(services){
   return json_response
 }
 
+/**
+* give_available_services function.
+* Function to retrieve metadata from the GetWaterOneFlowServiceInfo
+* */
 give_available_services = function(){
   $("#soapAddLoading-group").removeClass("hidden");
   try{
@@ -195,6 +215,10 @@ $("#btn-check_all").on("click", function(){
 
 });
 
+/**
+* show_variables_groups function.
+* Function to retrieve the variables in all the catalogs.
+* */
 show_variables_groups = function(){
   $("#KeywordLoading").removeClass("hidden");
   $.ajax({
@@ -293,6 +317,10 @@ show_variables_groups = function(){
   })
 }
 
+/**
+* available_regions function.
+* Function to retrieve the regions in all the catalogs.
+* */
 available_regions = function(){
   $("#KeywordLoading").removeClass("hidden");
   $.ajax({
@@ -373,6 +401,11 @@ available_regions = function(){
 
   })
 }
+
+/**
+* listener_checkbox function.
+* Function to retrieve the variables found in a specific country.
+* */
 listener_checkbox = function(list_countries){
   try{
     let le_object = {
@@ -495,39 +528,7 @@ listener_checkbox = function(list_countries){
 
 
 }
-// $(document).on("click", "#btn-filter-group-f", load_search_group_modal);
 
-load_search_group_modal = function(){
-  try{
-    $("#modalFilterGroup").find("#groups_countries2").empty();
-    $("#modalFilterGroup").find("#groups_variables2").empty();
-    show_variables_group();
-    available_regions_group();
-  }
-  catch(e){
-    console.log(e);
-    $.notify(
-        {
-            message: `Problem loading the Filter for the groups of views`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-
-
-}
 $(document).on("click", "#btn-key-update-variables", function(){
   let checkboxes = $('#data-table').find("input[type=checkbox][name=countries]")
   let countries_selected = [];
@@ -551,6 +552,10 @@ $(document).on("click", "#btn-key-update-variables", function(){
 
 });
 
+/**
+* add_hydroserver_for_groups function.
+* Function to add a services to a newly creted catalog in the WDE.
+* */
 add_hydroserver_for_groups= function(hs_object,actual_group_name){
   try{
     let url_single = hs_object['url'];
@@ -844,6 +849,10 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
 
 }
 
+/**
+* create_group_hydroservers function.
+* Function to create a new empty catalog in the WDE.
+* */
 create_group_hydroservers = function(){
   try{
     //CHECKS IF THE INPUT IS EMPTY ///
@@ -1070,9 +1079,12 @@ create_group_hydroservers = function(){
     )
   }
 };
-
 $("#btn-add-addHydro").on("click", create_group_hydroservers);
 
+/**
+* load_group_hydroservers function.
+* Function to load all the different catalogs in the WDE.
+* */
 load_group_hydroservers = function(){
    $.ajax({
        type: "POST",
@@ -1193,126 +1205,10 @@ load_group_hydroservers = function(){
  })
 }
 
-/*
-****** FU1NCTION NAME : REMOVE_INDIVIDUAL_HYDROSERVERS_GROUPS *********
-****** FUNCTION PURPOSE: MAKES THE LAYERS OF HYDROSERVERS AND THE GROUP TAG TO DISSAPEAR WHEN THE GROUP NAME IS UNCHECK*********
-*/
-remove_individual_hydroservers_group = function(group_name){
-  try{
-    let group_name_obj={
-      group: group_name
-    };
-    $.ajax({
-        type: "POST",
-        url: `catalog-group/`,
-        dataType: "JSON",
-        data: group_name_obj,
-        success: result => {
-          try{
-            let servers = result["hydroserver"]
-
-            //USE A FUNCTION TO FIND THE LI ASSOCIATED WITH THAT GROUP  AND DELETE IT FROM THE MAP AND MAKE ALL
-            // THE CHECKBOXES VISIBLE //
-
-            let extent = ol.extent.createEmpty();
-
-            let id_group_separator = `${group_name}_list_separator`;
-
-            let lis = document.getElementById(`${id_group_separator}`).getElementsByTagName("li");
-            let li_arrays = Array.from(lis);
-            servers.forEach(server => {
-                let {
-                    title,
-                    url,
-                    geoserver_url,
-                    layer_name,
-                    extents,
-                    siteInfo
-                } = server
-                map.removeLayer(layersDict[title])
-                delete layersDict[title]
-                delete layerColorDict[title]
-                map.updateSize()
-                let lis_to_delete = li_arrays.filter(x => title === x.attributes['layer-name'].value);
-                let ul_servers = document.getElementById(`${id_group_separator}`);
-            })
-          }
-          catch(e){
-            console.log(e);
-            $.notify(
-                {
-                    message: `We are having an error updating the interface, please reload the page`
-                },
-                {
-                    type: "danger",
-                    allow_dismiss: true,
-                    z_index: 20000,
-                    delay: 5000,
-                    animate: {
-                      enter: 'animated fadeInRight',
-                      exit: 'animated fadeOutRight'
-                    },
-                    onShow: function() {
-                        this.css({'width':'auto','height':'auto'});
-                    }
-                }
-            )
-          }
-
-
-        },
-        error: function(error) {
-          console.log(error);
-            $.notify(
-                {
-                    message: `We are having an error trying to delete the selected servers from the groups`
-                },
-                {
-                    type: "danger",
-                    allow_dismiss: true,
-                    z_index: 20000,
-                    delay: 5000,
-                    animate: {
-                      enter: 'animated fadeInRight',
-                      exit: 'animated fadeOutRight'
-                    },
-                    onShow: function() {
-                        this.css({'width':'auto','height':'auto'});
-                    }
-                }
-            )
-        }
-    })
-  }
-  catch(error){
-    console.log(error);
-    $.notify(
-        {
-            message: `We are having an error trying to recognize the actual group`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
-  }
-
-
- };
-
-/*
-****** FU1NCTION NAME: MAKE_LIST_GROUPS*********
-****** FUNCTION PURPOSE: GET THE LIST OF THE GROUPS THAT THE APP CONTAINS *********
-*/
+/**
+* make_list_groups function.
+* Function to get the list of the catalogs that the WDE contains
+* */
 make_list_groups = function(){
   try{
     let groupsDiv = $("#current-Groupservers").find(".panel.panel-default");
@@ -1376,10 +1272,11 @@ make_list_groups = function(){
 }
 $("#btn-del-groups-f").on("click", make_list_groups);
 
-/*
-****** FUNCTION NAME: GET_HS_LIST_FROM_HYDROSERVER *********
-****** FUNCTION PURPOSE: GET THE LIST OF HYDROSERVERS THAT A GROUP OF HYDROSERVER CONTAINS *********
-*/
+/**
+* get_hs_list_from_hydroserver function.
+* Function to get the list of all the services that a service contains contains
+* */
+
 get_hs_list_from_hydroserver = function(){
   try{
     if(actual_group == undefined){
@@ -1503,10 +1400,11 @@ get_hs_list_from_hydroserver = function(){
 }
 $(document).on("click",'#delete-server', get_hs_list_from_hydroserver);
 
-/*
-****** FU1NCTION NAME : delete_group_of_hydroservers *********
-****** FUNCTION PURPOSE: DELETES THE HYDROSERVER GROUP AND THE HYDROSERVERS INSIDE THE GROUP*********
-*/
+
+/**
+* delete_group_of_hydroservers function.
+* Function to delete the selected catalogs and the services that they contain.
+* */
 delete_group_of_hydroservers = function(){
   try{
     let datastring = Object.values($("#tbl-hydrogroups").find(".chkbx-group"));
@@ -1693,14 +1591,12 @@ delete_group_of_hydroservers = function(){
 
   }
 }
-
 $("#btn-del-hydro-groups").on("click", delete_group_of_hydroservers);
 
-/*
-************ FUNCTION NAME : GET_KEYWORDS_FROM_GROUPS
-************ PURPOSE : THE FUNCTION LETS YOU FILTER THE HYDROSERVERS LIST FROM THE SELECTED GROUPS OF HYDROSERVERS
-*/
-
+/**
+* catalog_filter_regions function.
+* Function to filter catalogs by regions
+* */
 catalog_filter_regions = function(){
   var styles = {
     'MultiPolygon': [new ol.style.Style({
@@ -2011,7 +1907,10 @@ catalog_filter_regions = function(){
 }
 $("#btn-key-filter-only-country").on("click", catalog_filter_regions);
 
-
+/**
+* catalog_filter_vars function.
+* Function to filter catalogs by variables
+* */
 catalog_filter_vars = function(){
 
   try{
@@ -2217,6 +2116,10 @@ catalog_filter_vars = function(){
 }
 $("#btn-key-filter-only-variables").on("click", catalog_filter_vars);
 
+/**
+* reset_keywords function.
+* Function to reset the filters results.
+* */
 reset_keywords = function(){
   try{
     $('#btn-r-reset').hide();
@@ -2277,10 +2180,13 @@ reset_keywords = function(){
     )
   }
 }
-
 $("#btn-r-reset").on("click", reset_keywords);
 $("#btn-r-reset-catalog").on("click", reset_keywords);
 
+/**
+* load_info_model function.
+* Function to load the structure of the catalogs and services with console.log
+* */
 load_info_model = function(){
   try{
     var HSTableHtml = ''
@@ -2301,6 +2207,10 @@ load_info_model = function(){
 
 }
 
+/**
+* load_search_modal function.
+* Function to load all the different regions and variables that the catalogs WDE contains
+* */
 load_search_modal = function(){
   try{
     load_info_model();
@@ -2333,6 +2243,10 @@ load_search_modal = function(){
 }
 $("#btn-filter-groups-f").on("click", load_search_modal);
 
+/**
+* searchGroups function.
+* Function to search the regions table list in the WDE
+* */
 searchGroups = function() {
   try{
     general_search("myInputKeyword","data-table");
@@ -2343,6 +2257,11 @@ searchGroups = function() {
 }
 document.getElementById('myInputKeyword').addEventListener("keyup", searchGroups);
 
+
+/**
+* searchVariables function.
+* Function to search the variables table list in the WDE
+* */
 searchVariables = function() {
   try{
     general_search("myInputKeyword2","data-table-var");
@@ -2354,7 +2273,10 @@ searchVariables = function() {
 }
 document.getElementById('myInputKeyword2').addEventListener("keyup", searchVariables);
 
-// for only one group
+/**
+* searchGroups_group function.
+* Function to search the regions table list in the selected group
+* */
 searchGroups_group = function() {
   try{
     general_search("myInputKeywordGroup","data-table2");
@@ -2365,6 +2287,10 @@ searchGroups_group = function() {
 }
 document.getElementById('myInputKeywordGroup').addEventListener("keyup", searchGroups_group);
 
+/**
+* searchVariablesGroup function.
+* Function to search the variables table list in the selected group
+* */
 searchVariablesGroup = function() {
   try{
     general_search("myInputKeywordGroup2","data-table-var2");
@@ -2375,6 +2301,10 @@ searchVariablesGroup = function() {
 }
 document.getElementById('myInputKeywordGroup2').addEventListener("keyup", searchVariablesGroup);
 
+/**
+* general_search function.
+* Function to search the variables or regions table list.
+* */
 general_search = function(id_search_input, id_table){
   try{
     input = document.getElementById(`${id_search_input}`);
@@ -2417,6 +2347,47 @@ general_search = function(id_search_input, id_table){
   }
 
 }
+
+
+// FUNCTIONS IF THE APP NEEDS TO BE EXTENDED
+
+// /**
+// * load_search_group_modal function.
+// * Function to retrieve the variables and regions in all the catalogs in the WDE.
+// * */
+// load_search_group_modal = function(){
+//   try{
+//     $("#modalFilterGroup").find("#groups_countries2").empty();
+//     $("#modalFilterGroup").find("#groups_variables2").empty();
+//     show_variables_group();
+//     available_regions_group();
+//   }
+//   catch(e){
+//     console.log(e);
+//     $.notify(
+//         {
+//             message: `Problem loading the Filter for the groups of views`
+//         },
+//         {
+//             type: "danger",
+//             allow_dismiss: true,
+//             z_index: 20000,
+//             delay: 5000,
+//             animate: {
+//               enter: 'animated fadeInRight',
+//               exit: 'animated fadeOutRight'
+//             },
+//             onShow: function() {
+//                 this.css({'width':'auto','height':'auto'});
+//             }
+//         }
+//     )
+//   }
+//
+//
+// }
+// $(document).on("click", "#btn-filter-group-f", load_search_group_modal);
+
 // available_regions_group = function(){
 //   try{
 //     let arrayActual_group=actual_group.split('=')[1];
