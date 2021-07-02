@@ -68,81 +68,11 @@ def available_regions(request):
         hydroservers_selected = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
 
     for server in hydroservers_selected:
-        # print(server.title,json.loads(server.countries)['countries'])
         countries = json.loads(server.countries)['countries']
         region_list = region_list + list(set(countries) - set(region_list))
 
     ret_object['countries'] = region_list
     return JsonResponse(ret_object)
-    # shapely.speedups.enable()
-    # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries.geojson')
-    # countries_gdf = gpd.read_file(countries_geojson_file_path)
-    # countries_series = countries_gdf.loc[:,'geometry']
-    # ret_object = {}
-    # list_regions = []
-    # SessionMaker = app.get_persistent_store_database(
-    #     Persistent_Store_Name, as_sessionmaker=True)
-    # session = SessionMaker()
-    #
-    # region_list = []
-    # hydroserver_lat_list = []
-    # hydroserver_long_list = []
-    # hydroserver_name_list = []
-    #
-    # if request.method == 'GET' and 'group' not in request.GET:
-    #     hydroservers_selected = session.query(HydroServer_Individual).all()
-    # else:
-    #     specific_group=request.GET.get('group')
-    #     hydroservers_selected = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
-    # for server in hydroservers_selected:
-    #     sites = json.loads(server.siteinfo)
-    #     ls_lats = []
-    #     ls_longs = []
-    #     site_names = []
-    #     # print(sites)
-    #     for site in sites:
-    #         ls_lats.append(site['latitude'])
-    #         ls_longs.append(site['longitude'])
-    #         site_names.append(site['fullSiteCode'])
-    #     hydroserver_lat_list.append(ls_lats)
-    #     hydroserver_long_list.append(ls_longs)
-    #     hydroserver_name_list.append(site_names)
-    #
-    # list_countries_stations = {}
-    # for indx in range(0,len(hydroserver_name_list)):
-    #     df = pd.DataFrame({'SiteName': hydroserver_name_list[indx],'Latitude': hydroserver_lat_list[indx],'Longitude': hydroserver_long_list[indx]})
-    #     gdf = gpd.GeoDataFrame(geometry=gpd.points_from_xy(df.Longitude, df.Latitude), index = hydroserver_name_list[indx])
-    #     gdf = gdf.assign(**{str(key): gdf.within(geom) for key, geom in countries_series.items()})
-    #     trues_onlys = gdf.copy()
-    #     trues_onlys = trues_onlys.drop(['geometry'],axis=1)
-    #     trues_onlys = trues_onlys.loc[:,trues_onlys.any()]
-    #     countries_index = list(trues_onlys.columns)
-    #     trues_onlys_copy = trues_onlys.copy()
-    #     countries_index = [x for x in countries_index if x != 'geometry']
-    #
-    #     countries_index2 = [int(i) for i in countries_index]
-    #     countries_selected = countries_gdf.iloc[countries_index2]
-    #     list_countries_selected = list(countries_selected['name'])
-    #     for coun in list_countries_selected:
-    #         if coun not in region_list:
-    #             region_list.append(coun)
-    #
-    #     my_indx = 0
-    #     for column_ in trues_onlys_copy[countries_index]:
-    #         trues_onlys_copy[column_] = np.where(trues_onlys_copy[column_] == True, trues_onlys_copy.index, trues_onlys_copy[column_])
-    #         list_co = trues_onlys_copy[column_].tolist()
-    #         list_co = list(filter(lambda list_co: list_co != False, list_co))
-    #         country_sel = list_countries_selected[my_indx]
-    #         if country_sel not in list_countries_stations:
-    #             list_countries_stations[country_sel] = list_co
-    #         else:
-    #             list_countries_stations[country_sel].extend(list_co)
-    #         my_indx = my_indx + 1
-    #
-    # ret_object['countries'] = region_list
-    # ret_object['stations'] = list_countries_stations
-    # return JsonResponse(ret_object)
-
 
 def available_variables(request):
     SessionMaker = app.get_persistent_store_database(
@@ -177,7 +107,6 @@ def available_variables(request):
     varaibles_list['urls'] = hydroserver_urls_list
     varaibles_list['names'] = hydroserver_server_list
 
-    print(len(hydroserver_urls_list), len(hydroserver_variable_code_list))
     return JsonResponse(varaibles_list)
 
 
@@ -197,14 +126,12 @@ def create_group(request):
 
         selected_services = []
         for key, value in request.POST.items():
-            #print(key)
             if value not in (title, description,url_catalog):
                 selected_services.append(value.replace("_"," "))
 
 
         group_obj['title']= title
         group_obj['description']= description
-        # url_catalog = request.POST.get('url')
         group_hydroservers=Groups(title=title, description=description)
         session.add(group_hydroservers)
         session.commit()
@@ -230,7 +157,6 @@ def create_group(request):
     else:
         group_obj['message'] = 'There was an error while adding th group.'
 
-    # print(group_obj['views'])
     return JsonResponse(group_obj)
 
 
@@ -242,7 +168,6 @@ def addMultipleViews(request,hs_list,group):
 
         return_obj = {}
         try:
-            # sites_object = water.GetSites()
             sites_object = GetSites_WHOS(new_url)
             sites_parsed_json = json.dumps(sites_object)
             countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
@@ -290,11 +215,9 @@ def addMultipleViews(request,hs_list,group):
 
 def get_groups_list(request):
     list_catalog = {}
-    #print("get_groups_list controllers.py FUNCTION inside")
 
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
 
-    #print(SessionMaker)
     session = SessionMaker()  # Initiate a session
 
 
@@ -320,7 +243,6 @@ def get_groups_list(request):
         array_example.append(layer_obj)
 
     list2["servers"] =array_example
-    #print(list2)
 
     return JsonResponse(list_catalog)
 
@@ -335,7 +257,6 @@ def catalog_group(request):
 
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
 
-    # print(SessionMaker)
     session = SessionMaker()  # Initiate a session
     hydroservers_group = session.query(Groups).filter(Groups.title == specific_group)[0].hydroserver
     h1=session.query(Groups).join("hydroserver")
@@ -365,7 +286,6 @@ def delete_group(request):
         SessionMaker = app.get_persistent_store_database(
             Persistent_Store_Name, as_sessionmaker=True)
         session = SessionMaker()
-        #print(request.POST)
         if request.is_ajax() and request.method == 'POST':
             groups=request.POST.getlist('groups[]')
             list_groups['groups']=groups
@@ -598,16 +518,9 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
                 countries_index = [x for x in countries_index if x != 'geometry']
                 countries_index2 = [int(i) for i in countries_index]
                 countries_selected = countries_gdf.iloc[countries_index2]
-                # list_countries_selected = list(countries_selected['name'])
-                # list_countries_selected = list(countries_selected['ADMIN'])
+
                 list_countries_selected = list(countries_selected['admin'])
 
-                # list_countries_selected.extend(list(countries_selected['ADMIN']))
-                # list_countries_selected = list(set(list_countries_selected))
-                # print("this list",list_countries_selected)
-                # if len(list_countries_selected) > 0:
-                # for my_indx in range(0,len(list(countries_selected['ADMIN']))):
-                # if len(list(countries_selected['ADMIN'])) > 0:
                 if len(list(countries_selected['admin'])) > 0:
                     region_list.append(hydroservers_selected[indx].title)
                     my_indx = 0
@@ -628,20 +541,10 @@ def filter_region(countries_geojson_file_path,list_countries, actual_group = Non
 
                             sites_info_filter.append(site_objInfo[site_full_name])
 
-                        # country_sel = list_countries_selected[my_indx]
-                        # print(country_sel)
-                        # if country_sel not in list_countries_stations:
-                        #     list_countries_stations['sites'] = sites_info_filter
-                        #     print("none",len(list_countries_stations['sites']))
-                        #
-                        # else:
-                        #     list_countries_stations['sites'].extend(sites_info_filter)
-                        #     print("yes",len(list_countries_stations['sites']))
                         list_countries_stations['sites'].extend(sites_info_filter)
                         my_indx = my_indx + 1
 
                     list_filtered.append(list_countries_stations)
-                    # print(list_filtered)
         ret_object['stations'] = list_filtered
         ret_object['hs'] = region_list
         return ret_object
@@ -669,13 +572,10 @@ def filter_variable(variables_list, actual_group = None):
             if "whos" in hydroservers.url:
                 name = hydroservers.title
                 hs_list_temp = []
-                # water = pwml.WaterMLOperations(url = hydroservers.url.strip())
                 for variable_single in variables_list:
                     url2 = f'{hydroservers.url.strip().split("?")[0]}/GetSites?variableCode={variable_single}'
-                    # print(url2)
                     datos = requests.get(url2).content
                     sites_dict = xmltodict.parse(datos)
-                    # print(sites_dict)
                     sites_json_object = json.dumps(sites_dict)
                     sites_json = json.loads(sites_json_object)['soap:Envelope']['soap:Body']['GetSitesResponse']['GetSitesResult']
                     sites_dict2 = xmltodict.parse(sites_json)
@@ -730,7 +630,6 @@ def filter_variable(variables_list, actual_group = None):
                                 hs_sites.append(hs_json)
 
 
-                        # sites_object = parseJSON(sites_json2)
                         sites_object = hs_sites
                         df = pd.DataFrame.from_dict(sites_object)
                         hs_list_temp.append(df)
@@ -738,19 +637,12 @@ def filter_variable(variables_list, actual_group = None):
                         print(e)
                 try:
                     df_temp = pd.concat(hs_list_temp).drop_duplicates().reset_index(drop=True)
-                    # print(df_temp)
                     dict_temp = df_temp.to_dict('records')
 
                     hs_list.append(dict_temp)
                 except ValueError as e:
                     print(e)
-                #
-                # variables_sever = water.GetVariables()['variables']
-                # df_variables = pd.DataFrame.from_dict(variables_sever)
-                # variables_array = df_variables['variableName'].tolist()
-                # check = any(item in variables_array for item in variables_list)
-                # if check is True:
-                #     hs_list.append(name)
+
 
     return hs_list
 
@@ -759,14 +651,6 @@ def get_variables_for_country(request):
     countries = request.POST.getlist('countries[]')
     list_variables = []
     list_variables_codes = []
-    # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries2.geojson')
-
-    # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries3.geojson')
-    # if request.method == 'GET' and 'group' in request.GET:
-    #     specific_group=request.GET.get('group')
-    #     hs_filtered_region = filter_region(countries_geojson_file_path,countries,actual_group = specific_group )
-    # else:
-    #     hs_filtered_region = filter_region(countries_geojson_file_path,countries)
 
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()
@@ -775,40 +659,15 @@ def get_variables_for_country(request):
     for hs_selected in hydroservers_selected:
         list_contries_final = json.loads(hs_selected.countries)['countries']
         set_contries_final = set(list_contries_final)
-        # print(set_contries_final)
         set_request_final = set(countries)
-        print(set_contries_final,"hs")
-        print(set_request_final,"js")
+
         if (set_contries_final & set_request_final):
-            print((set_contries_final & set_request_final), "mix")
-
-
             hs_variables_json  = json.loads(hs_selected.variables)
             list_variables = list_variables + hs_variables_json['variables']
             list_variables_codes = list_variables_codes +hs_variables_json['variables_codes']
 
-
-    # for hs_big in hs_filtered_region['stations']:
-        # for hs in hs_big['sites']:
-        #     hs_url = hs['url']
-        #     # for key in hs:
-        #     #     if key is not 'url':
-        #             # for site in hs[key]:
-        #     site = hs['network'] + ":" + hs['sitecode']
-        #     water = pwml.WaterMLOperations(url = hs_url)
-        #     variables_sever = water.GetSiteInfo(site)['siteInfo']
-        #     df_variables = pd.DataFrame.from_dict(variables_sever)
-        #     # print(df_variables)
-        #     # print(list(df_variables))
-        #     variables_array = df_variables['variableName'].tolist()
-        #     for vari in variables_array:
-        #         variables_hs.append(vari)
-        #         variables_hs = list(set(variables_hs))
-
-    # variables_hs = list(set(variables_hs))
     response_obj['variables'] = list_variables
     response_obj['variables_codes'] = list_variables_codes
-    # print(response_obj)
     return JsonResponse(response_obj)
 
 ######*****************************************************************************************################
