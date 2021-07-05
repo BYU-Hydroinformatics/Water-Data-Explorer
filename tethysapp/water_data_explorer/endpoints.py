@@ -381,7 +381,7 @@ def available_variables_2(url):
     varaibles_list["variables"] = hydroserver_variable_list
     varaibles_list["variables_codes"] = hydroserver_variable_code_list
     return varaibles_list
-    
+
 ######*****************************************************************************************################
 ######**ADD A HYDROSERVER TO THE SELECTED GROUP OF HYDROSERVERS THAT WERE CREATED BY THE USER *################
 ######*****************************************************************************************################
