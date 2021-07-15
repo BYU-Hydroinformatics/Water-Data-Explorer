@@ -54,7 +54,7 @@ var water_data_explorer_PACKAGE = (function() {
       try{
         if(color === "None"){
           color = "#000000";
-        }service
+        }
         if(width === "None"){
           width = 3;
         }

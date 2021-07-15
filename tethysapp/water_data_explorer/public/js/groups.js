@@ -2261,16 +2261,18 @@ document.getElementById('myInputKeyword').addEventListener("keyup", searchGroups
 * searchVariables function.
 * Function to search the variables table list in the WDE
 * */
-searchVariables = function() {
-  try{
-    general_search("myInputKeyword2","data-table-var");
 
-  }
-  catch(error){
-    console.log(error);
-  }
-}
-document.getElementById('myInputKeyword2').addEventListener("keyup", searchVariables);
+// UNCOMMENT FOR FILTERING VARIABLES //
+// searchVariables = function() {
+//   try{
+//     general_search("myInputKeyword2","data-table-var");
+//
+//   }
+//   catch(error){
+//     console.log(error);
+//   }
+// }
+// document.getElementById('myInputKeyword2').addEventListener("keyup", searchVariables);
 
 /**
 * searchGroups_group function.
