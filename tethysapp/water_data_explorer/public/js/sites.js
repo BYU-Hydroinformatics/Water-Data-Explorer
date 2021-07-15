@@ -73,7 +73,7 @@ getSiteInfoHelperJS = function(object_siteInfo,object_methods){
 
   }
   catch(e){
-    console.log(e);
+    // console.log(e);
     return_obj['country'] = "No Data was Provided";
   }
 
@@ -84,7 +84,7 @@ getSiteInfoHelperJS = function(object_siteInfo,object_methods){
   }
 
   catch(e){
-    console.log(e);
+    // console.log(e);
     return_obj['siteName'] = "No Data was Provided";
   }
 
@@ -92,7 +92,7 @@ getSiteInfoHelperJS = function(object_siteInfo,object_methods){
     return_obj['latitude'] = object_siteInfo['geoLocation']['geogLocation']['latitude'];
   }
   catch(e){
-    console.log(e);
+    // console.log(e);
     return_obj['latitude'] = "No Data was Provided";
   }
 
@@ -101,7 +101,7 @@ getSiteInfoHelperJS = function(object_siteInfo,object_methods){
 
   }
   catch(e){
-    console.log(e);
+    // console.log(e);
     return_obj['longitude'] = "No Data was Provided";
   }
 
@@ -110,7 +110,7 @@ getSiteInfoHelperJS = function(object_siteInfo,object_methods){
 
   }
   catch(e){
-    console.log(e);
+    // console.log(e);
     return_obj['geolocation'] = "No Data was Provided";
   }
 
@@ -119,14 +119,14 @@ getSiteInfoHelperJS = function(object_siteInfo,object_methods){
 
   }
   catch(e){
-    console.log(e);
+    // console.log(e);
      return_obj['network'] = "No Data was Provided";
   }
   try{
     return_obj['siteCode'] = object_siteInfo['siteCode']['#text'];
   }
   catch(e){
-    console.log(e);
+    // console.log(e);
     return_obj['siteCode'] = "No Data was Provided";
   }
 
