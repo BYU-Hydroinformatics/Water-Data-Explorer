@@ -540,6 +540,7 @@ select_variable_change = function(){
                 let parseValuesData = getValuesJS(xmlData,null,null);
                 let result1 = {};
                 result1 = get_values_graph_hs(parseValuesData);
+                console.log(result1);
                 if(result1['graphs'].length > 0){
                   //GRAPHS VALUES//
                 let time_series_array = result1['graphs'];
