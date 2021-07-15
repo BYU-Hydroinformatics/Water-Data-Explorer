@@ -738,6 +738,7 @@ activate_layer_values = function (){
                     // THIS IS NECESARRY TO RESET THE DATES OTHERWISE IT IS GOING TO HAVE EMPTY SPACES..
                     $('#datetimepicker6').datepicker('setStartDate', null);
                     $('#datetimepicker6').datepicker('setEndDate', null);
+                    $('#datetimepicker7').datepicker('setStartDate',null);
                     $('#datetimepicker7').datepicker('setEndDate',null);
 
                     //@KrunchMuffin I found a workaround this issue:
@@ -752,7 +753,7 @@ activate_layer_values = function (){
                     $('#datetimepicker7').datepicker('update', dateUTC_end);
                     $('#datetimepicker6').datepicker('setStartDate', dateUTC_start);
                     $('#datetimepicker6').datepicker('setEndDate', dateUTC_end);
-                    // $('#datetimepicker7').datepicker('setStartDate',dateUTC_end);
+                    $('#datetimepicker7').datepicker('setStartDate',dateUTC_start);
                     $('#datetimepicker7').datepicker('setEndDate',dateUTC_end);
                     $("#GeneralLoading").addClass("hidden");
 
