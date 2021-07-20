@@ -62,7 +62,10 @@ RUN /bin/bash -c ". ${CONDA_HOME}/bin/activate tethys \
   ; cd /tethys_apps/Water-Data-Explorer \
   ; tethys install -N"
 
+RUN ${CONDA_HOME}/bin/conda install -n tethys pip
 
+RUN /bin/bash -c ". ${CONDA_HOME}/bin/activate tethys \
+  ;  pip install psycopg2==2.8.6"
 
 ######################################################
 # CHANGE THE PROXY TIME REPLACING THE NGINX TEMPLATE #
