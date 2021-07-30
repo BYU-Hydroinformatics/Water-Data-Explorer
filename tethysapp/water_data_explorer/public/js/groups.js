@@ -571,7 +571,16 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
       url_decons = url_single.split("?");
 
       let url_request;
-      url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
+      console.log(url_decons[0]);
+      let make_sure_not_mc = url_decons[0].split("//");
+      // console.log(document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetSitesObject&format=WML1")
+      // console.log(url_decons[0] + "?request=GetSitesObject&format=WML1")
+      if(make_sure_not_mc[0] == document.location.protocol){
+        url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
+      }
+      else{
+        url_request = document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetSitesObject&format=WML1";
+      }
         $.ajax({
           type:"GET",
           url:url_request,
