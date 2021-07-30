@@ -175,7 +175,8 @@ var colors,
     change_effect_groups,
     html_for_groups,
     toDegreesMinutesAndSeconds,
-    getSitesJS;
+    getSitesJS,
+    check_if_exits;
 
 /************************************************************************
  *  PRIVATE FUNCTION IMPLEMENTATIONS

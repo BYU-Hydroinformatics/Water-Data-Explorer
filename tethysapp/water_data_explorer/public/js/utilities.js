@@ -709,3 +709,20 @@ getIconLegend = function(style,server) {
   }
 
 }
+
+/**
+* check_if_exits function.
+* Function to check if a groups/service has already been created
+  * @param {string} name_to_check - name of the group or service
+  * @return {boolean} isThere - boolean to see if the group/service exists
+* */
+check_if_exits = function(name_to_check){
+  isThere = false;
+  Object.keys(id_dictionary).forEach(function(key){
+    if(id_dictionary[key] == name_to_check){
+      isThere = true;
+      return isThere
+    }
+  })
+  return isThere
+}

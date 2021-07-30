@@ -872,6 +872,17 @@ create_group_hydroservers = function(){
     else {
       $modalAddGroupHydro.find(".warning").html("")
     }
+    if(check_if_exits($("#addGroup-title").val())){
+      $modalAddGroupHydro
+          .find(".warning")
+          // .html("<b>Please note that only numbers and other characters besides the underscore ( _ ) are not allowed</b>");
+          .html("<b>There is already a group with the same name.");
+      return false
+    }
+    else{
+      $modalAddGroupHydro.find(".warning").html("");
+
+    }
     if ($("#addGroup-title").val() != "") {
       var regex = new RegExp("^(?![0-9]*$)[a-zA-Z0-9]+$")
       var specials=/[*|\":<>[\]{}`\\()';@&$]/;
