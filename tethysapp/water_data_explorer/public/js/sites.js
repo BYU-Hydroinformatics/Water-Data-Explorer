@@ -384,10 +384,10 @@ getSitesInfoJS = function(xmlData){
   var result = parser.validate(xmlData);
   if (result !== true) console.log(result.err);
   var jsonObj = parser.parse(xmlData,options);
-  // console.log(jsonObj);
+  console.log(jsonObj);
   try{
     let firstObject = jsonObj['soap:Envelope']['soap:Body']['GetSiteInfoObjectResponse']['sitesResponse'];
-    // console.log(firstObject);
+    console.log(firstObject);
     let object_methods = firstObject['site']['seriesCatalog']['series'];
     let object_siteInfo = firstObject['site']['siteInfo'];
     if (object_methods.constructor == Object) {
@@ -530,7 +530,7 @@ activate_layer_values = function (){
         let SITE = feature_single.values_['code'];
         // SITE = 'B6940B585CE66AD1D5E33075197668BE487A1CDB';
         let url_request = `${url_base}?request=GetSiteInfoObject&site=${SITE}`;
-        // console.log(url_request);
+        console.log(url_request);
         $("#GeneralLoading").removeClass("hidden");
         $('#sG').bootstrapToggle('on');
         $.ajax({
@@ -538,11 +538,11 @@ activate_layer_values = function (){
           url:url_request,
           dataType: "text",
           success: function(xmlData){
-            // console.log(xmlData);
+            console.log(xmlData);
             let getSiteInfoObjectParse = getSitesInfoJS(xmlData);
-            // console.log(getSiteInfoObjectParse);
+            console.log(getSiteInfoObjectParse);
             let result =getSiteInfoObjectParsableJS(getSiteInfoObjectParse);
-            
+
             try{
               // MAKE THE METADATA OF THE SITE TO LOAD IN THE FIRST SLIDE //
               let description_site = document.getElementById('siteDes');

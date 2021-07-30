@@ -956,6 +956,7 @@ delete_hydroserver= function(){
               Object.keys(id_dictionary).forEach(function(key) {
                 if(id_dictionary[key] == title ){
                   new_title = key;
+                  delete id_dictionary[key]
                 }
               });
               $(`#${new_title}-row-complete`).remove()
@@ -1637,6 +1638,7 @@ getVariablesJS = function(url,hsActual,group_name){
       url:url_request,
       dataType: "text",
       success: function(xmlData){
+        console.log(xmlData);
         let parsedObject = getVariablesHelperJS(xmlData);
         let requestObject = {
           hs: id_dictionary[hsActual],
@@ -1758,6 +1760,7 @@ getVariablesHelperJS = function(xmlData){
   var result = parser.validate(xmlData);
   if (result !== true) console.log(result.err);
   var jsonObj = parser.parse(xmlData,options);
+  console.log(jsonObj);
   let firstObject = jsonObj['soap:Envelope']['soap:Body']['GetVariablesObjectResponse'];
 
   let array_variables = firstObject['variablesResponse']['variables']['variable'];

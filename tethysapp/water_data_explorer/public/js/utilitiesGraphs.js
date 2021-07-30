@@ -344,6 +344,7 @@ getValuesJS = function(xmlData, methodCode, qualityControlLevelCode){
   var result = parser.validate(xmlData);
   if (result !== true) console.log(result.err);
   var jsonObj = parser.parse(xmlData,options);
+  console.log(jsonObj);
   var times_series = {};
   try{
     let values_json = jsonObj['soap:Envelope']['soap:Body'];
@@ -530,7 +531,7 @@ select_variable_change = function(){
         let ENDDATE_S = end_date_string.replace(" ","T");
         let url_final = `${url_base}?request=GetValuesObject&site=${SITE_S}&variable=${VARIABLE_S}&beginDate=${BEGINDATE_S}&endDate=${ENDDATE_S}&format=WML1`;
 
-
+        console.log(url_final);
           $.ajax({
             type:"GET",
             url:url_final,
