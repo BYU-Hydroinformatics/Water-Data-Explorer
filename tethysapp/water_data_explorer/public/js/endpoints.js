@@ -587,6 +587,13 @@ add_hydroserver = function(){
     else {
       $modalAddSOAP.find(".warning").html("")
     }
+    if(check_if_exits($("#soap-title").val())){
+      $modalAddSOAP.find(".warning").html(  "<b>There is already a view with that name, please provide another</b>")
+      return false
+    }
+    else {
+      $modalAddSOAP.find(".warning").html("")
+    }
     if($("#soap-url").val() == "http://hydroportal.cuahsi.org/nwisdv/cuahsi_1_1.asmx?WSDL" ||$("#soap-url").val() =="http://hydroportal.cuahsi.org/nwisuv/cuahsi_1_1.asmx?WSDL"){
         $modalAddSOAP
               .find(".warning")
