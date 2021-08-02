@@ -527,9 +527,16 @@ activate_layer_values = function (){
         object_request['code']=feature_single.values_['code'];
         object_request['network']=feature_single.values_['network'];
         let url_base = feature_single.values_['hs_url'].split("?")[0];
+        let url_request;
         let SITE = feature_single.values_['code'];
         // SITE = 'B6940B585CE66AD1D5E33075197668BE487A1CDB';
-        let url_request = `${url_base}?request=GetSiteInfoObject&site=${SITE}`;
+        let make_sure_not_mc = url_base.split("//");
+
+        if(make_sure_not_mc[0] != document.location.protocol){
+          url_base = document.location.protocol + "//" + make_sure_not_mc[1];
+        }
+
+        url_request = `${url_base}?request=GetSiteInfoObject&site=${SITE}`;
         console.log(url_request);
         $("#GeneralLoading").removeClass("hidden");
         $('#sG').bootstrapToggle('on');

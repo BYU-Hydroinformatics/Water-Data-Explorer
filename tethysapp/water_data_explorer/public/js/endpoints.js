@@ -45,8 +45,14 @@ get_vars_from_site = function (resultList){
     $("#downloading_loading").removeClass("hidden");
     let url_base = $("#url_WOF").text().split("?")[0];
     let SITE = resultList[indexs]['sitecode'];
-    let url_request = `${url_base}?request=GetSiteInfoObject&site=${SITE}`;
+    let url_request;
+    let make_sure_not_mc = url_base.split("//");
 
+    if(make_sure_not_mc[0] != document.location.protocol){
+      url_base = document.location.protocol + "//" + make_sure_not_mc[1];
+    }
+    url_request = `${url_base}?request=GetSiteInfoObject&site=${SITE}`;
+    console.log(url_request);
       $.ajax({
         type:"GET",
         url:url_request,
@@ -636,7 +642,16 @@ add_hydroserver = function(){
         url_to_sent = url_to_sent + "?WSDL";
       }
       let url_request;
-      url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
+      // url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
+      let make_sure_not_mc = url_decons[0].split("//");
+
+      if(make_sure_not_mc[0] == document.location.protocol){
+        url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
+      }
+      else{
+        url_request = document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetSitesObject&format=WML1";
+      }
+      console.log(url_request);
         $.ajax({
           type:"GET",
           url:url_request,
@@ -1629,7 +1644,18 @@ document.getElementById('myInput').addEventListener("keyup", searchSites);
 getVariablesJS = function(url,hsActual,group_name){
   let url_decons = url.split("?");
 
-  let url_request = url_decons[0] + "?request=GetVariablesObject&format=WML1";
+  let url_request;
+  // let url_request = url_decons[0] + "?request=GetVariablesObject&format=WML1";
+  console.log(url_decons[0]);
+  let make_sure_not_mc = url_decons[0].split("//");
+
+  if(make_sure_not_mc[0] == document.location.protocol){
+    url_request = url_decons[0] + "?request=GetVariablesObject&format=WML1";
+  }
+  else{
+    url_request = document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetVariablesObject&format=WML1";
+  }
+  console.log(url_request);
   $("#GeneralLoading").removeClass("hidden");
 
   try{
@@ -2196,7 +2222,15 @@ getSitesJS = function(url,hsActual,group_name){
        transform: 'translate(-50%, -50%)'
      });
     $("#GeneralLoading").removeClass("hidden");
-    url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
+    // url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
+    let make_sure_not_mc = url_decons[0].split("//");
+    if(make_sure_not_mc[0] == document.location.protocol){
+      url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
+    }
+    else{
+      url_request = document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetSitesObject&format=WML1";
+    }
+    console.log(url_request);
     try{
       $.ajax({
         type:"GET",

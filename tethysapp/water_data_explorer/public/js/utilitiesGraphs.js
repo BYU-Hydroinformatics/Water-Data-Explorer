@@ -525,6 +525,14 @@ select_variable_change = function(){
 
 
         let url_base = object_request_variable['hs_url'].split("?")[0];
+
+        let make_sure_not_mc = url_base.split("//");
+
+        if(make_sure_not_mc[0] != document.location.protocol){
+          url_base = document.location.protocol + "//" + make_sure_not_mc[1];
+        }
+
+
         let SITE_S = object_request_variable['code'];
         let VARIABLE_S = object_request_variable['code_variable'];
         let BEGINDATE_S = start_date_string.replace(" ","T");
@@ -652,7 +660,7 @@ select_variable_change = function(){
                           // IF TO AVOID 'WaterML1.0' VALUE IN THE DROPDOWN//
                           else if(selectedDownloadType == "WaterML1.0" ){
                             $("#graphAddLoading").removeClass("hidden");
-                            let url_base = object_request_variable['hs_url'].split("?")[0];
+                            // let url_base = object_request_variable['hs_url'].split("?")[0];
                             let SITE = object_request_variable['code'];
                             let VARIABLE = object_request_variable['code_variable'];
                             let BEGINDATE = x_array[0].replace(" ","T");
@@ -769,7 +777,7 @@ select_variable_change = function(){
                           // IF TO AVOID 'WaterML2.0' VALUE IN THE DROPDOWN//
                           else if(selectedDownloadType == "WaterML2.0" ){
                             $("#graphAddLoading").removeClass("hidden");
-                            let url_base = object_request_variable['hs_url'].split("?")[0];
+                            // let url_base = object_request_variable['hs_url'].split("?")[0];
                             let SITE = object_request_variable['code'];
                             let VARIABLE = object_request_variable['code_variable'];
                             let BEGINDATE = x_array[0].replace(" ","T");
@@ -871,7 +879,7 @@ select_variable_change = function(){
                           // IF TO AVOID 'NetCDF' VALUE IN THE DROPDOWN//
                           else if(selectedDownloadType == "NetCDF" ){
                             $("#graphAddLoading").removeClass("hidden");
-                            let url_base = object_request_variable['hs_url'].split("?")[0];
+                            // let url_base = object_request_variable['hs_url'].split("?")[0];
                             let SITE = object_request_variable['code'];
                             let VARIABLE = object_request_variable['code_variable'];
                             let BEGINDATE = x_array[0].replace(" ","T");
