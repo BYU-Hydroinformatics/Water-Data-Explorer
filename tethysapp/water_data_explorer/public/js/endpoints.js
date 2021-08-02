@@ -659,7 +659,7 @@ add_hydroserver = function(){
           success: function(xmlData){
             try{
               let parsedObject = getSitesHelper(xmlData);
-              console.log(parsedObject);
+              // console.log(parsedObject);
               let requestObject = {
                 hs: $("#soap-title").val(),
                 group: actual_group.split('=')[1],
@@ -1646,7 +1646,6 @@ getVariablesJS = function(url,hsActual,group_name){
 
   let url_request;
   // let url_request = url_decons[0] + "?request=GetVariablesObject&format=WML1";
-  console.log(url_decons[0]);
   let make_sure_not_mc = url_decons[0].split("//");
 
   if(make_sure_not_mc[0] == document.location.protocol){
@@ -1664,7 +1663,7 @@ getVariablesJS = function(url,hsActual,group_name){
       url:url_request,
       dataType: "text",
       success: function(xmlData){
-        console.log(xmlData);
+        // console.log(xmlData);
         let parsedObject = getVariablesHelperJS(xmlData);
         let requestObject = {
           hs: id_dictionary[hsActual],
@@ -1786,7 +1785,7 @@ getVariablesHelperJS = function(xmlData){
   var result = parser.validate(xmlData);
   if (result !== true) console.log(result.err);
   var jsonObj = parser.parse(xmlData,options);
-  console.log(jsonObj);
+  // console.log(jsonObj);
   let firstObject = jsonObj['soap:Envelope']['soap:Body']['GetVariablesObjectResponse'];
 
   let array_variables = firstObject['variablesResponse']['variables']['variable'];

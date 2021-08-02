@@ -384,10 +384,10 @@ getSitesInfoJS = function(xmlData){
   var result = parser.validate(xmlData);
   if (result !== true) console.log(result.err);
   var jsonObj = parser.parse(xmlData,options);
-  console.log(jsonObj);
+  // console.log(jsonObj);
   try{
     let firstObject = jsonObj['soap:Envelope']['soap:Body']['GetSiteInfoObjectResponse']['sitesResponse'];
-    console.log(firstObject);
+    // console.log(firstObject);
     let object_methods = firstObject['site']['seriesCatalog']['series'];
     let object_siteInfo = firstObject['site']['siteInfo'];
     if (object_methods.constructor == Object) {
@@ -545,9 +545,9 @@ activate_layer_values = function (){
           url:url_request,
           dataType: "text",
           success: function(xmlData){
-            console.log(xmlData);
+            // console.log(xmlData);
             let getSiteInfoObjectParse = getSitesInfoJS(xmlData);
-            console.log(getSiteInfoObjectParse);
+            // console.log(getSiteInfoObjectParse);
             let result =getSiteInfoObjectParsableJS(getSiteInfoObjectParse);
 
             try{

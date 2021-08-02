@@ -344,7 +344,7 @@ getValuesJS = function(xmlData, methodCode, qualityControlLevelCode){
   var result = parser.validate(xmlData);
   if (result !== true) console.log(result.err);
   var jsonObj = parser.parse(xmlData,options);
-  console.log(jsonObj);
+  // console.log(jsonObj);
   var times_series = {};
   try{
     let values_json = jsonObj['soap:Envelope']['soap:Body'];
@@ -549,7 +549,7 @@ select_variable_change = function(){
                 let parseValuesData = getValuesJS(xmlData,null,null);
                 let result1 = {};
                 result1 = get_values_graph_hs(parseValuesData);
-                console.log(result1);
+                // console.log(result1);
                 if(result1['graphs'].length > 0){
                   //GRAPHS VALUES//
                 let time_series_array = result1['graphs'];
