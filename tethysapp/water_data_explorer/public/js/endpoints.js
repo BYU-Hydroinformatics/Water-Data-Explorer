@@ -1144,6 +1144,7 @@ delete_hydroserver_Individual= function(group,server){
                     $(no_servers).appendTo(`#${id_group_separator}`) ;
               }
               $.notify(
+
                   {
                       message: `Successfully Deleted the Web service!`
                   },
