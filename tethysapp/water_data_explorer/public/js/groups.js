@@ -1000,6 +1000,7 @@ create_group_hydroservers = function(){
               })
 
               $("#btn-add-addHydro").show()
+              $("#soapAddLoading-group").addClass("hidden");
 
               $.notify(
                   {
@@ -1460,6 +1461,8 @@ delete_group_of_hydroservers = function(){
               Object.keys(id_dictionary).forEach(function(key) {
                 if(id_dictionary[key] == group ){
                   group_name_e3 = key;
+                  delete id_dictionary[key]
+                  console.log(id_dictionary);
                 }
               });
               let element=document.getElementById(group_name_e3);
@@ -1478,7 +1481,7 @@ delete_group_of_hydroservers = function(){
                 Object.keys(id_dictionary).forEach(function(key) {
                   if(id_dictionary[key] == hydroserver ){
                     new_title = key;
-                    delete id_dictionary[key]
+
                   }
                 });
                 map.removeLayer(layersDict[hydroserver]);
