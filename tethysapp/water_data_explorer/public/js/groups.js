@@ -1478,6 +1478,7 @@ delete_group_of_hydroservers = function(){
                 Object.keys(id_dictionary).forEach(function(key) {
                   if(id_dictionary[key] == hydroserver ){
                     new_title = key;
+                    delete id_dictionary[key]
                   }
                 });
                 map.removeLayer(layersDict[hydroserver]);
