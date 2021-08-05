@@ -40,6 +40,8 @@ getWaterOneFlowServicesInfoHelperJS = function(xmlData){
   var result = parser.validate(xmlData);
   if (result !== true) console.log(result.err);
   var jsonObj = parser.parse(xmlData,options);
+  console.log(jsonObj);
+
   try{
     return_array = jsonObj['ArrayOfServiceInfo']['ServiceInfo'];
     return return_array
@@ -100,7 +102,7 @@ give_available_services = function(){
       dataType: "text",
       success: function(xmlData){
         try{
-          // console.log(xmlData);
+          console.log(xmlData);
           let services = getWaterOneFlowServicesInfoHelperJS(xmlData);
           console.log(services);
           obj_services = giveServices(services)
@@ -913,8 +915,7 @@ create_group_hydroservers = function(){
     let datastring= elementForm.serialize();
     // console.log(datastring);
     $("#soapAddLoading-group").removeClass("hidden");
-    let unique_id_group = uuidv4()
-    id_dictionary[unique_id_group] = $("#addGroup-title").val()
+
     let urls_array = datastring.split('&server=');
     urls_array = urls_array.slice(1);
 
@@ -939,6 +940,8 @@ create_group_hydroservers = function(){
         dataType: "HTML",
         data: datastring,
         success: function(result) {
+          let unique_id_group = uuidv4()
+          id_dictionary[unique_id_group] = $("#addGroup-title").val()
             //Returning the geoserver layer metadata from the controller
             try{
               var json_response = JSON.parse(result);

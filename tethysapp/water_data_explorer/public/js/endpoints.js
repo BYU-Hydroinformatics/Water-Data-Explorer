@@ -629,24 +629,25 @@ add_hydroserver = function(){
       }
 
       $("#soapAddLoading").removeClass("hidden");
-      let unique_id_group = uuidv4();
-      id_dictionary[unique_id_group] = $("#soap-title").val();
+
 
       let url_decons;
       let url_to_sent =$("#soap-url").val();
       if($("#soap-url").val().includes("?WSDL")){
-        url_decons = $("#soap-url").val().split("?");
+        url_decons = $("#soap-url").val().split("?")[0];
       }
       else{
         url_decons = url_to_sent;
         url_to_sent = url_to_sent + "?WSDL";
       }
       let url_request;
+      let url
+      console.log(url_decons);
       // url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
-      let make_sure_not_mc = url_decons[0].split("//");
-
+      let make_sure_not_mc = url_decons.split("//");
+      console.log(make_sure_not_mc);
       if(make_sure_not_mc[0] == document.location.protocol){
-        url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
+        url_request = url_decons + "?request=GetSitesObject&format=WML1";
       }
       else{
         url_request = document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetSitesObject&format=WML1";
@@ -673,6 +674,8 @@ add_hydroserver = function(){
                 dataType: "JSON",
                 data: requestObject,
                 success:function(result){
+                  let unique_id_group = uuidv4();
+                  id_dictionary[unique_id_group] = $("#soap-title").val();
                   try{
                     //Returning the geoserver layer metadata from the controller
                     var json_response = result
@@ -904,6 +907,29 @@ add_hydroserver = function(){
                   }
               )
             }
+          },
+          error: function(error){
+            console.log(error);
+            $("#soapAddLoading").addClass("hidden");
+            $("#btn-add-soap").show();
+            $.notify(
+                {
+                    message: `Invalid WaterOneFlow web service Url. Please check and try again.`
+                },
+                {
+                    type: "danger",
+                    allow_dismiss: true,
+                    z_index: 20000,
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
+                }
+            )
           }
         })
   }
