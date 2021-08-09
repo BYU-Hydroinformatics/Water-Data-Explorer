@@ -291,12 +291,11 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
       var trace1 = {
         x: xArray,
         y: yArray,
-        mode: 'lines',
+        mode: (yArray.length > 1) ? 'lines' : 'lines+markers',
         type: type,
         name: legend1,
         text: [],
-        marker: { size: 5 },
-        line: {color: '#17BECF'}
+        line: {color: '#17BECF'},
       };
       var interpolation_trace;
       var data = [];
