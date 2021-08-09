@@ -190,44 +190,49 @@ clear_coords = function() {
   * Function to hide or show the graphs panel
 * */
 activate_deactivate_graphs = function(){
-  ////console.log("we ACTIVATEEAAGAG");
-  let actual_state=$(this).prop('checked');
-  let element_graphs=document.getElementById("graph");
+  try{
+    let actual_state=$(this).prop('checked');
+    let element_graphs=document.getElementById("graph");
 
-  let element_map =document.getElementById("map");
-  if(actual_state){
-    if($( window ).width() > 320 && $( window ).width() <= 480){
-      element_graphs.style.cssText=  "display: flex !important; flex-direction: column;";
-      map.updateSize();
-    }
-    else{
-      element_graphs.style.cssText=  "display: flex !important; flex-direction: row;";
-      map.updateSize();
-    }
+    let element_map =document.getElementById("map");
+    if(actual_state){
+      if($( window ).width() > 320 && $( window ).width() <= 480){
+        element_graphs.style.cssText=  "display: flex !important; flex-direction: column;";
+        map.updateSize();
+      }
+      else{
+        element_graphs.style.cssText=  "display: flex !important; flex-direction: row;";
+        map.updateSize();
+      }
 
-    try{
-      if($('#plots').is(':visible')){
-        Plotly.Plots.resize("plots");
-          Plotly.relayout($("plots"), {
-            'xaxis.autorange': true,
-            'yaxis.autorange': true
-          });
+      try{
+        if($('#plots').is(':visible')){
+          Plotly.Plots.resize("plots");
+            Plotly.relayout($("plots"), {
+              'xaxis.autorange': true,
+              'yaxis.autorange': true
+            });
+        }
+      }
+      catch(e){
+        console.log("Simple plotly error, not worry")
       }
     }
-    catch(e){
-      console.log("Simple plotly error, not worry")
-    }
-  }
 
-  else{
+    else{
 
-    $("#graph").hide();
-    if(map !==undefined){
-      map.updateSize();
+      $("#graph").hide();
+      if(map !==undefined){
+        map.updateSize();
+
+      }
 
     }
-
   }
+  catch(e){
+    console.log(e);
+  }
+
 
 };
 $('#sG').change(activate_deactivate_graphs)
@@ -237,13 +242,19 @@ $('#sG').change(activate_deactivate_graphs)
   * Function to hide or show the legend of the map
 * */
 legend_change = function(){
-  let actual_state=$(this).prop('checked');
-  if(actual_state){
-    $("#tableLegend").show()
+  try{
+    let actual_state=$(this).prop('checked');
+    if(actual_state){
+      $("#tableLegend").show()
+    }
+    else{
+      $("#tableLegend").hide();
+    }
   }
-  else{
-    $("#tableLegend").hide();
+  catch(e){
+    console.log(e);
   }
+
 }
 $('#sG-legend').change(legend_change)
 
@@ -716,7 +727,8 @@ getIconLegend = function(style,server) {
   * @return {boolean} isThere - boolean to see if the group/service exists
 * */
 check_if_exits = function(name_to_check){
-  isThere = false;
+  try{
+      isThere = false;
   Object.keys(id_dictionary).forEach(function(key){
     if(id_dictionary[key] == name_to_check){
       isThere = true;
@@ -724,4 +736,9 @@ check_if_exits = function(name_to_check){
     }
   })
   return isThere
+  }
+  catch(e){
+    console.log(e);
+  }
+
 }

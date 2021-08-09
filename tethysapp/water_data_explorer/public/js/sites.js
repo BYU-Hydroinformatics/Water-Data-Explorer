@@ -66,7 +66,7 @@ getSiteInfoHelperJS = function(object_siteInfo,object_methods){
     }
 
     else{
-      if (sitePorperty_Info['@name'] == 'Country'){
+      if (sitePorperty_Info['attr']['@name'] == 'Country'){
         return_obj['country'] = sitePorperty_Info['#text'];
       }
     }
@@ -549,7 +549,7 @@ activate_layer_values = function (){
             let getSiteInfoObjectParse = getSitesInfoJS(xmlData);
             // console.log(getSiteInfoObjectParse);
             let result =getSiteInfoObjectParsableJS(getSiteInfoObjectParse);
-
+            // console.log(result);
             try{
               // MAKE THE METADATA OF THE SITE TO LOAD IN THE FIRST SLIDE //
               let description_site = document.getElementById('siteDes');

@@ -105,6 +105,7 @@ get_vars_from_site = function (resultList){
                       $("#downloading_loading").addClass("hidden");
                     }
                     catch(e){
+                      console.log(e);
                       $("#downloading_loading").addClass("hidden");
                       $.notify(
                           {
@@ -1352,6 +1353,8 @@ showVariables2 = function(){
     })
  }
  catch(e){
+   $("#variablesLoading2").addClass("hidden");
+
    $.notify(
        {
            message: `We are having problems recognizing the actual servers selected to delete. WE ARE WORKING ON IT :)`
@@ -1405,6 +1408,8 @@ hydroserver_information = function(){
     filterSites['group']=groupActual;
     filterSites['hs']=hsActual;
     $("#hydroserverTitle").html(`${filterSites['hs']} View`);
+    $("#downloading_loading").removeClass("hidden");
+
     $.ajax({
       type:"POST",
       url: `get-hydroserver-info/`,
@@ -1669,66 +1674,89 @@ document.getElementById('myInput').addEventListener("keyup", searchSites);
   * @param {string} group_name - name of the catalog
 * */
 getVariablesJS = function(url,hsActual,group_name){
-  let url_decons = url.split("?");
-
-  let url_request;
-  // let url_request = url_decons[0] + "?request=GetVariablesObject&format=WML1";
-  let make_sure_not_mc = url_decons[0].split("//");
-
-  if(make_sure_not_mc[0] == document.location.protocol){
-    url_request = url_decons[0] + "?request=GetVariablesObject&format=WML1";
-  }
-  else{
-    url_request = document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetVariablesObject&format=WML1";
-  }
-  console.log(url_request);
-  $("#GeneralLoading").removeClass("hidden");
-
   try{
+    let url_decons = url.split("?");
+
+    let url_request;
+    // let url_request = url_decons[0] + "?request=GetVariablesObject&format=WML1";
+    let make_sure_not_mc = url_decons[0].split("//");
+
+    if(make_sure_not_mc[0] == document.location.protocol){
+      url_request = url_decons[0] + "?request=GetVariablesObject&format=WML1";
+    }
+    else{
+      url_request = document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetVariablesObject&format=WML1";
+    }
+    console.log(url_request);
+    $("#GeneralLoading").removeClass("hidden");
     $.ajax({
       type:"GET",
       url:url_request,
       dataType: "text",
       success: function(xmlData){
         // console.log(xmlData);
-        let parsedObject = getVariablesHelperJS(xmlData);
-        let requestObject = {
-          hs: id_dictionary[hsActual],
-          group: id_dictionary[group_name],
-          variables: JSON.stringify(parsedObject)
-        }
-        $.ajax({
-          type:"POST",
-          url: "save-variables/",
-          dataType: "JSON",
-          data: requestObject,
-          success:function(data){
-            $("#GeneralLoading").addClass("hidden");
-            return data
-          },
-          error: function(error){
-            $("#GeneralLoading").addClass("hidden");
-            console.log(error);
-            $.notify(
-                {
-                    message: `There was an error updating the Web Service`
-                },
-                {
-                    type: "danger",
-                    allow_dismiss: true,
-                    z_index: 20000,
-                    delay: 5000,
-                    animate: {
-                      enter: 'animated fadeInRight',
-                      exit: 'animated fadeOutRight'
-                    },
-                    onShow: function() {
-                        this.css({'width':'auto','height':'auto'});
-                    }
-                }
-            )
+        try{
+          let parsedObject = getVariablesHelperJS(xmlData);
+          let requestObject = {
+            hs: id_dictionary[hsActual],
+            group: id_dictionary[group_name],
+            variables: JSON.stringify(parsedObject)
           }
-        })
+          $.ajax({
+            type:"POST",
+            url: "save-variables/",
+            dataType: "JSON",
+            data: requestObject,
+            success:function(data){
+              $("#GeneralLoading").addClass("hidden");
+              return data
+            },
+            error: function(error){
+              $("#GeneralLoading").addClass("hidden");
+              console.log(error);
+              $.notify(
+                  {
+                      message: `There was an error updating the Web Service`
+                  },
+                  {
+                      type: "danger",
+                      allow_dismiss: true,
+                      z_index: 20000,
+                      delay: 5000,
+                      animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                      },
+                      onShow: function() {
+                          this.css({'width':'auto','height':'auto'});
+                      }
+                  }
+              )
+            }
+          })
+        }
+        catch(e){
+          $("#GeneralLoading").addClass("hidden");
+          console.log(e);
+          $.notify(
+              {
+                  message: `There was an error updating the Web Service`
+              },
+              {
+                  type: "danger",
+                  allow_dismiss: true,
+                  z_index: 20000,
+                  delay: 5000,
+                  animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                  },
+                  onShow: function() {
+                      this.css({'width':'auto','height':'auto'});
+                  }
+              }
+          )
+        }
 
       },
       error: function(error){
@@ -2237,27 +2265,27 @@ getSitesHelper = function (xmlData){
   * @param {string} group_name - name of the catalog
 * */
 getSitesJS = function(url,hsActual,group_name){
-  let url_decons = url.split("?");
-  let url_request;
-  if(url_decons.length > 0){
-    $("#GeneralLoading").css({
-       position:'fixed',
-       "z-index": 9999,
-       top: '50%',
-       left: '50%',
-       transform: 'translate(-50%, -50%)'
-     });
-    $("#GeneralLoading").removeClass("hidden");
-    // url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
-    let make_sure_not_mc = url_decons[0].split("//");
-    if(make_sure_not_mc[0] == document.location.protocol){
-      url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
-    }
-    else{
-      url_request = document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetSitesObject&format=WML1";
-    }
-    console.log(url_request);
     try{
+      let url_decons = url.split("?");
+      let url_request;
+      if(url_decons.length > 0){
+        $("#GeneralLoading").css({
+           position:'fixed',
+           "z-index": 9999,
+           top: '50%',
+           left: '50%',
+           transform: 'translate(-50%, -50%)'
+         });
+        $("#GeneralLoading").removeClass("hidden");
+        // url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
+        let make_sure_not_mc = url_decons[0].split("//");
+        if(make_sure_not_mc[0] == document.location.protocol){
+          url_request = url_decons[0] + "?request=GetSitesObject&format=WML1";
+        }
+        else{
+          url_request = document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetSitesObject&format=WML1";
+        }
+        console.log(url_request);
       $.ajax({
         type:"GET",
         url:url_request,
@@ -2418,6 +2446,7 @@ getSitesJS = function(url,hsActual,group_name){
         }
       })
     }
+  }
     catch(e){
       console.log(e);
       $("#GeneralLoading").addClass("hidden");
@@ -2442,7 +2471,6 @@ getSitesJS = function(url,hsActual,group_name){
     }
   }
 
-}
 
 /**
 * getSitesJS function.
