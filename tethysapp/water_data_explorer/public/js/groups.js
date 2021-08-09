@@ -832,6 +832,28 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
                   }
               )
             }
+          },
+          error: function(err){
+            console.log(err);
+            $("#soapAddLoading-group").addClass("hidden");
+            $.notify(
+                {
+                    message: `We are having problems adding the ${title_server} WaterOneFlow web service`
+                },
+                {
+                    type: "danger",
+                    allow_dismiss: true,
+                    z_index: 20000,
+                    delay: 5000,
+                    animate: {
+                      enter: 'animated fadeInRight',
+                      exit: 'animated fadeOutRight'
+                    },
+                    onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                    }
+                }
+            )
           }
         })
   }
@@ -1202,30 +1224,30 @@ load_group_hydroservers = function(){
           }
 
 
-   },
-   error: function(error) {
-     console.log(error);
-       $("#GeneralLoading").addClass("hidden")
+       },
+       error: function(error) {
+         console.log(error);
+           $("#GeneralLoading").addClass("hidden")
 
-       $.notify(
-           {
-               message: `There was an error while loading the different Web Services`
-           },
-           {
-               type: "danger",
-               allow_dismiss: true,
-               z_index: 20000,
-               delay: 5000,
-               animate: {
-                 enter: 'animated fadeInRight',
-                 exit: 'animated fadeOutRight'
+           $.notify(
+               {
+                   message: `There was an error while loading the different Web Services`
                },
-               onShow: function() {
-                   this.css({'width':'auto','height':'auto'});
+               {
+                   type: "danger",
+                   allow_dismiss: true,
+                   z_index: 20000,
+                   delay: 5000,
+                   animate: {
+                     enter: 'animated fadeInRight',
+                     exit: 'animated fadeOutRight'
+                   },
+                   onShow: function() {
+                       this.css({'width':'auto','height':'auto'});
+                   }
                }
-           }
-       )
-   }
+           )
+       }
 
  })
 }
@@ -1986,107 +2008,132 @@ catalog_filter_vars = function(){
             url: url2_request,
             dataType: "text",
             success:function(xmlData){
-              $("#KeywordLoading").removeClass("hidden");
-              array_for_sale.push(xmlData);
-              let sites = getSitesFilterHelper(xmlData);
-                let title = server_name;
-                let url = url_temp;
+              try{
+                $("#KeywordLoading").removeClass("hidden");
+                array_for_sale.push(xmlData);
+                let sites = getSitesFilterHelper(xmlData);
+                  let title = server_name;
+                  let url = url_temp;
 
-                //ADD LAYERS
-                var vectorLayer = map_layers(sites,title,url)[0]
-                var vectorSource = map_layers(sites,title,url)[1]
-                map.addLayer(vectorLayer)
-                vectorLayer.set("selectable", true)
-                layer_object_filter[title] = vectorLayer;
+                  //ADD LAYERS
+                  var vectorLayer = map_layers(sites,title,url)[0]
+                  var vectorSource = map_layers(sites,title,url)[1]
+                  map.addLayer(vectorLayer)
+                  vectorLayer.set("selectable", true)
+                  layer_object_filter[title] = vectorLayer;
 
-                $("#current-Groupservers").find("li").each(function(){
-                      var $li=$(this)['0'];
-                      let id_li = $li['id'];
-                      // console.log(id_li)
-                      // console.log(server_name)
-                      let hs_new2;
-                      Object.keys(id_dictionary).forEach(function(key) {
-                        if(id_dictionary[key] == server_name ){
-                          hs_new2 = key;
-                        }
-                      });
-                      if(hs_new2 == id_li){
-                        $(`#${id_li}`).css({"opacity": "1",
-                                            "border-color": "#ac2925",
-                                            "border-width": "2px",
-                                            "border-style": "solid",
-                                            "color": "black",
-                                            "font-weight": "bold"});
-                        $(`#${id_li} input[type=checkbox]`).each(function() {
-                          this.checked = true;
+                  $("#current-Groupservers").find("li").each(function(){
+                        var $li=$(this)['0'];
+                        let id_li = $li['id'];
+                        // console.log(id_li)
+                        // console.log(server_name)
+                        let hs_new2;
+                        Object.keys(id_dictionary).forEach(function(key) {
+                          if(id_dictionary[key] == server_name ){
+                            hs_new2 = key;
+                          }
                         });
-
-                      }
-                      else{
-                        let groups_divs = Object.keys(information_model);
-                        let groups_divs_3e = []
-                        groups_divs.forEach(function(g3){
-                          let g_new2;
-                          Object.keys(id_dictionary).forEach(function(key) {
-                            if(id_dictionary[key] == g3 ){
-                              g_new2 = key;
-                            }
+                        if(hs_new2 == id_li){
+                          $(`#${id_li}`).css({"opacity": "1",
+                                              "border-color": "#ac2925",
+                                              "border-width": "2px",
+                                              "border-style": "solid",
+                                              "color": "black",
+                                              "font-weight": "bold"});
+                          $(`#${id_li} input[type=checkbox]`).each(function() {
+                            this.checked = true;
                           });
-                          groups_divs_3e.push(g_new2);
-                        })
-                        groups_divs = groups_divs_3e
-                        if (!groups_divs.includes(id_li)){
-                          $(`#${id_li}`).css({"opacity": "0.5",
-                                               "border-color": "#d3d3d3",
-                                               "border-width":"1px",
-                                               "border-style":"solid",
-                                               "color":"#555555",
-                                               "font-weight": "normal"});
+
                         }
-                      }
-                   });
+                        else{
+                          let groups_divs = Object.keys(information_model);
+                          let groups_divs_3e = []
+                          groups_divs.forEach(function(g3){
+                            let g_new2;
+                            Object.keys(id_dictionary).forEach(function(key) {
+                              if(id_dictionary[key] == g3 ){
+                                g_new2 = key;
+                              }
+                            });
+                            groups_divs_3e.push(g_new2);
+                          })
+                          groups_divs = groups_divs_3e
+                          if (!groups_divs.includes(id_li)){
+                            $(`#${id_li}`).css({"opacity": "0.5",
+                                                 "border-color": "#d3d3d3",
+                                                 "border-width":"1px",
+                                                 "border-style":"solid",
+                                                 "color":"#555555",
+                                                 "font-weight": "normal"});
+                          }
+                        }
+                     });
 
-                   let groups_divs = Object.keys(information_model);
+                     let groups_divs = Object.keys(information_model);
 
-                   for(let i=0; i< groups_divs.length; ++i){
-                     let check_all = []
-                     for(let j=0; j< information_model[groups_divs[i]].length; ++j){
+                     for(let i=0; i< groups_divs.length; ++i){
+                       let check_all = []
+                       for(let j=0; j< information_model[groups_divs[i]].length; ++j){
 
-                       let service_div = information_model[groups_divs[i]][j];
-                       let new_service_div;
-                       Object.keys(id_dictionary).forEach(function(key) {
-                         if(id_dictionary[key] == service_div ){
-                           new_service_div = key;
-                         }
-                       });
-                       $(`#${new_service_div} input[type=checkbox]`).each(function(){
-                         if(this.checked){
-                           check_all.push(true);
-                         }
-                         else{
-                           check_all.push(false);
-                         }
-                       });
-                     }
-                     if(!check_all.includes(false) && check_all.length > 0){
-                       let groups_divs_3e = []
-                       groups_divs.forEach(function(g3){
-                         let g_new2;
+                         let service_div = information_model[groups_divs[i]][j];
+                         let new_service_div;
                          Object.keys(id_dictionary).forEach(function(key) {
-                           if(id_dictionary[key] == g3 ){
-                             g_new2 = key;
+                           if(id_dictionary[key] == service_div ){
+                             new_service_div = key;
                            }
                          });
-                         groups_divs_3e.push(g_new2);
-                       })
+                         $(`#${new_service_div} input[type=checkbox]`).each(function(){
+                           if(this.checked){
+                             check_all.push(true);
+                           }
+                           else{
+                             check_all.push(false);
+                           }
+                         });
+                       }
+                       if(!check_all.includes(false) && check_all.length > 0){
+                         let groups_divs_3e = []
+                         groups_divs.forEach(function(g3){
+                           let g_new2;
+                           Object.keys(id_dictionary).forEach(function(key) {
+                             if(id_dictionary[key] == g3 ){
+                               g_new2 = key;
+                             }
+                           });
+                           groups_divs_3e.push(g_new2);
+                         })
 
-                       $(`#${groups_divs_3e[i]} input[type=checkbox]`).each(function() {
-                         this.checked = true;
-                       });
+                         $(`#${groups_divs_3e[i]} input[type=checkbox]`).each(function() {
+                           this.checked = true;
+                         });
+                       }
                      }
-                   }
-                   $("#KeywordLoading").addClass("hidden");
+                     $("#KeywordLoading").addClass("hidden");
+              }
 
+              catch(error){
+                console.log(error);
+                $("#KeywordLoading").addClass("hidden");
+
+                $.notify(
+                    {
+                        message: `Something were wrong when filtering the web services by variable`
+                    },
+                    {
+                        type: "danger",
+                        allow_dismiss: true,
+                        z_index: 20000,
+                        delay: 5000,
+                        animate: {
+                          enter: 'animated fadeInRight',
+                          exit: 'animated fadeOutRight'
+                        },
+                        onShow: function() {
+                            this.css({'width':'auto','height':'auto'});
+                        }
+                    }
+                )
+              }
             },
             error: function(error) {
               console.log(error);
