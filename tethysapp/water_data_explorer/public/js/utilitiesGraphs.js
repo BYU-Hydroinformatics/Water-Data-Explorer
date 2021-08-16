@@ -463,23 +463,30 @@ get_values_graph_hs = function(values){
     return_obj['graphs'] = []
     return_obj['interpolation'] = []
     return_obj['unit_name'] = []
+    return_obj['unit_abbr'] = []
     return_obj['variablename'] = []
     return_obj['timeUnitName'] = []
     return return_obj
   }
   df = new dfd.DataFrame(values);
   let variable_name = df['variableName']['data'][0];
-  let unit_name = df['unitAbbreviation']['data'][0];
+  let unit_abbr = df['unitAbbreviation']['data'][0];
+  let unit_name = df['unitName']['data'][0];
   let time_unit_name = df['timeUnitName']['data'][0];
   let time_series_vals = df['dataValue']['data'];
   let time_series_timeUTC = df['dateTime']['data'];
   return_obj['graphs'] = [];
-
+  let double_come = []
   for(let i= 0; i< time_series_timeUTC.length; i++){
-    return_obj['graphs'].push([time_series_timeUTC[i], time_series_vals[i]]);
+    if(!double_come.includes(time_series_timeUTC[i])){
+      // console.log("si hay error ");
+      return_obj['graphs'].push([time_series_timeUTC[i], time_series_vals[i]]);
+    }
+    double_come.push(time_series_timeUTC[i])
   }
 
   return_obj['unit_name'] = unit_name
+  return_obj['unit_abbr'] = unit_abbr
   return_obj['variablename'] = variable_name
   return_obj['timeUnitName'] = time_unit_name
   return return_obj
@@ -549,6 +556,7 @@ select_variable_change = function(){
                 let parseValuesData = getValuesJS(xmlData,null,null);
                 let result1 = {};
                 result1 = get_values_graph_hs(parseValuesData);
+
                 // console.log(result1);
                 if(result1['graphs'].length > 0){
                   //GRAPHS VALUES//
@@ -576,14 +584,24 @@ select_variable_change = function(){
                    let title_graph = `${result1['variablename']}`;
 
                    // UNITS X AXIS //
-                   let units_x = `${result1['variablename']} (${result1['unit_name']})` ;
-                   if (result1['unit_name'] == "No Data was provided"){
-                     units_x = " ";
+                   // let units_x = `${result1['variablename']} (${result1['unit_name']})` ;
+                   let units_x = "";
+                   if (result1['unit_abbr'] == "No Data was Provided" && result1['unit_name'] == "No Data was Provided" ){
+                     units_x = "";
+                   }
+                   if(result1['unit_name'] !="No Data was Provided" && result1['unit_abbr'] == "No Data was Provided"){
+                     units_x = `${result1['unit_name']}`;
+                   }
+                   if(result1['unit_abbr'] !="No Data was Provided" && result1['unit_name'] == "No Data was Provided"){
+                     units_x = `${result1['unit_abbr']}`;
+                   }
+                   if(result1['unit_abbr'] != "No Data was Provided" && result1['unit_name'] != "No Data was Provided"){
+                     units_x = `${result1['unit_abbr']}`;
                    }
 
                    // UNITS Y AXIS //
                    let units_y = `${result1['timeUnitName']}`;
-                   if (result1['timeUnitName'] == "No Data was provided"){
+                   if (result1['timeUnitName'] == "No Data was Provided"){
                      units_y = "Time";
                    }
 
@@ -982,16 +1000,15 @@ select_variable_change = function(){
 
                }
                else{
-                 let title_graph=  `${object_request_graphs['site_name']} - ${selectedItemText}
-                 No Data Available`
+                 let title_graph=  `${object_request_graphs['site_name']} - ${selectedItemText} No Data Available`
                  initialize_graphs([],[],title_graph,"","","","scatter");
                  $("#graphAddLoading").addClass("hidden")
                  $.notify(
                      {
-                         message: `There is no data for this variable, Sorry`
+                         message: `The variable does not contain any data, Sorry`
                      },
                      {
-                         type: "danger",
+                         type: "info",
                          allow_dismiss: true,
                          z_index: 20000,
                          delay: 5000,
