@@ -1,8 +1,8 @@
 name: WDE Test
 on:
   push:
-    # branches:
-    #   - inmet-WDE
+    branches:
+      - inmet-WDE
     # Pattern matched against refs/tags
     tags:
       - '*'
@@ -27,7 +27,8 @@ jobs:
       - run: echo "The workflow is now ready to test your code on the runner."
       - name: Run docker-wde installation
         working-directory: docker_files
-        run: |
-          docker-compose up --build
-          docker-compose down
+        run: docker-compose up --build
+      - name: Stop containers
+        if: always()
+        run: docker-compose -f down
       - run: echo "This job's status is ${{ job.status }}."
