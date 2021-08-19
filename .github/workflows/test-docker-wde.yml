@@ -26,5 +26,6 @@ jobs:
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "The workflow is now ready to test your code on the runner."
       - name: Run docker-wde installation
+        working-directory: docker_files
         run: docker-compose up --build
       - run: echo "This job's status is ${{ job.status }}."
