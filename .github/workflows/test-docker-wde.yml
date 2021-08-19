@@ -6,14 +6,14 @@ on:
   pull_request:
     branches:
       - inmet-WDE
-defaults:
-  run:
-    working-directory: docker_files
+# defaults:
+#   run:
+#     working-directory: docker_files
 
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/inmet-WDE'
+    if: github.ref == 'refs/heads/inmet-WDE'
     steps:
       - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
