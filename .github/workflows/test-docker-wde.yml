@@ -18,6 +18,6 @@ jobs:
       - run: echo "The workflow is now ready to test your code on the runner."
       - name: Run docker-wde installation
         run: |
-          cd docker_files
+          cd ${{ github.workspace }}/docker_files
           docker-compose up --build
       - run: echo "This job's status is ${{ job.status }}."
