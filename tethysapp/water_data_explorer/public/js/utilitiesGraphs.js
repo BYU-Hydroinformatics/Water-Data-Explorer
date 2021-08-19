@@ -129,7 +129,7 @@ getValuesHelperJS2 = function (times_series,return_object){
 
       }
       catch(e){
-        return_object['isRegular'] = "No Data was provided";
+        return_object['isRegular'] = "No Data was Provided";
 
       }
       try{
@@ -137,7 +137,7 @@ getValuesHelperJS2 = function (times_series,return_object){
 
       }
       catch(e){
-        return_object['timeSupport'] = "No Data was provided"
+        return_object['timeSupport'] = "No Data was Provided"
 
       }
       try{
@@ -145,7 +145,7 @@ getValuesHelperJS2 = function (times_series,return_object){
 
       }
       catch(e){
-        return_object['timeUnitName'] = "No Data was provided";
+        return_object['timeUnitName'] = "No Data was Provided";
 
       }
       try{
@@ -153,7 +153,7 @@ getValuesHelperJS2 = function (times_series,return_object){
 
       }
       catch(e){
-        return_object['timeUnitAbbreviation'] = "No Data was provided";
+        return_object['timeUnitAbbreviation'] = "No Data was Provided";
 
       }
       try{
@@ -581,8 +581,11 @@ select_variable_change = function(){
                   })
 
                   // NAME TITLE //
-                   let title_graph = `${result1['variablename']}`;
-
+                   let title_graph = "";
+                   if (result1['variablename'] != "No Data was Provided"){
+                     title_graph = `${result1['variablename']}`;
+                     title_graph = title_graph.replace(',', ' ');
+                   }
                    // UNITS X AXIS //
                    // let units_x = `${result1['variablename']} (${result1['unit_name']})` ;
                    let units_x = "";
@@ -639,7 +642,7 @@ select_variable_change = function(){
                           // IF TO AVOID 'CSV' VALUE IN THE DROPDOWN//
                           if(selectedDownloadType == "CSV" ){
                             var csvData = [];
-                            var header = [units_y,units_x] //main header.
+                            var header = [units_y,`${title_graph}(${units_x})`] //main header.
                             csvData.push(header);
                             for (var i = 0; i < x_array.length; i++){ //data
                               var line = [x_array[i],y_array[i]];
