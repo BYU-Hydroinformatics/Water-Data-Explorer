@@ -20,8 +20,8 @@ jobs:
       - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: check out the repository with the correct branche inmet-WDE
         uses: actions/checkout@v2
-          with:
-            ref: inmet-WDE
+        with:
+          ref: inmet-WDE
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "The workflow is now ready to test your code on the runner."
       - name: Run docker-wde installation
