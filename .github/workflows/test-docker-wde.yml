@@ -1,14 +1,14 @@
 name: WDE Test
 on:
   push:
-    branches:
-      - inmet-WDE
+    # branches:
+    #   - inmet-WDE
+    # Pattern matched against refs/tags
+    tags:
+      - '*'
   pull_request:
     branches:
       - inmet-WDE
-# defaults:
-#   run:
-#     working-directory: docker_files
 
 jobs:
   Explore-GitHub-Actions:
@@ -27,5 +27,7 @@ jobs:
       - run: echo "The workflow is now ready to test your code on the runner."
       - name: Run docker-wde installation
         working-directory: docker_files
-        run: docker-compose up --build
+        run: |
+          docker-compose up --build
+          docker-compose down
       - run: echo "This job's status is ${{ job.status }}."
