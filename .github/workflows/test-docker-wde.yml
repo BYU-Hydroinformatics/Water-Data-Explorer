@@ -27,7 +27,7 @@ jobs:
       - run: echo "The workflow is now ready to test your code on the runner."
       - name: Run docker-wde installation
         working-directory: docker_files
-        run: docker-compose up --build
+        run: docker-compose up --build -d
       - name: Stop containers
         if: always()
         run: docker-compose -f down
