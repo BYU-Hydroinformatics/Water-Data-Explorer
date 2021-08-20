@@ -1,8 +1,8 @@
 name: WDE Test
 on:
   push:
-    branches:
-      - inmet-WDE
+    # branches:
+    #   - inmet-WDE
     # Pattern matched against refs/tags
     tags:
       - '*'
