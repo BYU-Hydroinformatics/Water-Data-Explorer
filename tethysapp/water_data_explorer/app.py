@@ -50,7 +50,7 @@ class WaterDataExplorer(TethysAppBase):
                    controller='water_data_explorer.endpoints.save_sites_data'),
 
             UrlMap(name='save-new-sites',
-                   url='save-new_sites/',
+                   url='save_new_sites/',
                    controller='water_data_explorer.endpoints.save_new_sites_data'),
 
             UrlMap(name='save-variables',
@@ -84,7 +84,7 @@ class WaterDataExplorer(TethysAppBase):
             UrlMap(name='get-hydroserver-info',
                    url='get-hydroserver-info/',
                    controller='water_data_explorer.endpoints.get_hydroserver_info'),
-                   
+
             UrlMap(name='available-variables',
                    url='available-variables/',
                    controller='water_data_explorer.groups.available_variables'),

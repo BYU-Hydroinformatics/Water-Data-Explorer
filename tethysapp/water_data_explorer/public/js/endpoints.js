@@ -671,7 +671,7 @@ add_hydroserver = function(){
               }
               $.ajax({
                 type:"POST",
-                url: "save-new_sites/",
+                url: "save_new_sites/",
                 dataType: "JSON",
                 data: requestObject,
                 success:function(result){

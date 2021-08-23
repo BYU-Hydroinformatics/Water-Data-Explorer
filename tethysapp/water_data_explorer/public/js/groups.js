@@ -603,7 +603,7 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
               console.log(requestObject);
               $.ajax({
                 type:"POST",
-                url: "save-new_sites/",
+                url: "save_new_sites/",
                 dataType: "JSON",
                 data: requestObject,
                 success:function(result){
