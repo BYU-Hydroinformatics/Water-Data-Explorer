@@ -1540,6 +1540,7 @@ hydroserver_information = function(){
               }
 
           }
+          $("#downloading_loading").addClass("hidden");
         }
         catch(e){
           console.log(e);
