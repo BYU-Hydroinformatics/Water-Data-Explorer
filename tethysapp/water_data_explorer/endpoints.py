@@ -136,7 +136,7 @@ def get_hydroserver_info(request):
         if name == specific_hs:
             response_obj["url"] = hydroservers.url.strip()
             response_obj["title"] = hydroservers.title
-            response_obj["description"] = hydroservers.description
+            # response_obj["description"] = hydroservers.description
             response_obj["siteInfo"] = json.loads(hydroservers.siteinfo)
 
     return JsonResponse(response_obj)

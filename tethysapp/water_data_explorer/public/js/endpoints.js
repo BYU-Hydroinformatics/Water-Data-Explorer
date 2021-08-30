@@ -1461,7 +1461,6 @@ hydroserver_information = function(){
           $("#url_WOF").html($("#urlHydroserver").html());
 
 
-          $("#description_Hydroserver").html(result1['description']);
           var HSTableHtml =
               `<table id="${filterSites['hs']}-info-table" class="table table-striped table-bordered nowrap" width="100%"><tbody>`
           if (result1['siteInfo'].length === 0) {
