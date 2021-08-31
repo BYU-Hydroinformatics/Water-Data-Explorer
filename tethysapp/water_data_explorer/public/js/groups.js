@@ -93,7 +93,7 @@ giveServices = function(services){
 give_available_services = function(){
   $("#soapAddLoading-group").removeClass("hidden");
   try{
-    let url = $("#url").val()
+    let url = $("#url").val().trim();
     let url_request = `${url}?request=GetWaterOneFlowServiceInfo`;
     console.log(url_request);
     $.ajax({
