@@ -365,6 +365,12 @@ load_individual_hydroservers_group = function(group_name){
            success: result => {
              try{
                let servers = result["hydroserver"]
+               // console.log(servers);
+               servers.sort(function(a, b) {
+                    var textA = a.title.toUpperCase();
+                    var textB = b.title.toUpperCase();
+                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                });
                //USE A FUNCTION TO FIND THE LI ASSOCIATED WITH THAT GROUP  AND DELETE IT FROM THE MAP AND MAKE ALL
                // THE CHECKBOXES VISIBLE //
                let group_name_e3;
@@ -513,6 +519,7 @@ load_individual_hydroservers_group = function(group_name){
                $("#GeneralLoading").addClass("hidden");
              }
              catch(e){
+               console.log(e);
                $("#GeneralLoading").addClass("hidden");
                $.notify(
                    {
