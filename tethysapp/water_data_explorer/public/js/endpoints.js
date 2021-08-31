@@ -398,7 +398,6 @@ load_individual_hydroservers_group = function(group_name){
 
                      let newHtml = html_for_servers(new_title,group_name_e3);
                      $(newHtml).appendTo(`#${id_group_separator}`);
-
                      $(`#${new_title}_variables`).on("click",showVariables2);
                      $(`#${new_title}_variables_info`).on("click",hydroserver_information);
                      $(`#${new_title}_${group_name_e3}_reload`).on("click",update_hydroserver);

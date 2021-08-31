@@ -458,6 +458,7 @@ var water_data_explorer_PACKAGE = (function() {
    *************************************************************************/
   $(function() {
     try{
+
       init_jquery_var();
       addDefaultBehaviorToAjax();
       init_map();
