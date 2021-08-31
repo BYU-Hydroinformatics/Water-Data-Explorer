@@ -10,11 +10,16 @@
 
             </div>
             <div class="modal-body">
-                <p class="hsinfo"> Endpoint/URL </p>
-                <span id="urlHydroserver"></span> <span> <button onclick="copyToClipboard('#urlHydroserver')" class="btn btn-light btn-sm tool_tip_h" data-toggle="tooltip" title="copy"> <span class="glyphicon glyphicon-copy"></span></button></span>
-
+                <p class="hsinfo"> Endpoint/URL <span> <button onclick="copyToClipboard('#urlHydroserver')" class="btn btn-light btn-sm tool_tip_h" data-toggle="tooltip" title="copy"> <span class="glyphicon glyphicon-copy"></span></button></span></p>
+                <p id="urlHydroserver"></p>
+                <p>
+                  <em>
+                  In order to make the endpoint operational, users should complete them with a Personal Token Identifier
+                  generated after WHOS User <a href="https://whos.geodab.eu/gs-service/whos/registration.html" target="_blank">Registration</a>.
+                  </em>
+                </p>
                 <div class="image_button">
-                  <h3>Analysis Tools</h3>
+                  <p class="hsinfo">Analysis Tools</p>
                   <p>The Water Data Explorer application uses a python package called "Pywaterml". The Pywaterml allows to access WaterOneFlow (WOF) web services
                    and retrieve information in different formats. </p>
 

@@ -1406,7 +1406,7 @@ hydroserver_information = function(){
     hsActual = id_dictionary[hsActual]
     filterSites['group']=groupActual;
     filterSites['hs']=hsActual;
-    $("#hydroserverTitle").html(`${filterSites['hs']} View`);
+    $("#hydroserverTitle").html(`${filterSites['hs']}`);
     $("#downloading_loading").removeClass("hidden");
 
     $.ajax({
@@ -1456,7 +1456,15 @@ hydroserver_information = function(){
 
           },600)
 
-          $("#urlHydroserver").html(result1['url']);
+          let url_token_array = result1['url'].split('/');
+          let token_s = "<b>{Your Personal Token Identifier}</b>";
+          url_token_array[7] = token_s;
+          let url_token_final = url_token_array.join("/");
+
+          console.log(result1['url']);
+          console.log(url_token_final);
+
+          $("#urlHydroserver").html(url_token_final);
           $("#url_WOF").html($("#urlHydroserver").html());
 
 
