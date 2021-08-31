@@ -274,6 +274,7 @@ tr:hover {
     -ms-flex-align: center;
     align-items: center;
     text-align: left;
+    padding-bottom: 0.5em;
 }
 #current-Groupservers li ul {
   display: block;
