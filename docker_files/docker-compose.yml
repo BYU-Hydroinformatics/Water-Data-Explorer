@@ -24,6 +24,7 @@ services:
       ALLOWED_HOSTS: "\"[localhost, 127.0.0.1, 97.67.251.194, 62.245.16.117]\""
       #Force to have larger Responses in order to save from the JS to the PostgreSQL DATABASES
       DATA_UPLOAD_MAX_NUMBER_FIELDS: "50000000000000000"
+      DATA_UPLOAD_MAX_MEMORY_SIZE: "5000000000000000000"
 
     links:
       - db
@@ -34,6 +35,5 @@ services:
     restart: always
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
-      # - /home/gio/tethysdev/postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: pass
