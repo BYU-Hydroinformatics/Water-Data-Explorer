@@ -1140,10 +1140,17 @@ load_group_hydroservers = function(){
        success: result => {
           try{
             let groups =result["hydroservers"];
-
+            check_groups_length = groups.length;
+            console.log(check_groups_length);
             $(".divForServers").empty() //Resetting the catalog
             let extent = ol.extent.createEmpty()
             ind = 1;
+            groups.sort(function(a, b) {
+                 var textA = a.title.toUpperCase();
+                 var textB = b.title.toUpperCase();
+                 return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+             });
+
             groups.forEach(group => {
                 let {
                     title,

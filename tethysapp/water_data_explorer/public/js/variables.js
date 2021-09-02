@@ -176,6 +176,7 @@ var colors,
     html_for_groups,
     toDegreesMinutesAndSeconds,
     getSitesJS,
+    check_groups_length,
     check_if_exits;
 
 /************************************************************************

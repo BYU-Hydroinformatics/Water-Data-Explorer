@@ -1,3 +1,11 @@
+.group-legend{
+  display: flex;
+  justify-content: center;
+  background-color: #5a6268;
+  color: white;
+  opacity: 0.5;
+}
+
 .ol-attribution li{
   font-size: 1.5em;
 }
@@ -623,9 +631,9 @@ tr:hover {
   position: absolute;
   top: 3%;
   right: 1%;
-  padding: 0.5em;
+  padding: 1em;
   background-color: rgba(255,255,255,0.5);
-  width: 20%;
+  width: 50%;
   word-break: break-all;
 }
 
@@ -811,11 +819,12 @@ tr:hover {
     position: absolute;
     top: 3%;
     right: 1%;
-    padding: 0.5em;
+    padding: 1em;
     background-color: rgba(255,255,255,0.5);
     width: fit-content;
-    max-width: 30%;
-    word-break: break-all;
+    max-width: 50%;
+    word-break: keep-all;
+    white-space: pre-wrap;
   }
 
 }
@@ -873,11 +882,12 @@ tr:hover {
     position: absolute;
     top: 3%;
     right: 1%;
-    padding: 0.5em;
+    padding: 1em;
     background-color: rgba(255,255,255,0.5);
     width: fit-content;
-    max-width: 30%;
-    word-break: break-all;
+    max-width: 50%;
+    word-break: keep-all;
+    white-space: pre-wrap;
   }
 }
 
@@ -888,7 +898,7 @@ tr:hover {
     position: absolute;
     top: 3%;
     right: 1%;
-    padding: 0.5em;
+    padding: 1em;
     background-color: rgba(255,255,255,0.5);
     width: fit-content;
     max-width: 100%;

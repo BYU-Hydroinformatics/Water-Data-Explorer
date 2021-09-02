@@ -388,7 +388,15 @@ load_individual_hydroservers_group = function(group_name){
                else{
                   $(`#${group_name_e3}-noGroups`).hide();
                }
-
+               let rowHTML= `<tr id= ${group_name_e3}-row-complete>
+                              <th id="${group_name_e3}-row-legend"></th>
+                              <th class= "group-legend">${group_name}</th>
+                            </tr>`
+              if(!document.getElementById(`${group_name_e3}-row-complete`) && servers.length > 0 ){
+                if(check_groups_length > 0){
+                  $(rowHTML).appendTo('#tableLegend');
+                }
+              }
                servers.forEach(function(server){
                    let {
                        title,
