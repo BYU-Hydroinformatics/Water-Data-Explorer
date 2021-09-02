@@ -1492,6 +1492,8 @@ delete_group_of_hydroservers = function(){
                   group_name_e3 = key;
                   delete id_dictionary[key]
                   console.log(id_dictionary);
+                  $(`#${group_name_e3}-row-complete`).remove()
+
                 }
               });
               let element=document.getElementById(group_name_e3);

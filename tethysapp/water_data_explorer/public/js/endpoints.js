@@ -393,7 +393,7 @@ load_individual_hydroservers_group = function(group_name){
                               <th class= "group-legend">${group_name}</th>
                             </tr>`
               if(!document.getElementById(`${group_name_e3}-row-complete`) && servers.length > 0 ){
-                if(check_groups_length > 0){
+                if(check_groups_length > 1){
                   $(rowHTML).appendTo('#tableLegend');
                 }
               }
