@@ -583,11 +583,39 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
       else{
         url_request = document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetSitesObject&format=WML1";
       }
+      var lastResponseLength = false;
+
       console.log(url_request);
         $.ajax({
           type:"GET",
           url:url_request,
           dataType: "text",
+          // xhrFields: {
+          //     // Getting on progress streaming response
+          //     onprogress: function(e)
+          //     {
+          //         var progressResponse;
+          //         var response = e.currentTarget.response;
+          //         if(lastResponseLength === false)
+          //         {
+          //             progressResponse = response;
+          //             lastResponseLength = response.length;
+          //         }
+          //         else
+          //         {
+          //             progressResponse = response.substring(lastResponseLength);
+          //             lastResponseLength = response.length;
+          //         }
+          //         // console.log(progressResponse);
+          //         // var parsedResponse = JSON.parse(progressResponse);
+          //         // console.log(progressResponse);
+          //         // console.log(parsedResponse.message);
+          //         // $('#progressTest').text(progressResponse);
+          //         // $('#fullResponse').text(parsedResponse.message);
+          //         // $('.progress-bar').css('width', parsedResponse.progress + '%');
+          //     }
+          // },
+
           success: function(xmlData){
             try{
               let parsedObject = getSitesHelper(xmlData);
