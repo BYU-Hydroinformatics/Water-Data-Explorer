@@ -583,40 +583,126 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
       else{
         url_request = document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetSitesObject&format=WML1";
       }
+      var raw_add = '';
+      var complete_add = '';
       var lastResponseLength = false;
-
+      var loco_index = 0;
+      var almost_response = '';
+      var complete_response;
+      var tag_b;
+      var tag_c = '</sitesResponse></GetSitesObjectResponse></soap:Body></soap:Envelope>';
       console.log(url_request);
         $.ajax({
           type:"GET",
           url:url_request,
           dataType: "text",
-          // xhrFields: {
-          //     // Getting on progress streaming response
-          //     onprogress: function(e)
-          //     {
-          //         var progressResponse;
-          //         var response = e.currentTarget.response;
-          //         if(lastResponseLength === false)
-          //         {
-          //             progressResponse = response;
-          //             lastResponseLength = response.length;
-          //         }
-          //         else
-          //         {
-          //             progressResponse = response.substring(lastResponseLength);
-          //             lastResponseLength = response.length;
-          //         }
-          //         // console.log(progressResponse);
-          //         // var parsedResponse = JSON.parse(progressResponse);
-          //         // console.log(progressResponse);
-          //         // console.log(parsedResponse.message);
-          //         // $('#progressTest').text(progressResponse);
-          //         // $('#fullResponse').text(parsedResponse.message);
-          //         // $('.progress-bar').css('width', parsedResponse.progress + '%');
-          //     }
-          // },
+          xhrFields: {
+              // Getting on progress streaming response
+              onprogress: function(e){
+
+                  var progressResponse;
+
+                  var response = e.currentTarget.response;
+                  raw_add += response;
+                  var last_child;
+                  // if (loco_index > 0){
+                  if(lastResponseLength === false){
+                      progressResponse = response;
+                      tag_b = progressResponse.split('</queryInfo>')[0] + '</queryInfo>';
+                      last_child = progressResponse.substr(progressResponse.length - 7);
+                      console.log("last characters",last_child);
+                      if(last_child == '</site>'){
+                        console.log('1a');
+                          complete_response = progressResponse;
+                      }
+                      else{
+                        console.log('1b');
+                        // Get the first incomplete element and add the site tag//
+                        almost_response = '<site>' + progressResponse.split('<site>')[progressResponse.split('<site>').length - 1] ;
+                        // Add the response withpu the last element as the complete response //
+                        complete_response = progressResponse.split('<site>').slice(0,-1).join('<site>');
+                      }
+                      lastResponseLength = response.length;
+                  }
+                  else{
+                    progressResponse = response.substring(lastResponseLength);
+                    last_child = progressResponse.substr(progressResponse.length - 7);
+                    console.log("last characters",last_child);
+                    if(last_child == '</site>'){
+                      if(almost_response != ''){
+                        console.log('2a1');
+
+                        complete_response = almost_response + progressResponse;
+                        // almost_response = '';
+                        // complete_response = almost_response + progressResponse.split('<site>')[0];
+                        // almost_response = progressResponse.split('<site>').slice(1).join('<site>');
+
+                      }
+                      else{
+                        console.log('2a2');
+
+                        complete_response = progressResponse;
+                      }
+                    }
+                    else{
+                      if(almost_response != ''){
+                        console.log('2b1');
+
+                        complete_response = almost_response + progressResponse.split('<site>')[0];
+                        almost_response = '<site>' + progressResponse.split('<site>').slice(1).join('<site>');
+                      }
+                      else{
+                        console.log('2b2');
+
+                        // Get the first incomplete element and add the site tag//
+                        almost_response = '<site>' + progressResponse.split('<site>')[progressResponse.split('<site>').length - 1];
+                        // Add the response withpu the last element as the complete response //
+                        complete_response = progressResponse.split('<site>').slice(0,-1).join('<site>');
+                      }
+
+                    }
+                    lastResponseLength = response.length;
+
+                    // console.log(complete_response);
+                  }
+                  complete_add += complete_response;
+
+                  // complete_response += tag_c;
+
+                  console.log("raw");
+                  console.log(progressResponse);
+
+                  console.log("complete");
+                  console.log(complete_response);
+
+                  console.log("partial");
+                  console.log(almost_response);
+
+                  loco_index += 1;
+
+                  // let parsedObject = getSitesHelper(progressResponse);
+                  // console.log(parsedObject);
+
+                  // var parsedResponse = JSON.parse(progressResponse);
+                  // console.log(progressResponse);
+                  // console.log(parsedResponse.message);
+                  // $('#progressTest').text(progressResponse);
+                  // $('#fullResponse').text(parsedResponse.message);
+                  // $('.progress-bar').css('width', parsedResponse.progress + '%');
+              }
+          },
 
           success: function(xmlData){
+            if(complete_add == raw_add ){
+              console.log("they are the same");
+              console.log(complete_add);
+              console.log(raw_add);
+            }
+            else{
+              console.log("they are not the same");
+              console.log(complete_add);
+              console.log(raw_add);
+            }
             try{
               let parsedObject = getSitesHelper(xmlData);
               console.log(parsedObject);
