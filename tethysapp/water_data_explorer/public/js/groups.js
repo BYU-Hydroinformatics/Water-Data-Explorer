@@ -611,7 +611,7 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
                       tag_b = progressResponse.split('</queryInfo>')[0] + '</queryInfo>';
                       last_child = progressResponse.substr(progressResponse.length - 7);
                       console.log("last characters",last_child);
-                      if(last_child == '</site>'){
+                      if(last_child == '</site>' || last_child == 'velope>'){
                         console.log('1a');
                           complete_response = progressResponse;
                       }
@@ -628,7 +628,7 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
                     progressResponse = response.substring(lastResponseLength);
                     last_child = progressResponse.substr(progressResponse.length - 7);
                     console.log("last characters",last_child);
-                    if(last_child == '</site>'){
+                    if(last_child == '</site>' || last_child == 'velope>'){
                       if(almost_response != ''){
                         console.log('2a1');
 
