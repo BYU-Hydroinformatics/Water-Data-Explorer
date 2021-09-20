@@ -592,7 +592,10 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
       var tag_b;
       var tag_c = '</sitesResponse></GetSitesObjectResponse></soap:Body></soap:Envelope>';
       var list_sites_me = [];
+      var notifications;
       console.log(url_request);
+      // $("#loading_p").removeClass("hidden");
+      // $("#loading_p").html(`Adding ${title_server}: 0 new sites added to the database . . .`);
         $.ajax({
           type:"GET",
           url:url_request,
@@ -600,7 +603,7 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
           xhrFields: {
               // Getting on progress streaming response
               onprogress: function(e){
-
+                try{
                   var progressResponse;
 
                   var response = e.currentTarget.response;
@@ -666,12 +669,11 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
 
                     // console.log(complete_response);
                   }
-                  complete_add += complete_response;
                   if(!complete_response.includes(tag_c)){
                     complete_response = complete_response + tag_c;
                   }
-                  // complete_response += tag_c;
 
+                  // complete_response += tag_c;
                   // console.log("raw");
                   // console.log(progressResponse);
                   //
@@ -689,7 +691,7 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
                     group: actual_group_name,
                     sites: JSON.stringify(parsedObject),
                     url: url_to_sent,
-                    description:description
+                    description:description,
                   }
 
                   console.log(requestObject);
@@ -700,13 +702,52 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
                     data: requestObject,
                     success:function(result){
                         //Returning the geoserver layer metadata from the controller
+                        console.log(result);
                         var json_response = result['success']
                         console.log(json_response);
+                        if(!result.hasOwnProperty("error")){
+
+                          $("#loading_p").html(`Adding ${title_server}: ${json_response} . . .`);
+                          if(notifications != undefined){
+                            notifications.update(
+                                {
+                                    'message': `${title_server}: ${json_response} . . .`,
+                                    'delay': 500,
+
+                                }
+                            )
+                          }
+                          else{
+                            notifications = $.notify(
+                                {
+                                    message: `${title_server}: 0 new sites added to the database . . .`
+                                },
+                                {
+                                    newest_on_top: true,
+                                    type: "success",
+                                    allow_dismiss: true,
+                                    z_index: 500,
+                                    delay: 0,
+                                    animate: {
+                                      enter: 'animated fadeInRight',
+                                      exit: 'animated fadeOutRight'
+                                    },
+                                    onShow: function() {
+                                        this.css({'width':'auto','height':'auto'});
+                                    }
+                                }
+                            )
+                          }
+
+                        }
+
 
                     },
                     error: function(err){
                       console.log(err);
                       $("#soapAddLoading-group").addClass("hidden");
+                      // $("#loading_p").addClass("hidden");
+
                       // $.notify(
                       //     {
                       //         message: `We are having problems adding the ${title_server} WaterOneFlow web service`
@@ -729,27 +770,13 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
 
                   })
 
-
-
-
-
-
-
-
-
-
-                  // console.log(parsedObject);
-
                   for(let i=0; i < parsedObject.length; ++i){
                     list_sites_me.push(parsedObject[i].sitename)
                   }
-                  // console.log(list_sites_me);
-                  // var parsedResponse = JSON.parse(progressResponse);
-                  // console.log(progressResponse);
-                  // console.log(parsedResponse.message);
-                  // $('#progressTest').text(progressResponse);
-                  // $('#fullResponse').text(parsedResponse.message);
-                  // $('.progress-bar').css('width', parsedResponse.progress + '%');
+                }
+                catch(e){
+                  console.log(e);
+                }
               }
           },
 
@@ -937,10 +964,11 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
                                   message: `Successfully Added the ${title_server} WaterOneFlow Service to the Map`
                               },
                               {
+                                  newest_on_top: true,
                                   type: "success",
                                   allow_dismiss: true,
                                   z_index: 20000,
-                                  delay: 5000,
+                                  delay: 100,
                                   animate: {
                                     enter: 'animated fadeInRight',
                                     exit: 'animated fadeOutRight'
@@ -950,6 +978,7 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
                                   }
                               }
                           )
+                          notifications.close();
                           $("#soapAddLoading-group").addClass("hidden");
 
 
@@ -1028,6 +1057,7 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
               )
             }
           },
+
           error: function(err){
             console.log(err);
             $("#soapAddLoading-group").addClass("hidden");
@@ -1227,7 +1257,7 @@ create_group_hydroservers = function(){
                       type: "success",
                       allow_dismiss: true,
                       z_index: 20000,
-                      delay: 5000,
+                      delay: 500,
                       animate: {
                         enter: 'animated fadeInRight',
                         exit: 'animated fadeOutRight'

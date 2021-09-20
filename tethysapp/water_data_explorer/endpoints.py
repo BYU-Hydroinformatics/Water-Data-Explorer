@@ -290,6 +290,7 @@ def save_only_sites_stream(request):
             sites = request.POST.get('sites')
             url_hs = request.POST.get('url')
             description_hs = request.POST.get('description')
+            # last = request.POST.get('islast')
             response_obj = {}
             SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
             session = SessionMaker()  # Initiate a session
@@ -299,8 +300,8 @@ def save_only_sites_stream(request):
 
             if hydroserver_group:
                 old_json_countries = json.loads(hydroserver_group.countries)
-                print(countries_json)
-                print(old_json_countries)
+                # print(countries_json)
+                # print(old_json_countries)
                 joined_count = list(set(countries_json['countries'] + old_json_countries['countries']))
                 object_countries['countries'] = joined_count
 
@@ -310,7 +311,7 @@ def save_only_sites_stream(request):
 
                 hydroserver_group.siteinfo = updated_sites
                 hydroserver_group.countries = json.dumps(object_countries)
-                return_obj['success'] = f'{len(old_sites)+ len(new_sites)} new sites'
+                return_obj['success'] = f'{len(old_sites)+ len(new_sites)} sites saved to the database'
             else:
                 hydroservers_group = session.query(Groups).filter(Groups.title == specific_group).first()
 
@@ -322,7 +323,7 @@ def save_only_sites_stream(request):
                                  countries = json.dumps(countries_json))
                 hydroservers_group.hydroserver.append(hs_one)
                 session.add(hydroservers_group)
-                return_obj['success'] = f'{len(json.loads(sites))} new sites'
+                return_obj['success'] = f'{len(json.loads(sites))} sites saved to the database'
 
             session.commit()
             session.close()

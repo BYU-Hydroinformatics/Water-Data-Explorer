@@ -1,3 +1,6 @@
+
+
+
 .group-legend{
   display: flex;
   justify-content: center;
@@ -150,6 +153,7 @@ tr:hover {
   flex:1 1 40%;
   order: 1;
   overflow-y: hidden;
+  position: absolute;
 }
 #graph{
   flex: 1 1 60%;
