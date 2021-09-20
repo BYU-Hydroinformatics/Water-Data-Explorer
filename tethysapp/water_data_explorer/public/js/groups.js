@@ -591,6 +591,7 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
       var complete_response;
       var tag_b;
       var tag_c = '</sitesResponse></GetSitesObjectResponse></soap:Body></soap:Envelope>';
+      var list_sites_me = [];
       console.log(url_request);
         $.ajax({
           type:"GET",
@@ -632,7 +633,7 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
                       if(almost_response != ''){
                         console.log('2a1');
 
-                        complete_response = almost_response + progressResponse;
+                        complete_response = tag_b + almost_response + progressResponse;
                         // almost_response = '';
                         // complete_response = almost_response + progressResponse.split('<site>')[0];
                         // almost_response = progressResponse.split('<site>').slice(1).join('<site>');
@@ -641,14 +642,14 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
                       else{
                         console.log('2a2');
 
-                        complete_response = progressResponse;
+                        complete_response = tag_b + progressResponse;
                       }
                     }
                     else{
                       if(almost_response != ''){
                         console.log('2b1');
 
-                        complete_response = almost_response + progressResponse.split('<site>')[0];
+                        complete_response = tag_b + almost_response + progressResponse.split('<site>')[0];
                         almost_response = '<site>' + progressResponse.split('<site>').slice(1).join('<site>');
                       }
                       else{
@@ -657,7 +658,7 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
                         // Get the first incomplete element and add the site tag//
                         almost_response = '<site>' + progressResponse.split('<site>')[progressResponse.split('<site>').length - 1];
                         // Add the response withpu the last element as the complete response //
-                        complete_response = progressResponse.split('<site>').slice(0,-1).join('<site>');
+                        complete_response = tag_b + progressResponse.split('<site>').slice(0,-1).join('<site>');
                       }
 
                     }
@@ -666,23 +667,83 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
                     // console.log(complete_response);
                   }
                   complete_add += complete_response;
-
+                  if(!complete_response.includes(tag_c)){
+                    complete_response = complete_response + tag_c;
+                  }
                   // complete_response += tag_c;
 
-                  console.log("raw");
-                  console.log(progressResponse);
-
-                  console.log("complete");
-                  console.log(complete_response);
-
-                  console.log("partial");
-                  console.log(almost_response);
+                  // console.log("raw");
+                  // console.log(progressResponse);
+                  //
+                  // console.log("complete");
+                  // console.log(complete_response);
+                  //
+                  // console.log("partial");
+                  // console.log(almost_response);
 
                   loco_index += 1;
 
-                  // let parsedObject = getSitesHelper(progressResponse);
+                  let parsedObject = getSitesHelper(complete_response);
+                  let requestObject = {
+                    hs: title_server,
+                    group: actual_group_name,
+                    sites: JSON.stringify(parsedObject),
+                    url: url_to_sent,
+                    description:description
+                  }
+
+                  console.log(requestObject);
+                  $.ajax({
+                    type:"POST",
+                    url: "save_stream/",
+                    dataType: "JSON",
+                    data: requestObject,
+                    success:function(result){
+                        //Returning the geoserver layer metadata from the controller
+                        var json_response = result['success']
+                        console.log(json_response);
+
+                    },
+                    error: function(err){
+                      console.log(err);
+                      $("#soapAddLoading-group").addClass("hidden");
+                      // $.notify(
+                      //     {
+                      //         message: `We are having problems adding the ${title_server} WaterOneFlow web service`
+                      //     },
+                      //     {
+                      //         type: "danger",
+                      //         allow_dismiss: true,
+                      //         z_index: 20000,
+                      //         delay: 5000,
+                      //         animate: {
+                      //           enter: 'animated fadeInRight',
+                      //           exit: 'animated fadeOutRight'
+                      //         },
+                      //         onShow: function() {
+                      //             this.css({'width':'auto','height':'auto'});
+                      //         }
+                      //     }
+                      // )
+                    }
+
+                  })
+
+
+
+
+
+
+
+
+
+
                   // console.log(parsedObject);
 
+                  for(let i=0; i < parsedObject.length; ++i){
+                    list_sites_me.push(parsedObject[i].sitename)
+                  }
+                  // console.log(list_sites_me);
                   // var parsedResponse = JSON.parse(progressResponse);
                   // console.log(progressResponse);
                   // console.log(parsedResponse.message);
@@ -693,19 +754,39 @@ add_hydroserver_for_groups= function(hs_object,actual_group_name){
           },
 
           success: function(xmlData){
-            if(complete_add == raw_add ){
-              console.log("they are the same");
-              console.log(complete_add);
-              console.log(raw_add);
+
+
+            function arrayCompare(_arr1, _arr2) {
+                if (
+                  !Array.isArray(_arr1)
+                  || !Array.isArray(_arr2)
+                  || _arr1.length !== _arr2.length
+                  ) {
+                    return false;
+                  }
+
+                // .concat() to not mutate arguments
+                const arr1 = _arr1.concat().sort();
+                const arr2 = _arr2.concat().sort();
+
+                for (let i = 0; i < arr1.length; i++) {
+                    if (arr1[i] !== arr2[i]) {
+                        return false;
+                     }
+                }
+
+                return true;
             }
-            else{
-              console.log("they are not the same");
-              console.log(complete_add);
-              console.log(raw_add);
-            }
+
             try{
+              let test_cont = []
               let parsedObject = getSitesHelper(xmlData);
-              console.log(parsedObject);
+              for(let i=0; i < parsedObject.length; ++i){
+                test_cont.push(parsedObject[i].sitename)
+              }
+
+              console.log(arrayCompare(test_cont,list_sites_me));
+
               let requestObject = {
                 hs: title_server,
                 group: actual_group_name,

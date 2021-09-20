@@ -239,34 +239,37 @@ def save_new_sites_data(request):
         if request.is_ajax() and request.method == 'POST':
             specific_group = request.POST.get('group')
             specific_hs = request.POST.get('hs')
-            sites = request.POST.get('sites')
+            # sites = request.POST.get('sites')
             url_service =request.POST.get('url')
             description = request.POST.get('description')
             response_obj = {}
             SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
             session = SessionMaker()  # Initiate a session
-            hydroservers_group = session.query(Groups).filter(Groups.title == specific_group).first()
-            print(f'saving to {hydroservers_group.title}')
+            # hydroservers_group = session.query(Groups).filter(Groups.title == specific_group).first()
+            hs_one = session.query(HydroServer_Individual).join(Groups).filter(Groups.title == specific_group).filter(HydroServer_Individual.title == specific_hs).first()
+
+            print(f'saving to {specific_group}')
             return_obj['title'] = specific_hs
             return_obj['url'] = url_service
             return_obj['description'] = description
-            return_obj['siteInfo'] = sites
+            return_obj['siteInfo'] = hs_one.siteinfo
+            # return_obj['siteInfo'] = sites
             return_obj['group'] = specific_group
-            countries_json = json.dumps(available_regions_2(request,siteinfo = sites))
+            # countries_json = json.dumps(available_regions_2(request,siteinfo = sites))
+            #
+            # hs_one = HydroServer_Individual(title=specific_hs,
+            #                  url=url_service,
+            #                  description = description,
+            #                  siteinfo=sites,
+            #                  variables = "{}",
+            #                  countries = countries_json )
 
-            hs_one = HydroServer_Individual(title=specific_hs,
-                             url=url_service,
-                             description = description,
-                             siteinfo=sites,
-                             variables = "{}",
-                             countries = countries_json )
-
-            print(f'created new view {hs_one.title}')
-            hydroservers_group.hydroserver.append(hs_one)
-            session.add(hydroservers_group)
+            # print(f'created new view {hs_one.title}')
+            # hydroservers_group.hydroserver.append(hs_one)
+            # session.add(hydroservers_group)
             session.commit()
             session.close()
-            print(f'new view {hs_one.title} saved')
+            # print(f'new view {hs_one.title} saved')
 
         else:
             return_obj['message'] = 'This request can only be made through a "POST" AJAX call.'
@@ -276,6 +279,63 @@ def save_new_sites_data(request):
         print(error)
         return JsonResponse(return_obj)
 
+def save_only_sites_stream(request):
+    return_obj = {}
+    object_countries = {}
+    updated_sites = []
+    try:
+        if request.is_ajax() and request.method == 'POST':
+            specific_group = request.POST.get('group')
+            specific_hs = request.POST.get('hs')
+            sites = request.POST.get('sites')
+            url_hs = request.POST.get('url')
+            description_hs = request.POST.get('description')
+            response_obj = {}
+            SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
+            session = SessionMaker()  # Initiate a session
+            hydroserver_group = session.query(HydroServer_Individual).join(Groups).filter(Groups.title == specific_group).filter(HydroServer_Individual.title == specific_hs).first()
+
+            countries_json = available_regions_2(request,siteinfo = sites)
+
+            if hydroserver_group:
+                old_json_countries = json.loads(hydroserver_group.countries)
+                print(countries_json)
+                print(old_json_countries)
+                joined_count = list(set(countries_json['countries'] + old_json_countries['countries']))
+                object_countries['countries'] = joined_count
+
+                old_sites = json.loads(hydroserver_group.siteinfo)
+                new_sites = json.loads(sites)
+                updated_sites = json.dumps(old_sites + new_sites)
+
+                hydroserver_group.siteinfo = updated_sites
+                hydroserver_group.countries = json.dumps(object_countries)
+                return_obj['success'] = f'{len(old_sites)+ len(new_sites)} new sites'
+            else:
+                hydroservers_group = session.query(Groups).filter(Groups.title == specific_group).first()
+
+                hs_one = HydroServer_Individual(title=specific_hs,
+                                 url = url_hs,
+                                 description = description_hs,
+                                 siteinfo = sites,
+                                 variables = "{}",
+                                 countries = json.dumps(countries_json))
+                hydroservers_group.hydroserver.append(hs_one)
+                session.add(hydroservers_group)
+                return_obj['success'] = f'{len(json.loads(sites))} new sites'
+
+            session.commit()
+            session.close()
+            # print(f'new view {hs_one.title} saved')
+
+        else:
+            return_obj['error'] = 'This request can only be made through a "POST" AJAX call.'
+
+        return JsonResponse(return_obj)
+    except Exception as error:
+        print(error)
+        return_obj['error'] = 'there is a problem'
+        return JsonResponse(return_obj)
 def upload_hs(request):
     return_obj = {}
     difference = 0

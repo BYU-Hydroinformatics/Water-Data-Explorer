@@ -53,6 +53,10 @@ class WaterDataExplorer(TethysAppBase):
                    url='save_new_sites/',
                    controller='water_data_explorer.endpoints.save_new_sites_data'),
 
+            UrlMap(name='save-stream',
+                   url='save_stream/',
+                   controller='water_data_explorer.endpoints.save_only_sites_stream'),
+
             UrlMap(name='save-variables',
                    url='save-variables/',
                    controller='water_data_explorer.endpoints.save_variables_data'),
