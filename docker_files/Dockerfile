@@ -20,12 +20,6 @@ FROM tethysplatform/tethys-core:master
 # ENV TETHYS_GS_USERNAME admin
 # ENV TETHYS_GS_PASSWORD geoserver
 # ENV CONDORPY_HOME ${TETHYS_HOME}/tethys
-
-ENV APP_DB_HOST ${TETHYS_DB_HOST}
-ENV APP_DB_PORT ${TETHYS_DB_PORT}
-ENV APP_DB_USERNAME ${TETHYS_DB_SUPERUSER}
-ENV APP_DB_PASSWORD ${TETHYS_DB_SUPERUSER_PASS}
-
 ##################################
 # PRODUCTION ENVIRONMENT VARIABLES
 ##################################
