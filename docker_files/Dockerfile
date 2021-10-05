@@ -77,7 +77,7 @@ ADD nginx /usr/lib/tethys/tethys/tethys_cli/gen_templates/
 # CHANGE THE SETTINGS.PY OF THE TETHYS_PORTAL #
 ######################################################
 
-ADD settings.py /usr/lib/tethys/tethys/tethys_portal/
+# ADD settings.py /usr/lib/tethys/tethys/tethys_portal/
 
 
 #########

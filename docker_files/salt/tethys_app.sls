@@ -4,10 +4,12 @@
 {% set TETHYS_HOME = salt['environ.get']('TETHYS_HOME') %}
 {% set TETHYS_PERSIST = salt['environ.get']('TETHYS_PERSIST') %}
 {% set TETHYSAPP_DIR = salt['environ.get']('TETHYSAPP_DIR') %}
-{% set APP_DB_HOST = salt['environ.get']('APP_DB_HOST') %}
-{% set APP_DB_PASSWORD = salt['environ.get']('APP_DB_PASSWORD') %}
-{% set APP_DB_PORT = salt['environ.get']('APP_DB_PORT') %}
-{% set APP_DB_USERNAME = salt['environ.get']('APP_DB_USERNAME') %}
+{% set APP_DB_HOST = salt['environ.get']('TETHYS_DB_HOST') %}
+{% set APP_DB_PASSWORD = salt['environ.get']('TETHYS_DB_SUPERUSER_PASS') %}
+{% set APP_DB_PORT = salt['environ.get']('TETHYS_DB_PORT') %}
+{% set APP_DB_USERNAME = salt['environ.get']('TETHYS_DB_SUPERUSER') %}
+{% set BYPASS_TETHYS_HOME_PAGE = salt['environ.get']('BYPASS_TETHYS_HOME_PAGE') %}
+{% set ENABLE_OPEN_PORTAL = salt['environ.get']('ENABLE_OPEN_PORTAL') %}
 
 # {% set TETHYS_GS_HOST = salt['environ.get']('TETHYS_GS_HOST') %}
 # {% set TETHYS_GS_PASSWORD = salt['environ.get']('TETHYS_GS_PASSWORD') %}
@@ -131,6 +133,12 @@ Sync_App_Persistent_Stores:
 #     - shell: /bin/bash
 #     - onlyif: /bin/bash -c "[ -f "/tmp/keys/condorkey-root" ];"
 #     - unless: /bin/bash -c "[ -f "${TETHYS_CLUSTER_PKEY_FILE}" ];"
+
+Making_Portal_Open:
+  cmd.run:
+    - name: . {{ CONDA_HOME }}/bin/activate {{ CONDA_ENV_NAME }} && tethys settings --set BYPASS_TETHYS_HOME_PAGE "${BYPASS_TETHYS_HOME_PAGE}" --set ENABLE_OPEN_PORTAL "${ENABLE_OPEN_PORTAL}"
+    - shell: /bin/bash
+    - unless: /bin/bash -c "[ -f "${TETHYS_PERSIST}/water_data_explorer_setup_complete" ];"
 
 Flag_Complete_Setup:
   cmd.run:
