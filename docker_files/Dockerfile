@@ -98,7 +98,28 @@ EXPOSE 80
 ## Be sure to be inside the docker_files folder ##
 ADD /salt/ /srv/salt/
 
+######################
+# CONFIGURE DATABASE #
+######################
+# use and uncomment this option if you are using an external cloud database instance from AMAZON.
+# ADD fix.sql $HOME
+# ADD configure_db.sh $HOME
+# RUN ["chmod", "+x", "/usr/lib/tethys/configure_db.sh"]
+
+
+######################
+# CONFIGURE FINAL_RUN #
+######################
+# use and uncomment this option if you are using an external cloud database instance from AMAZON.
+# ADD final_run.sh $HOME
+# RUN ["chmod", "+x", "/usr/lib/tethys/final_run.sh"]
+
+
 #######
 # RUN #
 #######
+# use and uncomment this option if you are using a local docker postgres container or a local postgres instance.
 CMD bash run.sh
+
+# use and uncomment this option if you are using an external cloud database instance from AMAZON.
+# CMD bash final_run.sh
