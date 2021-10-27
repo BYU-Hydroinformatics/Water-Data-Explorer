@@ -7,9 +7,6 @@ import pandas as pd
 import numpy as np
 import geopandas as gpd
 import shapely.speedups
-# sys.path.append("/home/elkin/Projects/condaPackages/pywaterml")
-
-import pywaterml.waterML as pwml
 
 from shapely.geometry import Point, Polygon
 
@@ -32,8 +29,6 @@ from .auxiliary import *
 import xml.etree.ElementTree as ET
 import psycopg2
 from owslib.waterml.wml11 import WaterML_1_1 as wml11
-from suds.client import Client  # For parsing WaterML/XML
-from suds.xsd.doctor import Import, ImportDoctor
 from json import dumps, loads
 from pyproj import Proj, transform  # Reprojecting/Transforming coordinates
 from datetime import datetime
@@ -44,8 +39,6 @@ from .app import WaterDataExplorer as app
 from tethys_sdk.workspaces import app_workspace
 
 Persistent_Store_Name = 'catalog_db'
-logging.basicConfig(level=logging.INFO)
-logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
 
 def get_download_hs(request):

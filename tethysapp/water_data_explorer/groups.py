@@ -7,7 +7,6 @@ import pandas as pd
 import geopandas as gpd
 import numpy as np
 import sys
-import pywaterml.waterML as pwml
 import shapely.speedups
 from urllib.error import HTTPError
 from django.shortcuts import render
@@ -30,10 +29,7 @@ from .endpoints import available_regions_2, available_variables_2
 import xml.etree.ElementTree as ET
 import psycopg2
 from owslib.waterml.wml11 import WaterML_1_1 as wml11
-import suds
-from suds.client import Client  # For parsing WaterML/XML
-from suds.xsd.doctor import Import, ImportDoctor
-from suds.transport import TransportError
+
 from json import dumps, loads
 from pyproj import Proj, transform  # Reprojecting/Transforming coordinates
 from datetime import datetime
@@ -45,8 +41,7 @@ from tethys_sdk.workspaces import app_workspace
 
 from shapely.geometry import Point, Polygon
 Persistent_Store_Name = 'catalog_db'
-# logging.basicConfig(level=logging.INFO)
-# logging.getLogger('suds.client').setLevel(logging.DEBUG)
+
 
 def available_regions(request):
 
