@@ -18,11 +18,9 @@ requirements:
       - owslib
       - sqlalchemy
       - psycopg2
-      - suds-jurko
       - xmltodict
       - pyshp
       - geopandas
-      - pywaterml
 
   pip:
 
