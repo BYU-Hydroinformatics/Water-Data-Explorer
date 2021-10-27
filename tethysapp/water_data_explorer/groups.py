@@ -7,6 +7,7 @@ import pandas as pd
 import geopandas as gpd
 import numpy as np
 import sys
+import pywaterml.waterML as pwml
 import shapely.speedups
 from urllib.error import HTTPError
 from django.shortcuts import render

@@ -21,6 +21,7 @@ requirements:
       - xmltodict
       - pyshp
       - geopandas
+      - pywaterml
 
   pip:
 
