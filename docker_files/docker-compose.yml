@@ -25,6 +25,9 @@ services:
       #Force to have larger Responses in order to save from the JS to the PostgreSQL DATABASES
       DATA_UPLOAD_MAX_NUMBER_FIELDS: "50000000000000000"
       DATA_UPLOAD_MAX_MEMORY_SIZE: "5000000000000000000"
+      ASGI_PROCESSES: "1"
+      CHANNEL_LAYERS_BACKEND: "channels_redis.core.RedisChannelLayer"
+      CHANNEL_LAYERS_CONFIG: "\"{\"hosts\": [[127.0.0.1, 6379]]}\""
 
     links:
       - db

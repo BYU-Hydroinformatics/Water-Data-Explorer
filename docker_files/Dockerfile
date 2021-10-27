@@ -1,34 +1,6 @@
 # Use our Tethyscore base docker image as a parent image
 FROM tethysplatform/tethys-core:master
 
-###############################
-# DEFAULT ENVIRONMENT VARIABLES
-###############################
-
-## IF YOU USE CLUSTERS, GS, AND CONDOR PLEASE UNCOMMENT
-
-# ENV TETHYS_CLUSTER_IP 172.17.0.1
-# ENV TETHYS_CLUSTER_USERNAME condor
-# ENV TETHYS_CLUSTER_PKEY_FILE ${TETHYS_PERSIST}/keys/condorkey
-# ENV TETHYS_CLUSTER_PKEY_PASSWORD please_dont_use_default_passwords
-# ENV TETHYS_GS_PROTOCOL http
-# ENV TETHYS_GS_HOST 172.17.0.1
-# ENV TETHYS_GS_PORT 8181
-# ENV TETHYS_GS_PROTOCOL_PUB https
-# ENV TETHYS_GS_HOST_PUB 172.17.0.1
-# ENV TETHYS_GS_PORT_PUB 443
-# ENV TETHYS_GS_USERNAME admin
-# ENV TETHYS_GS_PASSWORD geoserver
-# ENV CONDORPY_HOME ${TETHYS_HOME}/tethys
-##################################
-# PRODUCTION ENVIRONMENT VARIABLES
-##################################
-ENV ASGI_PROCESSES 1
-ENV CHANNEL_LAYERS_BACKEND "channels_redis.core.RedisChannelLayer"
-ENV CHANNEL_LAYERS_CONFIG "\"{\"hosts\": [[127.0.0.1, 6379]]}\""
-
-
-
 #########
 # SETUP #
 #########
@@ -66,13 +38,6 @@ RUN /bin/bash -c ". ${CONDA_HOME}/bin/activate tethys \
 ######################################################
 
 ADD nginx /usr/lib/tethys/tethys/tethys_cli/gen_templates/
-
-######################################################
-# CHANGE THE SETTINGS.PY OF THE TETHYS_PORTAL #
-######################################################
-
-# ADD settings.py /usr/lib/tethys/tethys/tethys_portal/
-
 
 #########
 # CHOWN #
