@@ -203,21 +203,12 @@ getValuesHelperJS2 = function (times_series,return_object){
  *
  * */
 getValuesHelperJS = function(k,return_obj){
-
   // #UTC TIME
   try{
-      let timeUTC = k['attr']['@dateTimeUTC']
-      let time1UTC = timeUTC.replace("T", "-");
-      let time_splitUTC = time1UTC.split("-");
-      let year = parseInt(time_splitUTC[0]);
-      let month = parseInt(time_splitUTC[1]);
-      let day = parseInt(time_splitUTC[2]);
-      let hour_minute = time_splitUTC[3].split(":");
-      let hour = parseInt(hour_minute[0]);
-      let minute = parseInt(hour_minute[1]);
-      let date_stringUTC = new Date(year, month, day, hour, minute);
-      let date_string_convertedUTC = date_stringUTC.toISOString("%Y-%m-%d %H:%M:%S");
-      return_obj['dateTimeUTC'] = date_string_convertedUTC;
+      let timeUTC = k['attr']['@dateTimeUTC'];
+
+      return_obj['dateTimeUTC'] = timeUTC ;
+
   }
   catch(e){
     return_obj['dateTimeUTC'] = "No Date UTC found";
@@ -226,17 +217,8 @@ getValuesHelperJS = function(k,return_obj){
   // #not UTC time
   try{
     let time = k['attr']['@dateTime']
-    let time1 = time.replace("T", "-")
-    let time_split = time1.split("-");
-    let year = parseInt(time_split[0]);
-    let month = parseInt(time_split[1]);
-    let day = parseInt(time_split[2]);
-    let hour_minute = time_split[3].split(":")
-    let hour = parseInt(hour_minute[0]);
-    let minute = parseInt(hour_minute[1]);
-    let date_string = new Date(year, month, day, hour, minute);
-    let date_string_converted = date_string.toISOString("%Y-%m-%d %H:%M:%S");
-    return_obj['dateTime'] = date_string_converted;
+
+    return_obj['dateTime'] = time;
   }
   catch(e){
     return_obj['dateTime'] = "No Date found";
@@ -344,7 +326,7 @@ getValuesJS = function(xmlData, methodCode, qualityControlLevelCode){
   var result = parser.validate(xmlData);
   if (result !== true) console.log(result.err);
   var jsonObj = parser.parse(xmlData,options);
-  // console.log(jsonObj);
+  console.log(jsonObj);
   var times_series = {};
   try{
     let values_json = jsonObj['soap:Envelope']['soap:Body'];
@@ -557,7 +539,7 @@ select_variable_change = function(){
                 let result1 = {};
                 result1 = get_values_graph_hs(parseValuesData);
 
-                // console.log(result1);
+                console.log(result1);
                 if(result1['graphs'].length > 0){
                   //GRAPHS VALUES//
                 let time_series_array = result1['graphs'];
