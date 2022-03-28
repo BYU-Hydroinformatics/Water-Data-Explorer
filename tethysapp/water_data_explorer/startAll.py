@@ -31,7 +31,7 @@ from suds.xsd.doctor import Import, ImportDoctor
 from json import dumps, loads
 from pyproj import Proj, transform  # Reprojecting/Transforming coordinates
 from datetime import datetime
-
+from tethys_sdk.permissions import login_required
 
 from django.http import JsonResponse, HttpResponse
 from .app import WaterDataExplorer as app
@@ -40,6 +40,7 @@ Persistent_Store_Name = 'catalog_db'
 
 logging.getLogger('suds.client').setLevel(logging.CRITICAL)
 
+@login_required()
 def home(request):
     """
     Controller for the app home page.

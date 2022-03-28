@@ -12,3 +12,5 @@ services.yml
 docs/_build
 docs/_static
 docs/templates
+docker_files/postgres-data
+

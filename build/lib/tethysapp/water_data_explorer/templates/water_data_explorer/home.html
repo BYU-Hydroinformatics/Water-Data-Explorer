@@ -1,0 +1,370 @@
+{% extends "water_data_explorer/base.html" %}
+{% load tethys_gizmos %}
+{% load static %}
+
+{% block app_navigation_toggle_override %}
+<<a href="#"></a>>
+{% endblock %}
+
+{% block app_navigation_items %}
+
+<!--The Hydroservers are added to this box-->
+
+<!-- id= "buttonsBar" for the button bar -->
+<br>
+
+{# <img id="GeneralLoading" class="view-file hidden" src="https://media.giphy.com/media/xTk9ZvMnbIiIew7IpW/giphy.gif" /> #}
+<img id="GeneralLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
+{# <img id="graphAddLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" /> #}
+
+<div class="accordion" id="groups_hydroservers">
+
+  <div id= "panHydroGroups" class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingCP">
+    </div>
+
+    <div id="collapseCP" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingCP">
+      <div id= "panel-bodyh" class="panel-body">
+        <h4 class="titleh"> Views </h4>
+        {% if can_delete_hydrogroups %}
+        <button class="btn btn-primary" data-toggle="modal" data-target="#modalAddGroupServer"> <span class="glyphicon glyphicon-plus"></span></button>
+          {% endif %}
+
+          {% if can_delete_hydrogroups %}
+          <button id="btn-del-groups-f" class="btn btn-danger"  data-toggle="modal" data-target="#modalDeleteGroups"> <span class="glyphicon glyphicon-trash"></span></button>
+          {% endif %}
+          <button id="btn-filter-groups-f" class="btn btn-success" data-toggle="modal" data-target="#modalKeyWordSearch">
+            <span class="glyphicon glyphicon-filter"></span>
+          </button>
+
+          <button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>
+      </div>
+    </div>
+  </div>
+  {% if logo_institucion %}
+  <div class="logo_institucion">
+    <!-- <img src="https://drive.google.com/thumbnail?id=1v6NrjGSbgmmy79_FA_y42SL_ICwhXwfx"/> -->
+    <img src="{{ logo_institucion }}"/>
+  </div>
+  {% endif %}
+
+  <div class="panel-group" id="current-Groupservers" role="tablist" aria-multiselectable="true"></div>
+
+
+</div>
+
+{% include "water_data_explorer/sideContent.html" %}
+
+{% endblock %}
+
+{% block app_content %}
+<!-- <div id="content_map"> -->
+<!-- <div id="container_map"> -->
+
+  <div id="map" class="map"></div>
+  <table id="tableLegend"></table>
+
+<!-- </div> -->
+<div id ="graph">
+  <img id="graphAddLoading" class="view-file hidden" alt="loading gif" src="{% static 'water_data_explorer/images/loading.gif' %}">
+  <div id="carouselExampleIndicators" class="carousel slide" data-interval="false" >
+    <ol class="carousel-indicators">
+      <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
+      </li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    </ol>
+    <div class="carousel-inner">
+      <div id = "tables_info" class="item active">
+          <div id="options">
+            <h3 id= "siteName_title"> Please select a Station/Platform on the map</h3>
+              <p id= "siteDes">
+              </p>
+            <div id="table_div"></div>
+          </div>
+      </div>
+      <div id = "plots_info" class="item">
+        <div id="plots2">
+          <h3></h3>
+          <div id= "ipad_lay_contr">
+          <div id= "firstContainer" class="controlGraphs2">
+            <div id= "select-graphs">
+              <select id= "variables_graph" class="selectpicker" data-dropup-auto="false" data-live-search="true" data-style="btn-info" data-width="100%">
+                <option > Select Variable</option>
+              </select>
+
+              <select id="type_graph_select2" class="selectpicker" data-width="100%">
+
+                <optgroup label="Individual Variable Plots">
+                  <option> Scatter </option>
+                  <option> Whisker and Box </option>
+              </optgroup>
+              </select>
+
+
+            </div>
+            <div id= "timeControllers" class="containerTime">
+                <div class='col-md-5'>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-5'>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div id= "secondContainer" class="controlGraphs2">
+              <button type="button" id= "update_graphs" class="btn btn-success">Plot Time Series</button>
+              <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit" data-size="mini">
+                  <option value="Download">Download</option>
+                    <option value="CSV" >CSV</option>
+                    <option value = "WaterML1.0">WaterML 1.0</option>
+                    <option value = "WaterML2.0">WaterML 2.0</option>
+                    <option value = "NetCDF">NetCDF</option>
+
+              </select>
+
+
+          </div>
+          </div>
+
+
+          <div id="plots"></div>
+        </div>
+
+
+      </div>
+    </div>
+    <a class="left carousel-control tool_tip_h" href="#carouselExampleIndicators" data-slide="prev" data-toggle="tooltip" data-placement="top" title="Station/Platform Information">
+      <span class="golang glyphicon glyphicon-list-alt"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control tool_tip_h" href="#carouselExampleIndicators" data-slide="next" data-toggle="tooltip" data-placement="top" title="Time series Plots ">
+      <span class=" golang glyphicon glyphicon-stats"></span>
+      <span class="sr-only">Next</span>
+    </a>
+
+  </div>
+  <!-- <div id="carouselExampleIndicators" class="carousel slide" data-interval="false">
+    <ol class="carousel-indicators">
+      <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
+      </li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    </ol>
+    <div class="carousel-inner">
+      <div class="item active">
+          <div id="options">
+            <h3 id= "siteName_title"> Select a Station</h3>
+              <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
+                in this part such as a name and a description.
+              </p>
+            <div id="table_div"></div>
+          </div>
+      </div>
+      <div class="item">
+        <div id="plots2">
+          <h3></h3>
+          <div id= "firstContainer" class="controlGraphs2">
+            <div id= "select-graphs">
+              <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info" data-width="100%" >
+                <option > Variables</option>
+              </select>
+              <select id="type_graph_select2" class="selectpicker" data-width="100%">
+
+                <optgroup label="Individual Variable Plots">
+                  <option> Scatter </option>
+                  <option> Whisker and Box </option>
+              </optgroup>
+              </select>
+            </div>
+            <div id= "timeControllers" class="containerTime">
+                <div class='col-md-5'>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-5'>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div id= "secondContainer" class="controlGraphs2">
+              <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
+              <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit" data-size="mini">
+                  <option value="Download">Download</option>
+                  <option value="CSV" >CSV</option>
+                  <option value = "WaterML1.0">WaterML 1.0</option>
+                  <option value = "WaterML2.0">WaterML 2.0</option>
+              </select>
+          </div>
+
+          <div id="plots"></div>
+        </div>
+
+
+      </div>
+    </div>
+    <a class="left carousel-control" href="#carouselExampleIndicators" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#carouselExampleIndicators" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+
+  </div> -->
+
+</div>
+
+<!-- <div id="graph">
+
+  <div id="options">
+    <h3 id= "siteName_title"> Select a Station</h3>
+      <p id= "siteDes"> No Site Selected, when a site is "clicked" metadata of the site will display
+        in this part such as a name and a description.
+      </p>
+    <div id="table_div"></div>
+
+  </div>
+  <img id="graphAddLoading" class="view-file hidden" alt="loading gif" src="{% static 'water_data_explorer/images/loading.gif' %}">
+
+  <div id="plots2">
+    <h3></h3>
+    <div id="controlGraphs">
+      <select id= "variables_graph" class="selectpicker" data-live-search="true" data-style="btn-info"width: '100%'>
+        <option > No Variables Available . . .</option>
+      </select>
+      <select id="type_graph_select2" class="selectpicker" data-width="fit">
+
+        <optgroup label="Individual Variable Plots">
+          <option> Scatter </option>
+          <option> Whisker and Box </option>
+      </optgroup>
+      </select>
+      <div class="containerTime">
+          <div class='col-md-5'>
+              <div class="form-group">
+                  <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
+                      <input type='text' class="form-control" />
+                      <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                  </div>
+              </div>
+          </div>
+          <div class='col-md-5'>
+              <div class="form-group">
+                  <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
+                      <input type='text' class="form-control" />
+                      <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <button type="button" id= "update_graphs" class="btn btn-danger">Search</button>
+      <select id= "download_dropdown" class="selectpicker" data-live-search="false" data-width="fit">
+          <option value="Download">Download</option>
+          <option value="CSV" >CSV</option>
+          <option value = "WaterML1.0">WaterML 1.0</option>
+          <option value = "WaterML2.0">WaterML 2.0</option>
+      </select>
+    </div>
+
+    <div id="plots"></div>
+
+
+
+  </div>
+
+
+</div> -->
+<script>
+    $(function(){
+        $("#about").modal('show');
+    });
+</script>
+
+{% endblock %}
+
+{# Use the after_app_content block for modals #}
+
+{% block app_content_wrapper_override %}
+
+{{ block.super }}
+
+{% include "water_data_explorer/modals/manageServers.html" %}
+{% include "water_data_explorer/modals/delCentral.html" %}
+{% include "water_data_explorer/modals/addHydroserver.html" %}
+{% include "water_data_explorer/modals/delServer.html" %}
+{% include "water_data_explorer/modals/addGroupHydroserver.html" %}
+{% include "water_data_explorer/modals/keywordSearch.html" %}
+{% include "water_data_explorer/modals/groupSearch.html" %}
+{% include "water_data_explorer/modals/DeleteHydroWarning.html" %}
+{% include "water_data_explorer/modals/DeleteTableGroup.html" %}
+{% include "water_data_explorer/modals/showVariables.html" %}
+{% include "water_data_explorer/modals/showVariables2.html" %}
+{% include "water_data_explorer/modals/hydro_info.html" %}
+{% include "water_data_explorer/modals/promp_down.html" %}
+
+{% endblock %}
+
+
+{% block after_app_content %}
+  <!-- Example Modal -->
+
+{% endblock %}
+
+{% block app_actions %}
+<div id="zoomlevel"></div>
+
+{% endblock %}
+{% block scripts %}
+  {{ block.super }}
+
+  <script type="text/javascript">
+      $(function () {
+
+          $('#datetimepicker6').datepicker();
+          $('#datetimepicker7').datepicker();
+
+
+          $("#datetimepicker6").datepicker().on("changeDate", function (e) {
+              console.log("changing time");
+              $('#datetimepicker7').datepicker('setStartDate', $(this).datepicker('getDate'));
+          });
+
+          $("#datetimepicker7").datepicker().on("changeDate", function (e) {
+              console.log("changing time");
+              $('#datetimepicker6').datepicker('setEndDate', $(this).datepicker('getDate'));
+          });
+
+      });
+  </script>
+{% endblock %}

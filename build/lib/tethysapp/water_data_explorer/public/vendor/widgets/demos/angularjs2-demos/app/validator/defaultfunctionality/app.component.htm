@@ -1,0 +1,17 @@
+﻿<angularValidator>
+    <form id="testForm" action="./">
+        <table class="register-table">
+            <tr>
+                <td>Username:</td>
+                <td><angularInput id="userInput" #userInput></angularInput></td>
+            </tr>
+            <tr>
+                <td>E-mail:</td>
+                <td><angularInput id="emailInput" #emailInput></angularInput></td>
+            </tr>
+            <tr>
+                <td><angularButton #button (OnClick)="OnSend($event)">Submit</angularButton></td>
+            </tr>
+        </table>
+    </form>
+</angularValidator>

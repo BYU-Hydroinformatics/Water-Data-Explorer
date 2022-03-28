@@ -1,0 +1,35 @@
+{% load staticfiles %}
+<form id="modalKeyWordSearch" class="modal fade" role="dialog">
+    {% csrf_token %}
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Filter of Views</h4>
+                <br>
+                <em>Filtering allows to find the views that meet the selected criteria</em>
+            </div>
+            <div class="modal-body" id = "keyword-modal-body">
+              <div class="leftContent">
+                <p> Filter by Country </p>
+                <input type="text" id="myInputKeyword" class= "searchBars" placeholder="Search for country" title="Type in a country">
+                <div id="groups_countries"></div>
+                <!-- <div class="button-group-temp">
+                    <button type="button" id="btn-key-update-variables" class="btn btn-primary">Update Variables</button>
+                </div> -->
+                <p class="hidden"> Filter by Variable </p>
+                <input type="text" id="myInputKeyword2" class= "searchBars hidden" placeholder="Search for variable" title="Type in a variable">
+                <div id="groups_variables" class="hidden"></div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="button-group">
+                  <img id="KeywordLoading" class="view-file hidden" src="{% static 'water_data_explorer/images/loading.gif' %}" />
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" id="btn-key-search" class="btn btn-success">Filter Views</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
