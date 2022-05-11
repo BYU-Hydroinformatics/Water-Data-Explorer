@@ -410,8 +410,14 @@ load_individual_hydroservers_group = function(group_name){
                    information_model[`${group_name}`].push(title);
 
                    let new_title = unique_id_group;
-
-                     let newHtml = html_for_servers(new_title,group_name_e3);
+                   let newHtml;
+                    if(can_delete_hydrogroups){
+                        newHtml = html_for_servers(can_delete_hydrogroups,new_title,group_name_e3);
+                    }
+                    else{
+                      newHtml = html_for_servers(false,new_title,group_name_e3);
+                    }
+                    //  let newHtml = html_for_servers(can_delete_hydrogroups,new_title,group_name_e3);
                      $(newHtml).appendTo(`#${id_group_separator}`);
                      $(`#${new_title}_variables`).on("click",showVariables2);
                      $(`#${new_title}_variables_info`).on("click",hydroserver_information);
@@ -980,7 +986,17 @@ add_hydroserver = function(){
 
 
                           let no_servers_tag = Array.from(document.getElementById(`${id_group_separator}`).getElementsByTagName("P"))[0];
-                          let newHtml = html_for_servers(new_title,group_name_e3)
+                          let newHtml;
+                          if(can_delete_hydrogroups){
+                              newHtml = html_for_servers(can_delete_hydrogroups,new_title,group_name_e3);
+                          }
+                          else{
+                            newHtml = html_for_servers(false,new_title,group_name_e3);
+                          }
+                          
+                          
+                          
+                          // let newHtml = html_for_servers(can_delete_hydrogroups,new_title,group_name_e3)
                            $(newHtml).appendTo(`#${id_group_separator}`);
                            $(`#${new_title}_variables`).on("click",showVariables2);
                            $(`#${new_title}_variables_info`).on("click",hydroserver_information);
