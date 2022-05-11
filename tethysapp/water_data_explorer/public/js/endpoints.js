@@ -257,6 +257,7 @@ get_vars_from_site = function (resultList){
   * @return {object} array containing the open layers vector Layer and vector Source
 * */
 map_layers = function(sites,title,url){
+  // console.log(sites)
   try{
     sites = sites.map(site => {
         return {
@@ -283,7 +284,7 @@ map_layers = function(sites,title,url){
             }
         }
     })
-
+    // console.log(sites)
     let sitesGeoJSON = {
         type: "FeatureCollection",
         crs: {
@@ -645,7 +646,11 @@ add_hydroserver = function(){
 
       $("#soapAddLoading").removeClass("hidden");
 
-
+      let title_server = $("#soap-title").val();
+      let unique_id_group = uuidv4();
+      id_dictionary[unique_id_group] = title_server;
+      let actual_group_name = actual_group.split('=')[1];
+      let description = $("#hs-description").val();
       let url_decons;
       let url_to_sent =$("#soap-url").val();
       if($("#soap-url").val().includes("?WSDL")){
@@ -668,33 +673,256 @@ add_hydroserver = function(){
         url_request = document.location.protocol + "//" + make_sure_not_mc[1] +"?request=GetSitesObject&format=WML1";
       }
       console.log(url_request);
+      var raw_add = '';
+      var complete_add = '';
+      var lastResponseLength = false;
+      var loco_index = 0;
+      var almost_response = '';
+      var complete_response;
+      var tag_b;
+      var tag_c = '</sitesResponse></GetSitesObjectResponse></soap:Body></soap:Envelope>';
+      var list_sites_me = [];
+      var notifications;
+      console.log(url_request);
+      // $("#loading_p").removeClass("hidden");
+      // $("#loading_p").html(`Adding ${title_server}: 0 new sites added to the database . . .`);
         $.ajax({
           type:"GET",
           url:url_request,
           dataType: "text",
+          xhrFields: {
+              // Getting on progress streaming response
+              onprogress: function(e){
+                try{
+                  var progressResponse;
+
+                  var response = e.currentTarget.response;
+                  raw_add += response;
+                  var last_child;
+                  // if (loco_index > 0){
+                  if(lastResponseLength === false){
+                      progressResponse = response;
+                      tag_b = progressResponse.split('</queryInfo>')[0] + '</queryInfo>';
+                      last_child = progressResponse.substr(progressResponse.length - 7);
+                      console.log("last characters",last_child);
+                      if(last_child == '</site>' || last_child == 'velope>'){
+                        console.log('1a');
+                          complete_response = progressResponse;
+                      }
+                      else{
+                        console.log('1b');
+                        // Get the first incomplete element and add the site tag//
+                        almost_response = '<site>' + progressResponse.split('<site>')[progressResponse.split('<site>').length - 1] ;
+                        // Add the response withpu the last element as the complete response //
+                        complete_response = progressResponse.split('<site>').slice(0,-1).join('<site>');
+                      }
+                      lastResponseLength = response.length;
+                  }
+                  else{
+                    progressResponse = response.substring(lastResponseLength);
+                    last_child = progressResponse.substr(progressResponse.length - 7);
+                    console.log("last characters",last_child);
+                    if(last_child == '</site>' || last_child == 'velope>'){
+                      if(almost_response != ''){
+                        console.log('2a1');
+
+                        complete_response = tag_b + almost_response + progressResponse;
+                        // almost_response = '';
+                        // complete_response = almost_response + progressResponse.split('<site>')[0];
+                        // almost_response = progressResponse.split('<site>').slice(1).join('<site>');
+
+                      }
+                      else{
+                        console.log('2a2');
+
+                        complete_response = tag_b + progressResponse;
+                      }
+                    }
+                    else{
+                      if(almost_response != ''){
+                        console.log('2b1');
+
+                        complete_response = tag_b + almost_response + progressResponse.split('<site>')[0];
+                        almost_response = '<site>' + progressResponse.split('<site>').slice(1).join('<site>');
+                      }
+                      else{
+                        console.log('2b2');
+
+                        // Get the first incomplete element and add the site tag//
+                        almost_response = '<site>' + progressResponse.split('<site>')[progressResponse.split('<site>').length - 1];
+                        // Add the response withpu the last element as the complete response //
+                        complete_response = tag_b + progressResponse.split('<site>').slice(0,-1).join('<site>');
+                      }
+
+                    }
+                    lastResponseLength = response.length;
+
+                    // console.log(complete_response);
+                  }
+                  if(!complete_response.includes(tag_c)){
+                    complete_response = complete_response + tag_c;
+                  }
+
+                  // complete_response += tag_c;
+                  // console.log("raw");
+                  // console.log(progressResponse);
+                  //
+                  // console.log("complete");
+                  // console.log(complete_response);
+                  //
+                  // console.log("partial");
+                  // console.log(almost_response);
+
+                  loco_index += 1;
+
+                  let parsedObject = getSitesHelper(complete_response);
+                  let requestObject = {
+                    hs: title_server,
+                    group: actual_group_name,
+                    sites: JSON.stringify(parsedObject),
+                    url: url_to_sent,
+                    description:description,
+                  }
+
+                  console.log(requestObject);
+                  $.ajax({
+                    type:"POST",
+                    url: "save_stream/",
+                    dataType: "JSON",
+                    data: requestObject,
+                    success:function(result){
+                        //Returning the geoserver layer metadata from the controller
+                        console.log(result);
+                        var json_response = result['success']
+                        console.log(json_response);
+                        if(!result.hasOwnProperty("error")){
+
+                          $("#loading_p").html(`Adding ${title_server}: ${json_response} . . .`);
+                          if(notifications != undefined){
+                            notifications.update(
+                                {
+                                    'message': `${title_server}: ${json_response} . . .`,
+                                    'delay': 500,
+
+                                }
+                            )
+                          }
+                          else{
+                            notifications = $.notify(
+                                {
+                                    message: `${title_server}: 0 new sites added to the database . . .`
+                                },
+                                {
+                                    newest_on_top: true,
+                                    type: "success",
+                                    allow_dismiss: true,
+                                    z_index: 500,
+                                    delay: 0,
+                                    animate: {
+                                      enter: 'animated fadeInRight',
+                                      exit: 'animated fadeOutRight'
+                                    },
+                                    onShow: function() {
+                                        this.css({'width':'auto','height':'auto'});
+                                    }
+                                }
+                            )
+                          }
+
+                        }
+
+
+                    },
+                    error: function(err){
+                      console.log(err);
+                      $("#soapAddLoading-group").addClass("hidden");
+                      // $("#loading_p").addClass("hidden");
+
+                      // $.notify(
+                      //     {
+                      //         message: `We are having problems adding the ${title_server} WaterOneFlow web service`
+                      //     },
+                      //     {
+                      //         type: "danger",
+                      //         allow_dismiss: true,
+                      //         z_index: 20000,
+                      //         delay: 5000,
+                      //         animate: {
+                      //           enter: 'animated fadeInRight',
+                      //           exit: 'animated fadeOutRight'
+                      //         },
+                      //         onShow: function() {
+                      //             this.css({'width':'auto','height':'auto'});
+                      //         }
+                      //     }
+                      // )
+                    }
+
+                  })
+
+                  for(let i=0; i < parsedObject.length; ++i){
+                    list_sites_me.push(parsedObject[i].sitename)
+                  }
+                }
+                catch(e){
+                  console.log(e);
+                }
+              }
+          },
+
           success: function(xmlData){
+
+
+            function arrayCompare(_arr1, _arr2) {
+                if (
+                  !Array.isArray(_arr1)
+                  || !Array.isArray(_arr2)
+                  || _arr1.length !== _arr2.length
+                  ) {
+                    return false;
+                  }
+
+                // .concat() to not mutate arguments
+                const arr1 = _arr1.concat().sort();
+                const arr2 = _arr2.concat().sort();
+
+                for (let i = 0; i < arr1.length; i++) {
+                    if (arr1[i] !== arr2[i]) {
+                        return false;
+                     }
+                }
+
+                return true;
+            }
+
             try{
+              let test_cont = []
               let parsedObject = getSitesHelper(xmlData);
-              // console.log(parsedObject);
+              for(let i=0; i < parsedObject.length; ++i){
+                test_cont.push(parsedObject[i].sitename)
+              }
+
+              console.log(arrayCompare(test_cont,list_sites_me));
+
               let requestObject = {
-                hs: $("#soap-title").val(),
-                group: actual_group.split('=')[1],
+                hs: title_server,
+                group: actual_group_name,
                 sites: JSON.stringify(parsedObject),
                 url: url_to_sent,
-                description:$("#hs-description").val()
+                description:description
               }
+
+              console.log(requestObject);
               $.ajax({
                 type:"POST",
                 url: "save_new_sites/",
                 dataType: "JSON",
                 data: requestObject,
                 success:function(result){
-                  let unique_id_group = uuidv4();
-                  id_dictionary[unique_id_group] = $("#soap-title").val();
                   try{
                     //Returning the geoserver layer metadata from the controller
                     var json_response = result
-                    let group_name = actual_group.split('=')[1];
+                    let group_name = actual_group_name;
                     let group_name_e3;
                     Object.keys(id_dictionary).forEach(function(key) {
                       if(id_dictionary[key] == group_name ){
@@ -706,155 +934,153 @@ add_hydroserver = function(){
 
                     let new_title = unique_id_group;
 
-                          // put the ajax call and also the filter //
-                          let servers_with_keywords = [];
+                    // put the ajax call and also the filter //
+                    let servers_with_keywords = [];
 
-                          $(`#${group_name_e3}-noGroups`).hide();
+                    $(`#${group_name_e3}-noGroups`).hide();
 
-                            let {title, siteInfo, url, group} = json_response
-
-
-                              let sites = siteInfo
-
-                              if (typeof(sites) == "string"){
-                                sites = JSON.parse(siteInfo);
-                              }
-                              var vectorLayer = map_layers(sites,title,url)[0]
-                              var vectorSource = map_layers(sites,title,url)[1]
-
-                              let test_style = new ol.style.Style({
-                                image: new ol.style.Circle({
-                                  radius: 10,
-                                  stroke: new ol.style.Stroke({
-                                    color: "white",
-                                  }),
-                                  fill: new ol.style.Fill({
-                                    color: layerColorDict[title],
-                                  }),
-                                })
-                              });
-                              let rowHTML= `<tr id= ${new_title}-row-complete>
-                                             <th id="${new_title}-row-legend"></th>
-                                             <th>${title}</th>
-                                           </tr>`
-                             if(!document.getElementById(`${new_title}-row-complete`)){
-                               $(rowHTML).appendTo('#tableLegend');
-                             }
-                             $(`#${new_title}-row-legend`).prepend($(getIconLegend(test_style,title)));
+                      let {title, siteInfo, url, group} = json_response
 
 
-                              map.addLayer(vectorLayer);
+                        let sites = siteInfo
 
-                              vectorLayer.set("selectable", true)
-                              map.getView().fit(vectorSource.getExtent());
+                        if (typeof(sites) == "string"){
+                          sites = JSON.parse(siteInfo);
+                        }
+                        var vectorLayer = map_layers(sites,title,url)[0]
+                        var vectorSource = map_layers(sites,title,url)[1]
+
+                        let test_style = new ol.style.Style({
+                          image: new ol.style.Circle({
+                            radius: 10,
+                            stroke: new ol.style.Stroke({
+                              color: "white",
+                            }),
+                            fill: new ol.style.Fill({
+                              color: layerColorDict[title],
+                            }),
+                          })
+                        });
+                        let rowHTML= `<tr id= ${new_title}-row-complete>
+                                       <th id="${new_title}-row-legend"></th>
+                                       <th>${title}</th>
+                                     </tr>`
+                       if(!document.getElementById(`${new_title}-row-complete`)){
+                         $(rowHTML).appendTo('#tableLegend');
+                       }
+                       $(`#${new_title}-row-legend`).prepend($(getIconLegend(test_style,title)));
+
+
+                        map.addLayer(vectorLayer);
+
+                        vectorLayer.set("selectable", true)
+                        map.getView().fit(vectorSource.getExtent());
+                        map.updateSize();
+                        layersDict[title] = vectorLayer;
+
+
+                          let no_servers_tag = Array.from(document.getElementById(`${id_group_separator}`).getElementsByTagName("P"))[0];
+                          let newHtml = html_for_servers(new_title,group_name_e3)
+                           $(newHtml).appendTo(`#${id_group_separator}`);
+                           $(`#${new_title}_variables`).on("click",showVariables2);
+                           $(`#${new_title}_variables_info`).on("click",hydroserver_information);
+                           $(`#${new_title}_${group_name_e3}_reload`).on("click",update_hydroserver);
+
+                          // MAKES THE LAYER INVISIBLE
+
+                          let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
+                          let li_arrays = Array.from(lis);
+                          let input_check = li_arrays.filter(x => new_title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
+
+                          input_check.addEventListener("change", function(){
+                            if(layersDict['selectedPointModal']){
+                              map.removeLayer(layersDict['selectedPointModal'])
                               map.updateSize();
-                              layersDict[title] = vectorLayer;
+                            }
+                            if(layersDict['selectedPoint']){
+                              map.removeLayer(layersDict['selectedPoint'])
+                              map.updateSize();
+                            }
+                            if(this.checked){
+                              map.getLayers().forEach(function(layer) {
+                                   if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                     layer.setStyle(featureStyle(layerColorDict[title]));
+                                   }
+                               });
+                            }
+                            else{
+                              map.getLayers().forEach(function(layer) {
+                                   if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                     layer.setStyle(new ol.style.Style({}));
 
+                                   }
+                               });
 
-                                let no_servers_tag = Array.from(document.getElementById(`${id_group_separator}`).getElementsByTagName("P"))[0];
-                                let newHtml = html_for_servers(new_title,group_name_e3)
-                                 $(newHtml).appendTo(`#${id_group_separator}`);
-                                 $(`#${new_title}_variables`).on("click",showVariables2);
-                                 $(`#${new_title}_variables_info`).on("click",hydroserver_information);
-                                 $(`#${new_title}_${group_name_e3}_reload`).on("click",update_hydroserver);
+                            }
 
-                                // MAKES THE LAYER INVISIBLE
+                          });
+                          $(`#${new_title}_zoom`).on("click",function(){
+                            if(layersDict['selectedPointModal']){
+                              map.removeLayer(layersDict['selectedPointModal'])
+                              map.updateSize();
+                            }
+                            if(layersDict['selectedPoint']){
+                              map.removeLayer(layersDict['selectedPoint'])
+                              map.updateSize();
+                            }
+                            map.getView().fit(vectorSource.getExtent());
+                            map.updateSize();
+                            map.getLayers().forEach(function(layer) {
+                              if (!(title in layer_object_filter)){
+                                if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
+                                  layer.setStyle(featureStyle(layerColorDict[title]));
+                                }
+                              }
+                              else{
+                                if(layer instanceof ol.layer.Vector && layer == layer_object_filter[title]){
+                                  layer.setStyle(featureStyle(layerColorDict[title]));
+                                }
+                              }
 
-                                let lis = document.getElementById("current-Groupservers").getElementsByTagName("li");
-                                let li_arrays = Array.from(lis);
-                                let input_check = li_arrays.filter(x => new_title === x.attributes['layer-name'].value)[0].getElementsByClassName("chkbx-layer")[0];
+                             });
+                            input_check.checked = true;
 
-                                input_check.addEventListener("change", function(){
-                                  if(layersDict['selectedPointModal']){
-                                    map.removeLayer(layersDict['selectedPointModal'])
-                                    map.updateSize();
+                          });
+                          urls_servers[$("#soap-title").val()] =  url_to_sent
+                          getVariablesJS(url_to_sent,new_title , group_name_e3);
+
+                          $.notify(
+                              {
+                                  message: `Successfully Added the ${title_server} WaterOneFlow Service to the Map`
+                              },
+                              {
+                                  newest_on_top: true,
+                                  type: "success",
+                                  allow_dismiss: true,
+                                  z_index: 20000,
+                                  delay: 100,
+                                  animate: {
+                                    enter: 'animated fadeInRight',
+                                    exit: 'animated fadeOutRight'
+                                  },
+                                  onShow: function() {
+                                      this.css({'width':'auto','height':'auto'});
                                   }
-                                  if(layersDict['selectedPoint']){
-                                    map.removeLayer(layersDict['selectedPoint'])
-                                    map.updateSize();
-                                  }
-                                  if(this.checked){
-                                    map.getLayers().forEach(function(layer) {
-                                         if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                           layer.setStyle(featureStyle(layerColorDict[title]));
-                                         }
-                                     });
-                                  }
-                                  else{
-                                    map.getLayers().forEach(function(layer) {
-                                         if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                           layer.setStyle(new ol.style.Style({}));
+                              }
+                          )
+                          notifications.close();
+                          $("#soapAddLoading-group").addClass("hidden");
 
-                                         }
-                                     });
-
-                                  }
-
-                                });
-                                $(`#${new_title}_zoom`).on("click",function(){
-                                  if(layersDict['selectedPointModal']){
-                                    map.removeLayer(layersDict['selectedPointModal'])
-                                    map.updateSize();
-                                  }
-                                  if(layersDict['selectedPoint']){
-                                    map.removeLayer(layersDict['selectedPoint'])
-                                    map.updateSize();
-                                  }
-                                  map.getView().fit(vectorSource.getExtent());
-                                  map.updateSize();
-                                  map.getLayers().forEach(function(layer) {
-                                    if (!(title in layer_object_filter)){
-                                      if(layer instanceof ol.layer.Vector && layer == layersDict[title]){
-                                        layer.setStyle(featureStyle(layerColorDict[title]));
-                                      }
-                                    }
-                                    else{
-                                      if(layer instanceof ol.layer.Vector && layer == layer_object_filter[title]){
-                                        layer.setStyle(featureStyle(layerColorDict[title]));
-                                      }
-                                    }
-
-                                   });
-                                  input_check.checked = true;
-
-                                });
-                                urls_servers[$("#soap-title").val()] =  url_to_sent
-                                getVariablesJS(url_to_sent,new_title , group_name_e3);
-
-                                $.notify(
-                                    {
-                                        message: `Successfully Added the WaterOneFlow Service to the Map`
-                                    },
-                                    {
-                                        type: "success",
-                                        allow_dismiss: true,
-                                        z_index: 20000,
-                                        delay: 5000,
-                                        animate: {
-                                          enter: 'animated fadeInRight',
-                                          exit: 'animated fadeOutRight'
-                                        },
-                                        onShow: function() {
-                                            this.css({'width':'auto','height':'auto'});
-                                        }
-                                    }
-                                )
-                                $("#soapAddLoading").addClass("hidden")
-                                $("#btn-add-soap").show();
-
-                                $("#modalAddSoap").modal("hide")
-                                $("#modalAddSoap").each(function() {
-                                    this.reset()
-                                })
 
                     }
                     catch(err){
                       console.log(err);
-                      $("#soapAddLoading").addClass("hidden");
+                      $("#soapAddLoading-group").addClass("hidden");
+
                       $("#btn-add-soap").show();
                       $.notify(
                           {
-                              message: `We are having problems adding the WaterOneFlow web service`
+                              message: `We are having problems adding the ${title_server} WaterOneFlow web service`
                           },
                           {
                               type: "danger",
@@ -873,13 +1099,12 @@ add_hydroserver = function(){
                   }
 
                 },
-                error: function(error){
-                  console.log(error);
-                  $("#soapAddLoading").addClass("hidden");
-                  $("#btn-add-soap").show();
+                error: function(err){
+                  console.log(err);
+                  $("#soapAddLoading-group").addClass("hidden");
                   $.notify(
                       {
-                          message: `Invalid WaterOneFlow web service Url. Please check and try again.`
+                          message: `We are having problems adding the ${title_server} WaterOneFlow web service`
                       },
                       {
                           type: "danger",
@@ -901,11 +1126,10 @@ add_hydroserver = function(){
             }
             catch(e){
               console.log(e);
-              $("#soapAddLoading").addClass("hidden");
-
+              $("#soapAddLoading-group").addClass("hidden");
               $.notify(
                   {
-                      message: `We are having problems adding the WaterOneFlow web service`
+                      message: `We are having problems adding the ${title_server} WaterOneFlow web service`
                   },
                   {
                       type: "danger",
@@ -923,13 +1147,13 @@ add_hydroserver = function(){
               )
             }
           },
-          error: function(error){
-            console.log(error);
-            $("#soapAddLoading").addClass("hidden");
-            $("#btn-add-soap").show();
+
+          error: function(err){
+            console.log(err);
+            $("#soapAddLoading-group").addClass("hidden");
             $.notify(
                 {
-                    message: `Invalid WaterOneFlow web service Url. Please check and try again.`
+                    message: `We are having problems adding the ${title_server} WaterOneFlow web service`
                 },
                 {
                     type: "danger",
