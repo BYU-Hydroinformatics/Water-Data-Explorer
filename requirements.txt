@@ -1,12 +1,7 @@
-requests
 fiona
 geojson
-pyproj
-shapely
-owslib
-sqlalchemy
-psycopg2
 xmltodict
 pyshp
 geopandas
+suds-community
 pywaterml
