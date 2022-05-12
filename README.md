@@ -36,15 +36,11 @@ conda:
   channels:
     - conda-forge
   packages:
-    - requests
     - fiona
     - geojson
-    - pyproj
     - shapely
     - owslib
-    - sqlalchemy
-    - psycopg2
-    - suds-jurko
+    - suds-community
     - xmltodict
     - pyshp
     - geopandas

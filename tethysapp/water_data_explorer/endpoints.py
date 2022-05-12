@@ -1,10 +1,6 @@
-import xmltodict
-import logging
-import sys
 import os
 import json
 import pandas as pd
-import numpy as np
 import geopandas as gpd
 import shapely.speedups
 
@@ -37,7 +33,7 @@ from pyproj import Proj, transform  # Reprojecting/Transforming coordinates
 from datetime import datetime
 
 
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from .app import WaterDataExplorer as app
 from tethys_sdk.workspaces import app_workspace
 
