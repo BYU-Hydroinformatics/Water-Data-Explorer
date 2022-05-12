@@ -10,11 +10,12 @@
 #  dependencies. If one fails,
 #  all dependencies will fail to install.
 #
-conda install -c conda-forge --yes --file requirements.txt
+conda install -c conda-forge --yes mamba
+mamba install -c conda-forge --yes --file requirements.txt
 
 #
 #  To go around issue above, one can
 #  iterate over all lines in the
 #  requirements.txt file.
 #
-while read requirement; do conda install --yes $requirement; done < requirements.txt
+while read requirement; do mamba install --yes $requirement; done <requirements.txt
