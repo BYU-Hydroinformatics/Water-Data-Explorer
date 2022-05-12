@@ -13,3 +13,9 @@ docs/_build
 docs/_static
 docs/templates
 docker_files/postgres-data
+.flake8
+.hadolint.yaml
+.isort.cfg
+.markdownlint.yaml
+.shellcheckrc
+.trunk
