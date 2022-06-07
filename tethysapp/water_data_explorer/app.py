@@ -126,10 +126,14 @@ class WaterDataExplorer(TethysAppBase):
             name='block_map',
             description='locks the map to a certain limit',
         )
+        use_wde = Permission(
+            name='use_wde',
+            description='Use WDE'
+        )
 
         admin = PermissionGroup(
             name='admin',
-            permissions=(delete_hydrogroups, block_map)
+            permissions=(delete_hydrogroups, block_map,use_wde)
         )
 
 

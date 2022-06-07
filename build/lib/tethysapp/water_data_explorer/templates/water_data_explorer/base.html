@@ -1,0 +1,147 @@
+{% extends "tethys_apps/app_base.html" %}
+
+{% load staticfiles %}
+
+
+{% block title %}{{ tethys_app.name }}{% endblock %}
+
+{% block app_icon %}
+  {# The path you provided in your app.py is accessible through the tethys_app.icon context variable #}
+  <img src="{% static tethys_app.icon %}">
+{% endblock %}
+
+{# The name you provided in your app.py is accessible through the tethys_app.name context variable #}
+{% block app_title %}{{ tethys_app.name }}{% endblock %}
+{% block header_buttons %}
+
+<div class= 'tool_tip_h' data-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Legend'> <input id="sG-legend" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-th-list'></span>" data-off="<span class='glyphicon glyphicon-th-list'></span>" data-size="mini" data-onstyle = "danger"></input></div>
+<div class= 'tool_tip_h' data-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Graphs Panel'> <input id="sG" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="mini" data-onstyle = "danger"></input></div>
+{% if can_block_map %}
+  {% if geoEndpoint %}
+    <input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="mini" data-onstyle = "danger"></input>
+  {% endif %}
+{% endif %}
+
+<div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Manage HydroServers">
+</div>
+
+{% include "water_data_explorer/modals/helpModal.html" %}
+<div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Help/Information">
+	<a href = "https://water-data-explorer.readthedocs.io/en/latest/"><span class="glyphicon glyphicon-info-sign"></span></a>
+</div>
+{% endblock %}
+
+
+{% block app_navigation_items %}
+
+  <br>
+
+{% endblock %}
+
+{% block app_content %}
+{% endblock %}
+
+
+{% block app_content_wrapper_override %}
+
+{{ block.super }}
+{% include "water_data_explorer/modals/terms_service.html" %}
+
+
+{% endblock %}
+
+
+
+
+
+{% block app_actions %}
+{% endblock %}
+
+{% block content_dependent_styles %}
+  {{ block.super }}
+  <link href="{% static 'water_data_explorer/vendor/bootstrap-3.3.6-dist/css/bootstrap.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'water_data_explorer/vendor/bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'water_data_explorer/vendor/bootstrap-select-1.11.2/css/bootstrap-select.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'water_data_explorer/vendor/bootstrap-toggle-master/css/bootstrap-toggle.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'water_data_explorer/vendor/contextMenu/contextMenu.css' %}" rel="stylesheet" />
+  <link href="{% static 'water_data_explorer/vendor/openlayers/ol.css' %}" rel="stylesheet">
+  <link href="{% static 'water_data_explorer/vendor/fontawesome-free-5.12.1-web/css/all.css' %}" rel="stylesheet">
+  <link href="{% static 'water_data_explorer/css/main.css' %}" rel="stylesheet"/>
+
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script>
+    var windowSize = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+  	var baseStatic = "{% static 'water_data_explorer/index.html' %}";
+  	baseStatic = baseStatic.replace('\/index.html','');
+    var can_block_map = {{can_block_map|yesno:"true,false"}};
+    console.log(can_block_map)
+    var can_delete_hydrogroups = {{can_delete_hydrogroups|yesno:"true,false"}};
+    var endpointGeoServer = "{{ geoEndpoint|safe }}";
+    var geoServerWorkspace = "{{ geoWorkspace|safe }}";
+    var geoServerLayer = "{{ geoLayer|safe }}";
+    var geoServerColor = "{{ geoColor|safe }}";
+    var geoServerWidth = "{{ geoWidth|safe }}";
+    var geoServerMovement = {{geoMovement|yesno:"true,false"}};
+    var views_names = "{{ views_names|safe }}";
+
+
+  </script>
+
+  <script src="{% static 'water_data_explorer/vendor/bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'water_data_explorer/vendor/bootstrap-select-1.11.2/js/bootstrap-select.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'water_data_explorer/vendor/bootstrap-toggle-master/js/bootstrap-toggle.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'water_data_explorer/vendor/plotly-latest.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'water_data_explorer/vendor/bootstrap-notify.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'water_data_explorer/vendor/contextMenu/contextMenu.min.js' %}" async="async"></script>
+  <script src="{% static 'water_data_explorer/vendor/openlayers/ol.js' %}" type="text/javascript"></script>
+  <script src="{% static 'water_data_explorer/vendor/fontawesome-free-5.12.1-web/js/all.js' %}" type="text/javascript"></script>
+
+  <script src="{% static 'water_data_explorer/js/variables.js' %}" type="text/javascript"></script>
+  <script src="{% static 'water_data_explorer/js/utilities.js' %}" type="text/javascript"></script>
+  <script src="{% static 'water_data_explorer/js/initAll.js' %}" type="text/javascript"></script>
+  <script src="{% static 'water_data_explorer/js/utilitiesGraphs.js' %}" type="text/javascript"></script>
+  <script src="{% static 'water_data_explorer/js/groups.js' %}" type="text/javascript"></script>
+  <script src="{% static 'water_data_explorer/js/endpoints.js' %}" type="text/javascript"></script>
+  <script src="{% static 'water_data_explorer/js/sites.js' %}" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    $(window).resize(function(e) {
+      if($( window ).width() < 500){
+        if($("#inner-app-content").width() < $( window ).width()){
+          $('#sG-legend').bootstrapToggle('off');
+          $('#sG').bootstrapToggle('off');
+
+        }
+        else{
+          $('#sG-legend').bootstrapToggle('on');
+          $('#sG').bootstrapToggle('on');
+
+
+
+        }
+      }
+      setTimeout(function(){
+        try{
+          if($('#plots').is(':visible')){
+            Plotly.Plots.resize("plots");
+              Plotly.relayout($("plots"), {
+                'xaxis.autorange': true,
+                'yaxis.autorange': true
+              });
+          }
+        }
+        catch(e){
+          console.log("Simple plotly error")
+        }
+        map.updateSize()
+      },200)
+
+    })
+
+  </script>
+
+{% endblock %}

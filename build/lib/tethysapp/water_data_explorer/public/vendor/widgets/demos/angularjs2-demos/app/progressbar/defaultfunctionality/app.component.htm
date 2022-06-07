@@ -1,0 +1,24 @@
+﻿<div id='jqxWidget' style="font-size: 13px; font-family: Verdana; float: left;">
+    <div style='margin-top: 10px;'>Horizontal</div>
+    <!--<angularProgressBar #horizontal style='margin-top: 10px; overflow: hidden;' id='jqxProgressBar'></angularProgressBar>-->
+    <angularProgressBar #horizontal></angularProgressBar>
+
+    <div style='margin-top: 10px;'>Vertical</div>
+    <angularProgressBar #vertical></angularProgressBar>
+    <!--<div style='margin-top: 10px; overflow: hidden;' id='jqxVerticalProgressBar'>
+    </div>-->
+    <br />
+    <div>Enter a value between 0 and 100</div>
+    <input id='ValueInput' type='text' style='margin-top: 5px;' />
+    <!--<input id='button' type='button' value='Update' style='padding: 3px; margin-top: 5px;' />-->
+    <angularButton (OnClick)="OnClick()">Update</angularButton>
+
+    <angularCheckBox #checkbox (OnChange)="OnCheckbox($event)">
+        Show Progress Text
+    </angularCheckBox>
+    <angularCheckBox #customtextcheckbox (OnChange)="OnCustomtextcheckbox($event)">
+        Custom Progress Text
+    </angularCheckBox>
+    <!--<div id="checkbox" style="margin-top: 20px;">Show Progress Text</div>-->
+    <!--<div id="customtextcheckbox" style="margin-top: 20px;">Custom Progress Text</div>-->
+</div>

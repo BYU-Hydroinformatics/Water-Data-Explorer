@@ -1,11 +1,11 @@
 # This file should be committed to your app code.
-version: 1.1.13
+version: 1.1.17
 # This should match the app - package name in your setup.py
 name: water_data_explorer
 
 requirements:
   # Putting in a skip true param will skip the entire section. Ignoring the option will assume it be set to False
-  skip: false
+  skip: true
   conda:
     channels:
       - conda-forge
@@ -22,8 +22,7 @@ requirements:
       - xmltodict
       - pyshp
       - geopandas
-      - pywaterml
 
   pip:
-
+    - pywaterml
 post:
