@@ -3,6 +3,21 @@
 {% load staticfiles %}
 
 
+{% block headtag %}
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3X1M2V7GLG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-3X1M2V7GLG');
+</script>
+
+{% endblock %}
+
+
 {% block title %}{{ tethys_app.name }}{% endblock %}
 
 {% block app_icon %}
