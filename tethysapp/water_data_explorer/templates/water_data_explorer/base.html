@@ -5,20 +5,22 @@
 
 {% block headtag %}
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script>
-  var gcode = "{{ gtagcode|safe }}";
 
-</script>
-<script async src='https://www.googletagmanager.com/gtag/js?id={{ gtagcode|safe }}'></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+{% if gtagcode %}
+  <script>
+    var gcode = "{{ gtagcode|safe }}";
+    console.log(gcode)
+  </script>
+  <script async src='https://www.googletagmanager.com/gtag/js?id={{ gtagcode|safe }}'></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', gcode);
+    gtag('config', gcode);
 
-</script>
+  </script>
+{% endif%}
 
 {% endblock %}
 
