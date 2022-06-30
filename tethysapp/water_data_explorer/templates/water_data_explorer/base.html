@@ -6,13 +6,18 @@
 {% block headtag %}
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-3X1M2V7GLG"></script>
+<script>
+  var gcode = "{{ gtagcode|safe }}";
+
+</script>
+<script async src='https://www.googletagmanager.com/gtag/js?id={{ gtagcode|safe }}'></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-3X1M2V7GLG');
+  gtag('config', gcode);
+
 </script>
 
 {% endblock %}
@@ -95,6 +100,8 @@
     var can_block_map = {{can_block_map|yesno:"true,false"}};
     console.log(can_block_map)
     var can_delete_hydrogroups = {{can_delete_hydrogroups|yesno:"true,false"}};
+    var can_download = {{can_download|yesno:"true,false"}};
+    console.log(can_download)
     var endpointGeoServer = "{{ geoEndpoint|safe }}";
     var geoServerWorkspace = "{{ geoWorkspace|safe }}";
     var geoServerLayer = "{{ geoLayer|safe }}";

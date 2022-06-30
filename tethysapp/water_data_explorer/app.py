@@ -130,14 +130,22 @@ class WaterDataExplorer(TethysAppBase):
             name='use_wde',
             description='Use WDE'
         )
+        can_download = Permission(
+            name='can_download',
+            description='download data if logged in'
+        )
+        download_at_least = PermissionGroup(
+            name='download_at_least',
+            permissions=(can_download,)
+        )
 
         admin = PermissionGroup(
             name='admin',
-            permissions=(delete_hydrogroups, block_map,use_wde)
+            permissions=(delete_hydrogroups, block_map, use_wde)
         )
 
 
-        permissions = (admin, )
+        permissions = (admin,download_at_least,)
 
         return permissions
 
@@ -191,6 +199,12 @@ class WaterDataExplorer(TethysAppBase):
                 name='Boundary Width',
                 type = CustomSetting.TYPE_STRING,
                 description='Width of the boundary. A number from 1 to 10',
+                required=False
+            ),
+            CustomSetting(
+                name='GA_MEASUREMENT_ID',
+                type = CustomSetting.TYPE_STRING,
+                description='GA_MEASUREMENT_ID for Google Analytics gtag.js',
                 required=False
             ),
 
