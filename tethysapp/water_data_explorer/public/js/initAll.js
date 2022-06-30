@@ -463,15 +463,9 @@ var water_data_explorer_PACKAGE = (function() {
       let empty_array=[];
       initialize_graphs([],[],"No data Available","","","","scatter");
       add_boundary_map(geoServerColor, geoServerWidth, map);
-      //activate_deactivate_graphs();
+      activate_deactivate_graphs();
       give_name();
       addLegendMap(map);
-     
-      $("#slider-bar").draggable({
-        axis : "x",
-        containment : "#graph-map-btn",
-        stop: sizeWindows
-      });
 
       //make the picker to always appear//
       $(".selectpicker").selectpicker("refresh");
