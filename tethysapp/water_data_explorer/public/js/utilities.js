@@ -336,49 +336,6 @@ clear_coords = function() {
 ************ FUNCTION NAME: ACTIVATE_DEACTIVATE_GRAPHS **********************
 ************ PURPOSE: THE FUNCTIONS SHOWS THE GRAPHS IN THE LOWER PORTION OF THE MAP ***********
 */
-sizeWindows = function (clicked) {
-  let position;
-  if (clicked.target.id === "map-btn" || clicked.target.id === "graph-btn"){
-      if ($("#slider-bar").position().left >= 50) {
-          $("#slider-bar").animate({left: '0%'});
-          position = 0;
-      } else {
-          $("#slider-bar").animate({left: '91%'});
-          position = 100;
-      }
-  } else {
-    position = ($("#slider-bar").position().left * ($("#graph-map-btn").width() / ($("#graph-map-btn").width() - $("#slider-bar").width()))) / $("#graph-map-btn").width() * 100;
-  }
-  $("#map").animate({height: `${position}%`}, {
-    duration: 200,
-    easing: "swing",
-  });
-  $("#graph").animate({height: `${100 - position}%`}, {
-    duration: 200,
-    easing: "swing",
-    complete: function () {
-      map.updateSize();
-      try{
-        if($('#plots').is(':visible')){
-          Plotly.Plots.resize("plots");
-          Plotly.relayout($("plots"), {
-            'xaxis.autorange': true,
-            'yaxis.autorange': true
-          });
-        }
-      } catch(e){
-        console.log("Simple plotly error, not worry")
-      }
-    }
-  });
-};
-
-document.getElementById("graph-map-btn").addEventListener("click", (event) => {
-    if (event.target.id !== "slider-bar") {
-        sizeWindows(event);
-    }
-});
-/*
 activate_deactivate_graphs = function(){
   ////console.log("we ACTIVATEEAAGAG");
   let actual_state=$(this).prop('checked');
@@ -421,7 +378,7 @@ activate_deactivate_graphs = function(){
 
 };
 $('#sG').change(activate_deactivate_graphs)
-*/
+
 legend_change = function(){
   let actual_state=$(this).prop('checked');
   if(actual_state){

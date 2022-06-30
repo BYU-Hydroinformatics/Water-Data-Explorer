@@ -29,13 +29,8 @@
 {% block app_title %}{{ tethys_app.name }}{% endblock %}
 {% block header_buttons %}
 
-<div id="graph-map-btn">
-  <div id="graph-btn">Graph</div>
-  <div id="slider-bar" draggable="true"></div>
-  <div id="map-btn">Map</div>
-</div>
 <div class= 'tool_tip_h' data-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Legend'> <input id="sG-legend" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-th-list'></span>" data-off="<span class='glyphicon glyphicon-th-list'></span>" data-size="mini" data-onstyle = "danger"></input></div>
-<!--<div class= 'tool_tip_h' data-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Graphs Panel'> <input id="sG" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="mini" data-onstyle = "danger"></input></div>-->
+<div class= 'tool_tip_h' data-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Graphs Panel'> <input id="sG" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="mini" data-onstyle = "danger"></input></div>
 {% if can_block_map %}
   {% if geoEndpoint %}
     <input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="mini" data-onstyle = "danger"></input>
@@ -119,7 +114,6 @@
   <script src="{% static 'water_data_explorer/vendor/contextMenu/contextMenu.min.js' %}" async="async"></script>
   <script src="{% static 'water_data_explorer/vendor/openlayers/ol.js' %}" type="text/javascript"></script>
   <script src="{% static 'water_data_explorer/vendor/fontawesome-free-5.12.1-web/js/all.js' %}" type="text/javascript"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
   <script src="{% static 'water_data_explorer/js/variables.js' %}" type="text/javascript"></script>
   <script src="{% static 'water_data_explorer/js/utilities.js' %}" type="text/javascript"></script>
