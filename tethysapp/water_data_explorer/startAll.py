@@ -18,7 +18,6 @@ def home(request):
     """
     Controller for the app home page.
     """
-    print(has_permission(request, 'download_data'))
     boundaryEndpoint = app.get_custom_setting('Boundary Geoserver Endpoint')
     boundaryWorkspace = app.get_custom_setting('Boundary Workspace Name')
     boundaryLayer = app.get_custom_setting('Boundary Layer Name')

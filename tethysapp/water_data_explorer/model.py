@@ -1,10 +1,8 @@
 # Put your persistent store models in this file
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, Float, String, DateTime, ForeignKey, Text
-from sqlalchemy.dialects.postgresql import JSON, JSONB
-from sqlalchemy.dialects.mysql import LONGTEXT
-from sqlalchemy.orm import sessionmaker, relationship
-from .app import WaterDataExplorer as app
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
+from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 Base = declarative_base()
