@@ -593,7 +593,6 @@ def soap_group(request):
             session.add(hydroservers_group)
             session.commit()
             session.close()
-            print("hola")
     else:
         return_obj[
             'message'] = 'This request can only be made through a "POST" AJAX call.'
