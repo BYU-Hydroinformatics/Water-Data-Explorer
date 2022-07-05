@@ -316,7 +316,7 @@ def parseJSON(json):
                 except Exception as e:
                     print(e)
                     hs_json['country'] = "No Data was Provided"
-                    print(hs_json['country'])
+                    # print(hs_json['country'])
                 hs_json["sitename"] = site_name.decode("UTF-8")
                 hs_json["latitude"] = latitude
                 hs_json["longitude"] = longitude

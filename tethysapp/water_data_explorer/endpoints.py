@@ -557,16 +557,15 @@ def soap_group(request):
 
             sites = GetSites_WHOS(url)
             sites_parsed_json = json.dumps(sites)
-            print(sites_parsed_json)
+            # print(sites_parsed_json)
             try:
 
                 countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
-                print(countries_json)
+                # print(countries_json)
 
                 variable_json = json.dumps(available_variables_2(url))
-                print(variable_json)
+                # print(variable_json)
             except Exception as e:
-                print("jp")
                 print(e)
 
             return_obj['title'] = title
@@ -575,7 +574,7 @@ def soap_group(request):
             return_obj['siteInfo'] = sites
             return_obj['group'] = group
             return_obj['status'] = "true"
-            print(return_obj)
+            # print(return_obj)
             SessionMaker = app.get_persistent_store_database(
                 Persistent_Store_Name, as_sessionmaker=True)
             session = SessionMaker()
