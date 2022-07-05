@@ -1,44 +1,14 @@
 import xmltodict
 import logging
-import itertools
-import sys
-
-import os
 import json
 import pandas as pd
-import numpy as np
 import pywaterml.waterML as pwml
 from datetime import datetime
-
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.core import serializers
-from django.conf import settings
-from django.template import Context, Template
-from django.template.loader import render_to_string, get_template
-
-from sqlalchemy import create_engine
-from sqlalchemy import Table, Column, Integer, String, MetaData
-from sqlalchemy.orm import mapper
-from .model import Base, Groups, HydroServer_Individual
-
-
-from tethys_sdk.gizmos import TimeSeries, SelectInput, DatePicker, TextInput, GoogleMapView
-from tethys_sdk.permissions import permission_required, has_permission
-
+from django.template.loader import render_to_string
 from .auxiliary import *
-
-import xml.etree.ElementTree as ET
-import psycopg2
-from owslib.waterml.wml11 import WaterML_1_1 as wml11
 from suds.client import Client  # For parsing WaterML/XML
-from suds.xsd.doctor import Import, ImportDoctor
-from json import dumps, loads
-from pyproj import Proj, transform  # Reprojecting/Transforming coordinates
 from datetime import datetime
-
-
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from .app import WaterDataExplorer as app
 
 Persistent_Store_Name = 'catalog_db'

@@ -1,52 +1,30 @@
 import xmltodict
-import logging
-import sys
 import os
 import json
 import pandas as pd
 import geopandas as gpd
 import numpy as np
-import sys
 import pywaterml.waterML as pwml
 import shapely.speedups
-from urllib.error import HTTPError
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.core import serializers
-from django.conf import settings
 
-from sqlalchemy import create_engine
-from sqlalchemy import Table, Column, Integer, String, MetaData
-from sqlalchemy.orm import mapper
-from .model import Base, Groups, HydroServer_Individual
+from .model import Groups, HydroServer_Individual
 
 
-from tethys_sdk.gizmos import TimeSeries, SelectInput, DatePicker, TextInput, GoogleMapView
-from tethys_sdk.permissions import permission_required, has_permission
+from tethys_sdk.permissions import has_permission
 
 from .auxiliary import *
 from .endpoints import available_regions_2, available_variables_2
 
-import xml.etree.ElementTree as ET
-import psycopg2
-from owslib.waterml.wml11 import WaterML_1_1 as wml11
-import suds
 from suds.client import Client  # For parsing WaterML/XML
-from suds.xsd.doctor import Import, ImportDoctor
-from suds.transport import TransportError
-from json import dumps, loads
-from pyproj import Proj, transform  # Reprojecting/Transforming coordinates
-from datetime import datetime
 from urllib.parse import unquote
 from .endpoints import *
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from .app import WaterDataExplorer as app
 from tethys_sdk.workspaces import app_workspace
 
-from shapely.geometry import Point, Polygon
+# from shapely.geometry import Point, Polygon
 Persistent_Store_Name = 'catalog_db'
-# logging.basicConfig(level=logging.INFO)
-# logging.getLogger('suds.client').setLevel(logging.DEBUG)
+
 
 def available_regions(request):
 

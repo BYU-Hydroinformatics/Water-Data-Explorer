@@ -1,7 +1,5 @@
 from sqlalchemy.orm import sessionmaker
-from .model import Base, HydroServer_Individual, Groups
-from .auxiliary2 import *
-from .app import WaterDataExplorer as app
+from .model import Base
 
 # Initialize an empty database, if the database has not been created already.
 

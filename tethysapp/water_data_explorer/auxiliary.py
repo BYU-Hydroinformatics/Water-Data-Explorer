@@ -9,15 +9,9 @@ import tempfile
 import shutil
 import sys
 import zipfile
-import string
-import random
-import requests
 import json
 import inspect
 import xmltodict
-import dateutil.relativedelta
-import time
-import calendar
 import functools
 import fiona
 import geojson
@@ -25,19 +19,12 @@ import pyproj
 import shapely.geometry
 import shapely.ops
 
-from owslib.waterml.wml11 import WaterML_1_1 as wml11
 from suds.client import Client
 from suds.sudsobject import asdict
-from dateutil import parser as dateparser
 from datetime import *
-from json import dumps
 
 from .app import WaterDataExplorer as app
 
-try:
-    from io import StringIO
-except ImportError:
-    from io import BytesIO as StringIO
 
 extract_base_path = '/tmp'
 
