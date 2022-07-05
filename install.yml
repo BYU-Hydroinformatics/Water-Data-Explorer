@@ -1,5 +1,5 @@
 # This file should be committed to your app code.
-version: 1.1.17
+version: 1.1.18
 # This should match the app - package name in your setup.py
 name: water_data_explorer
 
@@ -10,19 +10,13 @@ requirements:
     channels:
       - conda-forge
     packages:
-      - requests
-      - fiona
       - geojson
-      - pyproj
-      - shapely
-      - owslib
-      - sqlalchemy
-      - psycopg2
-      - suds-jurko
       - xmltodict
       - pyshp
       - geopandas
+      - suds-community
+      - pywaterml
 
   pip:
-    - pywaterml
+
 post:
