@@ -199,7 +199,7 @@ def available_services(request):
             hs_services['services'] = water.AvailableServices()['available']
 
         except Exception as e:
-            print(e)
+            # print(e)
             # print("I AM HERE OR NOT")
             # services = parseService(url_catalog)
             # views = giveServices(services)
@@ -252,7 +252,7 @@ def create_group(request):
                     group_obj['views'] = addMultipleViews(request,hs_list=views,group = title)
 
             except Exception as e:
-                print(e)
+                # print(e)
                 group_obj['views'] = []
 
     else:
@@ -306,7 +306,7 @@ def addMultipleViews(request,hs_list,group):
 
         #CHANGE LAST
         except Exception as detail:
-            print(detail)
+            # print(detail)
             continue
 
 
@@ -756,7 +756,9 @@ def filter_variable(variables_list, actual_group = None):
                         df = pd.DataFrame.from_dict(sites_object)
                         hs_list_temp.append(df)
                     except Exception as e:
-                        print(e)
+                        # print(e)
+                        error_new = e
+
                 try:
                     df_temp = pd.concat(hs_list_temp).drop_duplicates().reset_index(drop=True)
                     # print(df_temp)
@@ -764,7 +766,8 @@ def filter_variable(variables_list, actual_group = None):
 
                     hs_list.append(dict_temp)
                 except ValueError as e:
-                    print(e)
+                    error_new = e
+                    # print(e)
                 #
                 # variables_sever = water.GetVariables()['variables']
                 # df_variables = pd.DataFrame.from_dict(variables_sever)

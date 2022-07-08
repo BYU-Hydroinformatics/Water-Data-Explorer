@@ -389,7 +389,7 @@ def _getSiteInfoHelper(object_siteInfo,object_methods):
                 return_obj['country'] = str(sitePorperty_Info['#text'])
                 # print(return_obj['country'])
     except Exception as e:
-        print(e)
+        # print(e)
         return_obj['country'] = "No Data was Provided"
     try:
         # return_obj['siteName'] = object_siteInfo['siteName']

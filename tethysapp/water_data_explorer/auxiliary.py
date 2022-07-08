@@ -48,7 +48,7 @@ def GetSites_WHOS(url):
         return sites_object
 
     except Exception as error:
-        print(error)
+        #print(error)
         sites_object={}
 
     return sites_object
@@ -106,27 +106,27 @@ def parseSites(xml):
                         hs_json = {}
                         hs_json["sitename"] = site_name
                         hs_json["service"] = "REST"
-                        # print "Site Name: "+site_name
+                        # #print "Site Name: "+site_name
                     if descriptor.find('siteCode') != -1:
                         site_code = location.text
-                        # print "Site Code: "+site_code
+                        # #print "Site Code: "+site_code
                         source = location.get('network')
                         hs_json['network'] = source
                         hs_json["sitecode"] = site_code
                     if descriptor.find('elevation') != -1:
                         elevation = location.text
-                        # print "Elevation: " + elevation
+                        # #print "Elevation: " + elevation
                         hs_json["elevation"] = elevation
                     for geoLocation in location:
                         for coords in geoLocation:
                             latlon = coords.tag
                             if latlon.find('latitude') != -1:
                                 latitude = coords.text
-                                # print "Latitude: " + latitude
+                                # #print "Latitude: " + latitude
                                 hs_json["latitude"] = latitude
                             if latlon.find('longitude') != -1:
                                 longitude = coords.text
-                                # print "Longitude: " + longitude
+                                # #print "Longitude: " + longitude
                                 hs_json["longitude"] = longitude
                 hs_sites.append(hs_json)
 
@@ -189,7 +189,7 @@ def suds_to_json(data):
 
 def parseWML(bbox):
     hs_sites = []
-    # print bbox
+    # #print bbox
 
     bbox_json = recursive_asdict(bbox)  # Convert bounding box to json
 
@@ -240,9 +240,9 @@ def parseWML(bbox):
 
 def parseJSON(json):
     hs_sites = []
-    #print("I am inside the parseJSON")
-    #print(json)
-    #print(json.keys())
+    ##print("I am inside the parseJSON")
+    ##print(json)
+    ##print(json.keys())
     sites_object = None
     # This is to handle the WMO la Plata endpoints ##
     try:
@@ -275,11 +275,11 @@ def parseJSON(json):
                         else:
                             if str(sitePorperty_Info['@name']) == 'Country':
                                 hs_json['country'] = str(sitePorperty_Info['#text'])
-                                # print(return_obj['country'])
+                                # #print(return_obj['country'])
                     except Exception as e:
-                        print(e)
+                        #print(e)
                         hs_json['country'] = "No Data was Provided"
-                        # print(hs_json['country'])
+                        # #print(hs_json['country'])
                     hs_json["sitename"] = site_name.decode("UTF-8")
                     hs_json["latitude"] = latitude
                     hs_json["longitude"] = longitude
@@ -312,11 +312,11 @@ def parseJSON(json):
                     else:
                         if str(sitePorperty_Info['@name']) == 'Country':
                             hs_json['country'] = str(sitePorperty_Info['#text'])
-                            # print(return_obj['country'])
+                            # #print(return_obj['country'])
                 except Exception as e:
-                    print(e)
+                    #print(e)
                     hs_json['country'] = "No Data was Provided"
-                    # print(hs_json['country'])
+                    # #print(hs_json['country'])
                 hs_json["sitename"] = site_name.decode("UTF-8")
                 hs_json["latitude"] = latitude
                 hs_json["longitude"] = longitude
