@@ -23,42 +23,42 @@ bower install bootstrap-toggle
 ## Usage
 
 ### Basic example
-Simply add `data-toggle="toggle"` to convert checkboxes into toggles.
+Simply add `data-bs-toggle="toggle"` to convert checkboxes into toggles.
 
 ```html
-<input type="checkbox" checked data-toggle="toggle">
+<input type="checkbox" checked data-bs-toggle="toggle">
 ```
 
 ### Stacked checkboxes
-Refer to Bootstrap Form Controls documentation to create stacked checkboxes. Simply add `data-toggle="toggle"` to convert checkboxes into toggles.
+Refer to Bootstrap Form Controls documentation to create stacked checkboxes. Simply add `data-bs-toggle="toggle"` to convert checkboxes into toggles.
 
 ```html
 <div class="checkbox">
   <label>
-    <input type="checkbox" data-toggle="toggle">
+    <input type="checkbox" data-bs-toggle="toggle">
     Option one is enabled
   </label>
 </div>
 <div class="checkbox disabled">
   <label>
-    <input type="checkbox" disabled data-toggle="toggle">
+    <input type="checkbox" disabled data-bs-toggle="toggle">
     Option two is disabled
   </label>
 </div>
 ```
 
 ### Inline Checkboxes
-Refer to Bootstrap Form Controls documentation to create inline checkboxes. Simply add `data-toggle="toggle"` to a convert checkboxes into toggles.
+Refer to Bootstrap Form Controls documentation to create inline checkboxes. Simply add `data-bs-toggle="toggle"` to a convert checkboxes into toggles.
 
 ```html
 <label class="checkbox-inline">
-  <input type="checkbox" checked data-toggle="toggle"> First
+  <input type="checkbox" checked data-bs-toggle="toggle"> First
 </label>
 <label class="checkbox-inline">
-  <input type="checkbox" data-toggle="toggle"> Second
+  <input type="checkbox" data-bs-toggle="toggle"> Second
 </label>
 <label class="checkbox-inline">
-  <input type="checkbox" data-toggle="toggle"> Third
+  <input type="checkbox" data-bs-toggle="toggle"> Third
 </label>
 ```
 
@@ -80,7 +80,7 @@ Initialize toggles with id `toggle-one` with a single line of JavaScript.
 Options can be passed via data attributes or JavaScript. For data attributes, append the option name to `data-`, as in `data-on="Enabled"`.
 
 ```html
-<input type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled">
+<input type="checkbox" data-bs-toggle="toggle" data-on="Enabled" data-off="Disabled">
 <input type="checkbox" id="toggle-two">
 <script>
   $(function() {

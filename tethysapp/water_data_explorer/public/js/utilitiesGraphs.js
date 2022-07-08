@@ -43,7 +43,7 @@ select_variable_change = function(){
 
     // CHECK TO NOT SELECT THE FIRST DROPDOWN OPTION "SELECT VARIABLE"//
     if(selectedItem !== "0"){
-        $("#graphAddLoading").css({left:'0',bottom:"0",right:"0",top:"0", margin:"auto", position:'fixed',"z-index": 9999});
+        $("#graphAddLoading").css({left:'0',bottom:"0",right:"0",top:"50%", margin:"auto", position:'absolute',"z-index": 9999});
         $("#graphAddLoading").removeClass("hidden");
 
         $.ajax({

@@ -4,7 +4,10 @@ import json
 import pandas as pd
 import pywaterml.waterML as pwml
 from datetime import datetime
+
 from django.template.loader import render_to_string
+from tethys_sdk.routing import controller
+
 from .auxiliary import *
 from suds.client import Client  # For parsing WaterML/XML
 from datetime import datetime
@@ -15,6 +18,10 @@ Persistent_Store_Name = 'catalog_db'
 
 logging.getLogger('suds.client').setLevel(logging.CRITICAL)
 
+@controller(
+    name='get-values-hs',
+    url='get-values-hs/',
+)
 def get_values_hs(request):
     """
     Get metadata of a given site using the WaterOneFlow GetSiteInfo function .
@@ -97,6 +104,10 @@ def get_values_hs(request):
         return JsonResponse(return_obj)
 
 
+@controller(
+    name='get-values-graph-hs',
+    url='get-values-graph-hs/',
+)
 def get_values_graph_hs(request):
     """
     Get the time series of a given site using the WaterOneFlow GetValues function .
@@ -181,6 +192,10 @@ def get_values_graph_hs(request):
     return_obj['template_renderizado'] = template_renderizado
     return JsonResponse(return_obj)
 
+@controller(
+    name='get-xml',
+    url='get-xml/',
+)
 def get_xml(request):
     """
     Get the xml in WaterML.1.0 format of a given site.

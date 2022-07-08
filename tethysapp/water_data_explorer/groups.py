@@ -11,6 +11,7 @@ from .model import Groups, HydroServer_Individual
 
 
 from tethys_sdk.permissions import has_permission
+from tethys_sdk.routing import controller
 
 from .auxiliary import *
 from .endpoints import available_regions_2, available_variables_2
@@ -26,6 +27,11 @@ from tethys_sdk.workspaces import app_workspace
 Persistent_Store_Name = 'catalog_db'
 
 
+
+@controller(
+    name='available-regions',
+    url='available-regions/',
+)
 def available_regions(request):
 
     ret_object = {}
@@ -122,6 +128,10 @@ def available_regions(request):
     # return JsonResponse(ret_object)
 
 
+@controller(
+    name='available-variables',
+    url='available-variables/',
+)
 def available_variables(request):
     SessionMaker = app.get_persistent_store_database(
         Persistent_Store_Name, as_sessionmaker=True)
@@ -148,8 +158,6 @@ def available_variables(request):
     varaibles_list["variables"] = hydroserver_variable_list
     varaibles_list["variables_codes"] = hydroserver_variable_code_list
     return JsonResponse(varaibles_list)
-
-
 
 
     # Query DB for hydroservers
@@ -180,6 +188,10 @@ def available_variables(request):
     # varaibles_list["variables_codes"] = hydroserver_variable_code_list
     # return JsonResponse(varaibles_list)
 
+@controller(
+    name='available-services',
+    url='available-services/',
+)
 def available_services(request):
     url_catalog = request.POST.get('url')
     hs_services = {}
@@ -212,7 +224,12 @@ def available_services(request):
 ######*****************************************************************************************################
 ######***********************CREATE AN EMPTY GROUP OF HYDROSERVERS ****************************################
 ######*****************************************************************************************################
-def create_group(request):
+@controller(
+    name='create-group',
+    url='create-group/',
+    app_workspace=True,
+)
+def create_group(request, app_workspace):
     group_obj={}
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
     session = SessionMaker()  # Initiate a session
@@ -246,10 +263,10 @@ def create_group(request):
                 services = water.GetWaterOneFlowServicesInfo()
                 if selected_services:
                     views = water.aux._giveServices(services,selected_services)['working']
-                    group_obj['views'] = addMultipleViews(request,hs_list=views,group = title)
+                    group_obj['views'] = addMultipleViews(request, hs_list=views ,group=title, app_workspace=app_workspace)
                 else:
                     views = water.aux._giveServices(services)['working']
-                    group_obj['views'] = addMultipleViews(request,hs_list=views,group = title)
+                    group_obj['views'] = addMultipleViews(request, hs_list=views, group=title, app_workspace=app_workspace)
 
             except Exception as e:
                 # print(e)
@@ -263,7 +280,7 @@ def create_group(request):
 
 
 
-def addMultipleViews(request,hs_list,group):
+def addMultipleViews(request, hs_list,group, app_workspace):
     ret_object = []
     for hs in hs_list:
         new_url = hs['url']
@@ -273,7 +290,7 @@ def addMultipleViews(request,hs_list,group):
             # sites_object = water.GetSites()
             sites_object = GetSites_WHOS(new_url)
             sites_parsed_json = json.dumps(sites_object)
-            countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
+            countries_json = json.dumps(available_regions_2(request, siteinfo=sites_parsed_json, app_workspace=app_workspace))
 
             variable_json = json.dumps(available_variables_2(hs['url']))
             return_obj['title'] = hs['title']
@@ -315,7 +332,10 @@ def addMultipleViews(request,hs_list,group):
 ######*****************************************************************************************################
 ######************RETRIEVES THE GROUPS OF HYDROSERVERS THAT WERE CREATED BY THE USER **********################
 ######*****************************************************************************************################
-
+@controller(
+    name='load-groups',
+    url='load-groups/',
+)
 def get_groups_list(request):
     list_catalog = {}
     #print("get_groups_list controllers.py FUNCTION inside")
@@ -355,6 +375,10 @@ def get_groups_list(request):
 ######*****************************************************************************************################
 ##############################LOAD THE HYDROSERVERS OF AN SPECIFIC GROUP#######################################
 ######*****************************************************************************************################
+@controller(
+    name='load-hydroserver-of-groups',
+    url='catalog-group/',
+)
 def catalog_group(request):
 
     specific_group=request.POST.get('group')
@@ -383,7 +407,10 @@ def catalog_group(request):
 ######*****************************************************************************************################
 ############################## DELETE A GROUP OF HYDROSERVERS #############################
 ######*****************************************************************************************################
-
+@controller(
+    name='delete-group',
+    url='delete-group/',
+)
 def delete_group(request):
     list_response = {}
     can_delete_permission = has_permission(request,"delete_hydrogroups")
@@ -418,7 +445,13 @@ def delete_group(request):
 
     return JsonResponse(list_response)
 
-def catalog_filter(request):
+
+@controller(
+    name='catalog-filter',
+    url='catalog-filter/',
+    app_workspace=True
+)
+def catalog_filter(request, app_workspace):
     ret_obj = {}
     actual_group = None
     if request.method == 'POST' and 'actual-group' in request.POST:
@@ -434,7 +467,7 @@ def catalog_filter(request):
     for varia in variables:
         var_new.append(varia.replace("_"," "))
     variables = var_new
-    countries_geojson_file_path = os.path.join(app.get_app_workspace().path, 'countries3.geojson')
+    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries3.geojson')
     countries_gdf = gpd.read_file(countries_geojson_file_path)
     selected_countries_plot = countries_gdf[countries_gdf['name_long'].isin(countries)].reset_index(drop=True)
     json_selected_country = selected_countries_plot.to_json()
@@ -778,6 +811,10 @@ def filter_variable(variables_list, actual_group = None):
 
     return hs_list
 
+@controller(
+    name='get-variables-for-country',
+    url='get-variables-for-country/',
+)
 def get_variables_for_country(request):
     response_obj = {}
     countries = request.POST.getlist('countries[]')
@@ -838,6 +875,10 @@ def get_variables_for_country(request):
 ######*****************************************************************************************################
 ############################## Function to retrieve the keywords for all the selected groups #############################
 ######*****************************************************************************************################
+@controller(
+    name='keyword-group',
+    url='keyword-group',
+)
 def keyWordsForGroup(request):
     list_catalog={}
     specific_group=request.POST.get('group')

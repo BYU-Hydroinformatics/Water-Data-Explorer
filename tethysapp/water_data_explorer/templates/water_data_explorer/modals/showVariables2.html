@@ -1,13 +1,15 @@
-{% load staticfiles %}
-<form id="modalShowVariablesTable" class="modal fade" role="dialog">
+{% load static %}
+<form id="modalShowVariablesTable" class="modal" role="dialog">
     {% csrf_token %}
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Available Variables</h4>
-                <br>
-                <em>The list below contains all the View available variables. Each site may contain one or more variables from the list.</em>
+                <div>
+                    <h4 class="modal-title">Available Variables</h4>
+                    <br>
+                    <em> The list below contains all the View available variables. Each site may contain one or more variables from the list.</em>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               <br>
             </div>
             <div class="modal-body">
@@ -21,7 +23,7 @@
             <div class="modal-footer">
 
                 <div class="button-group">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

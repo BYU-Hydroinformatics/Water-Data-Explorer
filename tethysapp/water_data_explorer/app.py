@@ -8,7 +8,7 @@ class WaterDataExplorer(TethysAppBase):
     """
 
     name = 'Water Data Explorer'
-    index = 'water_data_explorer:home'
+    index = 'home'
     icon = 'water_data_explorer/images/wde.png'
     package = 'water_data_explorer'
     root_url = 'water-data-explorer'
@@ -17,100 +17,104 @@ class WaterDataExplorer(TethysAppBase):
     tags = '"Hydrology", "WMO", "BYU"'
     enable_feedback = False
     feedback_emails = []
+    
+    
+    controller_modules = ['startAll', 'sites', 'endpoints', 'groups', ]
+    
+    # def url_maps(self):
+    #     """
+    #     Add controllers
+    #     """
+    #    UrlMap = url_map_maker(self.root_url)
+    #
+    #     url_maps = (
+            # UrlMap(
+            #     name='home',
+            #     url='water-data-explorer',
+            #     controller='water_data_explorer.startAll.home'),
+            
+            # UrlMap(name='create-group',
+            #        url='create-group/',
+            #        controller='water_data_explorer.groups.create_group'),
 
-    def url_maps(self):
-        """
-        Add controllers
-        """
-        UrlMap = url_map_maker(self.root_url)
+            # UrlMap(name='load-groups',
+            #        url='load-groups/',
+            #        controller='water_data_explorer.groups.get_groups_list'),
 
-        url_maps = (
-            UrlMap(
-                name='home',
-                url='water-data-explorer',
-                controller='water_data_explorer.startAll.home'),
-            UrlMap(name='create-group',
-                   url='create-group/',
-                   controller='water_data_explorer.groups.create_group'),
+            # UrlMap(name='add-hydrosever-groups',
+            #        url='soap-group/',
+            #        controller='water_data_explorer.endpoints.soap_group'),
 
-            UrlMap(name='load-groups',
-                   url='load-groups/',
-                   controller='water_data_explorer.groups.get_groups_list'),
+            # UrlMap(name='update-hydrosever-groups',
+            #        url='soap-update/',
+            #        controller='water_data_explorer.endpoints.upload_hs'),
 
-            UrlMap(name='add-hydrosever-groups',
-                   url='soap-group/',
-                   controller='water_data_explorer.endpoints.soap_group'),
+            # UrlMap(name='load-hydroserver-of-groups',
+            #        url='catalog-group/',
+            #        controller='water_data_explorer.groups.catalog_group'),
 
-            UrlMap(name='update-hydrosever-groups',
-                   url='soap-update/',
-                   controller='water_data_explorer.endpoints.upload_hs'),
+            # UrlMap(name='delete-group-hydroserver',
+            #        url='delete-group-hydroserver/',
+            #        controller='water_data_explorer.endpoints.delete_group_hydroserver'),
 
-            UrlMap(name='load-hydroserver-of-groups',
-                   url='catalog-group/',
-                   controller='water_data_explorer.groups.catalog_group'),
+            # UrlMap(name='delete-group',
+            #        url='delete-group/',
+            #        controller='water_data_explorer.groups.delete_group'),
 
-            UrlMap(name='delete-group-hydroserver',
-                   url='delete-group-hydroserver/',
-                   controller='water_data_explorer.endpoints.delete_group_hydroserver'),
+            # UrlMap(name='keyword-group',
+            #        url='keyword-group',
+            #        controller='water_data_explorer.groups.keyWordsForGroup'),
 
-            UrlMap(name='delete-group',
-                   url='delete-group/',
-                   controller='water_data_explorer.groups.delete_group'),
+            # UrlMap(name='get-values-hs',
+            #        url='get-values-hs/',
+            #        controller='water_data_explorer.sites.get_values_hs'),
 
-            UrlMap(name='keyword-group',
-                   url='keyword-group',
-                   controller='water_data_explorer.groups.keyWordsForGroup'),
+            # UrlMap(name='get-values-graph-hs',
+            #        url='get-values-graph-hs/',
+            #        controller='water_data_explorer.sites.get_values_graph_hs'),
 
-            UrlMap(name='get-values-hs',
-                   url='get-values-hs/',
-                   controller='water_data_explorer.sites.get_values_hs'),
+            # UrlMap(name='get-variables-hs',
+            #        url='get-variables-hs/',
+            #        controller='water_data_explorer.endpoints.get_variables_hs'),
 
-            UrlMap(name='get-values-graph-hs',
-                   url='get-values-graph-hs/',
-                   controller='water_data_explorer.sites.get_values_graph_hs'),
+            # UrlMap(name='get-available-sites',
+            #        url='get-available-sites/',
+            #        controller='water_data_explorer.endpoints.get_available_sites'),
 
-            UrlMap(name='get-variables-hs',
-                   url='get-variables-hs/',
-                   controller='water_data_explorer.endpoints.get_variables_hs'),
+            # UrlMap(name='get-hydroserver-info',
+            #        url='get-hydroserver-info/',
+            #        controller='water_data_explorer.endpoints.get_hydroserver_info'),
 
-            UrlMap(name='get-available-sites',
-                   url='get-available-sites/',
-                   controller='water_data_explorer.endpoints.get_available_sites'),
+            # UrlMap(name='available-services',
+            #        url='available-services/',
+            #        controller='water_data_explorer.groups.available_services'),
 
-            UrlMap(name='get-hydroserver-info',
-                   url='get-hydroserver-info/',
-                   controller='water_data_explorer.endpoints.get_hydroserver_info'),
+            # UrlMap(name='available-variables',
+            #        url='available-variables/',
+            #        controller='water_data_explorer.groups.available_variables'),
 
-            UrlMap(name='available-services',
-                   url='available-services/',
-                   controller='water_data_explorer.groups.available_services'),
+            # UrlMap(name='available-regions',
+            #        url='available-regions/',
+            #        controller='water_data_explorer.groups.available_regions'),
 
-            UrlMap(name='available-variables',
-                   url='available-variables/',
-                   controller='water_data_explorer.groups.available_variables'),
+            # UrlMap(name='catalog-filter',
+            #        url='catalog-filter/',
+            #        controller='water_data_explorer.groups.catalog_filter'),
 
-            UrlMap(name='available-regions',
-                   url='available-regions/',
-                   controller='water_data_explorer.groups.available_regions'),
+            # UrlMap(name='get-variables-for-country',
+            #        url='get-variables-for-country/',
+            #        controller='water_data_explorer.groups.get_variables_for_country'),
 
-            UrlMap(name='catalog-filter',
-                   url='catalog-filter/',
-                   controller='water_data_explorer.groups.catalog_filter'),
+            # UrlMap(name='get-download-hs',
+            #        url='get-download-hs/',
+            #        controller='water_data_explorer.endpoints.get_download_hs'),
 
-            UrlMap(name='get-variables-for-country',
-                   url='get-variables-for-country/',
-                   controller='water_data_explorer.groups.get_variables_for_country'),
-
-            UrlMap(name='get-download-hs',
-                   url='get-download-hs/',
-                   controller='water_data_explorer.endpoints.get_download_hs'),
-
-            UrlMap(name='get-xml',
-                   url='get-xml/',
-                   controller='water_data_explorer.sites.get_xml'),
-        )
-
-        return url_maps
+            # UrlMap(name='get-xml',
+            #        url='get-xml/',
+            #        controller='water_data_explorer.sites.get_xml'),
+    #     )
+    # 
+    #     return url_maps
 
     def permissions(self):
         """
@@ -148,7 +152,8 @@ class WaterDataExplorer(TethysAppBase):
         permissions = (admin,download_at_least,)
 
         return permissions
-
+    
+    
     def custom_settings(self):
         custom_settings = (
 
@@ -161,7 +166,7 @@ class WaterDataExplorer(TethysAppBase):
             CustomSetting(
                 name='InstitutionLogo',
                 type = CustomSetting.TYPE_STRING,
-                description='Link containing the isntitution logo.',
+                description='Link containing the institution logo.',
                 required=False
             ),
             CustomSetting(
@@ -176,6 +181,7 @@ class WaterDataExplorer(TethysAppBase):
                 description='workspace and layer name (e.g workspace:layername)',
                 required=False
             ),
+            # These are edits
             CustomSetting(
                 name='Boundary Layer Name',
                 type = CustomSetting.TYPE_STRING,

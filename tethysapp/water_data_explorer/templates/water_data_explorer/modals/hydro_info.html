@@ -1,19 +1,20 @@
 
-{% load staticfiles %}
+{% load static %}
 
-<div id="modalHydroserInformation" class="modal fade" role="dialog">
+<div id="modalHydroserInformation" class="modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content myModal">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h1 id="hydroserverTitle"> WaterOneFlow Web Service Information </h1>
-
+                <h1 id="hydroserverTitle" align="center"> WaterOneFlow Web Service Information </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <p class="hsinfo">Description</p>
                 <p id="description_Hydroserver"></p>
                 <p class="hsinfo"> Endpoint/URL </p>
-                <span id="urlHydroserver"></span> <span> <button onclick="copyToClipboard('#urlHydroserver')" class="btn btn-light btn-sm tool_tip_h" data-toggle="tooltip" title="copy"> <span class="glyphicon glyphicon-copy"></span></button></span>
+                <span id="urlHydroserver"></span> <span> <button onclick="copyToClipboard('#urlHydroserver')" class="btn btn-light btn-sm tool_tip_h" data-bs-toggle="tooltip" title="copy"> 
+                  <i class="bi bi-clipboard"></i>
+                </button></span>
 
                 <div class="image_button">
                   <h3>Analysis Tools</h3>
@@ -22,13 +23,14 @@
 
                    <span class="hsinfo"> Documentation </span>
                    <span>
-                     <a href="https://gist.github.com/romer8/2ea44f0a9536e4cdad8ed7242ca27933" target="_blank" class="tool_tip_h" data-toggle="tooltip" title="Google Colab Pywaterml Tutorial">
+                     <a href="https://gist.github.com/romer8/2ea44f0a9536e4cdad8ed7242ca27933" target="_blank" class="tool_tip_h" data-bs-toggle="tooltip" title="Google Colab Pywaterml Tutorial">
                        <img src="{% static 'water_data_explorer/images/colab_icon.png' %}" alt="google_colab" />
                      </a>
                    </span>
                    <span>
-                        <a href="https://pywaterml.readthedocs.io/en/latest/" target="_blank" class="tool_tip_h" data-toggle="tooltip" title="Pywaterml Documentation">
-                          <button id="btn-download-colab" class="btn btn-light" > <span class="glyphicon glyphicon-book"></span>
+                        <a href="https://pywaterml.readthedocs.io/en/latest/" target="_blank" class="tool_tip_h" data-bs-toggle="tooltip" title="Pywaterml Documentation">
+                          <button id="btn-download-colab" class="btn btn-light" > 
+                            <i class="bi bi-journals"></i>
                           </button>
                         </a>
                    </span>
@@ -37,12 +39,14 @@
                   <span class="hsinfo"> Python Notebooks </span>
                   <span>
 
-                    <a href="https://gist.github.com/romer8/89c851014afb276b0f20cb61c9c731f6" target="_blank" class="tool_tip_h" data-toggle="tooltip" title="Open in Google Colab">
+                    <a href="https://gist.github.com/romer8/89c851014afb276b0f20cb61c9c731f6" target="_blank" class="tool_tip_h" data-bs-toggle="tooltip" title="Open in Google Colab">
                       <img src="{% static 'water_data_explorer/images/colab_icon.png' %}" alt="google_colab" />
                     </a>
                   </span>
-                  <span class="tool_tip_h" data-toggle="tooltip" title="Download Notebook">
-                    <button id="btn-download-colab" class="btn btn-light"  data-toggle="modal" data-target="#modalPrompDownload" > <span class="glyphicon glyphicon-download"></span></button>
+                  <span class="tool_tip_h" data-bs-toggle="tooltip" title="Download Notebook">
+                    <button id="btn-download-colab" class="btn btn-light"  data-bs-toggle="modal" data-bs-target="#modalPrompDownload" > 
+                      <i class="bi bi-download"></i>
+                    </button>
                   </span>
                 </div>
 

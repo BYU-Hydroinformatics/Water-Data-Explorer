@@ -6,6 +6,9 @@ import geopandas as gpd
 import shapely.speedups
 import pywaterml.waterML as pwml
 from .model import Base, Groups, HydroServer_Individual
+
+from tethys_sdk.routing import controller
+
 from .auxiliary import *
 from django.http import JsonResponse
 from .app import WaterDataExplorer as app
@@ -15,6 +18,10 @@ logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
 
+@controller(
+    name='get-download-hs',
+    url='get-download-hs/',
+)
 def get_download_hs(request):
     hs_name = request.POST.get('hs_name')
     hs_url = request.POST.get('hs_url')
@@ -36,7 +43,10 @@ def get_download_hs(request):
     return JsonResponse(nb)
 
 
-
+@controller(
+    name='get-variables-hs',
+    url='get-variables-hs/',
+)
 def get_variables_hs(request):
     list_catalog={}
     #print("get_variables_hs Function")
@@ -87,6 +97,10 @@ def get_variables_hs(request):
 
     return JsonResponse(list_catalog)
 
+@controller(
+    name='get-available-sites',
+    url='get-available-sites/',
+)
 def get_available_sites(request):
     if request.method=='POST':
         specific_group=request.POST.get('group')
@@ -348,6 +362,10 @@ def get_available_sites(request):
 
     return JsonResponse(list_catalog)
 
+@controller(
+    name='get-hydroserver-info',
+    url='get-hydroserver-info/',
+)
 def get_hydroserver_info(request):
     specific_group = request.POST.get('group')
     specific_hs = request.POST.get('hs')
@@ -367,7 +385,12 @@ def get_hydroserver_info(request):
 
     return JsonResponse(response_obj)
 
-def upload_hs(request):
+@controller(
+    name='update-hydrosever-groups',
+    url='soap-update/',
+    app_workspace=True,
+)
+def upload_hs(request, app_workspace):
     return_obj = {}
     difference = 0
 
@@ -391,7 +414,7 @@ def upload_hs(request):
 
                 sites = GetSites_WHOS(url)
                 sites_parsed_json = json.dumps(sites)
-                countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
+                countries_json = json.dumps(available_regions_2(request, siteinfo = sites_parsed_json, app_workspace=app_workspace))
                 # print(countries_json)
 
                 variable_json = json.dumps(available_variables_2(url))
@@ -415,10 +438,10 @@ def upload_hs(request):
 
     return JsonResponse(return_obj)
 
-def available_regions_2(request,siteinfo):
+def available_regions_2(request, siteinfo, app_workspace):
     shapely.speedups.enable()
     # countries_geojson_file_path = os.path.join(app_workspace.path, 'countries2.geojson')
-    countries_geojson_file_path = os.path.join(app.get_app_workspace().path, 'countries3.geojson')
+    countries_geojson_file_path = os.path.join(app_workspace.path, 'countries3.geojson')
     countries_gdf = gpd.read_file(countries_geojson_file_path)
     countries_series = countries_gdf.loc[:,'geometry']
     ret_object = {}
@@ -490,7 +513,12 @@ def available_variables_2(url):
 ######*****************************************************************************************################
 ######**ADD A HYDROSERVER TO THE SELECTED GROUP OF HYDROSERVERS THAT WERE CREATED BY THE USER *################
 ######*****************************************************************************************################
-def soap_group(request):
+@controller(
+    name='add-hydrosever-groups',
+    url='soap-group/',
+    app_workspace=True,
+)
+def soap_group(request, app_workspace):
     # logging.basicConfig(level=logging.INFO)
     # logging.getLogger('suds.client').setLevel(logging.DEBUG)
     return_obj = {}
@@ -521,7 +549,7 @@ def soap_group(request):
             return_obj['level'] = extent_value
             ext_list = extent_value.split(',')
             sitesByBoundingBox = water.GetSitesByBoxObject(ext_list,'epsg:3857')
-            countries_json = available_regions_2(request,sites_parsed_json)
+            countries_json = available_regions_2(request, sites_parsed_json, app_workspace=app_workspace)
             variable_json = available_variables_2(url)
 
             return_obj['title'] = title
@@ -559,8 +587,7 @@ def soap_group(request):
             sites_parsed_json = json.dumps(sites)
             # print(sites_parsed_json)
             try:
-
-                countries_json = json.dumps(available_regions_2(request,siteinfo = sites_parsed_json))
+                countries_json = json.dumps(available_regions_2(request, siteinfo=sites_parsed_json, app_workspace=app_workspace))
                 # print(countries_json)
 
                 variable_json = json.dumps(available_variables_2(url))
@@ -601,6 +628,10 @@ def soap_group(request):
 ######*****************************************************************************************################
 ############################## DELETE THE HYDROSERVER OF AN SPECIFIC GROUP ####################################
 ######*****************************************************************************************################
+@controller(
+    name='delete-group-hydroserver',
+    url='delete-group-hydroserver/',
+)
 def delete_group_hydroserver(request):
     list_catalog = {}
     SessionMaker = app.get_persistent_store_database(

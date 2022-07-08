@@ -16,6 +16,7 @@ requirements:
       - geopandas
       - suds-community
       - pywaterml
+      - numpy=1.21
 
   pip:
 

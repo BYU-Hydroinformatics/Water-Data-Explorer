@@ -1,7 +1,7 @@
 {% extends "tethys_apps/app_base.html" %}
 
-{% load staticfiles %}
-
+{% load static %}
+{% load tethys_gizmos %}
 
 {% block global_scripts %}
   {{ block.super }}  
@@ -36,20 +36,22 @@
 {% block app_title %}{{ tethys_app.name }}{% endblock %}
 {% block header_buttons %}
 
-<div class= 'tool_tip_h' data-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Legend'> <input id="sG-legend" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-th-list'></span>" data-off="<span class='glyphicon glyphicon-th-list'></span>" data-size="mini" data-onstyle = "danger"></input></div>
-<div class= 'tool_tip_h' data-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Graphs Panel'> <input id="sG" type="checkbox" data-toggle="toggle" data-on="<span class='glyphicon glyphicon-signal'></span>" data-off="<span class='glyphicon glyphicon-signal'></span>" data-size="mini" data-onstyle = "danger"></input></div>
+<div class= 'tool_tip_h' data-bs-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Legend'> <input id="sG-legend" type="checkbox" checked data-bs-toggle="toggle" data-on='<i class="bi bi-list-task"></i>' data-off='<i class="bi bi-list-task"></i>' data-size="mini" data-onstyle = "danger"></input></div>
+<div class= 'tool_tip_h' data-bs-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Graphs Panel'> <input id="sG" type="checkbox" data-bs-toggle="toggle" data-on='<i class="bi bi-reception-4"></i>' data-off='<i class="bi bi-reception-4"></i>' data-size="mini" data-onstyle = "danger"></input></div>
 {% if can_block_map %}
   {% if geoEndpoint %}
-    <input id="blockPosition" type="checkbox" checked data-toggle="toggle" data-on="<span class='glyphicon glyphicon-picture'></span>" data-off="<span class='glyphicon glyphicon-picture'></span>" data-size="mini" data-onstyle = "danger"></input>
+    <input id="blockPosition" type="checkbox" checked data-bs-toggle="toggle" data-on='<i class="bi bi-image"></i>' data-off='<i class="bi bi-image"></i>' data-size="mini" data-onstyle = "danger"></input>
   {% endif %}
 {% endif %}
 
-<div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Manage HydroServers">
+<div class="header-button" data-bs-toggle="tooltip" data-placement="bottom" title="Manage HydroServers">
 </div>
 
 {% include "water_data_explorer/modals/helpModal.html" %}
-<div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Help/Information">
-	<a href = "https://water-data-explorer.readthedocs.io/en/latest/"><span class="glyphicon glyphicon-info-sign"></span></a>
+<div class="header-button" data-bs-toggle="tooltip" data-placement="bottom" title="Help/Information">
+	<a href = "https://water-data-explorer.readthedocs.io/en/latest/">
+    <i class="bi bi-info-circle-fill"></i>
+  </a>
 </div>
 {% endblock %}
 
@@ -88,9 +90,9 @@
   <link href="{% static 'water_data_explorer/vendor/contextMenu/contextMenu.css' %}" rel="stylesheet" />
   <link href="{% static 'water_data_explorer/vendor/openlayers/ol.css' %}" rel="stylesheet">
   <link href="{% static 'water_data_explorer/vendor/fontawesome-free-5.12.1-web/css/all.css' %}" rel="stylesheet">
-  <link href="{% static 'water_data_explorer/css/main.css' %}" rel="stylesheet"/>
 
 {% endblock %}
+
 
 {% block scripts %}
   {{ block.super }}
@@ -167,5 +169,7 @@
     })
 
   </script>
+
+  <link href="{% static 'water_data_explorer/css/main.css' %}" rel="stylesheet"/>
 
 {% endblock %}

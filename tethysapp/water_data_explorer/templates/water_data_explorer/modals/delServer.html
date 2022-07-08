@@ -1,16 +1,16 @@
-<form id="modalDelete" class="modal fade" role="dialog" action="delete/" method="POST">
+<form id="modalDelete" class="modal" role="dialog" action="delete/" method="POST">
     {% csrf_token %}
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Delete Views</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
             </div>
             <div class="modal-footer">
                 <div class="button-group">
-                    <button type="button" class="btn btn-" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-" data-bs-dismiss="modal">Close</button>
                     <button type="button" id="btn-del-server" class="btn btn-danger">Delete</button>
                 </div>
             </div>

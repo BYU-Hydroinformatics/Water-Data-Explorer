@@ -32,7 +32,7 @@ responsive_graphs =  function(){
                     <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
                         <input type='text' class="form-control" />
                         <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                          <i class="bi bi-calendar2-week-fill"></i>
                         </span>
                     </div>
                 </div>
@@ -42,7 +42,7 @@ responsive_graphs =  function(){
                     <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
                         <input type='text' class="form-control" />
                         <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                          <i class="bi bi-calendar2-week-fill"></i>
                         </span>
                     </div>
                 </div>
@@ -71,9 +71,9 @@ responsive_graphs =  function(){
     newHtml = `
     <div id="carouselExampleIndicators" class="carousel slide" data-interval="false" >
       <ol class="carousel-indicators">
-        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
+        <li data-bs-target="#carouselExampleIndicators" data-slide-to="0" class="active">
         </li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-bs-target="#carouselExampleIndicators" data-slide-to="1"></li>
       </ol>
       <div class="carousel-inner">
         <div class="item active">
@@ -108,7 +108,7 @@ responsive_graphs =  function(){
                           <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
                               <input type='text' class="form-control" />
                               <span class="input-group-addon">
-                                  <span class="glyphicon glyphicon-calendar"></span>
+                                <i class="bi bi-calendar2-week-fill"></i>
                               </span>
                           </div>
                       </div>
@@ -118,7 +118,7 @@ responsive_graphs =  function(){
                           <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
                               <input type='text' class="form-control" />
                               <span class="input-group-addon">
-                                  <span class="glyphicon glyphicon-calendar"></span>
+                                <i class="bi bi-calendar2-week-fill"></i>
                               </span>
                           </div>
                       </div>
@@ -144,11 +144,11 @@ responsive_graphs =  function(){
         </div>
       </div>
       <a class="left carousel-control" href="#carouselExampleIndicators" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left"></span>
+        <i class="bi bi-chevron-left"></i>
         <span class="sr-only">Previous</span>
       </a>
       <a class="right carousel-control" href="#carouselExampleIndicators" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right"></span>
+        <i class="bi bi-chevron-right"></i>
         <span class="sr-only">Next</span>
       </a>
 
@@ -602,43 +602,43 @@ function html_for_groups(isAdmin, title, id_group_separator){
   try{
     let newHtml;
     if (isAdmin){
+      // Updated the following block for new accordion bootstrap 5 functionality
       newHtml =
-
+      
       `
-      <div class="panel panel-default" id="${title}_panel">
-        <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-          <h4 class="panel-title tool_tip_h" data-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">
-            <a role="button" data-toggle="collapse" data-target="#collapse_${title}" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
-            <span class="group-name"> ${id_dictionary[title]}</span>
-
+      <div class="accordion-item" id="${title}_panel">
+        <div class="accordion-header" id="heading_${title}" style="background: #286090 !important; display: flex; width: 100%;">
+          <h4 class="accordion-title tool_tip_h" id="${id_dictionary[title]}" data-bs-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">
+            <a role="button" data-bs-toggle="collapse" data-bs-target="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
+            <span class="group-name">${id_dictionary[title]}</span>
             </a>
           </h4>
           <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
 
               <input class="chkbx-layers" type="checkbox">
-              <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
-                <span class=" glyphicon glyphicon-info-sign "></span>
+              <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalInterface">
+                <i class="bi bi-info-circle-fill"></i>
               </button>
 
-              <button id="load-from-soap" class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalAddSoap">
-                <span class="glyphicon glyphicon-plus"></span>
+              <button id="load-from-soap" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalAddSoap">
+                <i class="bi bi-plus-lg"></i>
               </button>
-              <button id="delete-server" class="btn btn-primary btn-sm" data-toggle="modal"  data-dismiss="modal" data-target="#modalDelete">
-                <span class="glyphicon glyphicon-trash"></span>
+              <button id="delete-server" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalDelete">
+                <i class="bi bi-trash"></i>
               </button>
           </li>
-
         </div>
-
-        <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-        <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
-          <div class="panel-body">
+  
+        <div id="collapse_${title}" class="accordion-collapse collapse show" aria-labelledby="heading_${title}">
+          <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
+            <div class="accordion-body">
               <div id= ${id_group_separator} class="divForServers">
                 <button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group is empty</button>
               </div>
+            </div>
           </div>
         </div>
-      </div>
+      </div>          
       `
 
       return newHtml
@@ -646,23 +646,22 @@ function html_for_groups(isAdmin, title, id_group_separator){
     else{
       newHtml =
       `
-      <div class="panel panel-default" id="${title}_panel">
-        <div class="panel-heading buttonAppearance" role="tab" id="heading_${title}">
-          <h4 class="panel-title tool_tip_h" data-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">
-            <a role="button" data-toggle="collapse" data-parent="#current-Groupservers" href="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
+      <div class="accordion-item" id="${title}_panel">
+        <div class="accordion-header" id="heading_${title}" style="background: #286090 !important; display: flex; width: 100%;">
+          <h4 class="accordion-title tool_tip_h" id="${id_dictionary[title]}" data-bs-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">
+          <a role="button" data-bs-toggle="collapse" data-bs-target="#collapse_${title}" aria-expanded="true" aria-controls="collapse_${title}">
             <span class="group-name">${id_dictionary[title]}</span>
-
             </a>
           </h4>
           <li class="ui-state-default buttonAppearance" id="${title}" layer-name="none">
             <input class="chkbx-layers" type="checkbox">
-            <button class="btn btn-primary btn-sm" data-toggle="modal" data-dismiss="modal" data-target="#modalInterface">
-              <span class=" glyphicon glyphicon-info-sign "></span>
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalInterface">
+              <i class="bi bi-info-circle-fill"></i>
             </button>
           </li>
         </div>
-        <div id="collapse_${title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_${title}">
-          <div class="panel-body">
+        <div id="collapse_${title}" class="accordion-collapse collapse show" aria-labelledby="heading_${title}">
+          <div class="accordion-body">
               <div id= ${id_group_separator} class="divForServers"></div>
           </div>
         </div>
@@ -736,21 +735,21 @@ function html_for_servers(title,group_name,isNew){
     let check_var = (( isNew == true ) ? 'checked' : '');
     let newHtml = `
     <li class="ui-state-default" layer-name="${title}" id="${title}" >
-    <span class="server-name tool_tip_h" data-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">${id_dictionary[title]}</span>
-    <input class="chkbx-layer" type="checkbox" data-toggle="tooltip" data-placement="bottom" title="Show/Hide View" ${check_var}>
+    <span class="server-name tool_tip_h" data-bs-toggle="tooltip" data-placement="right" title="${id_dictionary[title]}">${id_dictionary[title]}</span>
+    <input class="chkbx-layer" type="checkbox" data-bs-toggle="tooltip" data-placement="bottom" title="Show/Hide View" ${check_var}>
     <button type="button" id="${title}_${group_name}_reload" class="btn btn-sm" >
-     <span  class="glyphicon glyphicon-refresh tool_tip_h" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Update View">
-     </span>
+     <i class="bi bi-arrow-clockwise tool_tip_h" aria-hidden="true" data-bs-toggle="tooltip" data-placement="bottom" title="Update View"></i>
     </button>
-    <button type="button" id="${title}_zoom" class="btn btn-dark btn-sm" >
-     <span class="glyphicon glyphicon-map-marker tool_tip_h" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Zoom to View"></span>
-    </button>
-
-    <button id="${title}_variables" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalShowVariablesTable"> <span class=" glyphicon glyphicon-list-alt tool_tip_h" data-toggle="tooltip" data-placement="bottom" title="View Variables"></span>
+    <button type="button" id="${title}_zoom" class="btn btn-sm" >
+     <i class="bi bi-geo-alt-fill tool_tip_h" aria-hidden="true" data-bs-toggle="tooltip" data-placement="bottom" title="Zoom to View"></i>
     </button>
 
-    <button type="button" id="${title}_variables_info" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalHydroserInformation">
-     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+    <button id="${title}_variables" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#modalShowVariablesTable"> 
+      <i class="bi bi-card-list tool_tip_h" data-bs-toggle="tooltip" data-placement="bottom" title="View Variables"></i>
+    </button>
+
+    <button type="button" id="${title}_variables_info" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#modalHydroserInformation">
+     <i class="bi bi-info-circle-fill tool_tip_h" data-bs-toggle="tooltip" data-placement="bottom" title="Hydroserver Information"></i>
     </button>
 
 

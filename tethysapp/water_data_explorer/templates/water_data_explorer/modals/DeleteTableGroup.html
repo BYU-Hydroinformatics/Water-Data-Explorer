@@ -1,18 +1,19 @@
-<form id="modalDeleteGroups" class="modal fade" role="dialog" action="delete/" method="POST">
+<form id="modalDeleteGroups" class="modal" role="dialog" action="delete/" method="POST">
     {% csrf_token %}
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Delete Catalogs</h4>
-                <br>
-                <em>Please be aware that deleting a catalog will delete all its views.</em>
+                <div>
+                    <h4 class="modal-title">Delete Catalogs</h4>
+                    <p><em>Please be aware that deleting a catalog will delete all its views.</em></p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
             </div>
             <div class="modal-footer">
                 <div class="button-group">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" id="btn-del-hydro-groups" class="btn btn-danger">Delete</button>
 
                 </div>
