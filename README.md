@@ -29,88 +29,42 @@ The Water Data Explorer is an Tethys application that will need to have the Teth
 
 Documentation for installing the Tethys Platform can be found [here](http://docs.tethysplatform.org/en/stable/installation.html)
 
-The following packages are the requirements for the WDE,but they do not need to be installed manually becuase the WDE manages to installs them automatically. They can be found in the [install.yml](https://github.com/BYU-Hydroinformatics/Water-Data-Explorer/blob/master/install.yml)
+The following packages are the requirements for the WDE. The Tethys Platform  manages to installs them automatically using the [install.yml](https://github.com/BYU-Hydroinformatics/Water-Data-Explorer/blob/master/install.yml)
 
 ```
 conda:
-  channels:
-    - conda-forge
-  packages:
-    - requests
-    - fiona
-    - geojson
-    - pyproj
-    - shapely
-    - owslib
-    - sqlalchemy
-    - psycopg2
-    - suds-jurko
-    - xmltodict
-    - pyshp
-    - geopandas
+  skip: true
+  conda:
+    channels:
+      - conda-forge
+    packages:
+      - geojson
+      - xmltodict
+      - pyshp
+      - geopandas
+      - suds-community
+      - pywaterml
 
-pip:
-  - pywaterml
+  pip:
+
+post:
 ```
-
-### Developer Installation
-
-The Developer installation of the WDE is easy and it can be done with the following steps:
-
-
-```bash
-
-cd <APP_SOURCES_ROOT>
-
-cd git clone <CLONE_URL>
-
-conda activate tethys
-
-tethys install
-
-tethys syncstores water_data_explorer
+However, the install.yml file in the WDE skips the installation of the dependencies. You need to install the requirements manually using the [requirements.txt](https://github.com/BYU-Hydroinformatics/Water-Data-Explorer/blob/master/requirements.txt). We recommend using mamba to have a fast and efficient installation of the dependencies:
 
 ```
-
-Detail explanation for installing apps with the Tethys Framework can be found [here](http://docs.tethysplatform.org/en/stable/installation/application.html)
-
-The application can also be installed with the Tethys WareHouse application. Steps can be found [here](https://tethys-app-warehouse.readthedocs.io/en/latest/)
-
-
-## Production Installation
-
-The Production installation of the WDE needs to have a tethys platform isntalled in the server where you plan to install the WDE.
-Docmumentation for installing the Tethys platform can be found [here](http://docs.tethysplatform.org/en/stable/installation/production.html)
-
-```bash
-
-conda activate tethys
-
-
-sudo mkdir -p <APP_SOURCES_ROOT>
-sudo chown $USER <APP_SOURCES_ROOT>
-
-cd <APP_SOURCES_ROOT>
-
-sudo git clone <CLONE_URL>
-cd <APP_SOURCES_ROOT>/<APP_DIR>
-
-tethys install
-
-sudo chown -R $USER <STATIC_ROOT>
-sudo chown -R $USER <TETHYS_WORKSPACES_ROOT>
-
-tethys manage collectall
-
-sudo chown -R <NGINX_USER>: <STATIC_ROOT>
-sudo chown -R <NGINX_USER>: <TETHYS_WORKSPACES_ROOT>
-
-sudo supervisorctl restart all
-
-tethys syncstores all
+conda install -n <tethys_env_name> mamba -c conda-forge
+conda activate <tethys_env_name>
+mamba install --file requirements.txt -c conda-forge
+```
+After installing the dependencies, you can install the WDE application:
 
 ```
-The application can also be installed with the Tethys WareHouse application. Steps can be found [here](https://tethys-app-warehouse.readthedocs.io/en/latest/)
+tethys install -d # for development
+tethys install # for production
+```
+
+
+The application can also be installed with the Tethys WareHouse application. Steps can be found [here](https://tethys-app-store.readthedocs.io)
 
 
 ## Built With
