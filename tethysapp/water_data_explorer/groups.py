@@ -196,7 +196,7 @@ def available_services(request):
     url_catalog = request.POST.get('url')
     hs_services = {}
     url_catalog = unquote(url_catalog)
-
+    print(url_catalog)
     if url_catalog:
         try:
             # url_catalog = unquote(url_catalog)
@@ -211,7 +211,7 @@ def available_services(request):
             hs_services['services'] = water.AvailableServices()['available']
 
         except Exception as e:
-            # print(e)
+            print(e)
             # print("I AM HERE OR NOT")
             # services = parseService(url_catalog)
             # views = giveServices(services)
@@ -269,7 +269,7 @@ def create_group(request, app_workspace):
                     group_obj['views'] = addMultipleViews(request, hs_list=views, group=title, app_workspace=app_workspace)
 
             except Exception as e:
-                # print(e)
+                print(e)
                 group_obj['views'] = []
 
     else:
