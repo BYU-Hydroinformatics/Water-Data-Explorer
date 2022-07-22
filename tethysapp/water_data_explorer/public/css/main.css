@@ -5,6 +5,10 @@
   width: 50%;
 }
 
+.hidden {
+  display: none;
+}
+
 .FootNote{
   text-align: left;
 }
