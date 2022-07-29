@@ -10,7 +10,7 @@ services:
     env_file:
       - ./helpful_files/db.env
     volumes:
-      - ./data/db2:/var/lib/postgresql/data
+      - ./data/db:/var/lib/postgresql/data
 
   web:
     image: tethys-portal-docker:latest
