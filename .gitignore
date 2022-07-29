@@ -19,3 +19,4 @@ docker_files/postgres-data
 .trunk
 .isort.cfg
 .markdownlint.yaml
+.vscode/settings.json

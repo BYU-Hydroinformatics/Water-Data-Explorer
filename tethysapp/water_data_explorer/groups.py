@@ -196,7 +196,6 @@ def available_services(request):
     url_catalog = request.POST.get('url')
     hs_services = {}
     url_catalog = unquote(url_catalog)
-    print(url_catalog)
     if url_catalog:
         try:
             # url_catalog = unquote(url_catalog)

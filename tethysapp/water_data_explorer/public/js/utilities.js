@@ -604,7 +604,7 @@ function html_for_groups(isAdmin, title, id_group_separator){
     if (isAdmin){
       // Updated the following block for new accordion bootstrap 5 functionality
       newHtml =
-      
+
       `
       <div class="accordion-item" id="${title}_panel">
         <div class="accordion-header" id="heading_${title}" style="background: #286090 !important; display: flex; width: 100%;">
@@ -638,7 +638,7 @@ function html_for_groups(isAdmin, title, id_group_separator){
             </div>
           </div>
         </div>
-      </div>          
+      </div>
       `
 
       return newHtml

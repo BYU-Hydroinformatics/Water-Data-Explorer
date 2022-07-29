@@ -6,8 +6,6 @@ from tethys_sdk.routing import controller
 
 from .auxiliary import *
 
-from tethys_sdk.permissions import has_permission
-
 from .app import WaterDataExplorer as app
 
 Persistent_Store_Name = 'catalog_db'
