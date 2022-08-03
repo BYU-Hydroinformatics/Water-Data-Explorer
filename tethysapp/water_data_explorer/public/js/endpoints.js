@@ -1344,7 +1344,7 @@ showAvailableSites = function(){
           try{
             let sites = result['hydroserver'];
             let title = filterSites['hs'];
-            let url = layersDict[title].values_.source.features[0].values_.features[0].values_.hs_url
+            let url = layersDict[title].getSource().getFeatures()[0].getProperties().features[0].getProperties().hs_url
             const vectorLayer =  map_layers(sites,title,url)[0]
             const vectorSource =  map_layers(sites,title,url)[1]
             map.getLayers().forEach(function(layer) {

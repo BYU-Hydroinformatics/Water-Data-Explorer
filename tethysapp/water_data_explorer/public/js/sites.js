@@ -68,10 +68,10 @@ activate_layer_values = function (){
           'pie':{},
           'whisker':{}
         }
-        let feature_single = feature.values_.features[0]
-        object_request['hs_url']=feature_single.values_['hs_url'];
-        object_request['code']=feature_single.values_['code'];
-        object_request['network']=feature_single.values_['network'];
+        let feature_single = feature.getProperties().features[0].getProperties()
+        object_request['hs_url']=feature_single['hs_url'];
+        object_request['code']=feature_single['code'];
+        object_request['network']=feature_single['network'];
 
         $("#GeneralLoading").removeClass("hidden");
         $('#sG').bootstrapToggle('on');
@@ -112,7 +112,7 @@ activate_layer_values = function (){
                 }
 
                 description_site.innerHTML =
-                  ` <p> <span>Station/Platform Name: </span> ${feature_single.values_['name']}<p>
+                  ` <p> <span>Station/Platform Name: </span> ${feature_single['name']}<p>
                     <p> <span> Territory of origin of data:</span> ${country_name}<p>
                     <p> <span> Supervising Organization:</span> ${organization_name} <p>
                     <p> <span> Geospatial Location:</span> lat: ${new_lat} lon: ${new_lon} <p>`
@@ -250,11 +250,11 @@ activate_layer_values = function (){
                     var selectedItemText = $('#variables_graph option:selected').text();
                     $("#GeneralLoading").removeClass("hidden");
                     let object_request2 = {};
-                    object_request2['hs_name']=feature_single.values_['hs_name'];
-                    object_request2['site_name']=feature_single.values_['name'];
-                    object_request2['hs_url']=feature_single.values_['hs_url'];
-                    object_request2['code']=feature_single.values_['code'];
-                    object_request2['network']=feature_single.values_['network'];
+                    object_request2['hs_name']=feature_single['hs_name'];
+                    object_request2['site_name']=feature_single['name'];
+                    object_request2['hs_url']=feature_single['hs_url'];
+                    object_request2['code']=feature_single['code'];
+                    object_request2['network']=feature_single['network'];
                     object_request2['variable']=selectedItem;
                     object_request2['code_variable']= code_variable[`${selectedItem}`];
                     object_request2['times_series'] = result['times_series'];
@@ -309,12 +309,12 @@ activate_layer_values = function (){
               }
               else{
                 description_site.innerHTML =
-                  ` <p> <em> Station/Platform Name:</em> ${feature_single.values_['name']}<p>`
+                  ` <p> <em> Station/Platform Name:</em> ${feature_single['name']}<p>`
 
                 $("#GeneralLoading").addClass("hidden");
                 $.notify(
                     {
-                        message: `The ${feature_single.values_['name']} site does not contain any variable`
+                        message: `The ${feature_single['name']} site does not contain any variable`
                     },
                     {
                         type: "info",
@@ -363,7 +363,7 @@ activate_layer_values = function (){
 
             $.notify(
                 {
-                    message: `There is an error to retrieve the values for the ${feature_single.values_['name']} site `
+                    message: `There is an error to retrieve the values for the ${feature_single['name']} site `
                 },
                 {
                     type: "danger",

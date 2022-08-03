@@ -38,6 +38,7 @@
 
 <div class= 'tool_tip_h' data-bs-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Legend'> <input id="sG-legend" type="checkbox" checked data-bs-toggle="toggle" data-on='<i class="bi bi-list-task"></i>' data-off='<i class="bi bi-list-task"></i>' data-size="mini" data-onstyle = "danger"></input></div>
 <div class= 'tool_tip_h' data-bs-toggle= 'tooltip' data-placement='bottom' title= 'Show/Hide Graphs Panel'> <input id="sG" type="checkbox" data-bs-toggle="toggle" data-on='<i class="bi bi-reception-4"></i>' data-off='<i class="bi bi-reception-4"></i>' data-size="mini" data-onstyle = "danger"></input></div>
+
 {% if can_block_map %}
   {% if geoEndpoint %}
     <input id="blockPosition" type="checkbox" checked data-bs-toggle="toggle" data-on='<i class="bi bi-image"></i>' data-off='<i class="bi bi-image"></i>' data-size="mini" data-onstyle = "danger"></input>
@@ -83,13 +84,14 @@
 
 {% block content_dependent_styles %}
   {{ block.super }}
-  <link href="{% static 'water_data_explorer/vendor/bootstrap-3.3.6-dist/css/bootstrap.min.css' %}" rel="stylesheet" />
-  <link href="{% static 'water_data_explorer/vendor/bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker.min.css' %}" rel="stylesheet" />
-  <link href="{% static 'water_data_explorer/vendor/bootstrap-select-1.11.2/css/bootstrap-select.min.css' %}" rel="stylesheet" />
-  <link href="{% static 'water_data_explorer/vendor/bootstrap-toggle-master/css/bootstrap-toggle.min.css' %}" rel="stylesheet" />
-  <link href="{% static 'water_data_explorer/vendor/contextMenu/contextMenu.css' %}" rel="stylesheet" />
-  <link href="{% static 'water_data_explorer/vendor/openlayers/ol.css' %}" rel="stylesheet">
-  <link href="{% static 'water_data_explorer/vendor/fontawesome-free-5.12.1-web/css/all.css' %}" rel="stylesheet">
+  <link href="{% static 'water_data_explorer/vendor/bootstrap-3.3.6-dist/css/bootstrap.min.css' %}" rel="stylesheet" />  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet" /> <!-- https://github.com/uxsolutions/bootstrap-datepicker -->
+  <link href="{% static 'water_data_explorer/vendor/bootstrap-select-1.11.2/css/bootstrap-select.min.css' %}" rel="stylesheet" /> <!-- does not support BS5 https://developer.snapappointments.com/bootstrap-select/ -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"> <!-- https://www.bootstraptoggle.com/#api -->
+  <link href="{% static 'water_data_explorer/vendor/contextMenu/contextMenu.css' %}" rel="stylesheet" /> <!-- has not been updated in 6 years-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.15.1/css/ol.css"> <!-- https://openlayers.org/download/ -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" rel="stylesheet"> <!-- cdnj -->
 
 {% endblock %}
 
@@ -117,14 +119,15 @@
 
   </script>
 
-  <script src="{% static 'water_data_explorer/vendor/bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.min.js' %}" type="text/javascript"></script>
-  <script src="{% static 'water_data_explorer/vendor/bootstrap-select-1.11.2/js/bootstrap-select.min.js' %}" type="text/javascript"></script>
-  <script src="{% static 'water_data_explorer/vendor/bootstrap-toggle-master/js/bootstrap-toggle.min.js' %}" type="text/javascript"></script>
-  <script src="{% static 'water_data_explorer/vendor/plotly-latest.min.js' %}" type="text/javascript"></script>
-  <script src="{% static 'water_data_explorer/vendor/bootstrap-notify.min.js' %}" type="text/javascript"></script>
-  <script src="{% static 'water_data_explorer/vendor/contextMenu/contextMenu.min.js' %}" async="async"></script>
-  <script src="{% static 'water_data_explorer/vendor/openlayers/ol.js' %}" type="text/javascript"></script>
-  <script src="{% static 'water_data_explorer/vendor/fontawesome-free-5.12.1-web/js/all.js' %}" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> <!-- https://github.com/uxsolutions/bootstrap-datepicker -->
+  <script src="{% static 'water_data_explorer/vendor/bootstrap-select-1.11.2/js/bootstrap-select.min.js' %}" type="text/javascript"></script> <!-- does not support BS5 -->
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script> <!-- https://www.bootstraptoggle.com/#api -->
+  <script src="https://cdn.plot.ly/plotly-2.13.3.js" charset="utf-8"></script>  <!-- https://plotly.com/javascript/ -->
+  <script src="{% static 'water_data_explorer/vendor/bootstrap-notify.js' %}" type="text/javascript"></script> <!-- does not support BS5; no updates in 7 years --> 
+  <script src="{% static 'water_data_explorer/vendor/contextMenu/contextMenu.js' %}" async="async"></script> <!-- has not been updated in 6 years-->
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.15.1/build/ol.js"></script> <!-- https://openlayers.org/download/ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/js/all.min.js" type="text/javascript"></script> <!-- cdnj -->
+
 
   <script src="{% static 'water_data_explorer/js/variables.js' %}" type="text/javascript"></script>
   <script src="{% static 'water_data_explorer/js/utilities.js' %}" type="text/javascript"></script>

@@ -467,6 +467,14 @@ var water_data_explorer_PACKAGE = (function() {
       give_name();
       addLegendMap(map);
 
+      // Setup the toggles
+      $('#sG-legend').bootstrapToggle('on');
+      $('#sG').bootstrapToggle('off');
+      try{
+        $('#blockPosition').bootstrapToggle('off');
+      }
+      catch(e){}
+
       //make the picker to always appear//
       $(".selectpicker").selectpicker("refresh");
       if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
