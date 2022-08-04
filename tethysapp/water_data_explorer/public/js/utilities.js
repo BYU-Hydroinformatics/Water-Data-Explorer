@@ -400,7 +400,8 @@ cleanGraphs = function(){
   $("#siteName_title").html("Select a Station");
   $("#siteDes").html("No Site Selected, when a site is 'clicked' metadata of the site will display in this part such as a name and a description.");
   $('#variables_graph option').remove();
-  $('#variables_graph').selectpicker('refresh');
+  // $('#variables_graph').selectpicker('refresh');
+  $('#variables_graph').select2();
   // $('#variables_graph').empty();
   $("#variables_graph").html(`<option > No Variables Available . . .</option>`);
   $('#datetimepicker6').datepicker('update', '');

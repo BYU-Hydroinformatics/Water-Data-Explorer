@@ -17,7 +17,8 @@
 activate_layer_values = function (){
   try{
     map.on('singleclick', function(evt) {
-      $('#variables_graph').selectpicker('setStyle', 'btn-primary');
+      // $('#variables_graph').selectpicker('setStyle', 'btn-primary');
+      $('#variables_graph').select2();
       evt.stopPropagation();
       $("#graphs").empty();
       let object_request={};
@@ -208,7 +209,8 @@ activate_layer_values = function (){
                 // 1 empty the dropdown for variables//
                 evt.stopPropagation();
                 $("#variables_graph").empty();
-                $("#variables_graph").selectpicker("refresh");
+                //$("#variables_graph").selectpicker("refresh");
+                $("#variables_graph").select2();
 
                 // 2 make the dropdown with the variables //
                 let variables = result['variables'];
@@ -236,7 +238,7 @@ activate_layer_values = function (){
                     }
                     variable_select.append(option)
 
-                    variable_select.selectpicker("refresh");
+                    variable_select.select2();
                     i = i+1;
                 });
 
@@ -245,7 +247,7 @@ activate_layer_values = function (){
 
                 $('#variables_graph').bind('change', function(e){
                   try{
-                    variable_select.selectpicker("refresh");
+                    variable_select.select2();
                     var selectedItem = $('#variables_graph').val() -1;
                     var selectedItemText = $('#variables_graph option:selected').text();
                     $("#GeneralLoading").removeClass("hidden");

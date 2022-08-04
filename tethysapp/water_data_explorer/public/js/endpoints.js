@@ -7,7 +7,8 @@ get_vars_from_site = function (resultList){
     request_obj['code'] = resultList[indexs]['sitecode']
     let var_select = $("#variable_choose");
     var_select.empty();
-    var_select.selectpicker("refresh");
+    // var_select.selectpicker("refresh");
+    var_select.select2();
     $("#downloading_loading").removeClass("hidden");
       $.ajax({
         type:"POST",
@@ -22,7 +23,8 @@ get_vars_from_site = function (resultList){
                 let option_begin = `<option value=${i}>${variables_[i]} </option>`;
                 var_select.append(option_begin);
               }
-              var_select.selectpicker("refresh");
+              // var_select.selectpicker("refresh");
+              var_select.select2();
 
               let reque_ob = {}
               reque_ob['hs_name'] = $("#site_choose option:selected").html();
@@ -1471,7 +1473,8 @@ hydroserver_information = function(){
     }
     let var_select = $("#variable_choose");
     var_select.empty();
-    var_select.selectpicker("refresh");
+    // var_select.selectpicker("refresh");
+    var_select.select2();
     let site_select = $("#site_choose");
     site_select.empty();
     // $("#site_choose").unbind('change');
@@ -1479,7 +1482,8 @@ hydroserver_information = function(){
       // console.log("change unbind");
     });
 
-    site_select.selectpicker("refresh");
+    // site_select.selectpicker("refresh");
+    site_select.select();
     let groupActual = this.parentElement.parentNode.id.split("_")[0];
     groupActual = id_dictionary[groupActual]
     let hsActual = this.id.split("_")[0];
@@ -1566,7 +1570,8 @@ hydroserver_information = function(){
                  '</tr>'
 
               }
-              site_select.selectpicker("refresh");
+              // site_select.selectpicker("refresh");
+              site_select.select2();
 
 
 

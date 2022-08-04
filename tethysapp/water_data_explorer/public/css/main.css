@@ -322,6 +322,9 @@ tr:hover {
 #buttonsBar{
   margin-left: 10%;
 }
+.select2{
+  height:34px;
+}
 
 #pop-up_description2 h1{
   display: flex;

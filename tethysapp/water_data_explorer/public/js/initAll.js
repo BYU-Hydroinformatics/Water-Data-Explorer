@@ -476,7 +476,8 @@ var water_data_explorer_PACKAGE = (function() {
       catch(e){}
 
       //make the picker to always appear//
-      $(".selectpicker").selectpicker("refresh");
+      //$(".selectpicker").selectpicker("refresh");
+      $(".selectpicker").select2();
       if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         $('.selectpicker').selectpicker('mobile');
       }
