@@ -16,7 +16,7 @@ resource_files += find_resource_files('tethysapp/' + app_package + '/workspaces'
 
 setup(
     name=release_package,
-    version='1.1.18',
+    version='1.1.19',
     description='A tethys app that lets the user to visualize and query WSDL enpoints',
     long_description='',
     keywords='',

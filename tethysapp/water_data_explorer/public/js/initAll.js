@@ -144,7 +144,44 @@ var water_data_explorer_PACKAGE = (function() {
 
     init_map = function() {
       try{
+               
         var url_UN = "https://geoservices.un.org/arcgis/rest/services/ClearMap_WebTopo/MapServer";
+        
+        var layers = [
+          new ol.layer.Tile({
+            title: 'Open Street Map',
+            source: new ol.source.OSM(),
+            type: 'base'
+          }),
+
+          new ol.layer.Tile({
+            title: 'United Nations Map', 
+            source: new ol.source.TileArcGISRest({
+              attributions: 'Produced by United Nations Geospatial',
+              url: url_UN
+            }),
+            type: 'base'
+          }),
+          new ol.layer.Tile({
+            title: 'ArcGIS World Topographic Map',
+            type:'base',
+            source: new ol.source.XYZ({
+              attributions:'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' + 'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
+              url:'https://server.arcgisonline.com/ArcGIS/rest/services/' + 'World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
+            }),
+          }),
+          new ol.layer.Tile({
+            title: 'ArcGIS World Imaginary Map',
+            type:'base',
+            source: new ol.source.XYZ({
+              attributions:'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' + 'rest/services/World_Imagery/MapServer">ArcGIS</a>',
+              url:'https://server.arcgisonline.com/ArcGIS/rest/services/' + 'World_Imagery/MapServer/tile/{z}/{y}/{x}'
+            }),
+          })
+
+        ]
+
+        // var url_UN = "https://geoservices.un.org/arcgis/rest/services/ClearMap_WebTopo/MapServer";
         var myZoom;
         if($( window ).width() <= 768){
           myZoom = 2;
@@ -158,12 +195,12 @@ var water_data_explorer_PACKAGE = (function() {
         //https://openlayers.org/en/latest/examples/arcgis-tiled.html
         //https://geoportal.un.org/arcgis/home/item.html?id=541557fd0d4d42efb24449be614e6887
 
-        const baseLayer =  new ol.layer.Tile({
-                source: new ol.source.TileArcGISRest({
-                  attributions: 'Produced by United Nations Geospatial',
-                  url: url_UN
-                })
-        });
+        // const baseLayer =  new ol.layer.Tile({
+        //         source: new ol.source.TileArcGISRest({
+        //           attributions: 'Produced by United Nations Geospatial',
+        //           url: url_UN
+        //         })
+        // });
 
         //Creating an empty source and layer to store the shapefile geojson object
         shpSource = new ol.source.Vector()
@@ -198,7 +235,10 @@ var water_data_explorer_PACKAGE = (function() {
         })
 
         layersDict = {}
-        layers = [baseLayer, vector_layer, shpLayer];
+        // layers = [baseLayer, vector_layer, shpLayer];
+        // layers = layers.push(vector_layer);
+        // layers = layers.push(shpLayer);
+        // console.log(layers);
           map = new ol.Map({
               target: "map",
               layers: layers,
@@ -223,6 +263,10 @@ var water_data_explorer_PACKAGE = (function() {
               // interactions: ol.interaction.defaults({ dragPan: false}),
           })
 
+
+        map.addControl(new ol.control.LayerSwitcher());
+        map.addLayer(vector_layer);
+        map.addLayer(shpLayer);
 
 
         var lastFeature, draw, featureType
