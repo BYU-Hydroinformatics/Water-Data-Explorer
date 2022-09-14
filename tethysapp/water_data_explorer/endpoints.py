@@ -18,10 +18,7 @@ logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
 
-@controller(
-    name='get-download-hs',
-    url='get-download-hs/',
-)
+@controller(name='get-download-hs', url='get-download-hs/')
 def get_download_hs(request):
     hs_name = request.POST.get('hs_name')
     hs_url = request.POST.get('hs_url')
@@ -43,10 +40,7 @@ def get_download_hs(request):
     return JsonResponse(nb)
 
 
-@controller(
-    name='get-variables-hs',
-    url='get-variables-hs/',
-)
+@controller(name='get-variables-hs', url='get-variables-hs/')
 def get_variables_hs(request):
     list_catalog={}
     #print("get_variables_hs Function")
@@ -97,10 +91,7 @@ def get_variables_hs(request):
 
     return JsonResponse(list_catalog)
 
-@controller(
-    name='get-available-sites',
-    url='get-available-sites/',
-)
+@controller(name='get-available-sites', url='get-available-sites/')
 def get_available_sites(request):
     if request.method=='POST':
         specific_group=request.POST.get('group')
@@ -362,10 +353,7 @@ def get_available_sites(request):
 
     return JsonResponse(list_catalog)
 
-@controller(
-    name='get-hydroserver-info',
-    url='get-hydroserver-info/',
-)
+@controller(name='get-hydroserver-info', url='get-hydroserver-info/')
 def get_hydroserver_info(request):
     specific_group = request.POST.get('group')
     specific_hs = request.POST.get('hs')
@@ -385,11 +373,7 @@ def get_hydroserver_info(request):
 
     return JsonResponse(response_obj)
 
-@controller(
-    name='update-hydrosever-groups',
-    url='soap-update/',
-    app_workspace=True,
-)
+@controller(name='update-hydrosever-groups', url='soap-update/', app_workspace=True)
 def upload_hs(request, app_workspace):
     return_obj = {}
     difference = 0
@@ -513,11 +497,7 @@ def available_variables_2(url):
 ######*****************************************************************************************################
 ######**ADD A HYDROSERVER TO THE SELECTED GROUP OF HYDROSERVERS THAT WERE CREATED BY THE USER *################
 ######*****************************************************************************************################
-@controller(
-    name='add-hydrosever-groups',
-    url='soap-group/',
-    app_workspace=True,
-)
+@controller(name='add-hydrosever-groups', url='soap-group/', app_workspace=True)
 def soap_group(request, app_workspace):
     # logging.basicConfig(level=logging.INFO)
     # logging.getLogger('suds.client').setLevel(logging.DEBUG)
@@ -628,10 +608,7 @@ def soap_group(request, app_workspace):
 ######*****************************************************************************************################
 ############################## DELETE THE HYDROSERVER OF AN SPECIFIC GROUP ####################################
 ######*****************************************************************************************################
-@controller(
-    name='delete-group-hydroserver',
-    url='delete-group-hydroserver/',
-)
+@controller(name='delete-group-hydroserver', url='delete-group-hydroserver/')
 def delete_group_hydroserver(request):
     list_catalog = {}
     SessionMaker = app.get_persistent_store_database(

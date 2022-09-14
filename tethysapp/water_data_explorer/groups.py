@@ -28,10 +28,7 @@ Persistent_Store_Name = 'catalog_db'
 
 
 
-@controller(
-    name='available-regions',
-    url='available-regions/',
-)
+@controller(name='available-regions', url='available-regions/')
 def available_regions(request):
 
     ret_object = {}
@@ -128,10 +125,7 @@ def available_regions(request):
     # return JsonResponse(ret_object)
 
 
-@controller(
-    name='available-variables',
-    url='available-variables/',
-)
+@controller(name='available-variables', url='available-variables/')
 def available_variables(request):
     SessionMaker = app.get_persistent_store_database(
         Persistent_Store_Name, as_sessionmaker=True)
@@ -188,10 +182,7 @@ def available_variables(request):
     # varaibles_list["variables_codes"] = hydroserver_variable_code_list
     # return JsonResponse(varaibles_list)
 
-@controller(
-    name='available-services',
-    url='available-services/',
-)
+@controller(name='available-services', url='available-services/')
 def available_services(request):
     url_catalog = request.POST.get('url')
     hs_services = {}
@@ -223,11 +214,7 @@ def available_services(request):
 ######*****************************************************************************************################
 ######***********************CREATE AN EMPTY GROUP OF HYDROSERVERS ****************************################
 ######*****************************************************************************************################
-@controller(
-    name='create-group',
-    url='create-group/',
-    app_workspace=True,
-)
+@controller(name='create-group', url='create-group/', app_workspace=True)
 def create_group(request, app_workspace):
     group_obj={}
     SessionMaker = app.get_persistent_store_database(Persistent_Store_Name, as_sessionmaker=True)
@@ -331,10 +318,7 @@ def addMultipleViews(request, hs_list,group, app_workspace):
 ######*****************************************************************************************################
 ######************RETRIEVES THE GROUPS OF HYDROSERVERS THAT WERE CREATED BY THE USER **********################
 ######*****************************************************************************************################
-@controller(
-    name='load-groups',
-    url='load-groups/',
-)
+@controller(name='load-groups', url='load-groups/')
 def get_groups_list(request):
     list_catalog = {}
     #print("get_groups_list controllers.py FUNCTION inside")
@@ -374,10 +358,7 @@ def get_groups_list(request):
 ######*****************************************************************************************################
 ##############################LOAD THE HYDROSERVERS OF AN SPECIFIC GROUP#######################################
 ######*****************************************************************************************################
-@controller(
-    name='load-hydroserver-of-groups',
-    url='catalog-group/',
-)
+@controller(name='load-hydroserver-of-groups', url='catalog-group/')
 def catalog_group(request):
 
     specific_group=request.POST.get('group')
@@ -406,10 +387,7 @@ def catalog_group(request):
 ######*****************************************************************************************################
 ############################## DELETE A GROUP OF HYDROSERVERS #############################
 ######*****************************************************************************************################
-@controller(
-    name='delete-group',
-    url='delete-group/',
-)
+@controller(name='delete-group', url='delete-group/')
 def delete_group(request):
     list_response = {}
     can_delete_permission = has_permission(request,"delete_hydrogroups")
@@ -445,11 +423,7 @@ def delete_group(request):
     return JsonResponse(list_response)
 
 
-@controller(
-    name='catalog-filter',
-    url='catalog-filter/',
-    app_workspace=True
-)
+@controller(name='catalog-filter', url='catalog-filter/', app_workspace=True)
 def catalog_filter(request, app_workspace):
     ret_obj = {}
     actual_group = None
@@ -810,10 +784,7 @@ def filter_variable(variables_list, actual_group = None):
 
     return hs_list
 
-@controller(
-    name='get-variables-for-country',
-    url='get-variables-for-country/',
-)
+@controller(name='get-variables-for-country', url='get-variables-for-country/')
 def get_variables_for_country(request):
     response_obj = {}
     countries = request.POST.getlist('countries[]')
@@ -874,10 +845,7 @@ def get_variables_for_country(request):
 ######*****************************************************************************************################
 ############################## Function to retrieve the keywords for all the selected groups #############################
 ######*****************************************************************************************################
-@controller(
-    name='keyword-group',
-    url='keyword-group',
-)
+@controller(name='keyword-group', url='keyword-group')
 def keyWordsForGroup(request):
     list_catalog={}
     specific_group=request.POST.get('group')

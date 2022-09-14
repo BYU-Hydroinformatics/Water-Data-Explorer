@@ -13,10 +13,7 @@ Persistent_Store_Name = 'catalog_db'
 logging.getLogger('suds.client').setLevel(logging.CRITICAL)
 
 
-@controller(
-    name='home',
-    url='water-data-explorer',
-)
+@controller(name='home', url='water-data-explorer')
 def home(request):
     """
     Controller for the app home page.
