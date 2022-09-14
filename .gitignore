@@ -20,3 +20,5 @@ docker_files/postgres-data
 .isort.cfg
 .markdownlint.yaml
 .vscode/settings.json
+docker_files/data
+docker_files/logs
