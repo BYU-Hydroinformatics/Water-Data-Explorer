@@ -8,7 +8,7 @@ def init_catalog_db(engine, first_time):
     print("Initializing Persistant Storage")
     Base.metadata.create_all(engine)
     if first_time:
-    # # Make session
+        # # Make session
         SessionMaker = sessionmaker(bind=engine)
         session = SessionMaker()
 

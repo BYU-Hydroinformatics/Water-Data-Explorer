@@ -14,13 +14,14 @@ class Groups(Base):
     id = Column(Integer, primary_key=True)  # Record number.
     title = Column(String(1000))  # Tile as given by the admin
     description = Column(Text)  # URL of the SOAP endpointx
-    hydroserver = relationship("HydroServer_Individual", back_populates ="group", cascade = "all,delete, delete-orphan" )
-    #all, delete-orphan,save-update
+    hydroserver = relationship("HydroServer_Individual", back_populates="group",
+                               cascade="all,delete, delete-orphan")
+    # all, delete-orphan,save-update
     time_updated = Column(DateTime(timezone=True), onupdate=func.now())
 
     def __init__(self, title, description):
         self.title = title
-        self.description= description
+        self.description = description
 
 
 class HydroServer_Individual(Base):
@@ -35,10 +36,9 @@ class HydroServer_Individual(Base):
     countries = Column(JSON)
     group_id = Column(Integer, ForeignKey('Group_Hydroserver_Individuals.id'))
     group = relationship("Groups", back_populates="hydroserver")  # Tile as given by the admin
-    #cascade="all, delete-orphan"
     time_updated = Column(DateTime(timezone=True), onupdate=func.now())
 
-    def __init__(self, title, url,description, siteinfo,variables,countries):
+    def __init__(self, title, url, description, siteinfo, variables, countries):
         self.title = title
         self.url = url
         self.description = description

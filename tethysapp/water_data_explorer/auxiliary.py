@@ -21,19 +21,20 @@ import shapely.ops
 
 from suds.client import Client
 from suds.sudsobject import asdict
-from datetime import *
+from datetime import datetime, timedelta
 
 from .app import WaterDataExplorer as app
 
 
 extract_base_path = '/tmp'
 
+
 def GetSites_WHOS(url):
     try:
-        client = Client(url,timeout= 500)
+        client = Client(url, timeout=500)
         sites = client.service.GetSites('[:]')
 
-        sites_json={}
+        sites_json = {}
         if isinstance(sites, str):
             sites_dict = xmltodict.parse(sites)
             sites_json_object = json.dumps(sites_dict)
@@ -44,14 +45,13 @@ def GetSites_WHOS(url):
 
         sites_object = parseJSON(sites_json)
 
-
         return sites_object
 
-    except Exception as error:
-        #print(error)
-        sites_object={}
+    except Exception:
+        sites_object = {}
 
     return sites_object
+
 
 def checkCentral(centralUrl):
     # Currently just checking if its a valid endpoint.
@@ -240,16 +240,14 @@ def parseWML(bbox):
 
 def parseJSON(json):
     hs_sites = []
-    ##print("I am inside the parseJSON")
-    ##print(json)
-    ##print(json.keys())
     sites_object = None
     # This is to handle the WMO la Plata endpoints ##
     try:
         if "sitesResponse" in json:
             sites_object = json['sitesResponse']['site']
 
-            # If statement is executed for multiple sites within the HydroServer, if there is a single site then it goes to the else statement
+            # If statement is executed for multiple sites within the HydroServer,
+            # if there is a single site then it goes to the else statement
             # Parse through the HydroServer and each site with its metadata as a
             # dictionary object to the hs_sites list
             if type(sites_object) is list:
@@ -276,8 +274,7 @@ def parseJSON(json):
                             if str(sitePorperty_Info['@name']) == 'Country':
                                 hs_json['country'] = str(sitePorperty_Info['#text'])
                                 # #print(return_obj['country'])
-                    except Exception as e:
-                        #print(e)
+                    except Exception:
                         hs_json['country'] = "No Data was Provided"
                         # #print(hs_json['country'])
                     hs_json["sitename"] = site_name.decode("UTF-8")
@@ -285,7 +282,7 @@ def parseJSON(json):
                     hs_json["longitude"] = longitude
                     hs_json["sitecode"] = sitecode
                     hs_json["network"] = network
-                    hs_json["fullSiteCode"] = network +":" + sitecode
+                    hs_json["fullSiteCode"] = network + ":" + sitecode
                     hs_json["siteID"] = siteID
                     hs_json["service"] = "SOAP"
                     hs_sites.append(hs_json)
@@ -313,8 +310,7 @@ def parseJSON(json):
                         if str(sitePorperty_Info['@name']) == 'Country':
                             hs_json['country'] = str(sitePorperty_Info['#text'])
                             # #print(return_obj['country'])
-                except Exception as e:
-                    #print(e)
+                except Exception:
                     hs_json['country'] = "No Data was Provided"
                     # #print(hs_json['country'])
                 hs_json["sitename"] = site_name.decode("UTF-8")
@@ -322,12 +318,13 @@ def parseJSON(json):
                 hs_json["longitude"] = longitude
                 hs_json["sitecode"] = sitecode
                 hs_json["network"] = network
-                hs_json["fullSiteCode"] = network +":" + sitecode
+                hs_json["fullSiteCode"] = network + ":" + sitecode
                 hs_json["siteID"] = siteID
                 hs_json["service"] = "SOAP"
                 hs_sites.append(hs_json)
     except ValueError:
-        print("There is a discrepancy in the structure of the response. It is possible that the respond object does not contain the sitesResponse attribute")
+        print("There is a discrepancy in the structure of the response. It is possible that the respond object does "
+              "not contain the sitesResponse attribute")
 
     return hs_sites
 
@@ -361,7 +358,9 @@ def genShapeFile(input, title, hs_url):
         w.save(file_location)  # Save the shapefile
         prj = open("%s.prj" % file_location, "w")  # Creating a projection file
         # Projection of the file is EPSG 4326
-        epsg = 'GEOGCS["WGS84",DATUM["WGS_1984",SPHEROID["WGS84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.01745329251994328,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]]'
+        epsg = 'GEOGCS["WGS84",DATUM["WGS_1984",SPHEROID["WGS84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],"\
+            "AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree","\
+            "0.01745329251994328,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]]'
         prj.write(epsg)
         prj.close()
 
@@ -381,7 +380,6 @@ def genShapeFile(input, title, hs_url):
             'primary_geoserver', as_engine=True)
         layer_metadata = {}
 
-        response = None
         # Connect to a workspace called catalog. If there is no workspace,
         # create one.
         ws_name = "catalog"
@@ -405,8 +403,9 @@ def genShapeFile(input, title, hs_url):
 
         result = None
 
+        # Adding the zipshapefile to geoserver as a layer
         result = spatial_dataset_engine.create_shapefile_resource(
-            store_id=store_id, shapefile_zip=zip_file_full_path, overwrite=True, debug=False)  # Adding the zipshapefile to geoserver as a layer
+            store_id=store_id, shapefile_zip=zip_file_full_path, overwrite=True, debug=False)
 
         if result['success']:
             print("Created store " + title + " successfully")
@@ -427,7 +426,7 @@ def genShapeFile(input, title, hs_url):
 
         return layer_metadata
 
-    except:
+    except Exception:
         print("Unexpected error:", sys.exc_info())
         return False
     # finally:
@@ -442,8 +441,6 @@ def genShapeFile(input, title, hs_url):
 def parse_gldas_data(file):
     data = []
     data_flag_text = 'Date&Time'
-    error_flag_text = 'ERROR:'
-    error_message = None
     found_data = False
     file = file.split("\n")
     s_lines = []
@@ -558,7 +555,8 @@ def get_gldas_range():
     range = {}
     try:
         # Get the begin and end dates as the sort key is slightly different
-        begin_url1 = "https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_NOAH025SUBP_3H&version=001&page_size=1&sort_key=start_date"
+        begin_url1 = "https://cmr.earthdata.nasa.gov/search/granules?short_name="\
+            "GLDAS_NOAH025SUBP_3H&version=001&page_size=1&sort_key=start_date"
         open_begin_url1 = urllib.request.urlopen(begin_url1)
         read_begin_url1 = open_begin_url1.read()
         begin_url1_data = xmltodict.parse(read_begin_url1)
@@ -572,7 +570,8 @@ def get_gldas_range():
             'RangeDateTime']['BeginningDateTime']
         start_date = start_date.split('T')[0]
         # start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%Y-%m-%d')
-        end_url1 = "https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_NOAH025SUBP_3H&version=001&page_size=1&sort_key=-start_date"
+        end_url1 = "https://cmr.earthdata.nasa.gov/search/granules?short_name="\
+            "GLDAS_NOAH025SUBP_3H&version=001&page_size=1&sort_key=-start_date"
         open_end_url1 = urllib.request.urlopen(end_url1)
         read_end_url1 = open_end_url1.read()
         end_url1_data = xmltodict.parse(read_end_url1)
@@ -591,13 +590,13 @@ def get_gldas_range():
         lastMonth = first - timedelta(days=1)
         end_date = lastMonth.strftime("%Y-%m-%d")
         range = {"start": start_date, "end": end_date, "success": "success"}
-    except:
+    except Exception:
         range = {"start": "2010-08-08", "end": "2016-10-10", "fail": "fail"}
 
     return range
 
 
-# Functino for getting the Climate Serv seasonal forecast date range
+# Function for getting the Climate Serv seasonal forecast date range
 def get_sf_range():
     try:
         scenario_url = "http://limateserv.servirglobal.net/chirps/getClimateScenarioInfo/"
@@ -614,7 +613,7 @@ def get_sf_range():
         end_date = datetime.strptime(end_date, '%Y_%m_%d').strftime('%m/%d/%Y')
         range = {"start": start_date, "end": end_date}
         return range
-    except Exception as e:
+    except Exception:
         range = {"start": "00/00/0000", "end": "00/00/0000"}
         return range
 
@@ -670,16 +669,17 @@ def convert_shp(files):
                             if k in props:
                                 del props[k]
 
+                        # Creating the geojson object based on the shapefile properties
                         feature = geojson.Feature(id=f['id'],
                                                   geometry=projected_shape,
-                                                  properties=props)  # Creating the geojson object based on the shapefile properties
+                                                  properties=props)
                         features.append(feature)
                     fc = geojson.FeatureCollection(features)
 
                     geojson_string = geojson.dumps(
                         fc)  # Return the geojson string
 
-    except:
+    except Exception:
         return 'error'
     finally:
         if temp_dir is not None:
