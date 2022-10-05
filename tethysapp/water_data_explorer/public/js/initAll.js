@@ -511,23 +511,25 @@ var water_data_explorer_PACKAGE = (function() {
       give_name();
       addLegendMap(map);
 
+      // Setup the toggles
+      $('#sG-legend').bootstrapToggle('on');
+      $('#sG').bootstrapToggle('off');
+      try{
+        $('#blockPosition').bootstrapToggle('off');
+      }
+      catch(e){}
+
       //make the picker to always appear//
-      $(".selectpicker").selectpicker("refresh");
+      //$(".selectpicker").selectpicker("refresh");
+      $(".selectpicker").select2();
       if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         $('.selectpicker').selectpicker('mobile');
       }
 
-      $(".carousel-control.left ").hide();
-      $(".carousel-control").on("click",function(){
-        if ($("#tables_info").hasClass("active")) {
-         $(".carousel-control.right ").hide();
-         $(".carousel-control.left ").show();
-        }
-        if ($("#plots_info").hasClass("active")) {
-         $(".carousel-control.right ").show();
-         $(".carousel-control.left ").hide();
-        }
-      })
+      $(".carousel-control-prev ").hide();
+      $(".carousel-control-prev").on("click",hide_or_show_buttons_on_carousel)
+      $(".carousel-control-next").on("click",hide_or_show_buttons_on_carousel)
+      $(".carousel-indicator").on("click",hide_or_show_buttons_on_carousel)
       $(".toggle-nav").on("click",function(){
 
           setTimeout(function(){ map.updateSize(); }, 200);
@@ -559,13 +561,13 @@ var water_data_explorer_PACKAGE = (function() {
           }
 
       });
-      $(".carousel-control.right").on("click",function(e){
+      $(".carousel-control-next").on("click",function(e){
         map.updateSize();
 
       })
 
 
-      $('[data-toggle="tooltip"]').tooltip()
+      $('[data-bs-toggle="tooltip"]').tooltip()
 
       $('body').tooltip({
           selector: '.tool_tip_h'
@@ -628,3 +630,18 @@ var water_data_explorer_PACKAGE = (function() {
 
   })
 })() // End of package wrapper
+
+/*
+************ FUNCTION NAME: INIT_JEQUERY_VAR**********************
+************ PURPOSE: INITIALIZE ALL THE JQUERY VARIABLES USED***********
+*/
+hide_or_show_buttons_on_carousel = function(){
+  if ($("#tables_info").hasClass("active")) {
+    $(".carousel-control-next ").hide();
+    $(".carousel-control-prev ").show();
+   }
+   if ($("#plots_info").hasClass("active")) {
+    $(".carousel-control-next ").show();
+    $(".carousel-control-prev ").hide();
+   }
+}

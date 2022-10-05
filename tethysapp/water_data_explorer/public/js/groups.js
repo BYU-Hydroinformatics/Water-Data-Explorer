@@ -891,13 +891,8 @@ create_group_hydroservers = function(){
 
 
                 let newHtml;
-                if(can_delete_hydrogroups){
-                  newHtml = html_for_groups(can_delete_hydrogroups, new_title, id_group_separator);
-                }
-                else{
-                  newHtml = html_for_groups(false, new_title, id_group_separator);
-                }
-
+                newHtml = html_for_groups(can_delete_hydrogroups, new_title, id_group_separator);
+                
                 $(newHtml).appendTo("#current-Groupservers");
 
                 $(`#${title}-noGroups`).show();
@@ -1096,12 +1091,8 @@ load_group_hydroservers = function(){
 
                 let newHtml;
 
-                if(can_delete_hydrogroups){
-                  newHtml = html_for_groups(can_delete_hydrogroups, new_title, id_group_separator);
-                }
-                else{
-                  newHtml = html_for_groups(false, new_title, id_group_separator);
-                }
+                newHtml = html_for_groups(can_delete_hydrogroups, new_title, id_group_separator);
+                
                 $(newHtml).appendTo("#current-Groupservers");
 
 
@@ -1303,7 +1294,7 @@ remove_individual_hydroservers_group = function(group_name){
 */
 make_list_groups = function(){
   try{
-    let groupsDiv = $("#current-Groupservers").find(".panel.panel-default");
+    let groupsDiv = $("#current-Groupservers").find(".accordion-item");
     let arrayGroups = Object.values(groupsDiv);
     let finalGroupArray=[];
     arrayGroups.forEach(function(g){
@@ -2215,7 +2206,7 @@ generateListServices = function(){
             HSTableHtml +=
            '<tr>'+
                 `<td> <p id="titleSite">${i+1}.- ${result1['siteInfo'][i]['sitename']}
-                <button type="button" class="btn btn-primary" id="${result1['siteInfo'][i]['sitecode']}_modal"><span class="glyphicon glyphicon-pushpin"></span></button></p>
+                <button type="button" class="btn btn-primary" id="${result1['siteInfo'][i]['sitecode']}_modal"><i class="bi bi-pin-angle-fill"></i></button></p>
                   <p>Station/Platform Code: ${result1['siteInfo'][i]['sitecode']}</p>
                   <p>Network: ${result1['siteInfo'][i]['network']}</p>
                   <p>Latitude: ${result1['siteInfo'][i]['latitude']}</p>

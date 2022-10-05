@@ -7,7 +7,8 @@ get_vars_from_site = function (resultList){
     request_obj['code'] = resultList[indexs]['sitecode']
     let var_select = $("#variable_choose");
     var_select.empty();
-    var_select.selectpicker("refresh");
+    // var_select.selectpicker("refresh");
+    var_select.select2();
     $("#downloading_loading").removeClass("hidden");
       $.ajax({
         type:"POST",
@@ -22,7 +23,8 @@ get_vars_from_site = function (resultList){
                 let option_begin = `<option value=${i}>${variables_[i]} </option>`;
                 var_select.append(option_begin);
               }
-              var_select.selectpicker("refresh");
+              // var_select.selectpicker("refresh");
+              var_select.select2();
 
               let reque_ob = {}
               reque_ob['hs_name'] = $("#site_choose option:selected").html();
@@ -1344,7 +1346,7 @@ showAvailableSites = function(){
           try{
             let sites = result['hydroserver'];
             let title = filterSites['hs'];
-            let url = layersDict[title].values_.source.features[0].values_.features[0].values_.hs_url
+            let url = layersDict[title].getSource().getFeatures()[0].getProperties().features[0].getProperties().hs_url
             const vectorLayer =  map_layers(sites,title,url)[0]
             const vectorSource =  map_layers(sites,title,url)[1]
             map.getLayers().forEach(function(layer) {
@@ -1471,7 +1473,8 @@ hydroserver_information = function(){
     }
     let var_select = $("#variable_choose");
     var_select.empty();
-    var_select.selectpicker("refresh");
+    // var_select.selectpicker("refresh");
+    var_select.select2();
     let site_select = $("#site_choose");
     site_select.empty();
     // $("#site_choose").unbind('change');
@@ -1479,7 +1482,8 @@ hydroserver_information = function(){
       // console.log("change unbind");
     });
 
-    site_select.selectpicker("refresh");
+    // site_select.selectpicker("refresh");
+    site_select.select();
     let groupActual = this.parentElement.parentNode.id.split("_")[0];
     groupActual = id_dictionary[groupActual]
     let hsActual = this.id.split("_")[0];
@@ -1556,7 +1560,7 @@ hydroserver_information = function(){
                   HSTableHtml +=
                  '<tr>'+
                       `<td> <p id="titleSite">${i+1}.- ${result1['siteInfo'][i]['sitename']}
-                      <button type="button" class="btn btn-primary" id="${result1['siteInfo'][i]['sitecode']}_modal"><span class="glyphicon glyphicon-pushpin"></span></button></p>
+                      <button type="button" class="btn btn-primary" id="${result1['siteInfo'][i]['sitecode']}_modal"><i class="bi bi-pin-angle-fill"></i></button></p>
                         <p>Station/Platform Code: ${result1['siteInfo'][i]['sitecode']}</p>
                         <p>Network: ${result1['siteInfo'][i]['network']}</p>
                         <p>Latitude: ${result1['siteInfo'][i]['latitude']}</p>
@@ -1566,7 +1570,8 @@ hydroserver_information = function(){
                  '</tr>'
 
               }
-              site_select.selectpicker("refresh");
+              // site_select.selectpicker("refresh");
+              site_select.select2();
 
 
 

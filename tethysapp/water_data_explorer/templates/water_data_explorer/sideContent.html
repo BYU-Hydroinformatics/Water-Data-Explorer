@@ -1,10 +1,10 @@
-{% load staticfiles %}
+{% load static %}
 
 
 {% block app_navigation_items %}
 
 <div id="content_description" style="visibility: hidden">
-  <li>
+  <li class="nav-item">
     <div id="description">
       <h2></h2>
       <p id="description_text"></p>
@@ -12,12 +12,12 @@
   </li>
 </div>
 <div id="content_description_2" style="display: none">
-  <li>
+  <li class="nav-item">
     <div class="accordion" id="accordion_servers">
       <div class="card">
         <div class="card-header" id="headingOne">
           <h5 class="mb-0">
-            <button class="btn btn-primary" data-toggle="collapse" data-target="#current-servers" aria-expanded="false" aria-controls="current-servers">
+            <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#current-servers" aria-expanded="false" aria-controls="current-servers">
               <b>Current HydroServers Added</b><i class="fas fa-angle-down rotate-icon"></i>
             </button>
           </h5>
@@ -31,7 +31,9 @@
     </div>
   </li>
   <br>
-  <button class="btn btn-primary" data-toggle="modal" data-target="#modalInterface"> <span class="glyphicon glyphicon-list-alt"></span> Add or Delete Hydroservers</button>
+  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalInterface"> 
+    <i class="bi bi-list-task"></i>
+    Add or Delete Hydroservers</button>
   <br>
 </div>
 

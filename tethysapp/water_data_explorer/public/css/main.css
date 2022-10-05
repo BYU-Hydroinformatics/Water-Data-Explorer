@@ -5,7 +5,11 @@
   width: 50%;
 }
 
-.FootNote {
+.hidden {
+  display: none;
+}
+
+.FootNote{
   text-align: left;
 }
 
@@ -288,37 +292,45 @@ tr:hover {
 }
 
 .server-name {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  margin-right: 10%;
-  margin-left: 2%;
-  overflow: hidden;
-  position: relative;
-  display: inline-block;
-  text-align: left;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    margin-right: 10%;
+    margin-left: 2%;
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    text-align: left;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-.group-name {
-  width: 120px;
-  overflow: hidden;
-  position: relative;
-  display: inline-block;
-  text-align: left;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  max-width: 218px;
+.group-name{
+    width: 120px;
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    text-align: left;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    max-width: 218px;
+    background: #286090;
+    border: 0px;
+    border-color: #204d74;
+    color: white;
+    font-size:18px;
 }
-#buttonsBar {
+#buttonsBar{
   margin-left: 10%;
+}
+.select2{
+  height:34px;
 }
 
 #pop-up_description2 h1 {
@@ -478,11 +490,27 @@ tr:hover {
   padding-left: 0.1em;
   padding-right: 0.1em;
 }
-.panel-heading.buttonAppearance h4 {
-  width: 100%;
-  align-items: center;
-  margin-left: 2%;
-  display: flex;
+
+.accordion-header.buttonAppearance{
+    /* margin: 40px; */
+    display: flex;
+    height: 20%;
+    width: 100%;
+    background: #286090 !important;
+    border-color: #204d74 !important;
+    color: white !important;
+    transition: all 0.2s linear 0s;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 0.10em;
+    padding-right:0.10em;
+}
+.accordion-header.buttonAppearance h4{
+    width: 100%;
+    align-items: center;
+    margin-left: 2%;
+    display: flex;
+
 }
 .ui-state-default.buttonAppearance {
   display: flex;
@@ -491,13 +519,18 @@ tr:hover {
   background: #286090 !important;
   border: 0px;
   border-color: #204d74 !important;
-  color: white;
+  color: white !important;
   transition: all 0.2s linear 0s;
   justify-content: flex-end;
 }
 
-#modalHydroserInformation .modal {
-  display: block !important;
+.modal-dialog {
+  width: 75%;
+  max-width: 90%;
+}
+
+#modalHydroserInformation .modal{
+    display: block !important;
 }
 #modalHydroserInformation .modal-dialog {
   overflow-y: initial !important;
@@ -551,7 +584,7 @@ tr:hover {
 #collapseCP {
   border-radius: 0.25em;
 }
-#panel-bodyh {
+#accordion-bodyh{
   display: flex;
   background-color: #5a6268;
   align-items: center;
@@ -571,7 +604,7 @@ tr:hover {
 #panHydroGroups {
   background-color: #5a6268;
 }
-.panel {
+.accordion{
   border-color: none !important;
   border: none !important;
 }
@@ -664,7 +697,8 @@ tr:hover {
   justify-content: center;
   width: 100%;
 }
-.logo_institucion {
+
+.logo_institution{
   display: flex;
   justify-content: center;
   display: -ms-flexbox;
@@ -677,10 +711,10 @@ tr:hover {
   padding-top: 1vh;
   padding-bottom: 1vh;
 }
-.logo_institucion img {
+.logo_institution img{
   width: 200px;
 }
-.panel {
+.accordion{
   margin-bottom: 0px;
 }
 .image_button {
@@ -789,29 +823,47 @@ tr:hover {
   max-width: 100%;
   max-height: 100%;
 }
-.carousel-control.left {
+
+.carousel-control-prev{
   background-image: none;
   top: 0%;
   height: 5%;
+  font-size: 20px;
+  color: #f7f7f7;
+  padding: 1vw;
+  background: #5cb85c;
+  box-sizing: content-box;
 }
-.carousel-control.right {
+.carousel-control-next{
   background-image: none;
   top: 0%;
   height: 5%;
+  font-size: 20px;
+  color: #f7f7f7;
+  padding: 1vw;
+  background: #5cb85c;
+  box-sizing: content-box;
 }
 .carousel-indicators {
   top: 1%;
   height: fit-content;
 }
-.carousel-indicators .active {
-  background-color: #d9534f;
+.carousel-indicators .active{
+  background-color: #d9534f !important;
 }
 .carousel-indicators li {
-  background-color: #1b95dc;
+  background-color: #1b95dc !important;
+  display: inline-block !important;
+  width: 10px !important;
+  height: 10px !important;
+  margin: 1px !important;
+  text-indent: -999px !important;
+  cursor: pointer !important;
+  border: 1px solid #fff !important;
+  border-radius: 10px !important;
 }
 
-.carousel-control .golang,
-.carousel-control .icon-next {
+.carousel-control-prev .golang, .carousel-control-prev .icon-next {
   color: #f7f7f7;
   padding: 1vw;
   background: #5cb85c;
@@ -819,8 +871,8 @@ tr:hover {
   height: auto;
   box-sizing: content-box;
 }
-.carousel-control .golang,
-.carousel-control .icon-next {
+
+.carousel-control-next .golang, .carousel-control-next .icon-next {
   color: #f7f7f7;
   padding: 1vw;
   background: #5cb85c;

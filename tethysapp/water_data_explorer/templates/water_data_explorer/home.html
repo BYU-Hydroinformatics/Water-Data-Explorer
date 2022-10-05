@@ -24,17 +24,21 @@
       <div id= "panel-bodyh" class="panel-body">
         <h4 class="titleh"> Views </h4>
         {% if can_delete_hydrogroups %}
-        <button class="btn btn-primary" data-toggle="modal" data-target="#modalAddGroupServer"> <span class="glyphicon glyphicon-plus"></span></button>
-          {% endif %}
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddGroupServer"> 
+          <i class="bi bi-plus-lg"></i>
+        </button>
+        {% endif %}
 
-          {% if can_delete_hydrogroups %}
-          <button id="btn-del-groups-f" class="btn btn-danger"  data-toggle="modal" data-target="#modalDeleteGroups"> <span class="glyphicon glyphicon-trash"></span></button>
-          {% endif %}
-          <button id="btn-filter-groups-f" class="btn btn-success" data-toggle="modal" data-target="#modalKeyWordSearch">
-            <span class="glyphicon glyphicon-filter"></span>
-          </button>
+        {% if can_delete_hydrogroups %}
+        <button id="btn-del-groups-f" class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#modalDeleteGroups"> 
+          <i class="bi bi-trash"></i>
+        </button>
+        {% endif %}
+        <button id="btn-filter-groups-f" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalKeyWordSearch">
+          <i class="bi bi-funnel"></i>
+        </button>
 
-          <button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>
+        <button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>
       </div>
     </div>
   </div>
@@ -44,7 +48,7 @@
   </div>
   {% endif %}
 
-  <div class="panel-group" id="current-Groupservers" role="tablist" aria-multiselectable="true"></div>
+  <div class="accordion" id="current-Groupservers" role="tablist" aria-multiselectable="true"></div>
 
 
 </div>
@@ -59,14 +63,25 @@
 <table id="tableLegend"></table>
 <div id ="graph">
   <img id="graphAddLoading" class="view-file hidden" alt="loading gif" src="{% static 'water_data_explorer/images/loading.gif' %}">
-  <div id="carouselExampleIndicators" class="carousel slide" data-interval="false" >
-    <ol class="carousel-indicators">
-      <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
-      </li>
-      <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-    </ol>
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false" >
+    <div class="carousel-indicators">
+      <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="carousel-indicator active"></li>
+      <li type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" class="carousel-indicator"></li>
+    </div>
+    <div align="left">
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" data-bs-toggle="tooltip" data-placement="top" title="Station/Platform Information">
+      <i class="bi bi-list-task"></i>
+      <span class="sr-only">Previous</span>
+    </button>
+    </div>
+    <div align="right">
+    <button class="carousel-control-next" data-bs-target="#carouselExampleIndicators" data-bs-slide="next" data-bs-toggle="tooltip" data-placement="top" title="Time series Plots " align="right">
+      <i class="bi bi-bar-chart-line-fill"></i>
+      <span class="sr-only">Next</span>
+    </button>
+    </div>
     <div class="carousel-inner">
-      <div id = "tables_info" class="item active">
+      <div id = "tables_info" class="carousel-item active">
           <div id="options">
             <h3 id= "siteName_title"> Please select a Station/Platform on the map</h3>
               <p id= "siteDes">
@@ -74,7 +89,7 @@
             <div id="table_div"></div>
           </div>
       </div>
-      <div id = "plots_info" class="item">
+      <div id = "plots_info" class="carousel-item">
         <div id="plots2">
           <h3></h3>
           <div id= "ipad_lay_contr">
@@ -100,7 +115,7 @@
                         <div class='input-group date' id='datetimepicker6' data-provide="datepicker">
                             <input type='text' class="form-control" />
                             <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
+                                <i class="bi bi-calendar2-week-fill"></i>
                             </span>
                         </div>
                     </div>
@@ -110,7 +125,7 @@
                         <div class='input-group date' id='datetimepicker7' data-provide="datepicker">
                             <input type='text' class="form-control" />
                             <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
+                                <i class="bi bi-calendar2-week-fill"></i>
                             </span>
                         </div>
                     </div>
@@ -139,20 +154,10 @@
 
           <div id="plots"></div>
         </div>
-
-
       </div>
     </div>
-    <a class="left carousel-control tool_tip_h" href="#carouselExampleIndicators" data-slide="prev" data-toggle="tooltip" data-placement="top" title="Station/Platform Information">
-      <span class="golang glyphicon glyphicon-list-alt"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control tool_tip_h" href="#carouselExampleIndicators" data-slide="next" data-toggle="tooltip" data-placement="top" title="Time series Plots ">
-      <span class=" golang glyphicon glyphicon-stats"></span>
-      <span class="sr-only">Next</span>
-    </a>
-
   </div>
+</div>
 
 <script>
     $(function(){
