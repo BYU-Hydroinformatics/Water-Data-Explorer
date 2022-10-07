@@ -34,7 +34,7 @@ jobs:
   deployment:
     runs-on: ubuntu-latest
     name: Deployment
-    needs: lint
+    needs: app-lint
     steps:
       - name: Get Variables
         id: vars
@@ -46,3 +46,15 @@ jobs:
           url: 'https://multi-tethys.byu.edu/apps/app-store/install/git/'
           data: '{"url": "https://github.com/${{ github.repository }}.git", "branch": "${{ steps.vars.outputs.short_ref }}"}'
           customHeaders: '{"Authorization": "Token ${{ secrets.MULTI_TETHYS_BYU_AUTH_TOKEN }}"}'
+      - name: Get Installation ID
+        id: iid
+        run: |
+          echo ${{ steps.deploy.outputs.response }}
+          echo ::set-output name=IID::${{ fromJson(steps.deploy.outputs.response).install_id }}
+      - name: Get Installation Status
+        id: status
+        uses: msouff/tethys-app-status@v1
+        with:
+          url: 'https://multi-tethys.byu.edu/apps/app-store/install/git/status'
+          install_id: '${{ steps.iid.outputs.IID }}'
+          tethys_auth_token: '${{ secrets.MULTI_TETHYS_BYU_AUTH_TOKEN }}'
