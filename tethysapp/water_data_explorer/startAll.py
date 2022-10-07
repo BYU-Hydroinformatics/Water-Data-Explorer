@@ -7,8 +7,16 @@ from tethys_sdk.routing import controller
 from .app import WaterDataExplorer as app
 
 Persistent_Store_Name = 'catalog_db'
+logging.basicConfig()
 
-logging.getLogger('suds.client').setLevel(logging.CRITICAL)
+# Disable the pywaterml.auxiliaryMod logger #
+for name, logger in logging.root.manager.loggerDict.items():
+    print(name)
+    if(name=='pywaterml.auxiliaryMod'):
+        print("here")
+        logging.getLogger('pywaterml.auxiliaryMod').setLevel(logging.CRITICAL)
+        # logger.disabled = True
+        # logging.getLogger('pywaterml.auxiliaryMod').disabled = True
 
 
 @controller(name='home', url='water-data-explorer')

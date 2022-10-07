@@ -13,7 +13,6 @@ from django.http import JsonResponse
 
 Persistent_Store_Name = 'catalog_db'
 
-logging.getLogger('suds.client').setLevel(logging.CRITICAL)
 
 
 @controller(name='get-values-hs', url='get-values-hs/')

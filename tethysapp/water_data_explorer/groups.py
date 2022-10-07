@@ -1,4 +1,6 @@
 import xmltodict
+import logging
+
 import os
 import json
 import pandas as pd
@@ -23,6 +25,9 @@ from .app import WaterDataExplorer as app
 
 # from shapely.geometry import Point, Polygon
 Persistent_Store_Name = 'catalog_db'
+
+logging.getLogger("pywaterml.waterML").setLevel(logging.CRITICAL)
+logging.getLogger("pywaterml.auxiliaryMod").setLevel(logging.CRITICAL)
 
 
 @controller(name='available-regions', url='available-regions/')
@@ -633,12 +638,15 @@ def filter_region(countries_geojson_file_path, list_countries, actual_group=None
                         trues_onlys_copy[column_] = np.where(trues_onlys_copy[column_] is True, trues_onlys_copy.index,
                                                              trues_onlys_copy[column_])
                         list_co = trues_onlys_copy[column_].tolist()
+                        print(list_co)
                         list_co = list(filter(lambda list_co: list_co is True, list_co))
+                        print(list_co)
                         # print("station codes ",len(list_co))
                         sites_info_filter = []
                         country_sel = list_countries_selected[my_indx]
 
                         for site_fullcode_single in list_co:
+                            print(hydroservers_selected[indx].title)
                             site_full_name = site_fullcode_single + hydroservers_selected[indx].title
 
                             site_objInfo[site_full_name]['country'] = country_sel

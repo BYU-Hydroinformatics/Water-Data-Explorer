@@ -14,8 +14,10 @@ from django.http import JsonResponse
 from .app import WaterDataExplorer as app
 
 Persistent_Store_Name = 'catalog_db'
-logging.basicConfig(level=logging.INFO)
-logging.getLogger('suds.client').setLevel(logging.DEBUG)
+logging.getLogger("pywaterml.waterML").setLevel(logging.CRITICAL)
+logging.getLogger("pywaterml.auxiliaryMod").setLevel(logging.CRITICAL)
+# logging.basicConfig(level=logging.CRITICAL)
+# logging.getLogger('suds.client').setLevel(logging.DEBUG)
 
 
 @controller(name='get-download-hs', url='get-download-hs/')
