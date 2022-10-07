@@ -178,36 +178,53 @@ copyToClipboard = function(element) {
   $temp.val($(element).text()).select();
   document.execCommand("copy");
   $temp.remove();
-  $.notify(
-      {
-          message: `copied to clipboard`
-      },
-      {
-          element: '#urlHydroserver',
-          type: "info",
-          allow_dismiss: true,
-          z_index: 20000,
-          placement: {
-            from: "top",
-            align: "right"
-          },
-          offset: {
-            // x: -80,
-            y: 100,
-          },
-          delay:1000,
-          template: '<div id="modalCrazy" data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-          '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-          '<span data-notify="icon"></span> ' +
-          '<span data-notify="title">{1}</span> ' +
-          '<span data-notify="message">{2}</span>' +
-          '<div class="progress" data-notify="progressbar">' +
-            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-          '</div>' +
-          '<a href="{3}" target="{4}" data-notify="url"></a>' +
-          '</div>'
-      }
-  )
+  new Notify ({
+    status: 'success',
+    title: 'Success',
+    text: `Copied to clipboard`,
+    effect: 'fade',
+    speed: 300,
+    customClass: '',
+    customIcon: '',
+    showIcon: true,
+    showCloseButton: true,
+    autoclose: true,
+    autotimeout: 3000,
+    gap: 20,
+    distance: 20,
+    type: 1,
+    position: 'right top'
+  })
+  // $.notify(
+  //     {
+  //         message: `copied to clipboard`
+  //     },
+  //     {
+  //         element: '#urlHydroserver',
+  //         type: "info",
+  //         allow_dismiss: true,
+  //         z_index: 20000,
+  //         placement: {
+  //           from: "top",
+  //           align: "right"
+  //         },
+  //         offset: {
+  //           // x: -80,
+  //           y: 100,
+  //         },
+  //         delay:1000,
+  //         template: '<div id="modalCrazy" data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+  //         '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+  //         '<span data-notify="icon"></span> ' +
+  //         '<span data-notify="title">{1}</span> ' +
+  //         '<span data-notify="message">{2}</span>' +
+  //         '<div class="progress" data-notify="progressbar">' +
+  //           '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+  //         '</div>' +
+  //         '<a href="{3}" target="{4}" data-notify="url"></a>' +
+  //         '</div>'
+  //     }
+  // )
 }
 
 
