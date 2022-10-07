@@ -1,0 +1,48 @@
+name: tethys-app-installation
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+    inputs:
+      git-ref:
+        description: Manual trigger if the tags trigger does not start
+        required: false
+
+jobs:
+  app-lint:
+    runs-on: ubuntu-latest
+    name: Tethys App Lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run tethys-app-linter
+        uses: tethysapp/tethys-app-linter@v1
+  flake:
+    runs-on: ubuntu-latest
+    name: Flake8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run flake
+        uses: tonybajan/flake8-check-action@v1.0.0
+        with:
+          select: E,W,F # check for pep8 and pyflakes errors
+          maxlinelength: 120
+          repotoken: ${{ secrets.GITHUB_TOKEN }}
+  deployment:
+    runs-on: ubuntu-latest
+    name: Deployment
+    needs: lint
+    steps:
+      - name: Get Variables
+        id: vars
+        run: echo ::set-output name=short_ref::${GITHUB_REF##*/}
+      - name: Deploy Stage
+        uses: fjogeleit/http-request-action@master
+        with:
+          method: 'POST'
+          url: 'https://multi-tethys.byu.edu/apps/app-store/install/git/'
+          data: '{"url": "https://github.com/${{ github.repository }}.git", "branch": "${{ steps.vars.outputs.short_ref }}"}'
+          customHeaders: '{"Authorization": "Token ${{ secrets.MULTI_TETHYS_BYU_AUTH_TOKEN }}"}'
