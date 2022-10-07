@@ -34,7 +34,7 @@ jobs:
   deployment:
     runs-on: ubuntu-latest
     name: Deployment
-    needs: app-lint
+    # needs: app-lint
     steps:
       - name: Get Variables
         id: vars
