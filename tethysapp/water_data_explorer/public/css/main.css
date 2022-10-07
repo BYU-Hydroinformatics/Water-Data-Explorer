@@ -1,3 +1,74 @@
+/* some fixes to make it look nice */
+#variables_graph{
+  height: 100%;
+}
+#select-graphs {
+  flex: 1 1 50%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+span, p {
+  font-size: 14px;
+  color: #666;
+  font-weight: 400;
+  letter-spacing: .5px;
+}
+
+th{
+  font-size: 14px;
+}
+.wrapper-menu{
+  display: flex;
+  justify-content: center;
+}
+.accordion-body {
+  padding: 1rem 0.3rem 1rem;
+}
+
+
+.FootNote{
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  justify-content: space-between;
+  width: 100%;
+}
+#term_service_modal{
+  max-width: 600px;
+}
+
+.group-name{
+  width: 120px;
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+  text-align: left;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  max-width: 218px;
+  background: #286090;
+  border: 0px;
+  border-color: #204d74;
+  color: white;
+  font-size:18px;
+  padding:0.5rem;
+}
+
+#groups_hydroservers {
+  margin: 0.5%;
+  margin-top: 10px;
+}
+
+/* old */
+
 .ol-attribution li {
   font-size: 1.5em;
 }
@@ -6,12 +77,10 @@
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
-.FootNote{
-  text-align: left;
-}
+
 
 .button-group-temp {
   display: flex;
@@ -306,26 +375,7 @@ tr:hover {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.group-name{
-    width: 120px;
-    overflow: hidden;
-    position: relative;
-    display: inline-block;
-    text-align: left;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    -webkit-box-flex: 1;
-    -webkit-flex: 1 1 auto;
-    -ms-flex: 1 1 auto;
-    flex: 1 1 auto;
-    max-width: 218px;
-    background: #286090;
-    border: 0px;
-    border-color: #204d74;
-    color: white;
-    font-size:18px;
-}
+
 #buttonsBar{
   margin-left: 10%;
 }
@@ -524,10 +574,10 @@ tr:hover {
   justify-content: flex-end;
 }
 
-.modal-dialog {
+/* .modal-dialog {
   width: 75%;
   max-width: 90%;
-}
+} */
 
 #modalHydroserInformation .modal{
     display: block !important;
@@ -801,9 +851,7 @@ tr:hover {
   opacity: 0.8;
 }
 
-#groups_hydroservers {
-  margin: 0.5%;
-}
+
 
 #app-content-wrapper .hide-nav {
   /* display:none; */
@@ -827,22 +875,26 @@ tr:hover {
 .carousel-control-prev{
   background-image: none;
   top: 0%;
-  height: 5%;
-  font-size: 20px;
+  height: 30px;
+  font-size: 14px;
   color: #f7f7f7;
-  padding: 1vw;
+  padding: 9px;
   background: #5cb85c;
   box-sizing: content-box;
+  width: 30px;
+  border-radius: 3px;
 }
 .carousel-control-next{
   background-image: none;
   top: 0%;
-  height: 5%;
+  height: 30px;
   font-size: 20px;
   color: #f7f7f7;
-  padding: 1vw;
+  padding: 9px;
   background: #5cb85c;
   box-sizing: content-box;
+  width: 30px;
+  border-radius: 3px;
 }
 .carousel-indicators {
   top: 1%;
@@ -884,7 +936,7 @@ tr:hover {
   position: relative;
   width: 100%;
   overflow: hidden;
-  margin-top: 2%;
+  margin-top: 4%;
 }
 
 #app-content-wrapper #app-content {

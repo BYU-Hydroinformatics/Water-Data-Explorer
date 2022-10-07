@@ -9,7 +9,7 @@ from .model import Groups, HydroServer_Individual
 
 from tethys_sdk.routing import controller
 
-from .auxiliary import GetSites_WHOS, requests
+from .auxiliary import GetSites_WHOS
 from django.http import JsonResponse
 from .app import WaterDataExplorer as app
 

@@ -18,7 +18,6 @@ from .endpoints import available_regions_2, available_variables_2
 
 from suds.client import Client  # For parsing WaterML/XML
 from urllib.parse import unquote
-from .endpoints import requests
 from django.http import JsonResponse
 from .app import WaterDataExplorer as app
 

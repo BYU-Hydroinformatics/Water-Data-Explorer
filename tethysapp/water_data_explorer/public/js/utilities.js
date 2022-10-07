@@ -245,17 +245,34 @@ disable_map =  function (){
     }
   }
   catch(err){
-    $.notify(
-        {
-            message: `Boundary layer was not setup, please go to settings and set up the boundary layer`
-        },
-        {
-            type: "info",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000
-        }
-    )
+    new Notify ({
+      status: 'warning',
+      title: 'Warning',
+      text: `Boundary layer was not setup, please go to settings and set up the boundary layer`,
+      effect: 'fade',
+      speed: 300,
+      customClass: '',
+      customIcon: '',
+      showIcon: true,
+      showCloseButton: true,
+      autoclose: true,
+      autotimeout: 3000,
+      gap: 20,
+      distance: 20,
+      type: 1,
+      position: 'right top'
+    })
+    // $.notify(
+    //     {
+    //         message: `Boundary layer was not setup, please go to settings and set up the boundary layer`
+    //     },
+    //     {
+    //         type: "info",
+    //         allow_dismiss: true,
+    //         z_index: 20000,
+    //         delay: 5000
+    //     }
+    // )
   }
 
 }
@@ -541,17 +558,34 @@ initialize_graphs = function(xArray,yArray,title_graph,xTitle,yTitle,legend1,typ
 
   }
   catch(e){
-    $.notify(
-        {
-            message: `Unable to initialize the graphs`
-        },
-        {
-            type: "danger",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000
-        }
-    )
+    new Notify ({
+      status: 'error',
+      title: 'Error',
+      text: `Unable to initialize the graphs`,
+      effect: 'fade',
+      speed: 300,
+      customClass: '',
+      customIcon: '',
+      showIcon: true,
+      showCloseButton: true,
+      autoclose: true,
+      autotimeout: 3000,
+      gap: 20,
+      distance: 20,
+      type: 1,
+      position: 'right top'
+    })
+    // $.notify(
+    //     {
+    //         message: `Unable to initialize the graphs`
+    //     },
+    //     {
+    //         type: "danger",
+    //         allow_dismiss: true,
+    //         z_index: 20000,
+    //         delay: 5000
+    //     }
+    // )
   }
 
 }
@@ -634,7 +668,10 @@ function html_for_groups(isAdmin, title, id_group_separator){
           <div class="iconhydro"><img src="https://img.icons8.com/dusk/24/000000/ssd.png"/>WaterOneFlow Web Services</div>
             <div class="accordion-body">
               <div id= ${id_group_separator} class="divForServers">
-                <button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group is empty</button>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-danger btn-block" id = "${title}-noGroups"> The group is empty</button>
+
+                </div>
               </div>
             </div>
           </div>

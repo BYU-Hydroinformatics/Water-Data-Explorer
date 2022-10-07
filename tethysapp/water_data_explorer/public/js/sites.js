@@ -314,47 +314,81 @@ activate_layer_values = function (){
                   ` <p> <em> Station/Platform Name:</em> ${feature_single['name']}<p>`
 
                 $("#GeneralLoading").addClass("hidden");
-                $.notify(
-                    {
-                        message: `The ${feature_single['name']} site does not contain any variable`
-                    },
-                    {
-                        type: "info",
-                        allow_dismiss: true,
-                        z_index: 20000,
-                        delay: 5000,
-                        animate: {
-                          enter: 'animated fadeInRight',
-                          exit: 'animated fadeOutRight'
-                        },
-                        onShow: function() {
-                            this.css({'width':'auto','height':'auto'});
-                        }
-                    }
-                )
+                new Notify ({
+                  status: 'warning',
+                  title: 'Warning',
+                  text: `The ${feature_single['name']} site does not contain any variable`,
+                  effect: 'fade',
+                  speed: 300,
+                  customClass: '',
+                  customIcon: '',
+                  showIcon: true,
+                  showCloseButton: true,
+                  autoclose: true,
+                  autotimeout: 3000,
+                  gap: 20,
+                  distance: 20,
+                  type: 1,
+                  position: 'right top'
+                })
+                // $.notify(
+                //     {
+                //         message: `The ${feature_single['name']} site does not contain any variable`
+                //     },
+                //     {
+                //         type: "info",
+                //         allow_dismiss: true,
+                //         z_index: 20000,
+                //         delay: 5000,
+                //         animate: {
+                //           enter: 'animated fadeInRight',
+                //           exit: 'animated fadeOutRight'
+                //         },
+                //         onShow: function() {
+                //             this.css({'width':'auto','height':'auto'});
+                //         }
+                //     }
+                // )
               }
             }
             catch(e){
               $("#GeneralLoading").addClass("hidden");
               console.log(e);
-              $.notify(
-                  {
-                      message: `The is an error retriving the complete data of the station/platform `
-                  },
-                  {
-                      type: "danger",
-                      allow_dismiss: true,
-                      z_index: 20000,
-                      delay: 5000,
-                      animate: {
-                        enter: 'animated fadeInRight',
-                        exit: 'animated fadeOutRight'
-                      },
-                      onShow: function() {
-                          this.css({'width':'auto','height':'auto'});
-                      }
-                  }
-              )
+              new Notify ({
+                status: 'error',
+                title: 'Error',
+                text: `The is an error retrieving the complete data of the station/platform`,
+                effect: 'fade',
+                speed: 300,
+                customClass: '',
+                customIcon: '',
+                showIcon: true,
+                showCloseButton: true,
+                autoclose: true,
+                autotimeout: 3000,
+                gap: 20,
+                distance: 20,
+                type: 1,
+                position: 'right top'
+              })
+              // $.notify(
+              //     {
+              //         message: `The is an error retriving the complete data of the station/platform `
+              //     },
+              //     {
+              //         type: "danger",
+              //         allow_dismiss: true,
+              //         z_index: 20000,
+              //         delay: 5000,
+              //         animate: {
+              //           enter: 'animated fadeInRight',
+              //           exit: 'animated fadeOutRight'
+              //         },
+              //         onShow: function() {
+              //             this.css({'width':'auto','height':'auto'});
+              //         }
+              //     }
+              // )
             }
 
 
@@ -362,25 +396,41 @@ activate_layer_values = function (){
           },
           error: function(xhr, status, error){
             $("#GeneralLoading").addClass("hidden");
-
-            $.notify(
-                {
-                    message: `There is an error to retrieve the values for the ${feature_single['name']} site `
-                },
-                {
-                    type: "danger",
-                    allow_dismiss: true,
-                    z_index: 20000,
-                    delay: 5000,
-                    animate: {
-                      enter: 'animated fadeInRight',
-                      exit: 'animated fadeOutRight'
-                    },
-                    onShow: function() {
-                        this.css({'width':'auto','height':'auto'});
-                    }
-                }
-            )
+            new Notify ({
+              status: 'error',
+              title: 'Error',
+              text: `There is an error to retrieve the values for the ${feature_single['name']} site`,
+              effect: 'fade',
+              speed: 300,
+              customClass: '',
+              customIcon: '',
+              showIcon: true,
+              showCloseButton: true,
+              autoclose: true,
+              autotimeout: 3000,
+              gap: 20,
+              distance: 20,
+              type: 1,
+              position: 'right top'
+            })
+            // $.notify(
+            //     {
+            //         message: `There is an error to retrieve the values for the ${feature_single['name']} site `
+            //     },
+            //     {
+            //         type: "danger",
+            //         allow_dismiss: true,
+            //         z_index: 20000,
+            //         delay: 5000,
+            //         animate: {
+            //           enter: 'animated fadeInRight',
+            //           exit: 'animated fadeOutRight'
+            //         },
+            //         onShow: function() {
+            //             this.css({'width':'auto','height':'auto'});
+            //         }
+            //     }
+            // )
           }
 
         })
@@ -390,24 +440,41 @@ activate_layer_values = function (){
   }
   catch(error){
     $("#GeneralLoading").addClass("hidden");
-    $.notify(
-        {
-            message: `Unable to retrieve information of the selected site`
-        },
-        {
-            type: "info",
-            allow_dismiss: true,
-            z_index: 20000,
-            delay: 5000,
-            animate: {
-              enter: 'animated fadeInRight',
-              exit: 'animated fadeOutRight'
-            },
-            onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-            }
-        }
-    )
+    new Notify ({
+      status: 'warning',
+      title: 'Warning',
+      text: `Unable to retrieve information of the selected site`,
+      effect: 'fade',
+      speed: 300,
+      customClass: '',
+      customIcon: '',
+      showIcon: true,
+      showCloseButton: true,
+      autoclose: true,
+      autotimeout: 3000,
+      gap: 20,
+      distance: 20,
+      type: 1,
+      position: 'right top'
+    })
+    // $.notify(
+    //     {
+    //         message: `Unable to retrieve information of the selected site`
+    //     },
+    //     {
+    //         type: "info",
+    //         allow_dismiss: true,
+    //         z_index: 20000,
+    //         delay: 5000,
+    //         animate: {
+    //           enter: 'animated fadeInRight',
+    //           exit: 'animated fadeOutRight'
+    //         },
+    //         onShow: function() {
+    //             this.css({'width':'auto','height':'auto'});
+    //         }
+    //     }
+    // )
   }
 
 }

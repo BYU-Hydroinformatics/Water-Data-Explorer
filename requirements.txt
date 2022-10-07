@@ -1,0 +1,8 @@
+geojson
+xmltodict
+pyshp
+geopandas
+suds-community
+pywaterml
+numpy=1.21
+

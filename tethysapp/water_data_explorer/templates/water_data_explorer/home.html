@@ -17,28 +17,29 @@
 <div class="accordion" id="groups_hydroservers">
 
   <div id= "panHydroGroups" class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingCP">
-    </div>
 
-    <div id="collapseCP" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingCP">
-      <div id= "panel-bodyh" class="panel-body">
-        <h4 class="titleh"> Views </h4>
-        {% if can_delete_hydrogroups %}
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddGroupServer"> 
-          <i class="bi bi-plus-lg"></i>
-        </button>
-        {% endif %}
+    <div id="collapseCP">
+      <div id= "panel-bodyh">
+        <h5 class="titleh"> Views </h5>
+        <div class="wrapper-menu">
+          {% if can_delete_hydrogroups %}
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddGroupServer"> 
+            <i class="bi bi-plus-lg"></i>
+          </button>
+          {% endif %}
+  
+          {% if can_delete_hydrogroups %}
+          <button id="btn-del-groups-f" class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#modalDeleteGroups"> 
+            <i class="bi bi-trash"></i>
+          </button>
+          {% endif %}
+          <button id="btn-filter-groups-f" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalKeyWordSearch">
+            <i class="bi bi-funnel"></i>
+          </button>
+  
+          <button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>
+        </div>
 
-        {% if can_delete_hydrogroups %}
-        <button id="btn-del-groups-f" class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#modalDeleteGroups"> 
-          <i class="bi bi-trash"></i>
-        </button>
-        {% endif %}
-        <button id="btn-filter-groups-f" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalKeyWordSearch">
-          <i class="bi bi-funnel"></i>
-        </button>
-
-        <button type="button" id="btn-r-reset" class="btn btn-danger">Reset</button>
       </div>
     </div>
   </div>
@@ -83,7 +84,7 @@
     <div class="carousel-inner">
       <div id = "tables_info" class="carousel-item active">
           <div id="options">
-            <h3 id= "siteName_title"> Please select a Station/Platform on the map</h3>
+            <h5 id= "siteName_title"> Please select a Station/Platform on the map</h5>
               <p id= "siteDes">
               </p>
             <div id="table_div"></div>

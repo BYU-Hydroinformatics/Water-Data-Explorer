@@ -116,24 +116,41 @@ var water_data_explorer_PACKAGE = (function() {
         }
       }
       catch(e) {
-        $.notify(
-            {
-                message: `No boundary found for the Water Data Explorer`
-            },
-            {
-                type: "info",
-                allow_dismiss: true,
-                z_index: 20000,
-                delay: 5000,
-                animate: {
-                  enter: 'animated fadeInRight',
-                  exit: 'animated fadeOutRight'
-                },
-                onShow: function() {
-                    this.css({'width':'auto','height':'auto'});
-                }
-            }
-        )
+        new Notify ({
+          status: 'warning',
+          title: 'Info',
+          text: `No boundary found for the Water Data Explorer`,
+          effect: 'fade',
+          speed: 300,
+          customClass: '',
+          customIcon: '',
+          showIcon: true,
+          showCloseButton: true,
+          autoclose: true,
+          autotimeout: 3000,
+          gap: 20,
+          distance: 20,
+          type: 1,
+          position: 'right top'
+        })
+        // $.notify(
+        //     {
+        //         message: `No boundary found for the Water Data Explorer`
+        //     },
+        //     {
+        //         type: "info",
+        //         allow_dismiss: true,
+        //         z_index: 20000,
+        //         delay: 5000,
+        //         animate: {
+        //           enter: 'animated fadeInRight',
+        //           exit: 'animated fadeOutRight'
+        //         },
+        //         onShow: function() {
+        //             this.css({'width':'auto','height':'auto'});
+        //         }
+        //     }
+        // )
       }
     }
 
@@ -384,24 +401,42 @@ var water_data_explorer_PACKAGE = (function() {
             .change()
       }
       catch(e){
-        $.notify(
-            {
-                message: `Unable to initialize the map of the Data Explorer`
-            },
-            {
-                type: "danger",
-                allow_dismiss: true,
-                z_index: 20000,
-                delay: 5000,
-                animate: {
-                  enter: 'animated fadeInRight',
-                  exit: 'animated fadeOutRight'
-                },
-                onShow: function() {
-                    this.css({'width':'auto','height':'auto'});
-                }
-            }
-        )
+        console.log(e)
+        new Notify ({
+          status: 'error',
+          title: 'Error',
+          text: `Unable to initialize the map of the Data Explorer`,
+          effect: 'fade',
+          speed: 300,
+          customClass: '',
+          customIcon: '',
+          showIcon: true,
+          showCloseButton: true,
+          autoclose: true,
+          autotimeout: 3000,
+          gap: 20,
+          distance: 20,
+          type: 1,
+          position: 'right top'
+        })
+        // $.notify(
+        //     {
+        //         message: `Unable to initialize the map of the Data Explorer`
+        //     },
+        //     {
+        //         type: "danger",
+        //         allow_dismiss: true,
+        //         z_index: 20000,
+        //         delay: 5000,
+        //         animate: {
+        //           enter: 'animated fadeInRight',
+        //           exit: 'animated fadeOutRight'
+        //         },
+        //         onShow: function() {
+        //             this.css({'width':'auto','height':'auto'});
+        //         }
+        //     }
+        // )
       }
 
     }
@@ -416,46 +451,80 @@ var water_data_explorer_PACKAGE = (function() {
         else{
           $(".titleh").html(`Views `)
           $(".app-title").html(`Water Data Explorer`)
-          $.notify(
-              {
-                  message: `Tip: You can give name to the Data Explorer by going into the settings`
-              },
-              {
-                  type: "info",
-                  allow_dismiss: true,
-                  z_index: 20000,
-                  delay: 5000,
-                  animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-                  },
-                  onShow: function() {
-                      this.css({'width':'auto','height':'auto'});
-                  }
-              }
+          new Notify ({
+            status: 'success',
+            title: 'Water Data Explorer',
+            text: 'Tip: You can give name to the Data Explorer by going into the settings',
+            effect: 'fade',
+            speed: 200,
+            customClass: '',
+            customIcon: '',
+            showIcon: true,
+            showCloseButton: true,
+            autoclose: true,
+            autotimeout: 3000,
+            gap: 20,
+            distance: 20,
+            type: 1,
+            position: 'right top'
+          })
+          // $.notify(
+          //     {
+          //         message: `Tip: You can give name to the Data Explorer by going into the settings`
+          //     },
+          //     {
+          //         type: "info",
+          //         allow_dismiss: true,
+          //         z_index: 20000,
+          //         delay: 5000,
+          //         animate: {
+          //           enter: 'animated fadeInRight',
+          //           exit: 'animated fadeOutRight'
+          //         },
+          //         onShow: function() {
+          //             this.css({'width':'auto','height':'auto'});
+          //         }
+          //     }
 
-          )
+          // )
         }
       }
       catch(e){
-        $.notify(
-            {
-                message: `Unable to give a customized name to the view of the Water Data Explorer`
-            },
-            {
-                type: "info",
-                allow_dismiss: true,
-                z_index: 20000,
-                delay: 5000,
-                animate: {
-                  enter: 'animated fadeInRight',
-                  exit: 'animated fadeOutRight'
-                },
-                onShow: function() {
-                    this.css({'width':'auto','height':'auto'});
-                }
-            }
-        )
+        new Notify ({
+          status: 'warning',
+          title: 'Warning',
+          text: `Unable to give a customized name to the view of the Water Data Explorer`,
+          effect: 'fade',
+          speed: 300,
+          customClass: '',
+          customIcon: '',
+          showIcon: true,
+          showCloseButton: true,
+          autoclose: true,
+          autotimeout: 3000,
+          gap: 20,
+          distance: 20,
+          type: 1,
+          position: 'right top'
+        })
+        // $.notify(
+        //     {
+        //         message: `Unable to give a customized name to the view of the Water Data Explorer`
+        //     },
+        //     {
+        //         type: "info",
+        //         allow_dismiss: true,
+        //         z_index: 20000,
+        //         delay: 5000,
+        //         animate: {
+        //           enter: 'animated fadeInRight',
+        //           exit: 'animated fadeOutRight'
+        //         },
+        //         onShow: function() {
+        //             this.css({'width':'auto','height':'auto'});
+        //         }
+        //     }
+        // )
       }
 
 
@@ -607,24 +676,41 @@ var water_data_explorer_PACKAGE = (function() {
     }
       catch(error){
         console.log(error);
-        $.notify(
-            {
-                message: `Unable to start the Water Data Explorer`
-            },
-            {
-                type: "danger",
-                allow_dismiss: true,
-                z_index: 20000,
-                delay: 5000,
-                animate: {
-                  enter: 'animated fadeInRight',
-                  exit: 'animated fadeOutRight'
-                },
-                onShow: function() {
-                    this.css({'width':'auto','height':'auto'});
-                }
-            }
-        )
+        new Notify ({
+          status: 'error',
+          title: 'Error',
+          text: `Unable to start the Water Data Explorer`,
+          effect: 'fade',
+          speed: 300,
+          customClass: '',
+          customIcon: '',
+          showIcon: true,
+          showCloseButton: true,
+          autoclose: true,
+          autotimeout: 3000,
+          gap: 20,
+          distance: 20,
+          type: 1,
+          position: 'right top'
+        })
+        // $.notify(
+        //     {
+        //         message: `Unable to start the Water Data Explorer`
+        //     },
+        //     {
+        //         type: "danger",
+        //         allow_dismiss: true,
+        //         z_index: 20000,
+        //         delay: 5000,
+        //         animate: {
+        //           enter: 'animated fadeInRight',
+        //           exit: 'animated fadeOutRight'
+        //         },
+        //         onShow: function() {
+        //             this.css({'width':'auto','height':'auto'});
+        //         }
+        //     }
+        // )
       }
 
 
