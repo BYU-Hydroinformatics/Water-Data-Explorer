@@ -11,9 +11,9 @@ logging.basicConfig()
 
 # Disable the pywaterml.auxiliaryMod logger #
 for name, logger in logging.root.manager.loggerDict.items():
-    print(name)
+    # print(name)
     if(name=='pywaterml.auxiliaryMod'):
-        print("here")
+        # print("here")
         logging.getLogger('pywaterml.auxiliaryMod').setLevel(logging.CRITICAL)
         # logger.disabled = True
         # logging.getLogger('pywaterml.auxiliaryMod').disabled = True
