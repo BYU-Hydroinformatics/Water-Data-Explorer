@@ -1485,7 +1485,7 @@ $("#btn-add-addHydro").on("click", create_group_hydroservers);
 */
 load_group_hydroservers = function(){
    $.ajax({
-       type: "POST",
+       type: "GET",
        url: `load-groups/`,
        dataType: "JSON",
        success: result => {
