@@ -19,7 +19,7 @@ class WaterDataExplorer(TethysAppBase):
     enable_feedback = False
     feedback_emails = []
 
-    controller_modules = ['startAll', 'sites', 'endpoints', 'groups', ]
+    controller_modules = ['startAll', 'sites', 'endpoints', 'catalogs', ]
 
     def permissions(self):
         """
